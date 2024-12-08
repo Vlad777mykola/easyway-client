@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { useCreateUser } from "@/hooks/useCreateUser";
 import { Auth } from "./Auth";
+import { useLogin } from "@/hooks/useLogin";
 
 export const SignUp = () => {
   const [createUser] = useCreateUser();
+  const { login } = useLogin();
+
   return (
     <>
       <Auth
@@ -17,6 +20,7 @@ export const SignUp = () => {
               },
             },
           });
+          await login({ email, password });
         }}
       >
         <Link to={"/login"}>Login</Link>

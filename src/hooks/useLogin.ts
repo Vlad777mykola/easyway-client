@@ -16,7 +16,8 @@ const useLogin = ()=>{
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(request)
+            body: JSON.stringify(request),
+            credentials: 'include',
         })
 
         if(!res.ok){

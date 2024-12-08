@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "antd";
 import { Input } from "antd";
 import style from "./auth.module.css";
+import { useGetMe } from "@/hooks/useGetMe";
+import { useNavigate } from "react-router-dom";
 
 export const Auth = ({
   submitLabel,
@@ -16,6 +18,15 @@ export const Auth = ({
     email: "",
     password: "",
   });
+
+  const { data } = useGetMe();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (data) {
+      navigate("/");
+    }
+  }, [data, navigate]);
 
   const onChange = (value: string, key: "email" | "password") => {
     setAuth((prev) => ({
