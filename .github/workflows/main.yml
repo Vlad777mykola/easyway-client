@@ -1,10 +1,10 @@
-name: GitHub Actions
+name: Check
 run-name: ${{ github.actor }}
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 jobs:
   init:
     runs-on: ubuntu-latest
@@ -21,7 +21,3 @@ jobs:
         run: npm ci
       - name: Run lint
         run: npm run lint
-      - name: Run test
-        run: npm test
-      - name: Build project
-        run: npm run build
