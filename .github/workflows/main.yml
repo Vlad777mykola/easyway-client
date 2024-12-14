@@ -2,9 +2,9 @@ name: Check
 run-name: ${{ github.actor }}
 on:
   push:
-    branches: [main]
+    branches: [master, develop]
   pull_request:
-    branches: [main]
+    branches: [master, develop]
 jobs:
   init:
     runs-on: ubuntu-latest
