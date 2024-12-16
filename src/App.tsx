@@ -1,12 +1,12 @@
-import './App.css';
-import Button from './ui-components/Button/Button';
+import { RouterProvider } from 'react-router-dom';
+import { routers } from './router/Router';
 
-function App() {
+export const App = () => {
 	return (
 		<>
-			<Button>Click Me!</Button>
+			<RouterProvider router={routers} />
 		</>
 	);
-}
+};
 
 export default App;
