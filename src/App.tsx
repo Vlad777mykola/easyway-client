@@ -1,10 +1,42 @@
+import Navbar from './layouts/Navbar/Navbar';
+import {
+	CommentOutlined,
+	UserOutlined,
+	StrikethroughOutlined,
+	MoonOutlined,
+} from '@ant-design/icons';
 import './App.css';
-import Button from './ui-components/Button/Button';
+
+const leftItems = [
+	{
+		href: '/',
+		children: <StrikethroughOutlined className="logo" />,
+		isModal: false,
+	},
+];
+
+const rightItems = [
+	{
+		href: '/chat',
+		children: <CommentOutlined className="logo" />,
+		isModal: false,
+	},
+	{
+		href: '',
+		children: <UserOutlined className="logo" />,
+		isModal: true,
+	},
+	{
+		href: '/theme',
+		children: <MoonOutlined className="logo" />,
+		isModal: false,
+	},
+];
 
 function App() {
 	return (
 		<>
-			<Button>Click Me!</Button>
+			<Navbar isSticky leftItems={[...leftItems]} rightItems={[...rightItems]} />
 		</>
 	);
 }
