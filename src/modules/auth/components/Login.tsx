@@ -5,7 +5,7 @@ import { Auth } from './Auth';
 import { useReactiveVar } from '@apollo/client';
 
 export const Login = () => {
-	const { login, error } = useLogin();
+	const { login } = useLogin();
 	const authenticated = useReactiveVar(authenticatedVar);
 
 	return (

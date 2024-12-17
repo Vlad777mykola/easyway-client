@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Button } from 'antd';
 import { Input } from 'antd';
 import style from './auth.module.css';
@@ -12,7 +12,7 @@ export const Auth = ({
 }: {
 	submitLabel: string;
 	onSubmit: (req: { email: string; password: string }) => Promise<void>;
-	children: React.ReactNode;
+	children: ReactNode;
 }) => {
 	const navigate = useNavigate();
 	const [auth, setAuth] = useState({

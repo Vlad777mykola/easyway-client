@@ -1,9 +1,9 @@
 import { authenticatedVar } from '@/apollo-client';
 import { useGetUser } from '../hooks/useGetUser';
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 interface IGuardProps {
-	children: JSX.Element;
+	children: ReactNode;
 }
 
 const EXECUTED_ROUTES = ['/login', '/signup', '/'];
