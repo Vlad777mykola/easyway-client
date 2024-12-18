@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { classes } from '@/utils/classes/classes';
-import styles from './navbar.module.css';
+import { classes } from '@/utils/classes';
+import styles from './styles.module.css';
 
 export type Props = {
 	isSticky?: boolean;
