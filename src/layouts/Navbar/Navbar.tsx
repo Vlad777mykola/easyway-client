@@ -1,11 +1,12 @@
 import { ReactNode } from 'react';
+
 import { classes } from '@/utils/classes';
 import styles from './styles.module.css';
 
 export type Props = {
 	isSticky?: boolean;
-	RightSide?: ReactNode;
-	LeftSide?: ReactNode;
+	RightSide: ReactNode;
+	LeftSide: ReactNode;
 };
 
 export const Navbar = ({ isSticky = true, RightSide, LeftSide }: Props) => {

@@ -3,7 +3,7 @@ import { Navbar } from '../navbar';
 
 const Layouts = () => (
 	<div>
-		<Navbar />
+		<Navbar RightSide={<div>Menu</div>} LeftSide={<div>Menu</div>} />
 		<main>
 			<Outlet />
 		</main>
