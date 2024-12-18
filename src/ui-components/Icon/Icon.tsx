@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
-import { Size, Variant } from '@/common_ui/parameters';
-import type { SizeType, VariantType } from '@/common_ui/parameters';
+import { Size, Variant } from '@/common-ui/parameters';
+import type { SizeType, VariantType } from '@/common-ui/parameters';
+import { classes } from '@/utils/classes';
 import styles from './icon.module.css';
-import { classes } from '@/common_utils/classes/classes';
 
 type Props = {
 	IconSVG: ReactNode;
@@ -10,7 +10,7 @@ type Props = {
 	variant?: VariantType;
 };
 
-const Icon = ({ IconSVG, size = 'm', variant = 'primary' }: Props) => {
+export const Icon = ({ IconSVG, size = 'm', variant = 'primary' }: Props) => {
 	return (
 		<div
 			className={classes({
@@ -22,5 +22,3 @@ const Icon = ({ IconSVG, size = 'm', variant = 'primary' }: Props) => {
 		</div>
 	);
 };
-
-export default Icon;
