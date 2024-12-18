@@ -7,6 +7,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import prettier from 'eslint-plugin-prettier';
 import globals from 'globals';
+import cssModules from 'eslint-plugin-css-modules';
 
 export default [
 	// Base JavaScript recommended rules
@@ -14,7 +15,7 @@ export default [
 
 	// TypeScript-specific rules
 	{
-		files: ['src/**/*.{ts,tsx}'], // Target TypeScript files
+		files: ['src/**/*.{ts,tsx}'],
 		languageOptions: {
 			parser: tsParser,
 			parserOptions: {
@@ -29,11 +30,13 @@ export default [
 			},
 		},
 		plugins: {
+			'css-modules': cssModules,
 			'@typescript-eslint': tseslint,
 		},
 		rules: {
 			...tseslint.configs.recommended.rules, // Use recommended TypeScript rules
 			'@typescript-eslint/no-unused-vars': ['error'],
+			'css-modules/no-unused-class': 'error',
 		},
 	},
 

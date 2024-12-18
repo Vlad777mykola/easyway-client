@@ -1,3 +1,4 @@
+/* eslint-disable css-modules/no-unused-class */
 import { ReactNode } from 'react';
 import { Size, Variant } from '@/common-ui/parameters';
 import type { SizeType, VariantType } from '@/common-ui/parameters';
