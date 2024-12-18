@@ -1,0 +1,95 @@
+.menu {
+  position: absolute;
+  width: 100%;
+  min-height: 93.3vh;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.20);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  z-index: 10000000000000000000000000;
+}
+
+.buttonContainer {
+  float: right;
+}
+
+.inputContainer {
+  padding: 15px 35px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #EEEEEE;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.items {
+  padding: 0;
+  overflow-y: auto;
+  overflow-x: auto;
+  background-color: #fff;
+}
+
+.item {
+  list-style-type: none;
+  border-bottom: 1px solid #EEEEEE;
+  padding: 15px 0px 10px 20px;
+  box-sizing: border-box;
+  background: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.time {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  padding: 3px 4px;
+  color: #BBB;
+  background-color: #FFF;
+  border: 1px solid #E5E5E5;
+  border-radius: 15px;
+  margin-right: 10px;
+}
+
+.name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11pt;
+  color: #515151;
+}
+
+.lastMessage {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9pt;
+  color: #515151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  
+  width: 90%;
+}
+
+.messageContainer {
+  display: flex;
+  align-items: center;
+}
+
+.userPhoto {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.online {
+  position: relative;
+  top: -15px;
+  left: 35px;
+  width: 8px;
+  height: 8px;
+  background-color: #8BC34A;
+  border-radius: 13px;
+  border: 3px solid #FAFAFA;
+}
+
+.nameAndMessage {
+  margin-left: 15px;
+}
