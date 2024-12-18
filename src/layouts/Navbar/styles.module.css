@@ -8,6 +8,11 @@
 	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 	background-color: #fff;
 	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+	padding: 15px 0;
+	box-sizing: border-box;
+	min-height: 55px;
+	display: flex;
+	align-items: center;
 }
 
 .relativeNavContainer {
@@ -25,6 +30,7 @@
 	justify-content: space-between;
 	padding-left: 1.75rem;
 	padding-right: 1.75rem;
+	width: 100%;
 }
 
 .rightSide {
