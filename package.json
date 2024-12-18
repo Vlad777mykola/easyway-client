@@ -14,7 +14,9 @@
 		"verify": "npm run format && npm run lint "
 	},
 	"dependencies": {
+		"@apollo/client": "^3.12.3",
 		"antd": "^5.22.5",
+		"graphql": "^16.10.0",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-router-dom": "^7.0.2"

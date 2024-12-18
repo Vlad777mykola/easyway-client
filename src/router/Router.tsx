@@ -1,11 +1,12 @@
-import Layout from '@/layouts/main/Loyouts';
-import Home from '@/pages/Home';
 import { lazy } from 'react';
+import Layout from '@/layouts/main/Layouts';
+import { Auth } from '@/pages/Auth';
+import Home from '@/pages/Home';
 import { createBrowserRouter } from 'react-router-dom';
 
 const Profile = lazy(() => import('@/pages/Profile'));
 
-export const routers = createBrowserRouter([
+export const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <Layout />,
@@ -17,6 +18,14 @@ export const routers = createBrowserRouter([
 			{
 				path: 'profile',
 				element: <Profile />,
+			},
+			{
+				path: 'login',
+				element: <Auth />,
+			},
+			{
+				path: 'signup',
+				element: <Auth />,
 			},
 		],
 	},
