@@ -1,14 +1,14 @@
 import { ReactNode } from 'react';
-import { classes } from '../../common_utils/classes/classes.tsx';
-import styles from './Navbar.module.css';
+import { classes } from '@/utils/classes/classes';
+import styles from './navbar.module.css';
 
 export type Props = {
 	isSticky?: boolean;
-	RightSide: ReactNode;
-	LeftSide: ReactNode;
+	RightSide?: ReactNode;
+	LeftSide?: ReactNode;
 };
 
-const Navbar = ({ isSticky = false, RightSide = <>Hi</>, LeftSide = <>Hi</> }: Props) => {
+export const Navbar = ({ isSticky = true, RightSide, LeftSide }: Props) => {
 	return (
 		<nav
 			className={classes(styles.navContainer, {
@@ -23,5 +23,3 @@ const Navbar = ({ isSticky = false, RightSide = <>Hi</>, LeftSide = <>Hi</> }: P
 		</nav>
 	);
 };
-
-export default Navbar;
