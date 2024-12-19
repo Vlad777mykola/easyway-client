@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { lazy } from 'react';
 import Layout from '@/layouts/main/Layouts';
 import { Auth } from '@/pages/Auth';
