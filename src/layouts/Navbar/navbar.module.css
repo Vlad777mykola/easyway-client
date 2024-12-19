@@ -14,15 +14,12 @@
 	display: flex;
 	align-items: center;
 }
-
 .relativeNavContainer {
 	position: relative;
 }
-
 .stickyNavContainer {
 	position: sticky;
 }
-
 .navResponsive {
 	position: relative;
 	display: flex;
