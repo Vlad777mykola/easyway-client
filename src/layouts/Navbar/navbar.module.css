@@ -14,15 +14,12 @@
 	display: flex;
 	align-items: center;
 }
-
 .relativeNavContainer {
 	position: relative;
 }
-
 .stickyNavContainer {
 	position: sticky;
 }
-
 .navResponsive {
 	position: relative;
 	display: flex;
@@ -31,49 +28,4 @@
 	padding-left: 1.75rem;
 	padding-right: 1.75rem;
 	width: 100%;
-}
-
-.rightSide {
-	display: flex;
-}
-
-.logoContainer {
-	display: flex;
-	align-items: center;
-}
-
-.logo {
-	font-size: 30px;
-}
-
-.chat {
-	font-size: 20px;
-}
-
-.nav {
-	display: flex;
-	list-style: none;
-	margin-bottom: 0;
-	padding-bottom: 0;
-	border-bottom: 0;
-	margin: 0;
-}
-
-.navItem {
-	color: #fff;
-	cursor: pointer;
-	text-align: center;
-	white-space: nowrap;
-	font-size: 15px;
-	line-height: 30px;
-	font-weight: 500;
-	padding-top: 0.375rem;
-	padding-bottom: 0.375rem;
-	margin-left: 0;
-	display: flex;
-	justify-content: center;
-}
-
-.navItem:nth-child(2n) {
-	margin-left: 10px;
 }
