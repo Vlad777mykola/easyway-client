@@ -1,10 +1,9 @@
+/* eslint-disable css-modules/no-unused-class */
 import { useState, ReactNode } from 'react';
-
 import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
-
-import styles from './menu.module.css';
 import { Button } from '@/ui-components/Button';
 import { classes } from '@/utils/classes';
+import styles from './menu.module.css';
 
 const Side = {
 	left: 'left',
