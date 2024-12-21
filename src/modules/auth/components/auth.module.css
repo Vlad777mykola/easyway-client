@@ -45,11 +45,6 @@
 	margin-bottom: 10px;
 }
 
-.signUp {
-	text-decoration: none;
-	color: var(--color-primary);
-}
-
 @media (min-width: 320px) {
 	.authContainer {
 		width: 100%;

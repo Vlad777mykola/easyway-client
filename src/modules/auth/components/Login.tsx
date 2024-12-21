@@ -3,7 +3,7 @@ import { authenticatedVar } from '@/apollo-client';
 import { useLogin } from '../hooks/useLogin';
 import { Auth } from './Auth';
 import { useReactiveVar } from '@apollo/client';
-import style from './auth.module.css';
+import style from './login.module.css';
 
 export const Login = () => {
 	const { login } = useLogin();
