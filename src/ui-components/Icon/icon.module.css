@@ -38,6 +38,10 @@
 	color: var(--color-default-text);
 }
 
+.default {
+	color: #fff;
+}
+
 .xs {
 	font-size: var(--font-size-xs);
 }

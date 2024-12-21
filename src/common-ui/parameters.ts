@@ -4,6 +4,7 @@ export const Variant = {
 	success: 'success',
 	error: 'error',
 	dark: 'dark',
+	default: 'default',
 	'on-dark': 'on-dark',
 };
 
