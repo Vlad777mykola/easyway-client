@@ -1,9 +1,9 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { Button } from 'antd';
 import { Input } from 'antd';
-import style from './auth.module.css';
 import { useGetUser } from '../hooks/useGetUser';
 import { useNavigate } from 'react-router-dom';
+import style from './auth.module.css';
 
 export const Auth = ({
 	submitLabel,
@@ -37,23 +37,38 @@ export const Auth = ({
 
 	return (
 		<div className={style.authContainer}>
-			<Input
-				placeholder="email"
-				value={auth.email}
-				onChange={(e) => onChange(e.target.value, 'email')}
-			/>
-			<Input
-				placeholder="password"
-				value={auth.password}
-				onChange={(e) => onChange(e.target.value, 'password')}
-			/>
-			<Button
-				type="primary"
-				onClick={() => onSubmit({ email: auth.email, password: auth.password })}
-			>
-				{submitLabel}
-			</Button>
-			{children}
+			<div className={style.loginForm}>
+				<h3 className={style.loginHeader}>Login</h3>
+				<div className={style.formItem}>
+					<p className={style.nameOfItem}>Email: </p>
+					<Input
+						placeholder="email"
+						value={auth.email}
+						size="large"
+						onChange={(e) => onChange(e.target.value, 'email')}
+					/>
+				</div>
+				<div className={style.formItem}>
+					<p className={style.nameOfItem}>Password: </p>
+					<Input.Password
+						placeholder="password"
+						value={auth.password}
+						size="large"
+						onChange={(e) => onChange(e.target.value, 'password')}
+					/>
+				</div>
+				<div className={style.sendLogin}>
+					<Button
+						type="primary"
+						onClick={() => onSubmit({ email: auth.email, password: auth.password })}
+						size="large"
+						block
+					>
+						{submitLabel}
+					</Button>
+				</div>
+			</div>
+			<div>{children}</div>
 		</div>
 	);
 };

@@ -3,16 +3,21 @@ import { authenticatedVar } from '@/apollo-client';
 import { useLogin } from '../hooks/useLogin';
 import { Auth } from './Auth';
 import { useReactiveVar } from '@apollo/client';
+import style from './auth.module.css';
 
 export const Login = () => {
 	const { login } = useLogin();
 	const authenticated = useReactiveVar(authenticatedVar);
 
+	console.log('AUTHENTICATED: ', authenticated);
+
 	return (
 		<>
 			<Auth submitLabel={'Login'} onSubmit={(request) => login(request)}>
-				<Link to={'/signup'}>SingUp</Link>
-				{`${authenticated}`}
+				<Link className={style.signUp} to={'/signup'}>
+					Sing Up
+				</Link>
+				{/* {`${authenticated}`} */}
 			</Auth>
 		</>
 	);
