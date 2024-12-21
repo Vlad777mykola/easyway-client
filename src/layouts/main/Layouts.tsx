@@ -3,14 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { LoginOutlined, UserOutlined } from '@ant-design/icons';
 import { useGetUser } from '@/modules/auth/hooks/useGetUser';
 import { CircleButton } from '@/ui-components/CircleButton';
-import { Navbar } from '../navbar';
+import { Navbar } from '../Navbar';
 import styles from './layouts.module.css';
 
 const Layouts = () => {
 	const navigate = useNavigate();
 	const { data } = useGetUser();
-
-	console.log('DATA: ', data);
 
 	const handleClick = (link: string) => {
 		navigate(link);
