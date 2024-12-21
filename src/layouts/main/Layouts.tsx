@@ -1,9 +1,7 @@
 import { Outlet } from 'react-router-dom';
-import { Navbar } from '../navbar';
+import { Navbar } from '../Navbar';
 import { Menu } from '../Menu';
 import styles from './layouts.module.css';
-
-const items = [<div>Menu 1</div>, <div>Menu 2</div>, <div>Menu 3</div>, <div>Menu 4</div>];
 
 const SideMenu = () => {
 	return (

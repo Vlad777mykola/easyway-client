@@ -1,10 +1,10 @@
+/* eslint-disable css-modules/no-unused-class */
 import { useState, ReactNode } from 'react';
-
 import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
-
-import styles from './menu.module.css';
-import { Button } from '@/ui-components/Button';
+import { Icon } from '@/ui-components/Icon';
+import { CircleButton } from '@/ui-components/CircleButton';
 import { classes } from '@/utils/classes';
+import styles from './menu.module.css';
 
 const Side = {
 	left: 'left',
@@ -59,14 +59,14 @@ export const Menu = ({ Items, side }: Props) => {
 						})}
 						onClick={handleCloseMenu}
 					>
-						<CloseOutlined />
+						<Icon IconSVG={<CloseOutlined />} />
 					</span>
 					{Items}
 				</div>
 			)}
-			<Button size="middle" variant="filled" onClick={onClick}>
-				<MenuOutlined />
-			</Button>
+			<CircleButton size="middle" variant="filled" onClick={onClick}>
+				<Icon IconSVG={<MenuOutlined />} />
+			</CircleButton>
 		</>
 	);
 };
