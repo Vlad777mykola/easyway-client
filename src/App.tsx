@@ -7,13 +7,13 @@ import { AppContextProvider } from './context/AppContext';
 
 export const App = () => {
 	return (
-		<AppContextProvider>
-			<ApolloProvider client={client}>
-				<Guard>
+		<ApolloProvider client={client}>
+			<Guard>
+				<AppContextProvider>
 					<RouterProvider router={router} />
-				</Guard>
-			</ApolloProvider>
-		</AppContextProvider>
+				</AppContextProvider>
+			</Guard>
+		</ApolloProvider>
 	);
 };
 

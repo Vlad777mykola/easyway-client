@@ -30,14 +30,7 @@ const UserProvider = ({ children }: UserProviderType) => {
 		email: '',
 	});
 
-	if (data?.email) {
-		setUser(data);
-	} else {
-		setUser({
-			username: '',
-			email: '',
-		});
-	}
+	/* setUser(data?.me || ''); */
 
 	return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
 };
