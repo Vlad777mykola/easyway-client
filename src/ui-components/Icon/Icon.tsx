@@ -1,5 +1,5 @@
 /* eslint-disable css-modules/no-unused-class */
-import { CloseOutlined, MenuOutlined } from '@ant-design/icons';
+import { CloseOutlined, MenuOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
 import { Size, Variant } from '@/common-ui/parameters';
 import type { SizeType, VariantType } from '@/common-ui/parameters';
 import { classes } from '@/utils/classes';
@@ -8,6 +8,8 @@ import styles from './icon.module.css';
 const IconVariants = {
 	close: CloseOutlined,
 	menu: MenuOutlined,
+	login: LoginOutlined,
+	user: UserOutlined,
 };
 
 type IconVariantsType = keyof typeof IconVariants;
