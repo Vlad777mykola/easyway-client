@@ -1,0 +1,45 @@
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Icon } from '@/ui-components/Icon';
+import { Menu } from '@/ui-components/Menu';
+import { useGetUser } from '@/modules/auth/hooks/useGetUser';
+import { CircleButton } from '@/ui-components/CircleButton';
+import { Navbar } from '../navbar';
+import styles from './header.module.css';
+
+const SideMenu = () => {
+	return (
+		<div className={styles.headerLeftMenuList}>
+			<Link to="/constructor">Create Task</Link>
+			<Link to="/task">Tasks</Link>
+		</div>
+	);
+};
+
+const Header = () => {
+	const navigate = useNavigate();
+	const { data } = useGetUser();
+
+	const handleClick = (link: string) => {
+		navigate(link);
+	};
+
+	return (
+		<Navbar
+			RightSide={
+				data === undefined ? (
+					<CircleButton onClick={() => handleClick('/login')}>
+						<Icon icon="login" />
+					</CircleButton>
+				) : (
+					<CircleButton onClick={() => handleClick('/profile')}>
+						<Icon icon="user" />
+					</CircleButton>
+				)
+			}
+			LeftSide={<Menu side="left" Items={<SideMenu />} />}
+		/>
+	);
+};
+
+export default Header;
