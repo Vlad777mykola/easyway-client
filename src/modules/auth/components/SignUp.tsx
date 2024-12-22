@@ -20,6 +20,7 @@ export const SignUp = () => {
 	const { data } = useGetUser();
 	const [auth, setAuth] = useState({
 		email: '',
+		role: 'Student',
 		username: '',
 		password: '',
 		repeatPassword: '',
@@ -44,17 +45,48 @@ export const SignUp = () => {
 		await login({ email, password });
 	};
 
+	const changeRole = (role: string) => {
+		setAuth((prev) => ({
+			...prev,
+			role,
+		}));
+	};
+
 	useEffect(() => {
 		if (data) {
 			navigate('/');
 		}
 	}, [data, navigate]);
 
+	console.log('AUTH: ', auth);
+
 	return (
 		<>
 			<div className={style.authContainer}>
 				<div className={style.signUpForm}>
 					<h3 className={style.signUpHeader}>Sign Up</h3>
+					<div className={style.switchRole}>
+						<div className={style.role}>
+							<Button
+								className={style.button}
+								onClick={() => changeRole('teacher')}
+								type="text"
+								disabled={auth.role === 'teacher'}
+							>
+								Teacher
+							</Button>
+						</div>
+						<div className={style.role}>
+							<Button
+								className={style.button}
+								onClick={() => changeRole('student')}
+								type="text"
+								disabled={auth.role === 'student'}
+							>
+								Student
+							</Button>
+						</div>
+					</div>
 					<div className={style.formItem}>
 						<p className={style.nameOfItem}>Username: </p>
 						<Input
