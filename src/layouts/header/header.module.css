@@ -1,0 +1,14 @@
+.headerLeftMenuList {
+	display: flex;
+	flex-direction: column;
+	margin: 20px;
+}
+
+.headerLeftMenuList a {
+	text-decoration: none;
+	color: black;
+}
+
+.headerLeftMenuList a:hover {
+	color: var(--color-primary);
+}

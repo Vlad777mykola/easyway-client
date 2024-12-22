@@ -21,19 +21,3 @@
 .footer {
 	grid-area: foot;
 }
-
-.menuItem {
-	padding: 12px 24px;
-	color: #333;
-	font-family: 'Roboto', sans-serif;
-	font-size: 20px;
-	font-weight: 600;
-	text-decoration: none;
-	transition-duration: 0.25s;
-	cursor: pointer;
-	opacity: 1;
-}
-
-.menuItem:hover {
-	background-color: #cfd8dc;
-}
