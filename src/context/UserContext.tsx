@@ -1,35 +1,43 @@
+import { useGetUser } from '@/modules/auth/hooks/useGetUser';
 import { createContext, useState, Dispatch, SetStateAction, ReactNode } from 'react';
 
-export interface UserData {
+type UserData = {
 	username: string;
 	email: string;
-	password: string;
-}
+};
 
-interface IUserContext {
+type UserContextType = {
 	user: UserData;
 	setUser: Dispatch<SetStateAction<UserData>>;
-}
+};
 
-interface IUserProvider {
+type UserProviderType = {
 	children: ReactNode;
-}
+};
 
-const UserContext = createContext<IUserContext>({
+const UserContext = createContext<UserContextType>({
 	user: {
 		username: '',
 		email: '',
-		password: '',
 	},
 	setUser: () => {},
 });
 
-const UserProvider = ({ children }: IUserProvider) => {
+const UserProvider = ({ children }: UserProviderType) => {
+	const { data } = useGetUser();
 	const [user, setUser] = useState<UserData>({
 		username: '',
 		email: '',
-		password: '',
 	});
+
+	if (data?.email) {
+		setUser(data);
+	} else {
+		setUser({
+			username: '',
+			email: '',
+		});
+	}
 
 	return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
 };

@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { UserProvider } from './UserContext';
 
-interface IAppContextProvider {
+type IAppContextType = {
 	children: ReactNode;
-}
+};
 
-export const AppContextProvider = ({ children }: IAppContextProvider) => {
+export const AppContextProvider = ({ children }: IAppContextType) => {
 	return <UserProvider>{children}</UserProvider>;
 };
