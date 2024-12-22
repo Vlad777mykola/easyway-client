@@ -1,17 +1,27 @@
 /* eslint-disable css-modules/no-unused-class */
-import { ReactNode } from 'react';
+import { CloseOutlined, MenuOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
 import { Size, Variant } from '@/common-ui/parameters';
 import type { SizeType, VariantType } from '@/common-ui/parameters';
 import { classes } from '@/utils/classes';
 import styles from './icon.module.css';
 
+const IconVariants = {
+	close: CloseOutlined,
+	menu: MenuOutlined,
+	login: LoginOutlined,
+	user: UserOutlined,
+};
+
+type IconVariantsType = keyof typeof IconVariants;
+
 type Props = {
-	IconSVG: ReactNode;
+	icon: IconVariantsType;
 	size?: SizeType;
 	variant?: VariantType;
 };
 
-export const Icon = ({ IconSVG, size = 'm', variant = 'primary' }: Props) => {
+export const Icon = ({ icon, size = 'm', variant = 'primary' }: Props) => {
+	const IconComponent = IconVariants[icon];
 	return (
 		<div
 			className={classes({
@@ -19,7 +29,7 @@ export const Icon = ({ IconSVG, size = 'm', variant = 'primary' }: Props) => {
 				[styles[Variant[variant]]]: !!variant,
 			})}
 		>
-			{IconSVG}
+			<IconComponent />
 		</div>
 	);
 };
