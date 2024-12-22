@@ -1,10 +1,22 @@
 import { Outlet } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { LoginOutlined, UserOutlined } from '@ant-design/icons';
 import { useGetUser } from '@/modules/auth/hooks/useGetUser';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { Navbar } from '../Navbar';
+import { Menu } from '../Menu';
 import styles from './layouts.module.css';
+import { Icon } from '@/ui-components/Icon';
+
+const SideMenu = () => {
+	return (
+		<div>
+			<div className={styles.menuItem}>Menu 1</div>
+			<div className={styles.menuItem}>Menu 2</div>
+			<div className={styles.menuItem}>Menu 3</div>
+			<div className={styles.menuItem}>Menu 4</div>
+		</div>
+	);
+};
 
 const Layouts = () => {
 	const navigate = useNavigate();
@@ -21,15 +33,15 @@ const Layouts = () => {
 					RightSide={
 						data === undefined ? (
 							<CircleButton onClick={() => handleClick('/login')}>
-								<LoginOutlined />
+								<Icon icon="login" />
 							</CircleButton>
 						) : (
 							<CircleButton onClick={() => handleClick('/profile')}>
-								<UserOutlined />
+								<Icon icon="user" />
 							</CircleButton>
 						)
 					}
-					LeftSide={<div>Menu</div>}
+					LeftSide={<Menu side="left" Items={<SideMenu />} />}
 				/>
 			</header>
 			<main className={styles.main}>
