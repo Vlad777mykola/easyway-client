@@ -1,6 +1,5 @@
 /* eslint-disable css-modules/no-unused-class */
 import { useState, ReactNode } from 'react';
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { classes } from '@/utils/classes';
@@ -59,13 +58,13 @@ export const Menu = ({ Items, side }: Props) => {
 						})}
 						onClick={handleCloseMenu}
 					>
-						<Icon IconSVG={<CloseOutlined />} />
+						<Icon icon="close" />
 					</span>
 					{Items}
 				</div>
 			)}
 			<CircleButton size="middle" variant="filled" onClick={onClick}>
-				<Icon IconSVG={<MenuOutlined />} />
+				<Icon icon="menu" />
 			</CircleButton>
 		</>
 	);
