@@ -1,4 +1,4 @@
-import { useGetUser } from '@/modules/auth/hooks/useGetUser';
+/* import { useGetUser } from '@/modules/auth/hooks/useGetUser'; */
 import { createContext, useState, Dispatch, SetStateAction, ReactNode } from 'react';
 
 type UserData = {
@@ -24,13 +24,13 @@ const UserContext = createContext<UserContextType>({
 });
 
 const UserProvider = ({ children }: UserProviderType) => {
-	const { data } = useGetUser();
+	/* const { data } = useGetUser(); */
 	const [user, setUser] = useState<UserData>({
 		username: '',
 		email: '',
 	});
 
-	setUser(data?.email || '');
+	/* setUser(data?.email || ''); */
 
 	return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
 };
