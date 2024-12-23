@@ -1,5 +1,14 @@
 /* eslint-disable css-modules/no-unused-class */
-import { CloseOutlined, MenuOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
+import {
+	CloseOutlined,
+	MenuOutlined,
+	LoginOutlined,
+	UserOutlined,
+	FacebookOutlined,
+	InstagramOutlined,
+	YoutubeOutlined,
+	TwitterOutlined,
+} from '@ant-design/icons';
 import { Size, Variant } from '@/common-ui/parameters';
 import type { SizeType, VariantType } from '@/common-ui/parameters';
 import { classes } from '@/utils/classes';
@@ -10,6 +19,10 @@ const IconVariants = {
 	menu: MenuOutlined,
 	login: LoginOutlined,
 	user: UserOutlined,
+	facebook: FacebookOutlined,
+	instagram: InstagramOutlined,
+	youtube: YoutubeOutlined,
+	twitter: TwitterOutlined,
 };
 
 type IconVariantsType = keyof typeof IconVariants;
