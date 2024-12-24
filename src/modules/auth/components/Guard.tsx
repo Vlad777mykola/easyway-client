@@ -6,7 +6,7 @@ interface IGuardProps {
 	children: ReactNode;
 }
 
-const EXECUTED_ROUTES = ['/complete-test', '/login', '/signup', '/'];
+const EXECUTED_ROUTES = ['/login', '/signup', '/profile', '/complete-test'];
 
 export const Guard = ({ children }: IGuardProps) => {
 	const { data: user } = useGetUser();

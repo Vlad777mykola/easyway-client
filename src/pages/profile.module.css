@@ -1,0 +1,189 @@
+.profileContainer {
+	display: flex;
+	flex-direction: row;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin: auto;
+	width: 40%;
+	border-radius: 5px;
+	box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+	margin-top: 300px;
+	margin-bottom: 5px;
+	background: #fff;
+}
+
+.avatarOfUser {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	width: 30%;
+	margin-top: 50px;
+}
+
+.nickname {
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+.email {
+	color: #b2b2b2;
+	margin-top: 5px;
+}
+
+.profileSettings {
+	display: flex;
+	flex-direction: column;
+	border-left: 0.5px solid #e5e5e5;
+	padding-left: 15px;
+	padding-right: 15px;
+	width: 70%;
+}
+
+.headerContainer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 3px;
+}
+
+.header {
+	display: flex;
+	text-align: start;
+}
+
+.nameContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.name {
+	width: 48%;
+}
+
+.emailContainer {
+	margin-top: 15px;
+}
+
+.labels {
+	font-size: 15px;
+}
+
+.inputContainer {
+	margin-top: 5px;
+}
+
+.buttonContainer {
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+@media (min-width: 320px) {
+	.profileContainer {
+		width: 100%;
+		flex-direction: column;
+		margin-top: 0px;
+		box-shadow: none;
+		padding: 20px 20px;
+		box-sizing: border-box;
+		height: 100vh;
+	}
+
+	.header {
+		margin-left: 5px;
+		margin-top: 2rem;
+		font-size: 25px;
+	}
+
+	.nameContainer {
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+
+	.emailContainer {
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+
+	.avatarOfUser {
+		width: 100%;
+		margin-top: 10px;
+	}
+
+	.profileSettings {
+		border-left: none;
+		padding-left: 0px;
+		padding-right: 0px;
+		width: 100%;
+	}
+}
+
+@media (min-width: 769px) {
+	.profileContainer {
+		height: 100vh;
+	}
+
+	.header {
+		margin-left: 20px;
+	}
+
+	.nameContainer {
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+
+	.emailContainer {
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+}
+
+@media (min-width: 1025px) {
+	.profileContainer {
+		display: flex;
+		flex-direction: row;
+		padding-right: 15px;
+		padding-left: 15px;
+		width: 60%;
+		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+		margin-top: 150px;
+		height: 500px;
+	}
+
+	.avatarOfUser {
+		width: 30%;
+		margin-top: 50px;
+	}
+
+	.header {
+		margin-left: 0px;
+	}
+
+	.nameContainer {
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.emailContainer {
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.profileSettings {
+		display: flex;
+		flex-direction: column;
+		border-left: 0.5px solid #e5e5e5;
+		padding-left: 15px;
+		padding-right: 15px;
+		width: 70%;
+	}
+}
+
+@media (min-width: 1501px) {
+	.profileContainer {
+		width: 40%;
+	}
+}
