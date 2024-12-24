@@ -1,11 +1,8 @@
-/* eslint-disable react-refresh/only-export-components */
-import { lazy } from 'react';
+import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@/layouts/main/Layouts';
 import { Auth } from '@/pages/Auth';
+import Profile from '@/pages/Profile';
 import Home from '@/pages/Home';
-import { createBrowserRouter } from 'react-router-dom';
-
-const Profile = lazy(() => import('@/pages/Profile'));
 
 export const router = createBrowserRouter([
 	{
