@@ -3,6 +3,7 @@ import Layout from '@/layouts/main/Layouts';
 import { Auth } from '@/pages/Auth';
 import Profile from '@/pages/Profile';
 import Home from '@/pages/Home';
+import { CompleteTest } from '@/pages/CompleteTest';
 
 export const router = createBrowserRouter([
 	{
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
 			{
 				path: 'signup',
 				element: <Auth />,
+			},
+			{
+				path: 'complete-test',
+				element: <CompleteTest />,
 			},
 		],
 	},
