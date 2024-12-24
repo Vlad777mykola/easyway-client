@@ -1,0 +1,129 @@
+.lessonPage {
+	padding: 10px 0px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: 90vh;
+}
+
+.prevQuestion {
+	display: none;
+}
+
+.nextQuestion {
+	display: none;
+}
+
+.topic {
+	margin-top: 10px;
+}
+
+.sentenceContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-top: 0px;
+}
+
+.sentence {
+	font-size: 50px;
+	margin: 0px 0px 0px 0px;
+}
+
+.answerContainer {
+	height: 30px;
+	margin: 0px 0px;
+}
+
+.correctAnswerContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.answer {
+	font-size: 50px;
+	color: rgb(46, 125, 50);
+}
+
+.uncorrectAnswer {
+	font-size: 50px;
+	color: rgb(211, 47, 47);
+	margin: 100px 0px;
+}
+
+.words {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	width: 50%;
+	margin-top: 200px;
+	gap: 0px 50px;
+}
+
+.word {
+	margin: 30px 0px;
+}
+
+.pagination {
+	margin-top: auto;
+}
+
+.pagination :nth-child(2n) {
+	margin: 40px 10px;
+}
+
+@media (min-width: 320px) {
+	.words {
+		margin-top: 100px;
+		width: 100%;
+	}
+
+	.word {
+		margin: 10px;
+	}
+
+	.answer {
+		display: flex;
+		align-self: center;
+		font-size: 35px;
+	}
+}
+
+@media (min-width: 769px) {
+	.words {
+		width: 80%;
+		margin-top: 150px;
+	}
+
+	.word {
+		margin: 20px;
+	}
+
+	.prevQuestion {
+		display: block;
+		position: absolute;
+		top: 50%;
+		left: 0;
+	}
+
+	.nextQuestion {
+		display: block;
+		position: absolute;
+		top: 50%;
+		right: 0;
+	}
+}
+
+@media (min-width: 1025px) {
+	.words {
+		margin-top: 200px;
+		width: 50%;
+	}
+
+	.word {
+		margin: 30px 0px;
+	}
+}

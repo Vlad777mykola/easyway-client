@@ -4,6 +4,7 @@ import Layout from '@/layouts/main/Layouts';
 import { Auth } from '@/pages/Auth';
 import Home from '@/pages/Home';
 import { createBrowserRouter } from 'react-router-dom';
+import { CompleteTest } from '@/pages/CompleteTest';
 
 const Profile = lazy(() => import('@/pages/Profile'));
 
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
 			{
 				path: 'signup',
 				element: <Auth />,
+			},
+			{
+				path: 'complete-test',
+				element: <CompleteTest />,
 			},
 		],
 	},
