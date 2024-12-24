@@ -1,0 +1,114 @@
+.container {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form {
+  width: 50%;
+  margin-top: 25px;
+}
+
+.formItem {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.nameOfItem {
+  width: 60%;
+  font-size: 25px;
+  margin: 0px 0px;
+  display: flex;
+  align-self: center;
+}
+
+.saveTestContainer {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (min-width: 320px) {
+  .form {
+    width: 95%;
+    padding: 0px 15px;
+    box-sizing: border-box;
+  }
+
+  .formItem {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nameOfItem {
+    display: flex;
+    align-self: start;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media (min-width: 481px) {
+  .form {
+    width: 95%;
+  }
+
+  .formItem {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .nameOfItem {
+    display: flex;
+    align-self: center;
+    width: 60%;
+  } 
+}
+
+@media (min-width: 769px) {
+  .form {
+    width: 80%;
+  }
+}
+
+@media (min-width: 1025px) {
+  .form {
+    width: 75%;
+  }
+}
+
+@media (min-width: 1201px) {
+  .form {
+    width: 60%;
+  }
+}
+
+@media (min-width: 1501px) {
+  .form {
+    width: 55%;
+  }
+}
+
+@media (min-width: 1801px) {
+  .form {
+    width: 50%
+  }
+}
+
+@media (min-width: 2101px) {
+  .form {
+    width: 45%;
+  }
+}
+
+@media (min-width: 2301px) {
+  .form {
+    width: 30%;
+  }
+}
