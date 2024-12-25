@@ -1,8 +1,11 @@
+import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@/layouts/main/Layouts';
 import { Auth } from '@/pages/Auth';
-import Profile from '@/pages/Profile';
 import Home from '@/pages/Home';
+
+const Profile = lazy(() => import('@/pages/Profile'));
+const CreateTest = lazy(() => import('@/pages/CreateTest'));
 
 export const router = createBrowserRouter([
 	{
@@ -24,6 +27,10 @@ export const router = createBrowserRouter([
 			{
 				path: 'signup',
 				element: <Auth />,
+			},
+			{
+				path: 'test',
+				element: <CreateTest />,
 			},
 		],
 	},
