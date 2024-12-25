@@ -6,6 +6,7 @@ import Home from '@/pages/Home';
 
 const Profile = lazy(() => import('@/pages/Profile'));
 const CreateTest = lazy(() => import('@/pages/CreateTest'));
+const CompleteTest = lazy(() => import('@/pages/CompleteTest'));
 
 export const router = createBrowserRouter([
 	{
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
 			{
 				path: 'test',
 				element: <CreateTest />,
+			},
+			{
+				path: 'complete-test',
+				element: <CompleteTest />,
 			},
 		],
 	},

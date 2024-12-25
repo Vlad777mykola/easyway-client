@@ -8,6 +8,8 @@ import {
 	InstagramOutlined,
 	YoutubeOutlined,
 	TwitterOutlined,
+	LeftOutlined,
+	RightOutlined,
 } from '@ant-design/icons';
 import { Size, Variant } from '@/common-ui/parameters';
 import type { SizeType, VariantType } from '@/common-ui/parameters';
@@ -23,6 +25,8 @@ const IconVariants = {
 	instagram: InstagramOutlined,
 	youtube: YoutubeOutlined,
 	twitter: TwitterOutlined,
+	left: LeftOutlined,
+	right: RightOutlined,
 };
 
 type IconVariantsType = keyof typeof IconVariants;
