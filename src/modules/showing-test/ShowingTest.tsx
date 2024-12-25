@@ -1,7 +1,8 @@
 import { ReactNode, useEffect, useState } from 'react';
 import axios from 'axios';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button } from '@/ui-components/Button';
+import { Icon } from '@/ui-components/Icon';
+import { CircleButton } from '@/ui-components/CircleButton';
 import { Tag } from '@/ui-components/Tag';
 import styles from './showingTest.module.css';
 
@@ -201,14 +202,14 @@ export const ShowingTest = () => {
 	return (
 		<div className={styles.lessonPage}>
 			<div className={styles.prevQuestion}>
-				<Button type="primary" size="large" onClick={() => swapQuestion(testId - 1)}>
-					<LeftOutlined />
-				</Button>
+				<CircleButton type="primary" size="large" onClick={() => swapQuestion(testId - 1)}>
+					<Icon icon="left" variant="default" />
+				</CircleButton>
 			</div>
 			<div className={styles.nextQuestion}>
-				<Button type="primary" size="large" onClick={() => swapQuestion(testId + 1)}>
-					<RightOutlined />
-				</Button>
+				<CircleButton type="primary" size="large" onClick={() => swapQuestion(testId + 1)}>
+					<Icon icon="right" variant="default" />
+				</CircleButton>
 			</div>
 			<h1 className={styles.topic}>Lesson Topic</h1>
 			<div className={styles.sentenceContainer}>
