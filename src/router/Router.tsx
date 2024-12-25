@@ -4,9 +4,9 @@ import Layout from '@/layouts/main/Layouts';
 import { Auth } from '@/pages/Auth';
 import Home from '@/pages/Home';
 import { createBrowserRouter } from 'react-router-dom';
-import { CreateTest } from '@/pages/CreateTest';
 
 const Profile = lazy(() => import('@/pages/Profile'));
+const CreateTest = lazy(() => import('@/pages/CreateTest'));
 
 export const router = createBrowserRouter([
 	{
