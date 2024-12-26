@@ -133,11 +133,11 @@ export const SignUp = () => {
 							Sign Up
 						</Button>
 					</div>
-					<div className={style.loginContainer}>
-						<Link className={style.login} to={'/login'}>
-							Login
-						</Link>
-					</div>
+				</div>
+				<div className={style.loginContainer}>
+					<Link className={style.login} to={'/login'}>
+						Login
+					</Link>
 				</div>
 			</div>
 		</>

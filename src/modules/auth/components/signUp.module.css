@@ -2,7 +2,6 @@
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	justify-content: space-between;
 	width: 30%;
 	min-height: 400px;
 	margin: auto;
@@ -47,6 +46,7 @@
 .loginContainer {
 	display: flex;
 	justify-content: center;
+	margin-top: 20px;
 }
 
 .login {
@@ -76,14 +76,11 @@
 	.authContainer {
 		width: 100%;
 		margin-top: 0px;
-		height: 700px;
+		min-height: 100vh;
 	}
 }
 
 @media (min-width: 769px) {
-	.authContainer {
-		height: 100%;
-	}
 	.signUpHeader {
 		margin-top: 100px;
 		margin-bottom: 120px;
@@ -94,7 +91,8 @@
 	.authContainer {
 		width: 30%;
 		margin-top: 50px;
-		height: 700px;
+		margin-bottom: 50px;
+		min-height: 700px;
 	}
 
 	.signUpHeader {
@@ -105,21 +103,20 @@
 
 @media (min-width: 1500px) {
 	.authContainer {
-		margin-top: 100px;
+		margin-top: 50px;
 		width: 25%;
 	}
 }
 
 @media (min-width: 1800px) {
 	.authContainer {
-		margin-top: 150px;
+		margin-top: 50px;
 		width: 20%;
 	}
 }
 
 @media (min-width: 2100px) {
 	.authContainer {
-		margin-top: 200px;
 		width: 15%;
 	}
 }
