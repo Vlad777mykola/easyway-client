@@ -7,31 +7,29 @@ export const Footer = () => {
 			<ul className={style.footerRedesWrapper}>
 				<li className={style.linkList}>
 					<a className={style.footerLink} href="#">
-						<Icon icon="facebook" variant="on-dark" size="m" />
+						<Icon icon="facebook" variant="primary" size="m" />
 						<p className={style.nameOfLink}>FACEBOOK</p>
 					</a>
 				</li>
 				<li className={style.linkList}>
 					<a className={style.footerLink} href="#">
-						<Icon icon="twitter" variant="on-dark" size="m" />
+						<Icon icon="twitter" variant="primary" size="m" />
 						<p className={style.nameOfLink}>TWITTER</p>
 					</a>
 				</li>
 				<li className={style.linkList}>
 					<a className={style.footerLink} href="#">
-						<Icon icon="instagram" variant="on-dark" size="m" />
+						<Icon icon="instagram" variant="primary" size="m" />
 						<p className={style.nameOfLink}>INSTAGRAM</p>
 					</a>
 				</li>
 				<li className={style.linkList}>
 					<a className={style.footerLink} href="#">
-						<Icon icon="youtube" variant="on-dark" size="m" />
+						<Icon icon="youtube" variant="primary" size="m" />
 						<p className={style.nameOfLink}>YOUTUBE</p>
 					</a>
 				</li>
 			</ul>
-			<div className={style.separator}></div>
-			<p className={style.footerTextTo}>Copyright @ 2024</p>
 		</div>
 	);
 };

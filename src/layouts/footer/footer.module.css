@@ -1,5 +1,5 @@
 .footerRedes {
-	background-color: var(--color-primary);
+	background-color: #fff;
 	padding: 30px 30px;
 	display: flex;
 	flex-direction: column;
@@ -29,18 +29,7 @@
 
 .nameOfLink {
 	margin: 0px 0px 0px 10px;
-}
-
-.separator {
-	background-color: #fff;
-	height: 2px;
-	width: 5%;
-	margin-top: 40px;
-}
-
-.footerTextTo {
-	color: #fff;
-	margin: 40px 0px 0px 0px;
+	color: black;
 }
 
 @media (min-width: 320px) {
