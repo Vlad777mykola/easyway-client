@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
-import { Tag } from '@/ui-components/Tag';
 import styles from './showingTest.module.css';
 
 type Test = {
