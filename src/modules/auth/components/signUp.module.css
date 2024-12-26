@@ -44,6 +44,11 @@
 	margin-bottom: 10px;
 }
 
+.loginContainer {
+	display: flex;
+	justify-content: center;
+}
+
 .login {
 	text-decoration: none;
 	color: var(--color-primary);
@@ -77,7 +82,7 @@
 
 @media (min-width: 769px) {
 	.authContainer {
-		height: 900px;
+		height: 100%;
 	}
 	.signUpHeader {
 		margin-top: 100px;

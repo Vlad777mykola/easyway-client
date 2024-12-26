@@ -10,8 +10,8 @@ import styles from './header.module.css';
 const SideMenu = () => {
 	return (
 		<div className={styles.headerLeftMenuList}>
-			<Link to="/constructor">Create Task</Link>
-			<Link to="/task">Tasks</Link>
+			<Link to="/complete-test">Tasks</Link>
+			<Link to="/test">Create Task</Link>
 		</div>
 	);
 };
