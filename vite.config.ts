@@ -10,5 +10,5 @@ export default defineConfig({
 			'@ui-components': path.resolve(__dirname, './src/ui-components'),
 		},
 	},
-	base: '/easyway-client',
+	// base: '/easyway-client',
 });
