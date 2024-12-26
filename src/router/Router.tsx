@@ -13,30 +13,12 @@ export const router = createBrowserRouter([
 		path: '/',
 		element: <Layout />,
 		children: [
-			{
-				path: '',
-				element: <Home />,
-			},
-			{
-				path: 'profile',
-				element: <Profile />,
-			},
-			{
-				path: 'login',
-				element: <Auth />,
-			},
-			{
-				path: 'signup',
-				element: <Auth />,
-			},
-			{
-				path: 'test',
-				element: <CreateTest />,
-			},
-			{
-				path: 'complete-test',
-				element: <CompleteTest />,
-			},
+			{ path: '', element: <Home /> },
+			{ path: 'profile', element: <Profile /> },
+			{ path: 'login', element: <Auth /> },
+			{ path: 'signup', element: <Auth /> },
+			{ path: 'test', element: <CreateTest /> },
+			{ path: 'complete-test', element: <CompleteTest /> },
 		],
 	},
 ]);

@@ -38,6 +38,8 @@ export default [
 			'@typescript-eslint/no-unused-vars': ['error'],
 			'css-modules/no-unused-class': 'error',
 		},
+
+		ignores: ['dist/', 'node_modules/'],
 	},
 
 	// React-specific rules

@@ -197,7 +197,7 @@ export const ShowingTest = () => {
 
 	useEffect(() => {
 		showSentence(testId);
-	}, [testId]);
+	}, [testId, showSentence]);
 
 	return (
 		<div className={styles.lessonPage}>
