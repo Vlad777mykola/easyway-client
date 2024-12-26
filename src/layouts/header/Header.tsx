@@ -4,7 +4,7 @@ import { Icon } from '@/ui-components/Icon';
 import { Menu } from '@/ui-components/Menu';
 import { useGetUser } from '@/modules/auth/hooks/useGetUser';
 import { CircleButton } from '@/ui-components/CircleButton';
-import { Navbar } from '../navbar';
+import { Navbar } from '@/common-components/navbar';
 import styles from './header.module.css';
 
 const SideMenu = () => {
