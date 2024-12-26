@@ -1,0 +1,62 @@
+.primary {
+	color: var(--color-primary);
+	transition: var(--transition-button);
+}
+.primary:hover {
+	color: var(--color-primary-hover);
+}
+
+.secondary {
+	color: var(--color-secondary);
+	transition: var(--transition-button);
+}
+.secondary:hover {
+	color: var(--color-secondary-hover);
+}
+
+.success {
+	color: var(--color-success);
+	transition: var(--transition-button);
+}
+.success:hover {
+	color: var(--color-success-hover);
+}
+
+.error {
+	color: var(--color-error);
+	transition: var(--transition-button);
+}
+.error:hover {
+	color: var(--color-error-hover);
+}
+
+.dark {
+	color: var(--black);
+	transition: var(--transition-button);
+}
+.dark:hover {
+	color: var(--color-default-text);
+}
+
+.default {
+	color: #fff;
+}
+
+.xs {
+	font-size: var(--font-size-xs);
+}
+
+.s {
+	font-size: var(--font-size-s);
+}
+
+.m {
+	font-size: var(--font-size-m);
+}
+
+.l {
+	font-size: var(--font-size-l);
+}
+.xl {
+	font-size: var(--font-size-xl);
+}

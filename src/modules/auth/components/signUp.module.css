@@ -1,0 +1,125 @@
+.authContainer {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 30%;
+	min-height: 400px;
+	margin: auto;
+	background: #fff;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+	border-radius: 5px;
+	margin-top: 350px;
+	padding: 35px 35px;
+	box-sizing: border-box;
+}
+
+.signUpHeader {
+	font-size: 32px;
+	font-weight: 500;
+	line-height: 12px;
+	text-align: center;
+}
+
+.signUpForm {
+	width: 100%;
+}
+
+.formItem {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	width: 100%;
+}
+
+.nameOfItem {
+	display: block;
+	margin-top: 30px;
+	font-size: 16px;
+	font-weight: 500;
+}
+
+.sendSignUp {
+	margin-top: 50px;
+	margin-bottom: 10px;
+}
+
+.loginContainer {
+	display: flex;
+	justify-content: center;
+}
+
+.login {
+	text-decoration: none;
+	color: var(--color-primary);
+}
+
+.switchRole {
+	display: flex;
+	justify-content: space-around;
+}
+
+.role {
+	width: 50%;
+}
+
+.button {
+	width: 100%;
+	font-size: 22px;
+	font-weight: 500;
+	line-height: 32px;
+	color: '#7f7f7f';
+	padding: 20px 0px;
+}
+
+@media (min-width: 320px) {
+	.authContainer {
+		width: 100%;
+		margin-top: 0px;
+		height: 700px;
+	}
+}
+
+@media (min-width: 769px) {
+	.authContainer {
+		height: 100%;
+	}
+	.signUpHeader {
+		margin-top: 100px;
+		margin-bottom: 120px;
+	}
+}
+
+@media (min-width: 1201px) {
+	.authContainer {
+		width: 30%;
+		margin-top: 50px;
+		height: 700px;
+	}
+
+	.signUpHeader {
+		margin-top: 30px;
+		margin-bottom: 30px;
+	}
+}
+
+@media (min-width: 1500px) {
+	.authContainer {
+		margin-top: 100px;
+		width: 25%;
+	}
+}
+
+@media (min-width: 1800px) {
+	.authContainer {
+		margin-top: 150px;
+		width: 20%;
+	}
+}
+
+@media (min-width: 2100px) {
+	.authContainer {
+		margin-top: 200px;
+		width: 15%;
+	}
+}

@@ -1,12 +1,20 @@
-import './App.css';
-import Button from './ui-components/Button/Button';
+import { RouterProvider } from 'react-router-dom';
+import { ApolloProvider } from '@apollo/client';
+import { router } from '@/router/Router';
+import { client } from '@/apollo-client';
+import { Guard } from '@/modules/auth';
+import { AppContextProvider } from './context/AppContext';
 
-function App() {
+export const App = () => {
 	return (
-		<>
-			<Button>Click Me!</Button>
-		</>
+		<ApolloProvider client={client}>
+			<Guard>
+				<AppContextProvider>
+					<RouterProvider router={router} />
+				</AppContextProvider>
+			</Guard>
+		</ApolloProvider>
 	);
-}
+};
 
 export default App;
