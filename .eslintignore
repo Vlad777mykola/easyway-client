@@ -1,0 +1,3 @@
+tools/commitlint/commitlint.config.cjs
+node_modules/
+dist/
