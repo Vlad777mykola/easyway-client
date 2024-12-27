@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
-import { Tag } from '@/ui-components/Tag';
 import styles from './showingTest.module.css';
 
 type Test = {
@@ -62,8 +61,10 @@ export const ShowingTest = () => {
 
 	const fetchDefinition = async (word: string) => {
 		const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+		console.log('WORD: ', word);
 		try {
 			const response = await axios.get(url);
+			console.log('RESPONSE: ', response);
 			if (response.data[0].meanings[0].synonyms.length !== 0) {
 				await takeAnswersFromDefinition(response.data[0].meanings[0].synonyms, word, 'synonyms');
 			} else if (response.data[0].meanings[0].antonyms.length !== 0) {
@@ -239,14 +240,15 @@ export const ShowingTest = () => {
 				{answers.map((answer) => {
 					return (
 						<div key={answer.id} className={styles.word}>
-							<Tag
-								color="blue"
+							<Button
+								size="large"
+								type="default"
 								onClick={() => {
 									onClick(answer);
 								}}
 							>
 								{answer.name}
-							</Tag>
+							</Button>
 						</div>
 					);
 				})}
