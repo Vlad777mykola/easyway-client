@@ -18,6 +18,15 @@ type Answer = {
 	isCorrect: boolean;
 };
 
+type NounData = {
+	word: string;
+	score: number;
+};
+
+type VerbList = {
+	[key: string]: string;
+};
+
 const startTest = [
 	{
 		id: 1,
@@ -220,19 +229,9 @@ export const ShowingTest = () => {
 		const isAdjective = doc.adjectives().out('array').length > 0;
 		const isConjuction = doc.conjunctions().out('array').length > 0;
 
-		console.log('conjustionsCategories.subordinating.contrast: ', conjustionsCategories.contrast);
-
-		console.log('WORD: ', word);
-		console.log('IS VERB: ', isVerb);
-		console.log('Is Noun: ', isNoun);
-		console.log('Is Pronoun: ', isPronouns);
-		console.log('isConjuction: ', isConjuction);
-		console.log('CORRECT ANSWER: ', answer);
-		console.log('Answers: ', answers);
-		console.log('WORD: ', word);
-
 		if (isVerb) {
-			const verbList = doc.verbs().conjugate()[0];
+			const verbList = doc.verbs().conjugate()[0] as VerbList;
+			console.log('VERB LIST: ', verbList);
 			const answers = Object.keys(verbList)
 				.map((key) => verbList[key])
 				.map((item, index) => {
@@ -255,16 +254,10 @@ export const ShowingTest = () => {
 			isAdjective
 		) {
 			const response = await fetch(`https://api.datamuse.com/words?rel_syn=${word}`);
-			console.log('RESPONSE IN NOUNS: ', response);
 			const data = await response.json();
-			console.log(
-				'DATA: ',
-				data.map((item) => item.word),
-			);
-			const dataArray = data.map((item) => item.word);
+			const dataArray = data.map((item: NounData) => item.word);
 			const result = makeMaxAllowedAnswers(dataArray, word);
 
-			console.log('RESULT IN NOUN: ', result);
 			setAnswers(shuffle([...result]));
 		} else if (isPronouns) {
 			if (pronounCategories.object.includes(word)) {
@@ -410,7 +403,6 @@ export const ShowingTest = () => {
 	};
 
 	const makeMaxAllowedAnswers = (variants: string[], correctAnswer: string) => {
-		/* const answersShuffle = shuffle([...variants]); */
 		let result: Answer[] = [];
 		for (let i = 0; i <= maxNumbersOfAnswers - 1; i++) {
 			if (i === maxNumbersOfAnswers - 1) {
