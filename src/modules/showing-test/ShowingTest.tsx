@@ -466,24 +466,19 @@ export const ShowingTest = () => {
 	return (
 		<div className={styles.lessonPage}>
 			<div className={styles.prevQuestion}>
-				<CircleButton type="primary" size="large" onClick={() => swapQuestion(testId - 1)}>
-					<Icon icon="left" variant="default" />
+				<CircleButton type="default" size="large" onClick={() => swapQuestion(testId - 1)}>
+					<Icon icon="left" variant="dark" />
 				</CircleButton>
 			</div>
 			<div className={styles.nextQuestion}>
-				<CircleButton type="primary" size="large" onClick={() => swapQuestion(testId + 1)}>
-					<Icon icon="right" variant="default" />
+				<CircleButton type="default" size="large" onClick={() => swapQuestion(testId + 1)}>
+					<Icon icon="right" variant="dark" />
 				</CircleButton>
 			</div>
-			<h1 className={styles.topic}>Lesson Topic</h1>
-			<div className={styles.sentenceContainer}>
-				<p className={styles.sentence}>{sentence.sentence}</p>
-				<div className={styles.answerContainer}>
-					{answeredQuestions !== correctAnswers.length && (
-						<div className={styles.correctAnswerContainer}>
-							<p className={styles.answer}>{chooseAnswer}</p>
-						</div>
-					)}
+			<div className={styles.testContainer}>
+				<h1 className={styles.topic}>Lesson Topic</h1>
+				<div className={styles.sentenceContainer}>
+					<p className={styles.sentence}>{sentence.sentence}</p>
 					{isCorrect && answeredQuestions === correctAnswers.length && (
 						<div className={styles.correctAnswerContainer}>
 							<p className={styles.answer}>{sentence.correctAnswer}</p>
@@ -497,24 +492,29 @@ export const ShowingTest = () => {
 							<p className={styles.uncorrectAnswer}>Wrong Answer!</p>
 						</div>
 					)}
-				</div>
-			</div>
-			<div className={styles.words}>
-				{answers.map((answer) => {
-					return (
-						<div key={answer.id} className={styles.word}>
-							<Button
-								size="large"
-								type="default"
-								onClick={() => {
-									onClick(answer);
-								}}
-							>
-								{answer.name}
-							</Button>
+					{answeredQuestions !== correctAnswers.length && (
+						<div className={styles.correctAnswerContainer}>
+							<p className={styles.answer}>{chooseAnswer}</p>
 						</div>
-					);
-				})}
+					)}
+				</div>
+				<div className={styles.words}>
+					{answers.map((answer) => {
+						return (
+							<div key={answer.id} className={styles.word}>
+								<Button
+									size="large"
+									type="default"
+									onClick={() => {
+										onClick(answer);
+									}}
+								>
+									{answer.name}
+								</Button>
+							</div>
+						);
+					})}
+				</div>
 			</div>
 			<div className={styles.pagination}>
 				{test.map((item) => (
@@ -522,7 +522,7 @@ export const ShowingTest = () => {
 						key={item.id}
 						size="small"
 						color={item.isCompleted ? 'primary' : 'danger'}
-						type="primary"
+						type="default"
 						onClick={() => {
 							setTestId(item.id);
 						}}

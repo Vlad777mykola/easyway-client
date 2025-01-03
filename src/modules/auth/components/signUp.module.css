@@ -76,7 +76,7 @@
 	.authContainer {
 		width: 100%;
 		margin-top: 0px;
-		min-height: 100vh;
+		height: 100%;
 	}
 }
 
@@ -92,7 +92,7 @@
 		width: 30%;
 		margin-top: 50px;
 		margin-bottom: 50px;
-		min-height: 700px;
+		height: 750px;
 	}
 
 	.signUpHeader {
