@@ -4,12 +4,13 @@ import { Icon } from '@/ui-components/Icon';
 import { Menu } from '@/ui-components/Menu';
 import { useGetUser } from '@/modules/auth/hooks/useGetUser';
 import { CircleButton } from '@/ui-components/CircleButton';
-import { Navbar } from '@/common-components/navbar';
+import { Navbar } from '@/shared/navbar';
 import styles from './header.module.css';
 
 const SideMenu = () => {
 	return (
 		<div className={styles.headerLeftMenuList}>
+			<Link to="/">Home</Link>
 			<Link to="/complete-test">Tasks</Link>
 			<Link to="/test">Create Task</Link>
 		</div>

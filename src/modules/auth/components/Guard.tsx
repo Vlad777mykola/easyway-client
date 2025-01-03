@@ -15,7 +15,5 @@ export const Guard = ({ children }: IGuardProps) => {
 		if (user) authenticatedVar(true);
 	}, [user]);
 
-	console.log(user);
-
 	return <>{EXECUTED_ROUTES.includes(window.location.pathname) ? children : user && children}</>;
 };

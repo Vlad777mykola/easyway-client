@@ -3,6 +3,7 @@ import nlp from 'compromise';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
+import { DEFAULT_TEST } from '@/constants/data';
 import styles from './showingTest.module.css';
 
 type Test = {
@@ -26,39 +27,6 @@ type NounData = {
 type VerbList = {
 	[key: string]: string;
 };
-
-const startTest = [
-	{
-		id: 1,
-		sentence: 'Ти покажеш?',
-		correctAnswer: 'Will you show?',
-	},
-	{
-		id: 2,
-		sentence: 'Вона почала?',
-		correctAnswer: 'Did she start?',
-	},
-	{
-		id: 3,
-		sentence: 'Я розумію.',
-		correctAnswer: 'I understand.',
-	},
-	{
-		id: 4,
-		sentence: 'Кіт сів на килимок.',
-		correctAnswer: 'The Cat sat on the mat.',
-	},
-	{
-		id: 5,
-		sentence: 'Гарний сад сповнений барвистих квітів.',
-		correctAnswer: 'The beautiful garden is full of colorful flowers.',
-	},
-	{
-		id: 6,
-		sentence: 'Незважаючи на втому, вона продовжувала працювати.',
-		correctAnswer: 'Although she was tired, she kept working.',
-	},
-];
 
 const pronounCategories = {
 	subject: ['I', 'you', 'he', 'she', 'it', 'we', 'they'],
@@ -211,7 +179,7 @@ export const ShowingTest = () => {
 	const [isCorrectAnswer, setIsCorrectAnswer] = useState(0);
 
 	const [test, setTest] = useState<Test[]>([]);
-	const [sentence, setSentence] = useState({ ...startTest[0] });
+	const [sentence, setSentence] = useState({ ...DEFAULT_TEST[0] });
 	const [correctAnswers, setCorrectAnswers] = useState<string[]>(sentence.correctAnswer.split(' '));
 	const [answer, setAnswer] = useState(correctAnswers[0]);
 
@@ -439,12 +407,12 @@ export const ShowingTest = () => {
 
 	const showSentence = (id: number) => {
 		setChooseAnswer('');
-		for (let i = 0; i < startTest.length; i++) {
-			if (startTest[i].id === id) {
-				setSentence({ ...startTest[i] });
-				setCorrectAnswers(startTest[i].correctAnswer.split(' '));
-				setAnswer(startTest[i].correctAnswer.split(' ')[0]);
-				fetchDefinition(startTest[i].correctAnswer.split(' ')[0]);
+		for (let i = 0; i < DEFAULT_TEST.length; i++) {
+			if (DEFAULT_TEST[i].id === id) {
+				setSentence({ ...DEFAULT_TEST[i] });
+				setCorrectAnswers(DEFAULT_TEST[i].correctAnswer.split(' '));
+				setAnswer(DEFAULT_TEST[i].correctAnswer.split(' ')[0]);
+				fetchDefinition(DEFAULT_TEST[i].correctAnswer.split(' ')[0]);
 				setWordId(0);
 				setAnsweredQuestions(0);
 				setIsCorrect(false);
@@ -455,7 +423,7 @@ export const ShowingTest = () => {
 
 	useEffect(() => {
 		fetchDefinition(answer);
-		const allQuestions = startTest.map((item) => ({ ...item, isCompleted: false }));
+		const allQuestions = DEFAULT_TEST.map((item) => ({ ...item, isCompleted: false }));
 		setTest([...allQuestions]);
 	}, []);
 
