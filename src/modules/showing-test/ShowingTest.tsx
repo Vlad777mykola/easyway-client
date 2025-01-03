@@ -231,7 +231,6 @@ export const ShowingTest = () => {
 
 		if (isVerb) {
 			const verbList = doc.verbs().conjugate()[0] as VerbList;
-			console.log('VERB LIST: ', verbList);
 			const answers = Object.keys(verbList)
 				.map((key) => verbList[key])
 				.map((item, index) => {
