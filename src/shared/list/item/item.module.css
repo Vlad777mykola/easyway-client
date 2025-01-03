@@ -1,0 +1,16 @@
+.itemContainer {
+	width: 70%;
+	margin: auto;
+	background: #fff;
+	box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 8px;
+	border-radius: 5px;
+	padding: 10px;
+	box-sizing: border-box;
+	cursor: pointer;
+	transition: transform 0.5s ease;
+}
+
+.itemContainer:hover {
+	opacity: 0.8;
+	transform: scale(1.1);
+}
