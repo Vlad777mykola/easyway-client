@@ -11,7 +11,8 @@
 		"eslint:fix": "yarn run eslint --fix",
 		"lint": "yarn run eslint && yarn run format",
 		"preview": "vite preview",
-		"verify": "npm run format && npm run lint "
+		"verify": "npm run format && npm run lint ",
+		"deploy": "aws s3 sync dist/ s3://best-way"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.12.3",
