@@ -241,7 +241,6 @@ export const ShowingTest = () => {
 						return { id: index + 1, name: item, isCorrect: false };
 					}
 				});
-			console.log('VERB LIST ARRAY: ', answers);
 			setAnswers(shuffle([...answers]));
 		} else if (
 			(isNoun &&
@@ -290,8 +289,6 @@ export const ShowingTest = () => {
 				setAnswers(shuffle([...answers]));
 			}
 		} else if (isPreposition) {
-			const response = await fetch(`https://api.datamuse.com/words?rel_syn=${word}`);
-			console.log('RESPONSE IN PREPOSITIONS: ', response);
 			if (prepositionCategories.direction.includes(word)) {
 				const answers = makeMaxAllowedAnswers(prepositionCategories.direction, word);
 				setAnswers(shuffle([...answers]));
@@ -322,12 +319,8 @@ export const ShowingTest = () => {
 		} else if (isConjuction) {
 			if (conjustionsCategories.contrast) {
 				const answers = getGroup(conjustionsCategories.contrast, word);
-				console.log('WORK');
-				console.log('ANSWERS IN CONJUCTIONS CONTRAST: ', answers);
 				setAnswers(shuffle([...answers]));
-				console.log('ANSWER IN conjustionsCategories.subordinating.contrast', answers);
 			} else if (conjustionsCategories.coordinating.includes(word)) {
-				console.log('WORD IN CONJUCTIONS: ', word);
 				const answers = getGroup(conjustionsCategories.coordinating, word);
 				setAnswers(shuffle([...answers]));
 			} else if (conjustionsCategories.conjuctive.includes(word)) {
@@ -390,7 +383,6 @@ export const ShowingTest = () => {
 	};
 
 	const getGroup = (variants: string[], word: string) => {
-		console.log('variants in getGroup: ', variants);
 		const answers = variants.map((item, index) => {
 			if (item.toLocaleLowerCase() === word.toLocaleLowerCase()) {
 				return { id: index + 1, name: item, isCorrect: true };
