@@ -1,14 +1,13 @@
-.container {
+.testContainer {
 	display: flex;
 	justify-content: center;
-	margin-top: 25px;
-	margin-bottom: 25px;
 	flex-direction: column;
 	align-items: center;
+	width: 500px;
 }
 
 .form {
-	width: 50%;
+	width: 100%;
 	margin-top: 25px;
 }
 
@@ -34,7 +33,7 @@
 	width: 100%;
 }
 
-@media (min-width: 320px) {
+/* @media (min-width: 320px) {
 	.form {
 		width: 95%;
 		padding: 0px 15px;
@@ -69,46 +68,4 @@
 		align-self: center;
 		width: 60%;
 	}
-}
-
-@media (min-width: 769px) {
-	.form {
-		width: 80%;
-	}
-}
-
-@media (min-width: 1025px) {
-	.form {
-		width: 75%;
-	}
-}
-
-@media (min-width: 1201px) {
-	.form {
-		width: 60%;
-	}
-}
-
-@media (min-width: 1501px) {
-	.form {
-		width: 55%;
-	}
-}
-
-@media (min-width: 1801px) {
-	.form {
-		width: 50%;
-	}
-}
-
-@media (min-width: 2101px) {
-	.form {
-		width: 45%;
-	}
-}
-
-@media (min-width: 2301px) {
-	.form {
-		width: 30%;
-	}
-}
+} */
