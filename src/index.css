@@ -1,4 +1,9 @@
 :root {
+	--mobile-01: 450px;
+	--tablet-01: 850px;
+	--desktop-01: 1000px;
+	--desktop-large-01: 1200px;
+
 	--spacing-01: 2px;
 	--spacing-02: 4px;
 	--spacing-03: 8px;

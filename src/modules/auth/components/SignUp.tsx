@@ -6,8 +6,9 @@ import { useLogin } from '../hooks/useLogin';
 import { useGetUser } from '../hooks/useGetUser';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
+import { WrapperCard } from '@/ui-components/Wrapper-card';
+
 import style from './signUp.module.css';
-import { Wrapper } from './Wrapper';
 
 interface Data {
 	email: string;
@@ -62,87 +63,85 @@ export const SignUp = () => {
 	console.log('AUTH: ', auth);
 
 	return (
-		<>
-			<Wrapper>
-				<div className={style.authContainer}>
-					<div className={style.signUpForm}>
-						<h3 className={style.signUpHeader}>Sign Up</h3>
-						<div className={style.switchRole}>
-							<div className={style.role}>
-								<Button
-									className={style.button}
-									onClick={() => changeRole('teacher')}
-									type="text"
-									disabled={auth.role === 'teacher'}
-								>
-									Teacher
-								</Button>
-							</div>
-							<div className={style.role}>
-								<Button
-									className={style.button}
-									onClick={() => changeRole('student')}
-									type="text"
-									disabled={auth.role === 'student'}
-								>
-									Student
-								</Button>
-							</div>
-						</div>
-						<div className={style.formItem}>
-							<p className={style.nameOfItem}>Username: </p>
-							<Input
-								placeholder="username"
-								value={auth.email}
-								size="large"
-								onChange={(e) => onChange(e.target.value, 'username')}
-							/>
-						</div>
-						<div className={style.formItem}>
-							<p className={style.nameOfItem}>Email: </p>
-							<Input
-								placeholder="email"
-								value={auth.email}
-								size="large"
-								onChange={(e) => onChange(e.target.value, 'email')}
-							/>
-						</div>
-						<div className={style.formItem}>
-							<p className={style.nameOfItem}>Password: </p>
-							<Input
-								placeholder="password"
-								value={auth.password}
-								size="large"
-								onChange={(e) => onChange(e.target.value, 'password')}
-							/>
-						</div>
-						<div className={style.formItem}>
-							<p className={style.nameOfItem}>Repeat Password: </p>
-							<Input
-								placeholder="repeat password"
-								value={auth.password}
-								size="large"
-								onChange={(e) => onChange(e.target.value, 'repeatPassword')}
-							/>
-						</div>
-						<div className={style.sendSignUp}>
+		<WrapperCard>
+			<div className={style.signUpContainer}>
+				<div className={style.signUpForm}>
+					<h3 className={style.signUpHeader}>Sign Up</h3>
+					<div className={style.switchRole}>
+						<div className={style.role}>
 							<Button
-								type="primary"
-								onClick={() => onSubmit({ email: auth.email, password: auth.password })}
-								size="large"
-								block
+								className={style.button}
+								onClick={() => changeRole('teacher')}
+								type="text"
+								disabled={auth.role === 'teacher'}
 							>
-								Sign Up
+								Teacher
+							</Button>
+						</div>
+						<div className={style.role}>
+							<Button
+								className={style.button}
+								onClick={() => changeRole('student')}
+								type="text"
+								disabled={auth.role === 'student'}
+							>
+								Student
 							</Button>
 						</div>
 					</div>
-					<div className={style.loginContainer}>
-						<Link className={style.login} to={'/login'}>
-							Login
-						</Link>
+					<div className={style.formItem}>
+						<p className={style.nameOfItem}>Username: </p>
+						<Input
+							placeholder="username"
+							value={auth.email}
+							size="large"
+							onChange={(e) => onChange(e.target.value, 'username')}
+						/>
+					</div>
+					<div className={style.formItem}>
+						<p className={style.nameOfItem}>Email: </p>
+						<Input
+							placeholder="email"
+							value={auth.email}
+							size="large"
+							onChange={(e) => onChange(e.target.value, 'email')}
+						/>
+					</div>
+					<div className={style.formItem}>
+						<p className={style.nameOfItem}>Password: </p>
+						<Input
+							placeholder="password"
+							value={auth.password}
+							size="large"
+							onChange={(e) => onChange(e.target.value, 'password')}
+						/>
+					</div>
+					<div className={style.formItem}>
+						<p className={style.nameOfItem}>Repeat Password: </p>
+						<Input
+							placeholder="repeat password"
+							value={auth.password}
+							size="large"
+							onChange={(e) => onChange(e.target.value, 'repeatPassword')}
+						/>
+					</div>
+					<div className={style.sendSignUp}>
+						<Button
+							type="primary"
+							onClick={() => onSubmit({ email: auth.email, password: auth.password })}
+							size="large"
+							block
+						>
+							Sign Up
+						</Button>
 					</div>
 				</div>
-			</Wrapper>
-		</>
+				<div className={style.loginContainer}>
+					<Link className={style.login} to={'/login'}>
+						Login
+					</Link>
+				</div>
+			</div>
+		</WrapperCard>
 	);
 };

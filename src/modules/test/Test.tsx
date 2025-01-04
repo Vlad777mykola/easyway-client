@@ -25,7 +25,7 @@ export const Test = () => {
 	};
 
 	return (
-		<div className={styles.container}>
+		<div className={styles.testContainer}>
 			<h1 className={styles.header}>Create Sentence</h1>
 			<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
 				<div className={styles.formItem}>
