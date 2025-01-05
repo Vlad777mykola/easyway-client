@@ -3,16 +3,9 @@ import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { DEFAULT_TEST } from '@/constants/data';
+import { fetchDefinition, getReadyQuestion } from './functions/fetchDefinition';
 import styles from './showingTest.module.css';
-import {
-	ARTICLES,
-	PRONOUN_CATEGORIES,
-	CONJUCTIONS_CATEGORIES,
-	PREPOSITION_CATEGORIES,
-	MAX_VARIANTS,
-} from './constants';
-import { detectPartOfSpeech } from './functions/detectPartOfSpeech';
-import { showNounsOrAdverbs, showVariants, showVerbs, getGroup } from './functions/showVariants';
+import { useSelectData } from './hooks/useSelectData';
 
 type Test = {
 	id: number;
@@ -21,7 +14,7 @@ type Test = {
 	isCompleted: boolean;
 };
 
-type Answer = {
+export type Answer = {
 	id: number;
 	name: ReactNode;
 	isCorrect: boolean;
@@ -36,7 +29,7 @@ type Question = {
 
 type SentenceQuestion = {
 	id: number;
-	questions: Question[];
+	questions: string[][];
 	isCompleted: boolean;
 };
 
@@ -44,132 +37,60 @@ export const ShowingTest = () => {
 	const [test, setTest] = useState<Test[]>([]); // 100%
 	const [chooseAnswer, setChooseAnswer] = useState<string>(''); // 100%
 	const [readyQuestion, setReadyQuestion] = useState<SentenceQuestion>(); // 100%
+	const [isFault, setIsFault] = useState(false);
 
 	const [isCorrectAnswer, setIsCorrectAnswer] = useState(0); // not sure
 
 	const [sentence, setSentence] = useState({ ...DEFAULT_TEST[0] });
 
 	const [correctAnswers, setCorrectAnswers] = useState<string[]>(sentence.correctAnswer.split(' '));
-	const [answer, setAnswer] = useState(correctAnswers[0]);
+	const [correctAnswer, setCorrectAnswer] = useState(correctAnswers[0]);
 
 	const [testId, setTestId] = useState<number>(1);
 	const [wordId, setWordId] = useState(0);
 	const [answeredQuestions, setAnsweredQuestions] = useState(0);
 
-	/* console.log('SENTENCE: ', sentence);
-	console.log('CORRECT ANSWERS: ', correctAnswers); */
-	console.log('READY QUESTION: ', readyQuestion);
-	/* console.log('IS CORRECT ANSWER: ', isCorrectAnswer); */
+	const data = useSelectData(correctAnswers);
 
-	const fetchDefinition = async (word: string) => {
-		const { isAdjective, isArticle, isConjuction, isNoun, isPreposition, isVerb, isPronoun } =
-			detectPartOfSpeech(word);
+	console.log('///ANSWER: ', correctAnswer);
 
-		let answers: Answer[] = [];
-
-		if (isVerb) {
-			answers = showVerbs(word);
-		} else if ((isNoun && !isPronoun) || isAdjective) {
-			answers = await showNounsOrAdverbs(word, MAX_VARIANTS);
-		} else if (isPronoun) {
-			answers = showVariants(PRONOUN_CATEGORIES, word);
-		} else if (isPreposition) {
-			answers = showVariants(PREPOSITION_CATEGORIES, word);
-		} else if (isArticle) {
-			answers = getGroup(ARTICLES, word.toLocaleLowerCase());
-		} else if (isConjuction) {
-			answers = showVariants(CONJUCTIONS_CATEGORIES, word);
-		}
-
-		return answers;
-	};
-
-	const getReadyQuestion = async (correctAnswers: string[]) => {
-		let readyAnswers: Question[] = [];
-		for (let i = 0; i < correctAnswers.length; i++) {
-			const answers = await fetchDefinition(correctAnswers[i].replace(/[^a-zA-Z0-9]/g, ''));
-			readyAnswers = [
-				...readyAnswers,
-				{ id: i + 1, correctAnswer: correctAnswers[i], answers: answers, isCompleted: false },
-			];
-		}
-		setReadyQuestion({ id: testId, questions: [...readyAnswers], isCompleted: false });
-	};
-
-	const onClick = (answer: Answer) => {
+	const onClick = (answer: string) => {
 		const answered = answeredQuestions + 1;
 		let correct = 0;
 		setAnsweredQuestions(answered);
 
-		if (answer.isCorrect) {
+		if (correctAnswer === answer.toLocaleLowerCase()) {
+			console.log('///INCLUDES: ', correctAnswers.includes(answer));
 			correct = isCorrectAnswer + 1;
+			console.log('///CORRECT: ', correct);
 			setIsCorrectAnswer(correct);
-			// write correct
-			/* setReadyQuestion({
-				...(readyQuestion || { questions: [] }),
-				questions: (readyQuestion?.questions || []).map((question) =>
-					answer.id === question.id ? { ...question, isCompleted: true } : { ...question },
-				),
-			} as SentenceQuestion); */
-			setReadyQuestion({
-				...readyQuestion,
-				questions: [
-					...readyQuestion.questions.map((question) => {
-						if (
-							(question.correctAnswer
-								.toLocaleLowerCase()
-								.replace(/[^a-zA-Z0-9]/g, '') as string) ===
-							(answer.name.toLocaleLowerCase().replace(/[^a-zA-Z0-9]/g, '') as string)
-						) {
-							console.log(
-								'QUESTION CORRECT ANSWER: ',
-								answer.name.toLocaleLowerCase().replace(/[^a-zA-Z0-9]/g, '') as string,
-							);
-							console.log(
-								'EQUAL: ',
-								(question.correctAnswer
-									.toLocaleLowerCase()
-									.replace(/[^a-zA-Z0-9]/g, '') as string) ===
-									(answer.name.toLocaleLowerCase().replace(/[^a-zA-Z0-9]/g, '') as string),
-							);
-							const equal =
-								(question.correctAnswer
-									.toLocaleLowerCase()
-									.replace(/[^a-zA-Z0-9]/g, '') as string) ===
-								(answer.name.toLocaleLowerCase().replace(/[^a-zA-Z0-9]/g, '') as string);
-							return {
-								...question,
-								isCompleted: equal,
-							};
-						} else {
-							return { ...question };
-						}
-					}),
-				],
-			} as SentenceQuestion);
+		} else {
+			console.log('///IS NOT INCLUDE: ', correctAnswers.includes(answer));
 		}
 
 		if (answered !== correctAnswers.length) {
 			const word = wordId + 1;
 			setWordId(word);
-			setAnswer(correctAnswers[word].replace(/[^a-zA-Z0-9]/g, ''));
+			setCorrectAnswer(correctAnswers[word].replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase());
 		}
 
-		if (answered === correctAnswers.length) {
-			console.log(
-				'EVERY: ',
-				readyQuestion?.questions.every((question) => question.isCompleted),
-			);
-			if (correct === correctAnswers.length) {
-				setReadyQuestion({ ...readyQuestion, isCompleted: true } as SentenceQuestion);
-			}
-
-			if (correct !== correctAnswers.length) {
-				setReadyQuestion({ ...readyQuestion, isCompleted: false } as SentenceQuestion);
-			}
+		if (correct === correctAnswers.length) {
+			setTest([
+				...test.map((q) => {
+					if (q.id === testId) {
+						return { ...q, isCompleted: true };
+					} else {
+						return { ...q };
+					}
+				}),
+			]);
 		}
 
-		setChooseAnswer(chooseAnswer + ` ${answer.name}`);
+		if (answered === correctAnswers.length && correct !== correctAnswers.length) {
+			setIsFault(true);
+		}
+
+		setChooseAnswer(chooseAnswer + ` ${answer}`);
 	};
 
 	const swapQuestion = (id: number) => {
@@ -199,7 +120,12 @@ export const ShowingTest = () => {
 			if (DEFAULT_TEST[i].id === id) {
 				setSentence({ ...DEFAULT_TEST[i] });
 				setCorrectAnswers(DEFAULT_TEST[i].correctAnswer.split(' '));
-				setAnswer(DEFAULT_TEST[i].correctAnswer.split(' ')[0]);
+				setCorrectAnswer(
+					DEFAULT_TEST[i].correctAnswer
+						.split(' ')[0]
+						.replace(/[^a-zA-Z0-9]/g, '')
+						.toLocaleLowerCase(),
+				);
 				fetchDefinition(DEFAULT_TEST[i].correctAnswer.split(' ')[0]);
 				setWordId(0);
 				setAnsweredQuestions(0);
@@ -208,10 +134,17 @@ export const ShowingTest = () => {
 		}
 	};
 
+	const getQuestion = async () => {
+		const answers: string[][] = await getReadyQuestion(correctAnswers);
+		console.log('ANSWERS IN GET QUESTION: ', answers);
+		setReadyQuestion([...answers]);
+	};
+
 	useEffect(() => {
-		fetchDefinition(answer);
+		fetchDefinition(correctAnswer);
 		const allQuestions = DEFAULT_TEST.map((item) => ({ ...item, isCompleted: false }));
 		setTest([...allQuestions]);
+		getQuestion();
 	}, []);
 
 	useEffect(() => {
@@ -219,9 +152,14 @@ export const ShowingTest = () => {
 	}, [testId]);
 
 	useEffect(() => {
-		getReadyQuestion(correctAnswers);
+		getQuestion();
+		if (Array.isArray(readyQuestion) && readyQuestion.length > 0) {
+			console.log('USE EFFECT!!!!!!!: ', readyQuestion[0]);
+		} else {
+			console.log('USE EFFECT UNDEFINED!!!!!');
+		}
 	}, [correctAnswers]);
-
+	console.log('///////: ', data);
 	return (
 		<div className={styles.lessonPage}>
 			<div className={styles.prevQuestion}>
@@ -238,42 +176,43 @@ export const ShowingTest = () => {
 				<h1 className={styles.topic}>Lesson Topic</h1>
 				<div className={styles.sentenceContainer}>
 					<p className={styles.sentence}>{sentence.sentence}</p>
-					{readyQuestion?.isCompleted && answeredQuestions === correctAnswers.length && (
+					{test[testId - 1]?.isCompleted && (
 						<div className={styles.correctAnswerContainer}>
 							<p className={styles.answer}>{sentence.correctAnswer}</p>
 							<p className={styles.answer}>You Complete Test.</p>
 						</div>
 					)}
-					{!readyQuestion?.isCompleted && answeredQuestions === correctAnswers.length && (
+					{isFault && !test[testId - 1]?.isCompleted && (
 						<div className={styles.uncorrectAnswerContainer}>
 							<p className={styles.uncorrectAnswer}>{chooseAnswer}</p>
 							<p className={styles.answer}>{sentence.correctAnswer}</p>
 							<p className={styles.uncorrectAnswer}>Wrong Answer!</p>
 						</div>
 					)}
-					{answeredQuestions !== correctAnswers.length && (
+					{!test[testId - 1]?.isCompleted && !isFault && (
 						<div className={styles.correctAnswerContainer}>
 							<p className={styles.answer}>{chooseAnswer}</p>
 						</div>
 					)}
 				</div>
 				<div className={styles.words}>
-					{!readyQuestion?.isCompleted &&
-						readyQuestion?.questions[wordId]?.answers.map((answer) => {
-							return (
-								<div key={answer.id} className={styles.word}>
-									<Button
-										size="large"
-										type="default"
-										onClick={() => {
-											onClick(answer);
-										}}
-									>
-										{answer.name}
-									</Button>
-								</div>
-							);
-						})}
+					{data &&
+						data.length > 1 &&
+						!test[testId - 1]?.isCompleted &&
+						!isFault &&
+						data[wordId].map((s, i) => (
+							<div key={i} className={styles.word}>
+								<Button
+									size="large"
+									type="default"
+									onClick={() => {
+										onClick(s);
+									}}
+								>
+									{s}
+								</Button>
+							</div>
+						))}
 				</div>
 			</div>
 			<div className={styles.pagination}>

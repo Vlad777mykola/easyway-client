@@ -24,15 +24,9 @@ export type Variants = {
 export const showVerbs = (word: string) => {
 	const doc = nlp(word);
 	const verbList = doc.verbs().conjugate()[0] as VerbList;
-	const answers = Object.keys(verbList)
-		.map((key) => verbList[key])
-		.map((item, index) => {
-			if (item.toLowerCase() === word.toLowerCase()) {
-				return { id: index + 1, name: item, isCorrect: true };
-			} else {
-				return { id: index + 1, name: item, isCorrect: false };
-			}
-		});
+	console.log('VERBLIST: ', verbList);
+	const answers = Object.keys(verbList).map((key) => verbList[key]);
+	console.log('ANSWERS ON SHOW VERBS: ', answers);
 	return answers;
 };
 
@@ -44,16 +38,9 @@ export const showNounsOrAdverbs = async (word: string, maxNumbersOfAnswers: numb
 	let result: Answer[] = [];
 	for (let i = 0; i <= maxNumbersOfAnswers - 1; i++) {
 		if (i === maxNumbersOfAnswers - 1) {
-			result = [...result, { id: i + 1, name: word.toLocaleLowerCase(), isCorrect: true }];
-		} else {
-			result = [
-				...result,
-				{
-					id: i + 1,
-					name: dataArray[i],
-					isCorrect: false,
-				},
-			];
+			result = [...result, word.toLocaleLowerCase()];
+		} else if (dataArray[i] !== word.toLocaleLowerCase()) {
+			result = [...result, dataArray[i]];
 		}
 	}
 
@@ -61,7 +48,7 @@ export const showNounsOrAdverbs = async (word: string, maxNumbersOfAnswers: numb
 };
 
 export const showVariants = (variants: Variants, word: string) => {
-	let answers: Answer[] = [];
+	let answers: string[] = [];
 	const correctWord = word !== 'I' ? word.toLocaleLowerCase() : word;
 	for (let key in variants) {
 		if (variants[key].includes(correctWord)) {
@@ -69,18 +56,20 @@ export const showVariants = (variants: Variants, word: string) => {
 		}
 	}
 
+	console.log('ANSWERS IN SHOW VARIANTS: ', answers);
+
 	return answers;
 };
 
 export const getGroup = (variants: string[], word: string) => {
-	let result: Answer[] = [];
+	let result: string[] = [];
 	for (let i = 0; i <= variants.length - 1; i++) {
 		if (i === 0 && variants.length >= MAX_VARIANTS) {
-			result = [...result, { id: i + 1, name: word, isCorrect: true }];
+			result = [...result, word];
 		} else if (variants[i] !== word) {
-			result = [...result, { id: i + 1, name: variants[i], isCorrect: false }];
+			result = [...result, variants[i]];
 		} else if (variants.length < MAX_VARIANTS && variants[i] === word) {
-			result = [...result, { id: i + 1, name: variants[i], isCorrect: true }];
+			result = [...result, variants[i]];
 		}
 
 		if (result.length >= MAX_VARIANTS) {
