@@ -12,7 +12,7 @@ interface SaveProfile {
 	repeatPassword: string;
 }
 
-const Profile = () => {
+export const Profile = () => {
 	const { control, handleSubmit } = useForm<SaveProfile>({
 		defaultValues: {
 			name: '',
@@ -85,5 +85,3 @@ const Profile = () => {
 		</div>
 	);
 };
-
-export default Profile;
