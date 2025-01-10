@@ -10,7 +10,7 @@ export const Item = <T extends { correctAnswer: string; id: number }>({
 	const navigate = useNavigate();
 
 	const onClick = (id: number) => {
-		navigate(`/collections/${id}/task/:${id}`);
+		navigate(`/collections/${id}/task/${id}`);
 	};
 	return (
 		<section onClick={() => onClick(data.id)} className={styles.itemContainer}>

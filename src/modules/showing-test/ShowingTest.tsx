@@ -1,445 +1,203 @@
 import { ReactNode, useEffect, useState } from 'react';
-import nlp from 'compromise';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { DEFAULT_TEST } from '@/constants/data';
+import { fetchDefinition, getReadyQuestion } from './functions/fetchDefinition';
 import styles from './showingTest.module.css';
+import { useSelectData } from './hooks/useSelectData';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type Test = {
 	id: number;
 	sentence: string;
 	correctAnswer: string;
 	isCompleted: boolean;
+	isFault: boolean;
 };
 
-type Answer = {
+export type Answer = {
 	id: number;
 	name: ReactNode;
 	isCorrect: boolean;
 };
 
-type NounData = {
-	word: string;
-	score: number;
+type SentenceQuestion = {
+	id: number;
+	questions: string[][];
+	isCompleted: boolean;
 };
 
-type VerbList = {
-	[key: string]: string;
+type Answered = {
+	isCorrectAnswer: number;
+	correctAnswers: string[];
+	correctAnswer: string;
+	answeredQuestions: number;
 };
 
-const pronounCategories = {
-	subject: ['I', 'you', 'he', 'she', 'it', 'we', 'they'],
-	object: ['me', 'you', 'him', 'her', 'it', 'us', 'them'],
-	indefinite: ['some', 'any', 'no', 'little', 'few', 'many', 'much'],
-	interrogative: ['who', 'what', 'which', 'whose', 'whom'],
-	relative: ['who', 'what', 'which', 'whose', 'whom'],
-	possessive: ['my', 'your', 'his', 'her', 'its', 'our', 'their'],
-	reflexive: ['myself', 'yourself', 'himself', 'herself', 'itself', 'ourselves', 'themselves'],
+type Id = {
+	word: number;
 };
-
-const prepositionCategories = {
-	simple: [
-		'about',
-		'above',
-		'across',
-		'after',
-		'against',
-		'along',
-		'among',
-		'around',
-		'at',
-		'before',
-		'behind',
-		'below',
-		'beneath',
-		'beside',
-		'between',
-		'beyond',
-		'by',
-		'down',
-		'during',
-		'except',
-		'for',
-		'from',
-		'in',
-		'into',
-		'near',
-		'of',
-		'off',
-		'on',
-		'out',
-		'over',
-		'past',
-		'since',
-		'through',
-		'to',
-		'toward',
-		'under',
-		'until',
-		'up',
-		'with',
-		'within',
-		'without',
-	],
-	compound: [
-		'according to',
-		'ahead of',
-		'apart from',
-		'as for',
-		'as per',
-		'as to',
-		'because of',
-		'by means of',
-		'in accordance with',
-		'in addition to',
-		'in case of',
-		'in front of',
-		'in lieu of',
-		'in place of',
-		'in spite of',
-		'instead of',
-		'on account of',
-		'on behalf of',
-		'on top of',
-		'out of',
-		'prior to',
-		'with regard to',
-		'with respect to',
-	],
-	phrasal: [
-		'along with',
-		'away from',
-		'close to',
-		'due to',
-		'except for',
-		'far from',
-		'next to',
-		'owing to',
-		'rather than',
-		'thanks to',
-	],
-	place: ['on', 'in', 'under', 'between', 'next to'],
-	direction: ['to', 'from', 'out of', 'into', 'onto', 'towards'],
-	time: ['at', 'in', 'before', 'after', 'by', 'during'],
-	reasons: ['because of', 'due to', 'for', 'to', 'in order to'],
-};
-
-const conjustionsCategories = {
-	coordinating: ['for', 'and', 'nor', 'but', 'or', 'yet', 'so'],
-	time: [
-		'after',
-		'as',
-		'as soon as',
-		'before',
-		'once',
-		'since',
-		'till',
-		'until',
-		'when',
-		'whenever',
-		'while',
-	],
-	reason: ['because', 'as', 'since', 'so that', 'in order that'],
-	condition: ['if', 'unless', 'even if', 'provided that'],
-	contrast: ['although', 'though', 'even though', 'whereas', 'while'],
-	comparison: ['as', 'than'],
-	conjuctive: [
-		'accordingly',
-		'also',
-		'besides',
-		'consequently',
-		'finally',
-		'furthermore',
-		'hence',
-		'however',
-		'indeed',
-		'instead',
-		'likewise',
-		'moreover',
-		'nevertheless',
-		'nonetheless',
-		'otherwise',
-		'similarly',
-		'still',
-		'then',
-		'therefore',
-		'thus',
-	],
-};
-
-const articles = ['a', 'an', 'the'];
 
 export const ShowingTest = () => {
-	const maxNumbersOfAnswers = 8;
-	const [answers, setAnswers] = useState<Answer[]>([]);
-	const [chooseAnswer, setChooseAnswer] = useState<string>('');
-
-	const [isCorrect, setIsCorrect] = useState(false);
-	const [isCorrectAnswer, setIsCorrectAnswer] = useState(0);
-
 	const [test, setTest] = useState<Test[]>([]);
+	const [chooseAnswer, setChooseAnswer] = useState<string>('');
+	const [readyQuestion, setReadyQuestion] = useState<SentenceQuestion>();
 	const [sentence, setSentence] = useState({ ...DEFAULT_TEST[0] });
-	const [correctAnswers, setCorrectAnswers] = useState<string[]>(sentence.correctAnswer.split(' '));
-	const [answer, setAnswer] = useState(correctAnswers[0]);
+	const [answered, setAnswered] = useState<Answered>({
+		isCorrectAnswer: 0,
+		correctAnswers: sentence.correctAnswer.split(' '),
+		correctAnswer: sentence.correctAnswer.split(' ')[0],
+		answeredQuestions: 0,
+	});
 
-	const [testId, setTestId] = useState<number>(1);
-	const [wordId, setWordId] = useState(0);
-	const [answeredQuestions, setAnsweredQuestions] = useState(0);
+	const [id, setId] = useState<Id>({
+		word: 0,
+	});
 
-	const fetchDefinition = async (word: string) => {
-		const doc = nlp(word);
-		const isVerb = doc.verbs().out('array').length > 0;
-		const isPronouns = doc.pronouns().out('array').length > 0;
-		const isNoun = doc.nouns().out('array').length > 0;
-		const isPreposition = doc.prepositions().out('array').length > 0;
-		const isArticle = articles.includes(word.toLocaleLowerCase());
-		const isAdjective = doc.adjectives().out('array').length > 0;
-		const isConjuction = doc.conjunctions().out('array').length > 0;
+	const { taskId } = useParams();
 
-		if (isVerb) {
-			const verbList = doc.verbs().conjugate()[0] as VerbList;
-			const answers = Object.keys(verbList)
-				.map((key) => verbList[key])
-				.map((item, index) => {
-					if (item.toLowerCase() === word.toLowerCase()) {
-						return { id: index + 1, name: item, isCorrect: true };
-					} else {
-						return { id: index + 1, name: item, isCorrect: false };
-					}
-				});
-			setAnswers(shuffle([...answers]));
-		} else if (
-			(isNoun &&
-				!pronounCategories.object.includes(word) &&
-				!pronounCategories.possessive.includes(word) &&
-				!pronounCategories.reflexive.includes(word) &&
-				!pronounCategories.subject.includes(word) &&
-				!pronounCategories.relative.includes(word) &&
-				!pronounCategories.interrogative.includes(word)) ||
-			isAdjective
-		) {
-			const response = await fetch(`https://api.datamuse.com/words?rel_syn=${word}`);
-			const data = await response.json();
-			const dataArray = data.map((item: NounData) => item.word);
-			const result = makeMaxAllowedAnswers(dataArray, word);
+	const navigate = useNavigate();
 
-			setAnswers(shuffle([...result]));
-		} else if (isPronouns) {
-			if (pronounCategories.object.includes(word)) {
-				const answers = getGroup(pronounCategories.object, word);
-				setAnswers(shuffle([...answers]));
-			}
+	const data = useSelectData(answered.correctAnswers);
 
-			if (pronounCategories.possessive.includes(word)) {
-				const answers = getGroup(pronounCategories.possessive, word);
-				setAnswers(shuffle([...answers]));
-			}
-
-			if (pronounCategories.reflexive.includes(word)) {
-				const answers = getGroup(pronounCategories.reflexive, word);
-				setAnswers(shuffle([...answers]));
-			}
-
-			if (pronounCategories.subject.includes(word)) {
-				const answers = getGroup(pronounCategories.subject, word);
-				setAnswers(shuffle([...answers]));
-			}
-
-			if (pronounCategories.relative.includes(word)) {
-				const answers = getGroup(pronounCategories.relative, word);
-				setAnswers(shuffle([...answers]));
-			}
-
-			if (pronounCategories.interrogative.includes(word)) {
-				const answers = getGroup(pronounCategories.interrogative, word);
-				setAnswers(shuffle([...answers]));
-			}
-		} else if (isPreposition) {
-			if (prepositionCategories.direction.includes(word)) {
-				const answers = makeMaxAllowedAnswers(prepositionCategories.direction, word);
-				setAnswers(shuffle([...answers]));
-			}
-
-			if (prepositionCategories.place.includes(word)) {
-				const answers = getGroup(prepositionCategories.place, word);
-				setAnswers(shuffle([...answers]));
-			}
-
-			if (prepositionCategories.reasons.includes(word)) {
-				const answers = makeMaxAllowedAnswers(prepositionCategories.reasons, word);
-				setAnswers(shuffle([...answers]));
-			}
-
-			if (prepositionCategories.time.includes(word)) {
-				const answers = makeMaxAllowedAnswers(prepositionCategories.time, word);
-				setAnswers(shuffle([...answers]));
-			}
-
-			if (prepositionCategories.simple.includes(word)) {
-				const result = makeMaxAllowedAnswers(prepositionCategories.simple, word);
-				setAnswers(shuffle([...result]));
-			}
-		} else if (isArticle) {
-			const answers = getGroup(articles, word);
-			setAnswers(shuffle([...answers]));
-		} else if (isConjuction) {
-			if (conjustionsCategories.contrast) {
-				const answers = getGroup(conjustionsCategories.contrast, word);
-				setAnswers(shuffle([...answers]));
-			} else if (conjustionsCategories.coordinating.includes(word)) {
-				const answers = getGroup(conjustionsCategories.coordinating, word);
-				setAnswers(shuffle([...answers]));
-			} else if (conjustionsCategories.conjuctive.includes(word)) {
-				const answers = getGroup(conjustionsCategories.conjuctive, word);
-				setAnswers(shuffle([...answers]));
-			} else if (conjustionsCategories.comparison) {
-				const answers = getGroup(conjustionsCategories.comparison, word);
-				setAnswers(shuffle([...answers]));
-			} else if (conjustionsCategories.condition) {
-				const answers = getGroup(conjustionsCategories.condition, word);
-				setAnswers(shuffle([...answers]));
-			} else if (conjustionsCategories.reason) {
-				const answers = getGroup(conjustionsCategories.reason, word);
-				setAnswers(shuffle([...answers]));
-			} else if (conjustionsCategories.time) {
-				const answers = getGroup(conjustionsCategories.time, word);
-				setAnswers(shuffle([...answers]));
-			}
-		}
-	};
-
-	const shuffle = (array: Answer[]) => {
-		const newArray = [...array];
-		for (let i = newArray.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-		}
-		return newArray;
-	};
-
-	const onClick = (answer: Answer) => {
-		const answered = answeredQuestions + 1;
+	const onClick = (answer: string) => {
+		const answeredQ = answered.answeredQuestions + 1;
 		let correct = 0;
-		setAnsweredQuestions(answered);
+		setAnswered({ ...answered, answeredQuestions: answeredQ });
 
-		if (answer.isCorrect) {
-			correct = isCorrectAnswer + 1;
-			setIsCorrectAnswer(correct);
+		if (answered.correctAnswer === answer.toLocaleLowerCase()) {
+			correct = answered.isCorrectAnswer + 1;
+			setAnswered({ ...answered, isCorrectAnswer: correct, answeredQuestions: answeredQ });
 		}
 
-		if (answered !== correctAnswers.length) {
-			const word = wordId + 1;
-			setWordId(word);
-			setAnswer(correctAnswers[word].replace(/[^a-zA-Z0-9]/g, ''));
-			fetchDefinition(correctAnswers[word].replace(/[^a-zA-Z0-9]/g, ''));
+		if (answeredQ !== answered.correctAnswers.length) {
+			const word = id.word + 1;
+			setId({ ...id, word: word });
+			setAnswered({
+				...answered,
+				isCorrectAnswer: correct,
+				answeredQuestions: answeredQ,
+				correctAnswer: answered.correctAnswers[word]
+					.replace(/[^a-zA-Z0-9]/g, '')
+					.toLocaleLowerCase(),
+			});
 		}
 
-		if (answered === correctAnswers.length) {
-			setAnswers([]);
-			if (correct === correctAnswers.length) {
-				setIsCorrect(true);
-			}
-
-			if (correct !== correctAnswers.length) {
-				setIsCorrect(false);
-			}
+		if (correct === answered.correctAnswers.length) {
+			setTest([
+				...test.map((q) => {
+					if (q.id === Number(taskId)) {
+						return { ...q, isCompleted: true };
+					} else {
+						return { ...q };
+					}
+				}),
+			]);
 		}
 
-		setChooseAnswer(chooseAnswer + ` ${answer.name}`);
+		if (
+			answeredQ === answered.correctAnswers.length &&
+			correct !== answered.correctAnswers.length
+		) {
+			setTest([
+				...test.map((q) => {
+					if (q.id === Number(taskId)) {
+						return { ...q, isFault: true };
+					} else {
+						return { ...q };
+					}
+				}),
+			]);
+		}
+
+		setChooseAnswer(chooseAnswer + ` ${answer}`);
 	};
 
-	const getGroup = (variants: string[], word: string) => {
-		const answers = variants.map((item, index) => {
-			if (item.toLocaleLowerCase() === word.toLocaleLowerCase()) {
-				return { id: index + 1, name: item, isCorrect: true };
-			} else {
-				return { id: index + 1, name: item, isCorrect: false };
-			}
-		});
-
-		return answers;
-	};
-
-	const makeMaxAllowedAnswers = (variants: string[], correctAnswer: string) => {
-		let result: Answer[] = [];
-		for (let i = 0; i <= maxNumbersOfAnswers - 1; i++) {
-			if (i === maxNumbersOfAnswers - 1) {
-				result = [
-					...result,
-					{ id: i + 1, name: correctAnswer.toLocaleLowerCase(), isCorrect: true },
-				];
-			} else {
-				result = [
-					...result,
-					{
-						id: i + 1,
-						name: variants[i],
-						isCorrect: false,
-					},
-				];
-			}
-		}
-
-		return result;
-	};
-
-	const swapQuestion = (id: number) => {
+	const swapQuestion = (idTest: number) => {
 		let questionId: number = 0;
-		if (id <= test.length) {
-			questionId = id;
-			setTestId(id);
-			showSentence(id);
+		if (idTest <= test.length) {
+			questionId = idTest;
+			navigate(`/collections/${idTest}/task/${idTest}`);
+			showSentence(idTest);
 		}
 
-		if (id > test.length) {
+		if (idTest > test.length) {
 			questionId = 1;
-			setTestId(questionId);
+			navigate(`/collections/${questionId}/task/${questionId}`);
 			showSentence(questionId);
 		}
 
-		if (id < 1) {
+		if (idTest < 1) {
 			questionId = test.length;
-			setTestId(questionId);
+			navigate(`/collections/${questionId}/task/${questionId}`);
 			showSentence(questionId);
 		}
 	};
 
-	const showSentence = (id: number) => {
+	const showSentence = (idSentence: number) => {
 		setChooseAnswer('');
 		for (let i = 0; i < DEFAULT_TEST.length; i++) {
-			if (DEFAULT_TEST[i].id === id) {
+			if (DEFAULT_TEST[i].id === idSentence) {
 				setSentence({ ...DEFAULT_TEST[i] });
-				setCorrectAnswers(DEFAULT_TEST[i].correctAnswer.split(' '));
-				setAnswer(DEFAULT_TEST[i].correctAnswer.split(' ')[0]);
 				fetchDefinition(DEFAULT_TEST[i].correctAnswer.split(' ')[0]);
-				setWordId(0);
-				setAnsweredQuestions(0);
-				setIsCorrect(false);
-				setIsCorrectAnswer(0);
+				setId({ word: 0 });
+				setAnswered({
+					...answered,
+					isCorrectAnswer: 0,
+					correctAnswers: DEFAULT_TEST[i].correctAnswer.split(' '),
+					correctAnswer: DEFAULT_TEST[i].correctAnswer
+						.split(' ')[0]
+						.replace(/[^a-zA-Z0-9]/g, '')
+						.toLocaleLowerCase(),
+					answeredQuestions: 0,
+				});
 			}
 		}
+	};
+
+	const getQuestion = async () => {
+		const answers: string[][] = await getReadyQuestion(answered.correctAnswers);
+		setReadyQuestion([...answers]);
 	};
 
 	useEffect(() => {
-		fetchDefinition(answer);
-		const allQuestions = DEFAULT_TEST.map((item) => ({ ...item, isCompleted: false }));
+		fetchDefinition(answered.correctAnswer);
+		const allQuestions = DEFAULT_TEST.map((item) => ({
+			...item,
+			isCompleted: false,
+			isFault: false,
+		}));
 		setTest([...allQuestions]);
+		getQuestion();
 	}, []);
 
 	useEffect(() => {
-		showSentence(testId);
-	}, [testId]);
+		showSentence(Number(taskId));
+	}, [taskId]);
+
+	useEffect(() => {
+		getQuestion();
+		if (Array.isArray(readyQuestion) && readyQuestion.length > 0) {
+			console.log('USE EFFECT!!!!!!!: ', readyQuestion[0]);
+		} else {
+			console.log('USE EFFECT UNDEFINED!!!!!');
+		}
+	}, [answered.correctAnswers]);
+
+	useEffect(() => {
+		console.log('ANSWERED USE EFFECT: ', answered);
+	}, [answered]);
 
 	return (
 		<div className={styles.lessonPage}>
 			<div className={styles.prevQuestion}>
-				<CircleButton type="default" size="large" onClick={() => swapQuestion(testId - 1)}>
+				<CircleButton type="default" size="large" onClick={() => swapQuestion(Number(taskId) - 1)}>
 					<Icon icon="left" variant="dark" />
 				</CircleButton>
 			</div>
 			<div className={styles.nextQuestion}>
-				<CircleButton type="default" size="large" onClick={() => swapQuestion(testId + 1)}>
+				<CircleButton type="default" size="large" onClick={() => swapQuestion(Number(taskId) + 1)}>
 					<Icon icon="right" variant="dark" />
 				</CircleButton>
 			</div>
@@ -447,41 +205,43 @@ export const ShowingTest = () => {
 				<h1 className={styles.topic}>Lesson Topic</h1>
 				<div className={styles.sentenceContainer}>
 					<p className={styles.sentence}>{sentence.sentence}</p>
-					{isCorrect && answeredQuestions === correctAnswers.length && (
+					{test[Number(taskId) - 1]?.isCompleted && (
 						<div className={styles.correctAnswerContainer}>
 							<p className={styles.answer}>{sentence.correctAnswer}</p>
 							<p className={styles.answer}>You Complete Test.</p>
 						</div>
 					)}
-					{!isCorrect && answeredQuestions === correctAnswers.length && (
+					{test[Number(taskId) - 1]?.isFault && !test[Number(taskId) - 1]?.isCompleted && (
 						<div className={styles.uncorrectAnswerContainer}>
 							<p className={styles.uncorrectAnswer}>{chooseAnswer}</p>
 							<p className={styles.answer}>{sentence.correctAnswer}</p>
 							<p className={styles.uncorrectAnswer}>Wrong Answer!</p>
 						</div>
 					)}
-					{answeredQuestions !== correctAnswers.length && (
+					{!test[Number(taskId) - 1]?.isCompleted && !test[Number(taskId) - 1]?.isFault && (
 						<div className={styles.correctAnswerContainer}>
 							<p className={styles.answer}>{chooseAnswer}</p>
 						</div>
 					)}
 				</div>
 				<div className={styles.words}>
-					{answers.map((answer) => {
-						return (
-							<div key={answer.id} className={styles.word}>
+					{data &&
+						data.length > 1 &&
+						!test[Number(taskId) - 1]?.isCompleted &&
+						!test[Number(taskId) - 1]?.isFault &&
+						data[id.word].map((s, i) => (
+							<div key={i} className={styles.word}>
 								<Button
 									size="large"
 									type="default"
 									onClick={() => {
-										onClick(answer);
+										onClick(s);
 									}}
 								>
-									{answer.name}
+									{s}
 								</Button>
 							</div>
-						);
-					})}
+						))}
 				</div>
 			</div>
 			<div className={styles.pagination}>
@@ -492,7 +252,7 @@ export const ShowingTest = () => {
 						color={item.isCompleted ? 'primary' : 'danger'}
 						type="default"
 						onClick={() => {
-							setTestId(item.id);
+							navigate(`/collections/${item.id}/task/${item.id}`);
 						}}
 					>
 						{item.id}
