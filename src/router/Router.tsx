@@ -4,9 +4,11 @@ import Layout from '@/layouts/main/Layouts';
 import { Auth } from '@/pages/Auth';
 import Home from '@/pages/Home';
 
-const Profile = lazy(() => import('@/pages/Profile'));
 const CreateTest = lazy(() => import('@/pages/CreateTest'));
+const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const CompleteTest = lazy(() => import('@/pages/CompleteTest'));
+const CollectionsPage = lazy(() => import('@/pages/CollectionsPage'));
+const CollectionDetails = lazy(() => import('@/pages/CollectionDetailsPage'));
 
 export const router = createBrowserRouter([
 	{
@@ -14,11 +16,14 @@ export const router = createBrowserRouter([
 		element: <Layout />,
 		children: [
 			{ path: '', element: <Home /> },
-			{ path: 'profile', element: <Profile /> },
+			{ path: 'profile', element: <ProfilePage /> },
 			{ path: 'login', element: <Auth /> },
 			{ path: 'signup', element: <Auth /> },
 			{ path: 'test', element: <CreateTest /> },
+			{ path: 'collections', element: <CollectionsPage /> },
 			{ path: 'complete-test', element: <CompleteTest /> },
+			{ path: 'collections/:collectionsId', element: <CollectionDetails /> },
+			{ path: 'collections/:collectionsId/task/:taskId', element: <CompleteTest /> },
 		],
 	},
 ]);

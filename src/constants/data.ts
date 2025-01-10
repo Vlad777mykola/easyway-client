@@ -30,3 +30,42 @@ export const DEFAULT_TEST = [
 		correctAnswer: 'Although she was tired, she kept working.',
 	},
 ];
+
+export const DEFAULT_COLLECTIONS = [
+	{
+		id: 1,
+		title: 'Test 1',
+		subtitle: 'Test 1 subtitle',
+		taskList: DEFAULT_TEST.map((i) => i.id),
+	},
+	{
+		id: 2,
+		title: 'Test 1',
+		subtitle: 'Test 1 subtitle',
+		taskList: DEFAULT_TEST.map((i) => i.id),
+	},
+	{
+		id: 3,
+		title: 'Test 1',
+		subtitle: 'Test 1 subtitle',
+		taskList: DEFAULT_TEST.map((i) => i.id),
+	},
+	{
+		id: 4,
+		title: 'Test 1',
+		subtitle: 'Test 1 subtitle',
+		taskList: DEFAULT_TEST.map((i) => i.id),
+	},
+	{
+		id: 5,
+		title: 'Test 1',
+		subtitle: 'Test 1 subtitle',
+		taskList: DEFAULT_TEST.map((i) => i.id),
+	},
+	{
+		id: 6,
+		title: 'Test 1',
+		subtitle: 'Test 1 subtitle',
+		taskList: DEFAULT_TEST.map((i) => i.id),
+	},
+];
