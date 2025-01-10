@@ -12,8 +12,8 @@ const SideMenu = () => {
 		<div className={styles.headerLeftMenuList}>
 			<Link to="/">Home</Link>
 			<Link to="/collections">Collections</Link>
-			<Link to="/complete-test">Tasks</Link>
-			<Link to="/test">Create Task</Link>
+			{/* <Link to="/complete-test">Tasks</Link> */}
+			{/* <Link to="/test">Create Task</Link> */}
 		</div>
 	);
 };

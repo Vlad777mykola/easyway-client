@@ -1,50 +1,109 @@
-# React + TypeScript + Vite
+## UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. PartialComponent in React refers to breaking down UI into smaller, reusable, and independent components that represent parts of the application.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-	languageOptions: {
-		// other options...
-		parserOptions: {
-			project: ['./tsconfig.node.json', './tsconfig.app.json'],
-			tsconfigRootDir: import.meta.dirname,
-		},
-	},
+```
+export const partial = (Component, partialProps) => {
+  return (props) => {
+    return <Component {...partialProps} {...props} />;
+  };
+ export const Button = ({ size, color, text, ...props }) => {
+  return (
+    <button
+      style={{
+        fontSize: size === 'large' ? '25px' : '16px',
+        backgroundColor: color,
+      }}
+    >
+      {text}
+    </button>
+  );
+};
+export const SmallButton = partial(Button, { size: 'small' });
+export const LargeRedButton = partial(Button, {
+  size: 'large',
+  color: 'crimson',
 });
+};
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. React composition is a powerful design pattern that allows you to build flexible, reusable, and maintainable components by combining smaller components.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react';
+```
+export const Button = ({ size, color, text, ...props }) => {
+  return (
+    <button
+      style={{
+        fontSize: size === "large" ? "25px" : "16px",
+        backgroundColor: color,
+      }}
+    >
+      {text}
+    </button>
+  );
+};
+export const SmallButton = (props) => {
+  return <Button {...props} size={"small"} />;
+};
+export const SmallRedButton = (props) => {
+  return <SmallButton {...props} color={"crimson"} />;
+};
+```
 
-export default tseslint.config({
-	// Set the react version
-	settings: { react: { version: '18.3' } },
-	plugins: {
-		// Add the react plugin
-		react,
-	},
-	rules: {
-		// other rules...
-		// Enable its recommended rules
-		...react.configs.recommended.rules,
-		...react.configs['jsx-runtime'].rules,
-	},
-});
+3. Avoid re-render components by passing them as children
+
+```
+<DynamicScroll>
+    <SlowComponent />
+    <AdditionalComplexThings />
+</DynamicScroll>
+
+const DynamicScroll = ({ children }: { children: ReactNode }) => {
+  const [position, setPosition] = useState(170);
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const newPosition = calculatePosition(e.currentTarget.scrollTop);
+    setPosition(Math.max(113, newPosition));
+  };
+  const blockColor = calculateColor(position);
+
+  return (
+    <ScrollableContainer onScroll={handleScroll}>
+      <DynamicBlock top={position === 113 ? 113 : position} color={blockColor}>
+        🛒
+      </DynamicBlock>
+      {children}
+    </ScrollableContainer>
+  );
+};
+```
+
+4. Override default props to change the css value depend on parent component
+
+```
+<Button size="lg" icon={<Loading/>} />
+<Button type="primary" icon={<Loading />} />
+
+const Button = ({
+  type,
+  icon,
+  size,
+}: {
+  type?: string;
+  icon: ReactElement;
+  size?: string;
+}) => {
+  const defaultProps = {
+    size: size === "lg" ? "lg" : "md",  // path lg size for icon to <Loading />
+    color: type === "primary" ? "white" : "black", // path white color props for icon to <Loading />
+  };
+
+  const newProps = {
+    ...defaultProps,
+    ...icon.props,
+  };
+
+  const clonedIcon = React.cloneElement(icon, defaultProps);
+
+  return <button>Submit {clonedIcon}</button>;
+};
 ```
