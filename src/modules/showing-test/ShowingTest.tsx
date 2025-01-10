@@ -6,6 +6,7 @@ import { DEFAULT_TEST } from '@/constants/data';
 import { fetchDefinition, getReadyQuestion } from './functions/fetchDefinition';
 import styles from './showingTest.module.css';
 import { useSelectData } from './hooks/useSelectData';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type Test = {
 	id: number;
@@ -35,7 +36,6 @@ type Answered = {
 };
 
 type Id = {
-	test: number;
 	word: number;
 };
 
@@ -50,10 +50,14 @@ export const ShowingTest = () => {
 		correctAnswer: sentence.correctAnswer.split(' ')[0],
 		answeredQuestions: 0,
 	});
+
 	const [id, setId] = useState<Id>({
-		test: 1,
 		word: 0,
 	});
+
+	const { taskId } = useParams();
+
+	const navigate = useNavigate();
 
 	const data = useSelectData(answered.correctAnswers);
 
@@ -83,7 +87,7 @@ export const ShowingTest = () => {
 		if (correct === answered.correctAnswers.length) {
 			setTest([
 				...test.map((q) => {
-					if (q.id === id.test) {
+					if (q.id === Number(taskId)) {
 						return { ...q, isCompleted: true };
 					} else {
 						return { ...q };
@@ -98,7 +102,7 @@ export const ShowingTest = () => {
 		) {
 			setTest([
 				...test.map((q) => {
-					if (q.id === id.test) {
+					if (q.id === Number(taskId)) {
 						return { ...q, isFault: true };
 					} else {
 						return { ...q };
@@ -114,19 +118,19 @@ export const ShowingTest = () => {
 		let questionId: number = 0;
 		if (idTest <= test.length) {
 			questionId = idTest;
-			setId({ ...id, test: idTest });
+			navigate(`/collections/${idTest}/task/${idTest}`);
 			showSentence(idTest);
 		}
 
 		if (idTest > test.length) {
 			questionId = 1;
-			setId({ ...id, test: questionId });
+			navigate(`/collections/${questionId}/task/${questionId}`);
 			showSentence(questionId);
 		}
 
 		if (idTest < 1) {
 			questionId = test.length;
-			setId({ ...id, test: questionId });
+			navigate(`/collections/${questionId}/task/${questionId}`);
 			showSentence(questionId);
 		}
 	};
@@ -137,7 +141,7 @@ export const ShowingTest = () => {
 			if (DEFAULT_TEST[i].id === idSentence) {
 				setSentence({ ...DEFAULT_TEST[i] });
 				fetchDefinition(DEFAULT_TEST[i].correctAnswer.split(' ')[0]);
-				setId({ test: idSentence, word: 0 });
+				setId({ word: 0 });
 				setAnswered({
 					...answered,
 					isCorrectAnswer: 0,
@@ -169,8 +173,8 @@ export const ShowingTest = () => {
 	}, []);
 
 	useEffect(() => {
-		showSentence(id.test);
-	}, [id.test]);
+		showSentence(Number(taskId));
+	}, [taskId]);
 
 	useEffect(() => {
 		getQuestion();
@@ -184,15 +188,16 @@ export const ShowingTest = () => {
 	useEffect(() => {
 		console.log('ANSWERED USE EFFECT: ', answered);
 	}, [answered]);
+
 	return (
 		<div className={styles.lessonPage}>
 			<div className={styles.prevQuestion}>
-				<CircleButton type="default" size="large" onClick={() => swapQuestion(id.test - 1)}>
+				<CircleButton type="default" size="large" onClick={() => swapQuestion(Number(taskId) - 1)}>
 					<Icon icon="left" variant="dark" />
 				</CircleButton>
 			</div>
 			<div className={styles.nextQuestion}>
-				<CircleButton type="default" size="large" onClick={() => swapQuestion(id.test + 1)}>
+				<CircleButton type="default" size="large" onClick={() => swapQuestion(Number(taskId) + 1)}>
 					<Icon icon="right" variant="dark" />
 				</CircleButton>
 			</div>
@@ -200,20 +205,20 @@ export const ShowingTest = () => {
 				<h1 className={styles.topic}>Lesson Topic</h1>
 				<div className={styles.sentenceContainer}>
 					<p className={styles.sentence}>{sentence.sentence}</p>
-					{test[id.test - 1]?.isCompleted && (
+					{test[Number(taskId) - 1]?.isCompleted && (
 						<div className={styles.correctAnswerContainer}>
 							<p className={styles.answer}>{sentence.correctAnswer}</p>
 							<p className={styles.answer}>You Complete Test.</p>
 						</div>
 					)}
-					{test[id.test - 1]?.isFault && !test[id.test - 1]?.isCompleted && (
+					{test[Number(taskId) - 1]?.isFault && !test[Number(taskId) - 1]?.isCompleted && (
 						<div className={styles.uncorrectAnswerContainer}>
 							<p className={styles.uncorrectAnswer}>{chooseAnswer}</p>
 							<p className={styles.answer}>{sentence.correctAnswer}</p>
 							<p className={styles.uncorrectAnswer}>Wrong Answer!</p>
 						</div>
 					)}
-					{!test[id.test - 1]?.isCompleted && !test[id.test - 1]?.isFault && (
+					{!test[Number(taskId) - 1]?.isCompleted && !test[Number(taskId) - 1]?.isFault && (
 						<div className={styles.correctAnswerContainer}>
 							<p className={styles.answer}>{chooseAnswer}</p>
 						</div>
@@ -222,8 +227,8 @@ export const ShowingTest = () => {
 				<div className={styles.words}>
 					{data &&
 						data.length > 1 &&
-						!test[id.test - 1]?.isCompleted &&
-						!test[id.test - 1]?.isFault &&
+						!test[Number(taskId) - 1]?.isCompleted &&
+						!test[Number(taskId) - 1]?.isFault &&
 						data[id.word].map((s, i) => (
 							<div key={i} className={styles.word}>
 								<Button
@@ -247,7 +252,7 @@ export const ShowingTest = () => {
 						color={item.isCompleted ? 'primary' : 'danger'}
 						type="default"
 						onClick={() => {
-							setId({ ...id, test: item.id });
+							navigate(`/collections/${item.id}/task/${item.id}`);
 						}}
 					>
 						{item.id}
