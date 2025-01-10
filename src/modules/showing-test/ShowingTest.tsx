@@ -43,16 +43,13 @@ export const ShowingTest = () => {
 	const [test, setTest] = useState<Test[]>([]);
 	const [chooseAnswer, setChooseAnswer] = useState<string>('');
 	const [readyQuestion, setReadyQuestion] = useState<SentenceQuestion>();
-
 	const [sentence, setSentence] = useState({ ...DEFAULT_TEST[0] });
-
 	const [answered, setAnswered] = useState<Answered>({
 		isCorrectAnswer: 0,
 		correctAnswers: sentence.correctAnswer.split(' '),
 		correctAnswer: sentence.correctAnswer.split(' ')[0],
 		answeredQuestions: 0,
 	});
-
 	const [id, setId] = useState<Id>({
 		test: 1,
 		word: 0,
