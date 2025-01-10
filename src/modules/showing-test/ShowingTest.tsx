@@ -12,6 +12,7 @@ type Test = {
 	sentence: string;
 	correctAnswer: string;
 	isCompleted: boolean;
+	isFault: boolean;
 };
 
 export type Answer = {
@@ -20,64 +21,72 @@ export type Answer = {
 	isCorrect: boolean;
 };
 
-type Question = {
-	id: number;
-	correctAnswer: string;
-	answers: Answer[];
-	isCompleted: boolean;
-};
-
 type SentenceQuestion = {
 	id: number;
 	questions: string[][];
 	isCompleted: boolean;
 };
 
-export const ShowingTest = () => {
-	const [test, setTest] = useState<Test[]>([]); // 100%
-	const [chooseAnswer, setChooseAnswer] = useState<string>(''); // 100%
-	const [readyQuestion, setReadyQuestion] = useState<SentenceQuestion>(); // 100%
-	const [isFault, setIsFault] = useState(false);
+type Answered = {
+	isCorrectAnswer: number;
+	correctAnswers: string[];
+	correctAnswer: string;
+	answeredQuestions: number;
+};
 
-	const [isCorrectAnswer, setIsCorrectAnswer] = useState(0); // not sure
+type Id = {
+	test: number;
+	word: number;
+};
+
+export const ShowingTest = () => {
+	const [test, setTest] = useState<Test[]>([]);
+	const [chooseAnswer, setChooseAnswer] = useState<string>('');
+	const [readyQuestion, setReadyQuestion] = useState<SentenceQuestion>();
 
 	const [sentence, setSentence] = useState({ ...DEFAULT_TEST[0] });
 
-	const [correctAnswers, setCorrectAnswers] = useState<string[]>(sentence.correctAnswer.split(' '));
-	const [correctAnswer, setCorrectAnswer] = useState(correctAnswers[0]);
+	const [answered, setAnswered] = useState<Answered>({
+		isCorrectAnswer: 0,
+		correctAnswers: sentence.correctAnswer.split(' '),
+		correctAnswer: sentence.correctAnswer.split(' ')[0],
+		answeredQuestions: 0,
+	});
 
-	const [testId, setTestId] = useState<number>(1);
-	const [wordId, setWordId] = useState(0);
-	const [answeredQuestions, setAnsweredQuestions] = useState(0);
+	const [id, setId] = useState<Id>({
+		test: 1,
+		word: 0,
+	});
 
-	const data = useSelectData(correctAnswers);
-
-	console.log('///ANSWER: ', correctAnswer);
+	const data = useSelectData(answered.correctAnswers);
 
 	const onClick = (answer: string) => {
-		const answered = answeredQuestions + 1;
+		const answeredQ = answered.answeredQuestions + 1;
 		let correct = 0;
-		setAnsweredQuestions(answered);
+		setAnswered({ ...answered, answeredQuestions: answeredQ });
 
-		if (correctAnswer === answer.toLocaleLowerCase()) {
-			console.log('///INCLUDES: ', correctAnswers.includes(answer));
-			correct = isCorrectAnswer + 1;
-			console.log('///CORRECT: ', correct);
-			setIsCorrectAnswer(correct);
-		} else {
-			console.log('///IS NOT INCLUDE: ', correctAnswers.includes(answer));
+		if (answered.correctAnswer === answer.toLocaleLowerCase()) {
+			correct = answered.isCorrectAnswer + 1;
+			setAnswered({ ...answered, isCorrectAnswer: correct, answeredQuestions: answeredQ });
 		}
 
-		if (answered !== correctAnswers.length) {
-			const word = wordId + 1;
-			setWordId(word);
-			setCorrectAnswer(correctAnswers[word].replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase());
+		if (answeredQ !== answered.correctAnswers.length) {
+			const word = id.word + 1;
+			setId({ ...id, word: word });
+			setAnswered({
+				...answered,
+				isCorrectAnswer: correct,
+				answeredQuestions: answeredQ,
+				correctAnswer: answered.correctAnswers[word]
+					.replace(/[^a-zA-Z0-9]/g, '')
+					.toLocaleLowerCase(),
+			});
 		}
 
-		if (correct === correctAnswers.length) {
+		if (correct === answered.correctAnswers.length) {
 			setTest([
 				...test.map((q) => {
-					if (q.id === testId) {
+					if (q.id === id.test) {
 						return { ...q, isCompleted: true };
 					} else {
 						return { ...q };
@@ -86,70 +95,85 @@ export const ShowingTest = () => {
 			]);
 		}
 
-		if (answered === correctAnswers.length && correct !== correctAnswers.length) {
-			setIsFault(true);
+		if (
+			answeredQ === answered.correctAnswers.length &&
+			correct !== answered.correctAnswers.length
+		) {
+			setTest([
+				...test.map((q) => {
+					if (q.id === id.test) {
+						return { ...q, isFault: true };
+					} else {
+						return { ...q };
+					}
+				}),
+			]);
 		}
 
 		setChooseAnswer(chooseAnswer + ` ${answer}`);
 	};
 
-	const swapQuestion = (id: number) => {
+	const swapQuestion = (idTest: number) => {
 		let questionId: number = 0;
-		if (id <= test.length) {
-			questionId = id;
-			setTestId(id);
-			showSentence(id);
+		if (idTest <= test.length) {
+			questionId = idTest;
+			setId({ ...id, test: idTest });
+			showSentence(idTest);
 		}
 
-		if (id > test.length) {
+		if (idTest > test.length) {
 			questionId = 1;
-			setTestId(questionId);
+			setId({ ...id, test: questionId });
 			showSentence(questionId);
 		}
 
-		if (id < 1) {
+		if (idTest < 1) {
 			questionId = test.length;
-			setTestId(questionId);
+			setId({ ...id, test: questionId });
 			showSentence(questionId);
 		}
 	};
 
-	const showSentence = (id: number) => {
+	const showSentence = (idSentence: number) => {
 		setChooseAnswer('');
 		for (let i = 0; i < DEFAULT_TEST.length; i++) {
-			if (DEFAULT_TEST[i].id === id) {
+			if (DEFAULT_TEST[i].id === idSentence) {
 				setSentence({ ...DEFAULT_TEST[i] });
-				setCorrectAnswers(DEFAULT_TEST[i].correctAnswer.split(' '));
-				setCorrectAnswer(
-					DEFAULT_TEST[i].correctAnswer
+				fetchDefinition(DEFAULT_TEST[i].correctAnswer.split(' ')[0]);
+				setId({ test: idSentence, word: 0 });
+				setAnswered({
+					...answered,
+					isCorrectAnswer: 0,
+					correctAnswers: DEFAULT_TEST[i].correctAnswer.split(' '),
+					correctAnswer: DEFAULT_TEST[i].correctAnswer
 						.split(' ')[0]
 						.replace(/[^a-zA-Z0-9]/g, '')
 						.toLocaleLowerCase(),
-				);
-				fetchDefinition(DEFAULT_TEST[i].correctAnswer.split(' ')[0]);
-				setWordId(0);
-				setAnsweredQuestions(0);
-				setIsCorrectAnswer(0);
+					answeredQuestions: 0,
+				});
 			}
 		}
 	};
 
 	const getQuestion = async () => {
-		const answers: string[][] = await getReadyQuestion(correctAnswers);
-		console.log('ANSWERS IN GET QUESTION: ', answers);
+		const answers: string[][] = await getReadyQuestion(answered.correctAnswers);
 		setReadyQuestion([...answers]);
 	};
 
 	useEffect(() => {
-		fetchDefinition(correctAnswer);
-		const allQuestions = DEFAULT_TEST.map((item) => ({ ...item, isCompleted: false }));
+		fetchDefinition(answered.correctAnswer);
+		const allQuestions = DEFAULT_TEST.map((item) => ({
+			...item,
+			isCompleted: false,
+			isFault: false,
+		}));
 		setTest([...allQuestions]);
 		getQuestion();
 	}, []);
 
 	useEffect(() => {
-		showSentence(testId);
-	}, [testId]);
+		showSentence(id.test);
+	}, [id.test]);
 
 	useEffect(() => {
 		getQuestion();
@@ -158,17 +182,20 @@ export const ShowingTest = () => {
 		} else {
 			console.log('USE EFFECT UNDEFINED!!!!!');
 		}
-	}, [correctAnswers]);
-	console.log('///////: ', data);
+	}, [answered.correctAnswers]);
+
+	useEffect(() => {
+		console.log('ANSWERED USE EFFECT: ', answered);
+	}, [answered]);
 	return (
 		<div className={styles.lessonPage}>
 			<div className={styles.prevQuestion}>
-				<CircleButton type="default" size="large" onClick={() => swapQuestion(testId - 1)}>
+				<CircleButton type="default" size="large" onClick={() => swapQuestion(id.test - 1)}>
 					<Icon icon="left" variant="dark" />
 				</CircleButton>
 			</div>
 			<div className={styles.nextQuestion}>
-				<CircleButton type="default" size="large" onClick={() => swapQuestion(testId + 1)}>
+				<CircleButton type="default" size="large" onClick={() => swapQuestion(id.test + 1)}>
 					<Icon icon="right" variant="dark" />
 				</CircleButton>
 			</div>
@@ -176,20 +203,20 @@ export const ShowingTest = () => {
 				<h1 className={styles.topic}>Lesson Topic</h1>
 				<div className={styles.sentenceContainer}>
 					<p className={styles.sentence}>{sentence.sentence}</p>
-					{test[testId - 1]?.isCompleted && (
+					{test[id.test - 1]?.isCompleted && (
 						<div className={styles.correctAnswerContainer}>
 							<p className={styles.answer}>{sentence.correctAnswer}</p>
 							<p className={styles.answer}>You Complete Test.</p>
 						</div>
 					)}
-					{isFault && !test[testId - 1]?.isCompleted && (
+					{test[id.test - 1]?.isFault && !test[id.test - 1]?.isCompleted && (
 						<div className={styles.uncorrectAnswerContainer}>
 							<p className={styles.uncorrectAnswer}>{chooseAnswer}</p>
 							<p className={styles.answer}>{sentence.correctAnswer}</p>
 							<p className={styles.uncorrectAnswer}>Wrong Answer!</p>
 						</div>
 					)}
-					{!test[testId - 1]?.isCompleted && !isFault && (
+					{!test[id.test - 1]?.isCompleted && !test[id.test - 1]?.isFault && (
 						<div className={styles.correctAnswerContainer}>
 							<p className={styles.answer}>{chooseAnswer}</p>
 						</div>
@@ -198,9 +225,9 @@ export const ShowingTest = () => {
 				<div className={styles.words}>
 					{data &&
 						data.length > 1 &&
-						!test[testId - 1]?.isCompleted &&
-						!isFault &&
-						data[wordId].map((s, i) => (
+						!test[id.test - 1]?.isCompleted &&
+						!test[id.test - 1]?.isFault &&
+						data[id.word].map((s, i) => (
 							<div key={i} className={styles.word}>
 								<Button
 									size="large"
@@ -223,7 +250,7 @@ export const ShowingTest = () => {
 						color={item.isCompleted ? 'primary' : 'danger'}
 						type="default"
 						onClick={() => {
-							setTestId(item.id);
+							setId({ ...id, test: item.id });
 						}}
 					>
 						{item.id}

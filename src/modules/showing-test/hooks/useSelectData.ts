@@ -7,8 +7,6 @@ export const useSelectData = (props: string[]): string[][] | null => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const result: string[][] = await getReadyQuestion(props);
-			console.log('/////// ', props);
-			console.log('/////// ', result);
 			if (result.length > 1) {
 				setAnswers(result);
 			} else {

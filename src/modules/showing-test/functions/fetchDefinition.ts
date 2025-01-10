@@ -9,13 +9,6 @@ import {
 } from '../constants';
 import { Answer } from '../ShowingTest';
 
-type Question = {
-	id: number;
-	correctAnswer: string;
-	answers: Answer[];
-	isCompleted: boolean;
-};
-
 export const fetchDefinition = async (word: string) => {
 	const { isAdjective, isArticle, isConjuction, isNoun, isPreposition, isVerb, isPronoun } =
 		detectPartOfSpeech(word);

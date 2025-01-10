@@ -24,9 +24,7 @@ export type Variants = {
 export const showVerbs = (word: string) => {
 	const doc = nlp(word);
 	const verbList = doc.verbs().conjugate()[0] as VerbList;
-	console.log('VERBLIST: ', verbList);
 	const answers = Object.keys(verbList).map((key) => verbList[key]);
-	console.log('ANSWERS ON SHOW VERBS: ', answers);
 	return answers;
 };
 
@@ -55,8 +53,6 @@ export const showVariants = (variants: Variants, word: string) => {
 			answers = getGroup(shuffle([...variants[key]]), correctWord);
 		}
 	}
-
-	console.log('ANSWERS IN SHOW VARIANTS: ', answers);
 
 	return answers;
 };
