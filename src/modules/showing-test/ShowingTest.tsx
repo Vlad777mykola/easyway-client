@@ -1,14 +1,11 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { Button } from '@/ui-components/Button';
-import { Icon } from '@/ui-components/Icon';
-import { CircleButton } from '@/ui-components/CircleButton';
 import { DEFAULT_TEST } from '@/constants/data';
 import { fetchDefinition, getReadyQuestion } from './functions/fetchDefinition';
-import styles from './showingTest.module.css';
 import { useSelectData } from './hooks/useSelectData';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ShowingTestUI } from './ShowingTestUI';
 
-type Test = {
+export type Test = {
 	id: number;
 	sentence: string;
 	correctAnswer: string;
@@ -35,31 +32,40 @@ type Answered = {
 	answeredQuestions: number;
 };
 
-type Id = {
+export type Id = {
 	word: number;
 };
 
 export const ShowingTest = () => {
 	const [test, setTest] = useState<Test[]>([]);
-	const [chooseAnswer, setChooseAnswer] = useState<string>('');
-	const [readyQuestion, setReadyQuestion] = useState<SentenceQuestion>();
-	const [sentence, setSentence] = useState({ ...DEFAULT_TEST[0] });
-	const [answered, setAnswered] = useState<Answered>({
-		isCorrectAnswer: 0,
-		correctAnswers: sentence.correctAnswer.split(' '),
-		correctAnswer: sentence.correctAnswer.split(' ')[0],
-		answeredQuestions: 0,
-	});
 
 	const [id, setId] = useState<Id>({
 		word: 0,
 	});
+
+	const [completeTest, setCompleteTest] = useState({
+		question: { ...DEFAULT_TEST[0] },
+		selectedAnswer: '',
+	});
+
+	const [answered, setAnswered] = useState<Answered>({
+		isCorrectAnswer: 0,
+		correctAnswers: completeTest.question.correctAnswer.split(' '),
+		correctAnswer: completeTest.question.correctAnswer.split(' ')[0],
+		answeredQuestions: 0,
+	});
+
+	console.log('COMPLETE TEST: ', completeTest);
+	console.log('ANSWERED: ', answered);
+	console.log('TEST: ', test);
 
 	const { taskId } = useParams();
 
 	const navigate = useNavigate();
 
 	const data = useSelectData(answered.correctAnswers);
+
+	console.log('DATA: ', data);
 
 	const onClick = (answer: string) => {
 		const answeredQ = answered.answeredQuestions + 1;
@@ -111,7 +117,10 @@ export const ShowingTest = () => {
 			]);
 		}
 
-		setChooseAnswer(chooseAnswer + ` ${answer}`);
+		setCompleteTest({
+			...completeTest,
+			selectedAnswer: `${completeTest.selectedAnswer} ${answer}`,
+		});
 	};
 
 	const swapQuestion = (idTest: number) => {
@@ -136,10 +145,9 @@ export const ShowingTest = () => {
 	};
 
 	const showSentence = (idSentence: number) => {
-		setChooseAnswer('');
 		for (let i = 0; i < DEFAULT_TEST.length; i++) {
 			if (DEFAULT_TEST[i].id === idSentence) {
-				setSentence({ ...DEFAULT_TEST[i] });
+				setCompleteTest({ ...completeTest, question: { ...DEFAULT_TEST[i] }, selectedAnswer: '' });
 				fetchDefinition(DEFAULT_TEST[i].correctAnswer.split(' ')[0]);
 				setId({ word: 0 });
 				setAnswered({
@@ -156,11 +164,6 @@ export const ShowingTest = () => {
 		}
 	};
 
-	const getQuestion = async () => {
-		const answers: string[][] = await getReadyQuestion(answered.correctAnswers);
-		setReadyQuestion([...answers]);
-	};
-
 	useEffect(() => {
 		fetchDefinition(answered.correctAnswer);
 		const allQuestions = DEFAULT_TEST.map((item) => ({
@@ -169,7 +172,6 @@ export const ShowingTest = () => {
 			isFault: false,
 		}));
 		setTest([...allQuestions]);
-		getQuestion();
 	}, []);
 
 	useEffect(() => {
@@ -177,9 +179,8 @@ export const ShowingTest = () => {
 	}, [taskId]);
 
 	useEffect(() => {
-		getQuestion();
-		if (Array.isArray(readyQuestion) && readyQuestion.length > 0) {
-			console.log('USE EFFECT!!!!!!!: ', readyQuestion[0]);
+		if (Array.isArray(completeTest.answers) && completeTest.answers.length > 0) {
+			console.log('USE EFFECT!!!!!!!: ', completeTest.answers[0]);
 		} else {
 			console.log('USE EFFECT UNDEFINED!!!!!');
 		}
@@ -190,75 +191,17 @@ export const ShowingTest = () => {
 	}, [answered]);
 
 	return (
-		<div className={styles.lessonPage}>
-			<div className={styles.prevQuestion}>
-				<CircleButton type="default" size="large" onClick={() => swapQuestion(Number(taskId) - 1)}>
-					<Icon icon="left" variant="dark" />
-				</CircleButton>
-			</div>
-			<div className={styles.nextQuestion}>
-				<CircleButton type="default" size="large" onClick={() => swapQuestion(Number(taskId) + 1)}>
-					<Icon icon="right" variant="dark" />
-				</CircleButton>
-			</div>
-			<div className={styles.testContainer}>
-				<h1 className={styles.topic}>Lesson Topic</h1>
-				<div className={styles.sentenceContainer}>
-					<p className={styles.sentence}>{sentence.sentence}</p>
-					{test[Number(taskId) - 1]?.isCompleted && (
-						<div className={styles.correctAnswerContainer}>
-							<p className={styles.answer}>{sentence.correctAnswer}</p>
-							<p className={styles.answer}>You Complete Test.</p>
-						</div>
-					)}
-					{test[Number(taskId) - 1]?.isFault && !test[Number(taskId) - 1]?.isCompleted && (
-						<div className={styles.uncorrectAnswerContainer}>
-							<p className={styles.uncorrectAnswer}>{chooseAnswer}</p>
-							<p className={styles.answer}>{sentence.correctAnswer}</p>
-							<p className={styles.uncorrectAnswer}>Wrong Answer!</p>
-						</div>
-					)}
-					{!test[Number(taskId) - 1]?.isCompleted && !test[Number(taskId) - 1]?.isFault && (
-						<div className={styles.correctAnswerContainer}>
-							<p className={styles.answer}>{chooseAnswer}</p>
-						</div>
-					)}
-				</div>
-				<div className={styles.words}>
-					{data &&
-						data.length > 1 &&
-						!test[Number(taskId) - 1]?.isCompleted &&
-						!test[Number(taskId) - 1]?.isFault &&
-						data[id.word].map((s, i) => (
-							<div key={i} className={styles.word}>
-								<Button
-									size="large"
-									type="default"
-									onClick={() => {
-										onClick(s);
-									}}
-								>
-									{s}
-								</Button>
-							</div>
-						))}
-				</div>
-			</div>
-			<div className={styles.pagination}>
-				{test.map((item) => (
-					<Button
-						key={item.id}
-						size="small"
-						color={item.isCompleted ? 'primary' : 'danger'}
-						type="default"
-						onClick={() => {
-							navigate(`/collections/${item.id}/task/${item.id}`);
-						}}
-					>
-						{item.id}
-					</Button>
-				))}
-			</div>
-		</div>
+		<>
+			<ShowingTestUI
+				swapQuestion={swapQuestion}
+				taskId={Number(taskId)}
+				test={test}
+				sentence={completeTest.question}
+				chooseAnswer={completeTest.selectedAnswer}
+				questions={data}
+				id={id}
+				onClick={onClick}
+			/>
+		</>
 	);
 };
