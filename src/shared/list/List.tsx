@@ -10,7 +10,7 @@ export const List = <T extends { correctAnswer: string; id: number }>({
 	return (
 		<div className={styles.listContainer}>
 			{data.map((i: T) => (
-				<Item data={i} />
+				<Item key={i.id} data={i} />
 			))}
 		</div>
 	);

@@ -1,207 +1,63 @@
-import { ReactNode, useEffect, useState } from 'react';
-import { DEFAULT_TEST } from '@/constants/data';
-import { fetchDefinition, getReadyQuestion } from './functions/fetchDefinition';
+import { useEffect, useState } from 'react';
+import { DEFAULT_TEST, DEFAULT_TEST_2 } from '@/constants/data';
 import { useSelectData } from './hooks/useSelectData';
 import { useNavigate, useParams } from 'react-router-dom';
+import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { ShowingTestUI } from './ShowingTestUI';
+import { Pagination } from './Pagination';
 
-export type Test = {
-	id: number;
+import styles from './showingTest.module.css';
+
+export type TestType = {
+	id: string;
 	sentence: string;
-	correctAnswer: string;
-	isCompleted: boolean;
-	isFault: boolean;
+	lessonTopic: string;
+	correctAnswer: string[];
+	selectedAnswer: string;
+	currentWord: number;
+	isComplete: boolean;
+	isCorrectAnswer: boolean;
 };
 
-export type Answer = {
-	id: number;
-	name: ReactNode;
-	isCorrect: boolean;
-};
-
-type SentenceQuestion = {
-	id: number;
-	questions: string[][];
-	isCompleted: boolean;
-};
-
-type Answered = {
-	isCorrectAnswer: number;
-	correctAnswers: string[];
-	correctAnswer: string;
-	answeredQuestions: number;
-};
-
-export type Id = {
-	word: number;
+const DEFAULT_DATA_TEST = {
+	id: '',
+	sentence: '',
+	lessonTopic: '',
+	correctAnswer: [],
+	selectedAnswer: '',
+	currentWord: 0,
+	isComplete: false,
+	isCorrectAnswer: true,
 };
 
 export const ShowingTest = () => {
-	const [test, setTest] = useState<Test[]>([]);
-
-	const [id, setId] = useState<Id>({
-		word: 0,
-	});
-
-	const [completeTest, setCompleteTest] = useState({
-		question: { ...DEFAULT_TEST[0] },
-		selectedAnswer: '',
-	});
-
-	const [answered, setAnswered] = useState<Answered>({
-		isCorrectAnswer: 0,
-		correctAnswers: completeTest.question.correctAnswer.split(' '),
-		correctAnswer: completeTest.question.correctAnswer.split(' ')[0],
-		answeredQuestions: 0,
-	});
-
-	console.log('COMPLETE TEST: ', completeTest);
-	console.log('ANSWERED: ', answered);
-	console.log('TEST: ', test);
-
-	const { taskId } = useParams();
-
 	const navigate = useNavigate();
+	const { taskId, collectionsId } = useParams();
+	const [task, setTask] = useState<TestType>(DEFAULT_DATA_TEST);
+	const data = useSelectData(task.correctAnswer);
+	const taskList = collectionsId === '1' ? DEFAULT_TEST : DEFAULT_TEST_2;
 
-	const data = useSelectData(answered.correctAnswers);
-
-	console.log('DATA: ', data);
-
-	const onClick = (answer: string) => {
-		const answeredQ = answered.answeredQuestions + 1;
-		let correct = 0;
-		setAnswered({ ...answered, answeredQuestions: answeredQ });
-
-		if (answered.correctAnswer === answer.toLocaleLowerCase()) {
-			correct = answered.isCorrectAnswer + 1;
-			setAnswered({ ...answered, isCorrectAnswer: correct, answeredQuestions: answeredQ });
-		}
-
-		if (answeredQ !== answered.correctAnswers.length) {
-			const word = id.word + 1;
-			setId({ ...id, word: word });
-			setAnswered({
-				...answered,
-				isCorrectAnswer: correct,
-				answeredQuestions: answeredQ,
-				correctAnswer: answered.correctAnswers[word]
-					.replace(/[^a-zA-Z0-9]/g, '')
-					.toLocaleLowerCase(),
+	useEffect(() => {
+		const foundTask = taskList.find((i) => i.id === taskId);
+		if (foundTask) {
+			setTask({
+				...DEFAULT_DATA_TEST,
+				...foundTask,
+				correctAnswer: foundTask.correctAnswer.split(' '),
 			});
 		}
-
-		if (correct === answered.correctAnswers.length) {
-			setTest([
-				...test.map((q) => {
-					if (q.id === Number(taskId)) {
-						return { ...q, isCompleted: true };
-					} else {
-						return { ...q };
-					}
-				}),
-			]);
-		}
-
-		if (
-			answeredQ === answered.correctAnswers.length &&
-			correct !== answered.correctAnswers.length
-		) {
-			setTest([
-				...test.map((q) => {
-					if (q.id === Number(taskId)) {
-						return { ...q, isFault: true };
-					} else {
-						return { ...q };
-					}
-				}),
-			]);
-		}
-
-		setCompleteTest({
-			...completeTest,
-			selectedAnswer: `${completeTest.selectedAnswer} ${answer}`,
-		});
-	};
-
-	const swapQuestion = (idTest: number) => {
-		let questionId: number = 0;
-		if (idTest <= test.length) {
-			questionId = idTest;
-			navigate(`/collections/${idTest}/task/${idTest}`);
-			showSentence(idTest);
-		}
-
-		if (idTest > test.length) {
-			questionId = 1;
-			navigate(`/collections/${questionId}/task/${questionId}`);
-			showSentence(questionId);
-		}
-
-		if (idTest < 1) {
-			questionId = test.length;
-			navigate(`/collections/${questionId}/task/${questionId}`);
-			showSentence(questionId);
-		}
-	};
-
-	const showSentence = (idSentence: number) => {
-		for (let i = 0; i < DEFAULT_TEST.length; i++) {
-			if (DEFAULT_TEST[i].id === idSentence) {
-				setCompleteTest({ ...completeTest, question: { ...DEFAULT_TEST[i] }, selectedAnswer: '' });
-				fetchDefinition(DEFAULT_TEST[i].correctAnswer.split(' ')[0]);
-				setId({ word: 0 });
-				setAnswered({
-					...answered,
-					isCorrectAnswer: 0,
-					correctAnswers: DEFAULT_TEST[i].correctAnswer.split(' '),
-					correctAnswer: DEFAULT_TEST[i].correctAnswer
-						.split(' ')[0]
-						.replace(/[^a-zA-Z0-9]/g, '')
-						.toLocaleLowerCase(),
-					answeredQuestions: 0,
-				});
-			}
-		}
-	};
-
-	useEffect(() => {
-		fetchDefinition(answered.correctAnswer);
-		const allQuestions = DEFAULT_TEST.map((item) => ({
-			...item,
-			isCompleted: false,
-			isFault: false,
-		}));
-		setTest([...allQuestions]);
-	}, []);
-
-	useEffect(() => {
-		showSentence(Number(taskId));
 	}, [taskId]);
 
-	useEffect(() => {
-		if (Array.isArray(completeTest.answers) && completeTest.answers.length > 0) {
-			console.log('USE EFFECT!!!!!!!: ', completeTest.answers[0]);
-		} else {
-			console.log('USE EFFECT UNDEFINED!!!!!');
-		}
-	}, [answered.correctAnswers]);
-
-	useEffect(() => {
-		console.log('ANSWERED USE EFFECT: ', answered);
-	}, [answered]);
-
 	return (
-		<>
-			<ShowingTestUI
-				swapQuestion={swapQuestion}
-				taskId={Number(taskId)}
-				test={test}
-				sentence={completeTest.question}
-				chooseAnswer={completeTest.selectedAnswer}
-				questions={data}
-				id={id}
-				onClick={onClick}
-			/>
-		</>
+		<WrapperCard>
+			<div className={styles.taskContainer}>
+				{data && <ShowingTestUI key={taskId} task={task} setTask={setTask} variants={data} />}
+				<Pagination
+					currentId={`${taskId}`}
+					ids={taskList.map((i) => ({ id: `${i.id}` }))}
+					navigateTo={(id: string) => navigate(`/collections/${collectionsId}/task/${id}`)}
+				/>
+			</div>
+		</WrapperCard>
 	);
 };
