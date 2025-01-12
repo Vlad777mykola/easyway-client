@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 import type { TestType } from './ShowingTest';
 import { classes } from '@/utils/classes/classes';
 
-import styles from './showingTestUI.module.module.css';
+import styles from './showingTestUI.module.css';
 
 export const ShowingTestUI = ({
 	task,
