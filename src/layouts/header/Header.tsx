@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/ui-components/Icon';
 import { Menu } from '@/ui-components/Menu';
-import { useGetUser } from '@/modules/auth/hooks/useGetUser';
+// import { useGetUser } from '@/modules/auth/hooks/useGetUser';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { Navbar } from '@/shared/navbar';
 import styles from './header.module.css';
@@ -20,7 +20,8 @@ const SideMenu = () => {
 
 const Header = () => {
 	const navigate = useNavigate();
-	const { data } = useGetUser();
+	// const { data } = useGetUser();
+	const data = undefined;
 
 	const handleClick = (link: string) => {
 		navigate(link);
@@ -29,15 +30,18 @@ const Header = () => {
 	return (
 		<Navbar
 			RightSide={
-				data === undefined ? (
-					<CircleButton onClick={() => handleClick('/login')}>
-						<Icon icon="login" />
-					</CircleButton>
-				) : (
-					<CircleButton onClick={() => handleClick('/profile')}>
-						<Icon icon="user" />
-					</CircleButton>
-				)
+				<>
+					{!data && (
+						<CircleButton onClick={() => handleClick('/login')}>
+							<Icon icon="login" />
+						</CircleButton>
+					)}
+					{data && (
+						<CircleButton onClick={() => handleClick('/profile')}>
+							<Icon icon="user" />
+						</CircleButton>
+					)}
+				</>
 			}
 			LeftSide={<Menu side="left" Items={<SideMenu />} />}
 		/>

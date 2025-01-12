@@ -33,10 +33,10 @@ export const fetchDefinition = async (word: string) => {
 };
 
 export const getReadyQuestion = async (correctAnswers: string[]) => {
-	let readyAnswers: string[][] = [];
+	let readyAnswers = {};
 	for (let i = 0; i < correctAnswers.length; i++) {
 		const answers = await fetchDefinition(correctAnswers[i].replace(/[^a-zA-Z0-9]/g, ''));
-		readyAnswers = [...readyAnswers, [...answers]];
+		readyAnswers[correctAnswers[i]] = answers;
 	}
 
 	return readyAnswers;

@@ -10,7 +10,7 @@ export const ListCollections = <T extends { title: string; id: number; subtitle:
 	return (
 		<div className={styles.listContainer}>
 			{data.map((i: T) => (
-				<Item data={i} />
+				<Item key={i.id} data={i} />
 			))}
 		</div>
 	);
