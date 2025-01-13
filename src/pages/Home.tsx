@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Breadcrumb } from 'antd';
 import { UserContext } from '@/context/UserContext';
 import { TaskList } from '@/modules/task-list';
 import { CircleButton } from '@/ui-components/CircleButton';
@@ -18,29 +17,14 @@ export const Home = () => {
 	console.log('USER: ', user);
 
 	return (
-		<>
+		<div>
 			<div className={styles.buttonContainer}>
 				<CircleButton onClick={goBack}>
 					<Icon icon="left" />
 				</CircleButton>
-				<Breadcrumb
-					items={[
-						{
-							href: '',
-							title: <span>Home</span>,
-						},
-						{
-							href: '/profile',
-							title: <span>Profile</span>,
-						},
-						{
-							title: 'EASYWAY',
-						},
-					]}
-				/>
 			</div>
 			<TaskList />
-		</>
+		</div>
 	);
 };
 

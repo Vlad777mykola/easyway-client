@@ -1,3 +1,9 @@
+.headersContainer {
+	position: static;
+	box-sizing: border-box;
+	width: 100%;
+}
+
 .headerLeftMenuList {
 	display: flex;
 	flex-direction: column;
@@ -11,4 +17,24 @@
 
 .headerLeftMenuList a:hover {
 	color: var(--color-primary);
+}
+
+.separateLine {
+	width: 100%;
+	height: 0.5px;
+	background: var(--checkbox-disabled-background);
+}
+
+.routeDepthContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding-left: 1.75rem;
+	padding-right: 1.75rem;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	min-height: 40px;
+	top: 0;
+	background-color: #fff;
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
