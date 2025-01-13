@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/ui-components/Icon';
 import { Menu } from '@/ui-components/Menu';
-import { useGetUser } from '@/modules/auth/hooks/useGetUser';
+// import { useGetUser } from '@/modules/auth/hooks/useGetUser';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { Navbar } from '@/shared/navbar';
 import styles from './header.module.css';
@@ -28,7 +28,8 @@ type LinkType = {
 const Header = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { data } = useGetUser();
+	// const { data } = useGetUser();
+	const data = undefined;
 	const [depthRoute, setDepthRoute] = useState<LinkType[]>([]);
 
 	const handleClick = (link: string) => {
@@ -77,24 +78,24 @@ const Header = () => {
 		setDepthRoute(makeDepthRouterLocation(location.pathname));
 	}, [location.pathname]);
 
-	console.log('DEPTH ROUTE: ', depthRoute);
-	console.log('LOCATION PATHNAME: ', location.pathname);
-
 	return (
 		<div className={styles.headersContainer}>
 			<Navbar
 				RightSide={
-					data === undefined ? (
-						<CircleButton onClick={() => handleClick('/login')}>
-							<Icon icon="login" />
-						</CircleButton>
-					) : (
-						<div>
-							<CircleButton onClick={() => handleClick('/profile')}>
-								<Icon icon="user" />
+					<>
+						{!data && (
+							<CircleButton onClick={() => handleClick('/login')}>
+								<Icon icon="login" />
 							</CircleButton>
-						</div>
-					)
+						)}
+						{data && (
+							<div>
+								<CircleButton onClick={() => handleClick('/profile')}>
+									<Icon icon="user" />
+								</CircleButton>
+							</div>
+						)}
+					</>
 				}
 				LeftSide={<Menu side="left" Items={<SideMenu />} />}
 			/>
