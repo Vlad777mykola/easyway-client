@@ -1,13 +1,12 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/ui-components/Icon';
 import { Menu } from '@/ui-components/Menu';
 // import { useGetUser } from '@/modules/auth/hooks/useGetUser';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { Navbar } from '@/shared/navbar';
+import { NavHeader } from '@/shared/nav-header';
 import styles from './header.module.css';
-import { Breadcrumb } from '@/ui-components/Breadcrumb';
-import { useEffect, useState } from 'react';
 
 const SideMenu = () => {
 	return (
@@ -20,63 +19,14 @@ const SideMenu = () => {
 	);
 };
 
-type LinkType = {
-	href: string;
-	title: string;
-};
-
 const Header = () => {
 	const navigate = useNavigate();
-	const location = useLocation();
 	// const { data } = useGetUser();
 	const data = undefined;
-	const [depthRoute, setDepthRoute] = useState<LinkType[]>([]);
 
 	const handleClick = (link: string) => {
 		navigate(link);
 	};
-
-	const makeDepthRouterLocation = (url: string) => {
-		const urlArray = [...new Set(url.replace(/\/task.*$/, '').split('/'))];
-		let res: LinkType[] = [];
-		let link = '';
-		for (let i = 0; i < urlArray.length; i++) {
-			if (urlArray[i] === '') {
-				link += '/';
-				res = [
-					...res,
-					{
-						href: '/',
-						title: 'Home',
-					},
-				];
-			} else if (!isNaN(Number(urlArray[i]))) {
-				link += urlArray[i] + '/';
-				res = [
-					...res,
-					{
-						href: `${link}task/${urlArray[i]}`,
-						title: urlArray[i],
-					},
-				];
-			} else {
-				link += urlArray[i] + '/';
-				res = [
-					...res,
-					{
-						href: link,
-						title: urlArray[i],
-					},
-				];
-			}
-		}
-		console.log('RES: ', res);
-		return res;
-	};
-
-	useEffect(() => {
-		setDepthRoute(makeDepthRouterLocation(location.pathname));
-	}, [location.pathname]);
 
 	return (
 		<div className={styles.headersContainer}>
@@ -100,9 +50,7 @@ const Header = () => {
 				LeftSide={<Menu side="left" Items={<SideMenu />} />}
 			/>
 			<div className={styles.separateLine}></div>
-			<div className={styles.routeDepthContainer}>
-				<Breadcrumb items={[...depthRoute]} />
-			</div>
+			<NavHeader />
 		</div>
 	);
 };
