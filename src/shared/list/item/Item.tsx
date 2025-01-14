@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './item.module.css';
 
-export const Item = <T extends { correctAnswer: string; id: number }>({
+export const Item = <T extends { correctAnswer: string; id: string }>({
 	data,
 }: {
 	data: T;
@@ -10,7 +10,7 @@ export const Item = <T extends { correctAnswer: string; id: number }>({
 	const navigate = useNavigate();
 	const { collectionsId } = useParams();
 
-	const onClick = (id: number) => {
+	const onClick = (id: string) => {
 		navigate(`/collections/${collectionsId}/task/${id}`);
 	};
 	return (

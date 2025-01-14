@@ -46,7 +46,7 @@ export const ShowingTest = () => {
 				correctAnswer: foundTask.correctAnswer.split(' '),
 			});
 		}
-	}, [taskId]);
+	}, [taskId, taskList]);
 
 	return (
 		<WrapperCard>

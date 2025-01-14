@@ -2,14 +2,14 @@ import { ReactNode } from 'react';
 import styles from './item.module.css';
 import { useNavigate } from 'react-router-dom';
 
-export const Item = <T extends { title: string; id: number; subtitle: string }>({
+export const Item = <T extends { title: string; id: string; subtitle: string }>({
 	data,
 }: {
 	data: T;
 }): ReactNode => {
 	const navigate = useNavigate();
 
-	const onClick = (id: number) => {
+	const onClick = (id: string) => {
 		navigate(`/collections/${id}`);
 	};
 
