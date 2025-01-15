@@ -7,7 +7,11 @@ export const Home = () => {
 
 	console.log('USER: ', user);
 
-	return <TaskList />;
+	return (
+		<div>
+			<TaskList />
+		</div>
+	);
 };
 
 export default Home;

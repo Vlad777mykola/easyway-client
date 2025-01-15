@@ -1,10 +1,12 @@
 name: Check
 run-name: ${{ github.actor }}
+
 on:
   push:
     branches: [master, develop]
   pull_request:
     branches: [master, develop]
+
 jobs:
   init:
     runs-on: ubuntu-latest
@@ -21,3 +23,7 @@ jobs:
         run: npm ci
       - name: Run lint
         run: npm run lint
+      - name: Yarn install (for TypeScript)
+        run: yarn install
+      - name: TypeScript Check
+        uses: icrawl/action-tsc@v1

@@ -5,6 +5,7 @@ import { Menu } from '@/ui-components/Menu';
 // import { useGetUser } from '@/modules/auth/hooks/useGetUser';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { Navbar } from '@/shared/navbar';
+import { NavHeader } from '@/shared/nav-header';
 import styles from './header.module.css';
 
 const SideMenu = () => {
@@ -28,23 +29,29 @@ const Header = () => {
 	};
 
 	return (
-		<Navbar
-			RightSide={
-				<>
-					{!data && (
-						<CircleButton onClick={() => handleClick('/login')}>
-							<Icon icon="login" />
-						</CircleButton>
-					)}
-					{data && (
-						<CircleButton onClick={() => handleClick('/profile')}>
-							<Icon icon="user" />
-						</CircleButton>
-					)}
-				</>
-			}
-			LeftSide={<Menu side="left" Items={<SideMenu />} />}
-		/>
+		<div className={styles.headersContainer}>
+			<Navbar
+				RightSide={
+					<>
+						{!data && (
+							<CircleButton onClick={() => handleClick('/login')}>
+								<Icon icon="login" />
+							</CircleButton>
+						)}
+						{data && (
+							<div>
+								<CircleButton onClick={() => handleClick('/profile')}>
+									<Icon icon="user" />
+								</CircleButton>
+							</div>
+						)}
+					</>
+				}
+				LeftSide={<Menu side="left" Items={<SideMenu />} />}
+			/>
+			<div className={styles.separateLine}></div>
+			<NavHeader />
+		</div>
 	);
 };
 

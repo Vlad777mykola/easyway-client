@@ -6,7 +6,7 @@
 		'head'
 		'main'
 		'foot';
-	grid-template-rows: 60px 10fr 83px;
+	grid-template-rows: 120px 10fr 83px;
 	grid-template-columns: 1fr;
 }
 
