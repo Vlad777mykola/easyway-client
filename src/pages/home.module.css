@@ -1,8 +1,0 @@
-.buttonContainer {
-	position: fixed;
-	display: flex;
-	top: 11%;
-	left: 1.75rem;
-	gap: 10px;
-	align-items: center;
-}

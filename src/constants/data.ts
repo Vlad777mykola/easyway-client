@@ -57,13 +57,13 @@ export const DEFAULT_TEST_2 = [
 
 export const DEFAULT_COLLECTIONS = [
 	{
-		id: 1,
+		id: '1',
 		title: 'Test 1',
 		subtitle: 'Test 1 subtitle',
 		taskList: DEFAULT_TEST.map((i) => i.id),
 	},
 	{
-		id: 2,
+		id: '2',
 		title: 'Test 2',
 		subtitle: 'Test 2 subtitle',
 		taskList: DEFAULT_TEST_2.map((i) => i.id),
