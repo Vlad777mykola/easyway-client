@@ -7,13 +7,14 @@ import {
 	PREPOSITION_CATEGORIES,
 	PRONOUN_CATEGORIES,
 } from '../constants';
-import { Answer } from '../ShowingTest';
+
+export type VariantsType = { [key: string]: string[] };
 
 export const fetchDefinition = async (word: string) => {
 	const { isAdjective, isArticle, isConjuction, isNoun, isPreposition, isVerb, isPronoun } =
 		detectPartOfSpeech(word);
 
-	let answers: Answer[] = [];
+	let answers: string[] = [];
 
 	if (isVerb) {
 		answers = showVerbs(word);
@@ -33,9 +34,10 @@ export const fetchDefinition = async (word: string) => {
 };
 
 export const getReadyQuestion = async (correctAnswers: string[]) => {
-	let readyAnswers = {};
+	let readyAnswers: VariantsType = {};
 	for (let i = 0; i < correctAnswers.length; i++) {
-		const answers = await fetchDefinition(correctAnswers[i].replace(/[^a-zA-Z0-9]/g, ''));
+		const answers: string[] = await fetchDefinition(correctAnswers[i].replace(/[^a-zA-Z0-9]/g, ''));
+		console.log(answers);
 		readyAnswers[correctAnswers[i]] = answers;
 	}
 

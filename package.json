@@ -8,10 +8,11 @@
 		"build": "tsc -b && vite build",
 		"format": "prettier --write .",
 		"eslint": "eslint .",
+		"ts": "tsc",
 		"eslint:fix": "yarn run eslint --fix",
 		"lint": "yarn run eslint && yarn run format",
 		"preview": "vite preview",
-		"verify": "npm run format && npm run lint ",
+		"verify": "npm run format && npm run lint && npm run ts",
 		"deploy": "aws s3 sync dist/ s3://best-way"
 	},
 	"dependencies": {

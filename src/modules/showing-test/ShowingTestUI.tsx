@@ -4,6 +4,7 @@ import type { TestType } from './ShowingTest';
 import { classes } from '@/utils/classes/classes';
 
 import styles from './showingTestUI.module.css';
+import { VariantsType } from './functions/fetchDefinition';
 
 export const ShowingTestUI = ({
 	task,
@@ -12,7 +13,7 @@ export const ShowingTestUI = ({
 }: {
 	task: TestType;
 	setTask: Dispatch<SetStateAction<TestType>>;
-	variants: { [key: string]: [] };
+	variants: VariantsType;
 }) => {
 	const {
 		sentence,
