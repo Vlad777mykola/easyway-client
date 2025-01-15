@@ -6,7 +6,7 @@ type VerbList = {
 	[key: string]: string;
 };
 
-type Answer = {
+export type Answer = {
 	id: string;
 	name: ReactNode;
 	isCorrect: boolean;
@@ -33,10 +33,10 @@ export const showNounsOrAdverbs = async (word: string, maxNumbersOfAnswers: numb
 	const data = await response.json();
 	const dataArray = data.map((item: NounData) => item.word);
 
-	let result: Answer[] = [];
+	let result: string[] = [];
 	for (let i = 0; i <= maxNumbersOfAnswers - 1; i++) {
 		if (i === maxNumbersOfAnswers - 1) {
-			result = [...result, word.toLocaleLowerCase()] as Answer[];
+			result = [...result, word.toLocaleLowerCase()];
 		} else if (dataArray[i] !== word.toLocaleLowerCase()) {
 			result = [...result, dataArray[i]];
 		}
