@@ -1,5 +1,6 @@
 /* eslint-disable css-modules/no-unused-class */
 import { useState, ReactNode } from 'react';
+import type { IconVariantsType } from '../Icon/Icon';
 import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { classes } from '@/utils/classes';
@@ -15,9 +16,10 @@ type SideType = keyof typeof Side;
 type Props = {
 	Items: ReactNode;
 	side: SideType;
+	icon?: IconVariantsType;
 };
 
-export const Menu = ({ Items, side }: Props) => {
+export const Menu = ({ Items, side, icon = 'menu' }: Props) => {
 	const [open, setOpen] = useState<boolean>(false);
 	const [notShow, setNotShow] = useState<boolean>(true);
 
@@ -64,7 +66,7 @@ export const Menu = ({ Items, side }: Props) => {
 				</div>
 			)}
 			<CircleButton size="middle" variant="filled" onClick={onClick}>
-				<Icon icon="menu" />
+				<Icon icon={icon} />
 			</CircleButton>
 		</>
 	);
