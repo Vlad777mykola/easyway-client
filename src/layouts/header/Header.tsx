@@ -51,7 +51,6 @@ const Header = () => {
 			/>
 			<div className={styles.separateLine}></div>
 			<NavHeader />
-			<div className={styles.blurOverlay}></div>
 		</div>
 	);
 };
