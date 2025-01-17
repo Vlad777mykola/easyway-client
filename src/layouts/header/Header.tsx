@@ -1,53 +1,53 @@
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { Icon } from '@/ui-components/Icon';
 import { Menu } from '@/ui-components/Menu';
-// import { useGetUser } from '@/modules/auth/hooks/useGetUser';
-import { CircleButton } from '@/ui-components/CircleButton';
 import { Navbar } from '@/shared/navbar';
 import { NavHeader } from '@/shared/nav-header';
+import { SideMenu } from './SideMenu';
 import styles from './header.module.css';
 
-const SideMenu = () => {
-	return (
-		<div className={styles.headerLeftMenuList}>
-			<Link to="/">Home</Link>
-			<Link to="/collections">Collections</Link>
-			{/* <Link to="/complete-test">Tasks</Link> */}
-			{/* <Link to="/test">Create Task</Link> */}
-		</div>
-	);
-};
+const sideMenuItems = [
+	{
+		name: 'Home',
+		link: '/',
+	},
+	{
+		name: 'Collections',
+		link: '/collections',
+	},
+	{
+		name: 'Create Test',
+		link: '/test',
+	},
+];
+
+const profileMenuItems = [
+	{
+		name: 'Profile',
+		link: '/profile',
+	},
+	{
+		name: 'Progress',
+		link: '/',
+	},
+];
 
 const Header = () => {
-	const navigate = useNavigate();
-	// const { data } = useGetUser();
-	const data = undefined;
-
-	const handleClick = (link: string) => {
-		navigate(link);
-	};
-
 	return (
 		<div className={styles.headersContainer}>
 			<Navbar
 				RightSide={
-					<>
-						{!data && (
-							<CircleButton onClick={() => handleClick('/login')}>
-								<Icon icon="login" />
-							</CircleButton>
-						)}
-						{data && (
-							<div>
-								<CircleButton onClick={() => handleClick('/profile')}>
-									<Icon icon="user" />
-								</CircleButton>
-							</div>
-						)}
-					</>
+					<Menu
+						side="right"
+						icon="user"
+						Items={
+							<SideMenu
+								img="https://imgcdn.stablediffusionweb.com/2024/3/24/17ee935b-c63a-4374-8fc3-91b2559e02f2.jpg"
+								list={profileMenuItems}
+								imgSpan="John Smith"
+							/>
+						}
+					/>
 				}
-				LeftSide={<Menu side="left" Items={<SideMenu />} />}
+				LeftSide={<Menu side="left" Items={<SideMenu list={sideMenuItems} />} />}
 			/>
 			<div className={styles.separateLine}></div>
 			<NavHeader />

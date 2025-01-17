@@ -29,7 +29,7 @@ const IconVariants = {
 	right: RightOutlined,
 };
 
-type IconVariantsType = keyof typeof IconVariants;
+export type IconVariantsType = keyof typeof IconVariants;
 
 type Props = {
 	icon: IconVariantsType;

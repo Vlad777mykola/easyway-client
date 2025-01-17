@@ -1,0 +1,48 @@
+.headerLeftMenuList {
+	display: flex;
+	flex-direction: column;
+	padding: 2rem;
+	font-size: 1rem;
+}
+
+.actionListContent {
+	text-decoration: none;
+	color: black;
+	border: none;
+	border-radius: 0.375rem;
+	text-align: left;
+	width: 100%;
+	align-items: start;
+	padding-block: 0.375rem;
+	padding-inline: 0.5rem;
+}
+
+.headerLeftMenuList a:hover {
+	color: var(--color-primary);
+	background: #fbfcfc;
+}
+
+.imageContainer {
+	padding-block: 0.375rem;
+	padding-inline: 0.5rem;
+}
+
+.image {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	overflow: hidden;
+	object-fit: cover;
+}
+
+.imgSpan {
+	line-height: 1.25;
+	font-size: 0.875rem;
+	margin-left: 0.5rem;
+}
+
+.separateLine {
+	height: 0.5px;
+	border-bottom: 0.1px solid var(--color-disabled);
+	margin: 10px 0;
+}
