@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { classes } from '@/utils/classes';
+import { classes } from '@/shared/utils/classes';
 import styles from './navbar.module.css';
 
 export type Props = {

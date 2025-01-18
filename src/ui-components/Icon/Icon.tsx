@@ -1,4 +1,8 @@
 /* eslint-disable css-modules/no-unused-class */
+import { Size, Variant } from '@/common-ui/parameters';
+import type { SizeType, VariantType } from '@/common-ui/parameters';
+import { classes } from '@/shared/utils/classes';
+
 import {
 	CloseOutlined,
 	MenuOutlined,
@@ -11,9 +15,7 @@ import {
 	LeftOutlined,
 	RightOutlined,
 } from '@ant-design/icons';
-import { Size, Variant } from '@/common-ui/parameters';
-import type { SizeType, VariantType } from '@/common-ui/parameters';
-import { classes } from '@/utils/classes';
+
 import styles from './icon.module.css';
 
 const IconVariants = {
