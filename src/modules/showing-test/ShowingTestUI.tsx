@@ -42,6 +42,8 @@ export const ShowingTestUI = ({
 		}));
 	};
 
+	console.log('SENTENCE: ', lessonTopic);
+
 	return (
 		<div className={styles.testContainer}>
 			<h1 className={styles.topic}>{lessonTopic}</h1>
