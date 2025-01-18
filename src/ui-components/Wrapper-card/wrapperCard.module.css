@@ -14,7 +14,7 @@
 	width: fit-content;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 1201px) {
 	.wrapperCard {
 		margin: 0;
 		width: 100%;
@@ -22,16 +22,7 @@
 	}
 }
 
-/* @media (min-width: 1201px) {
-	.wrapperCard {
-		width: 30%;
-		margin-top: 50px;
-		margin-bottom: 50px;
-		height: 750px;
-	}
-}
-
-@media (min-width: 1500px) {
+/* @media (min-width: 1500px) {
 	.wrapperCard {
 		margin-top: 50px;
 		width: 25%;
