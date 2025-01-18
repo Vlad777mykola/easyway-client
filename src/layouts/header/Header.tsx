@@ -1,6 +1,6 @@
 import { Menu } from '@/ui-components/Menu';
-import { Navbar } from '@/shared/navbar';
-import { NavHeader } from '@/shared/nav-header';
+import { Navbar } from '@/shared/components/navbar';
+import { NavHeader } from '@/shared/components/nav-header';
 import { SideMenu } from './SideMenu';
 import styles from './header.module.css';
 

@@ -3,7 +3,7 @@ import { useState, ReactNode } from 'react';
 import type { IconVariantsType } from '../Icon/Icon';
 import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
-import { classes } from '@/utils/classes';
+import { classes } from '@/shared/utils/classes';
 import styles from './menu.module.css';
 
 const Side = {

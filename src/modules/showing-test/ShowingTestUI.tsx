@@ -1,7 +1,7 @@
 import { Button } from '@/ui-components/Button';
 import { Dispatch, SetStateAction } from 'react';
 import type { TestType } from './ShowingTest';
-import { classes } from '@/utils/classes/classes';
+import { classes } from '@/shared/utils/classes';
 
 import styles from './showingTestUI.module.css';
 import { VariantsType } from './functions/fetchDefinition';
