@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { User } from '@/models/User';
+import { User } from '@/shared/models/User';
 
 interface CreateUserInput {
 	createUserInput: {
