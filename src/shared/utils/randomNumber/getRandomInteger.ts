@@ -1,16 +1,7 @@
-export const getRandomInteger = (current: number, maxNumber: number): number | undefined => {
-	const minNumber = 0;
+export const getRandomInteger = (minNumber = 0, maxNumber: number, current: number): number => {
 	const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1)) + minNumber;
-	try {
-		if (randomNumber === current) {
-			return getRandomInteger(current, maxNumber);
-		}
-		if (maxNumber === minNumber) {
-			throw new Error('Max number equal min number!');
-		}
-		return randomNumber;
-	} catch (error) {
-		console.error(error);
-		return undefined;
+	if (randomNumber === current) {
+		return getRandomInteger(minNumber, maxNumber, current);
 	}
+	return randomNumber;
 };
