@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { List } from '@/shared/components/list/List';
-import { DEFAULT_TEST } from '@/constants/data';
+import { DEFAULT_TEST } from '@/shared/constants/data';
 
 export const TaskList = (): ReactNode => {
 	return (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULT_TEST, DEFAULT_TEST_2 } from '@/constants/data';
+import { DEFAULT_TEST, DEFAULT_TEST_2 } from '@/shared/constants/data';
 import { useSelectData } from './hooks/useSelectData';
 import { useNavigate, useParams } from 'react-router-dom';
 import { WrapperCard } from '@/ui-components/Wrapper-card';

@@ -1,6 +1,6 @@
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { ErrorResponse, onError } from '@apollo/client/link/error';
-import { API_URL } from '@/constants/urls';
+import { API_URL } from '@/shared/constants/urls';
 import { router } from '@/router/Router';
 
 const EXECUTED_ROUTES = ['/login', '/signup'];

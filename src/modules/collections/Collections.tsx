@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { ListCollections } from './ListCollections';
-import { DEFAULT_COLLECTIONS } from '@/constants/data';
+import { DEFAULT_COLLECTIONS } from '@/shared/constants/data';
 import styles from './collections.module.css';
 
 export const Collections = (): ReactNode => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { authenticatedVar } from '@/apollo-client';
+import { authenticatedVar } from '@/shared/apollo-client';
 import { useLogin } from '../hooks/useLogin';
 import { useReactiveVar } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';

@@ -1,7 +1,7 @@
 import { RouterProvider } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import { router } from '@/router/Router';
-import { client } from '@/apollo-client';
+import { client } from '@/shared/apollo-client';
 import { Guard } from '@/modules/auth';
 import { AppContextProvider } from './context/AppContext';
 

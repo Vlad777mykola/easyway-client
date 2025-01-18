@@ -1,4 +1,4 @@
-import { API_URL } from '@/constants/urls';
+import { API_URL } from '@/shared/constants/urls';
 
 const useLogout = () => {
 	const logout = async () => {
