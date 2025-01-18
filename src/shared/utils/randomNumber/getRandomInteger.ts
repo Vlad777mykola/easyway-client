@@ -1,7 +1,7 @@
-export const getRandomInteger = (minNumber = 0, maxNumber: number, current: number): number => {
+export const getRandomInteger = (current: number, maxNumber: number, minNumber = 0): number => {
 	const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1)) + minNumber;
 	if (randomNumber === current) {
-		return getRandomInteger(minNumber, maxNumber, current);
+		return getRandomInteger(current, maxNumber, minNumber);
 	}
 	return randomNumber;
 };
