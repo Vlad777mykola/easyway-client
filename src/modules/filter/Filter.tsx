@@ -37,11 +37,7 @@ export const Filter = ({ selectData }: Props) => {
 	};
 
 	const search = (selectedValues: SelectValue) => {
-		const result = selectData.map((item) => {
-			return { ...item, selectData: [...selectedValues[item.keyValue]] };
-		});
-
-		return result;
+		return selectedValues;
 	};
 
 	const clear = () => {
