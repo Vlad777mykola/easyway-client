@@ -14,6 +14,8 @@ import {
 	TwitterOutlined,
 	LeftOutlined,
 	RightOutlined,
+	SearchOutlined,
+	ClearOutlined,
 } from '@ant-design/icons';
 
 import styles from './icon.module.css';
@@ -29,6 +31,8 @@ const IconVariants = {
 	twitter: TwitterOutlined,
 	left: LeftOutlined,
 	right: RightOutlined,
+	search: SearchOutlined,
+	clear: ClearOutlined,
 };
 
 export type IconVariantsType = keyof typeof IconVariants;

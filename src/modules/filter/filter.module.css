@@ -1,0 +1,22 @@
+.filterContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 30px auto;
+  gap: 10px 20px;
+}
+
+.selectContainer {
+  width: 200px;
+}
+
+.select {
+  min-width: 200px;
+}
+
+.buttonsContainer {
+  width: 30%;
+  display: flex;
+  justify-content: space-between;
+}
