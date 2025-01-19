@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Select } from '@/ui-components/Select';
-import styles from './filter.module.css';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { Icon } from '@/ui-components/Icon';
+import styles from './filter.module.css';
 
 type SelectValue = {
 	[key: string]: string[];

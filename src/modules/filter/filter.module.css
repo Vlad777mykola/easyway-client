@@ -1,22 +1,22 @@
 .filterContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 1200px;
-  margin: 30px auto;
-  gap: 10px 20px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	max-width: 1200px;
+	margin: 30px auto;
+	gap: 10px 20px;
 }
 
 .selectContainer {
-  width: 200px;
+	width: 200px;
 }
 
 .select {
-  min-width: 200px;
+	min-width: 200px;
 }
 
 .buttonsContainer {
-  width: 30%;
-  display: flex;
-  justify-content: space-between;
+	width: 30%;
+	display: flex;
+	justify-content: space-between;
 }
