@@ -1,13 +1,16 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { Filter } from '../filter';
-import { ListCollections } from './ListCollections';
-import { Menu } from '@/ui-components/Menu';
-import { DEFAULT_COLLECTIONS, selectData } from '@/shared/constants/data';
+import { ListCollections } from './components/lits-collections/ListCollections';
+import { getAllCollections } from './services/getAllCollections';
+import { selectData } from '@/shared/constants/data';
 import styles from './collections.module.css';
+import { Menu } from '@/ui-components/Menu';
 
 const DESKTOP_SCREEN_WIDTH = 1201;
 
 export const Collections = (): ReactNode => {
+	const data = useMemo(() => getAllCollections(), []);
+
 	const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
 	useEffect(() => {
@@ -39,7 +42,7 @@ export const Collections = (): ReactNode => {
 						<Filter title="Filter" selectData={[...selectData]} />
 					</div>
 				)}
-				<ListCollections data={DEFAULT_COLLECTIONS} />
+				<ListCollections data={data} />
 			</div>
 		</div>
 	);

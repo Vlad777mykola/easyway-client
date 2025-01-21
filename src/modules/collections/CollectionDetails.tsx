@@ -1,16 +1,17 @@
-import { ReactNode } from 'react';
-import { DEFAULT_TEST, DEFAULT_TEST_2 } from '@/shared/constants/data';
+import { ReactNode, useMemo } from 'react';
+import styles from './collectionDetails.module.css';
 import { useParams } from 'react-router-dom';
 import { List } from '@/shared/components/list/List';
-import styles from './collectionDetails.module.css';
+import { getCollectionById } from './services/getCollectionById';
 
 export const CollectionDetails = (): ReactNode => {
 	const { collectionsId } = useParams();
+	const data = useMemo(() => getCollectionById(collectionsId || ''), [collectionsId]);
 
 	return (
 		<div className={styles.collectionsContainer}>
 			<div>Collections {collectionsId}</div>
-			<List data={collectionsId == '1' ? DEFAULT_TEST : DEFAULT_TEST_2} />
+			{data && <List data={data} />}
 		</div>
 	);
 };
