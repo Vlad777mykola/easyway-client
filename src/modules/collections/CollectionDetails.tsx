@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { DEFAULT_TEST, DEFAULT_TEST_2 } from '@/shared/constants/data';
-import styles from './collections.module.css';
 import { useParams } from 'react-router-dom';
 import { List } from '@/shared/components/list/List';
+import styles from './collectionDetails.module.css';
 
 export const CollectionDetails = (): ReactNode => {
 	const { collectionsId } = useParams();

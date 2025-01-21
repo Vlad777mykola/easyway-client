@@ -42,3 +42,34 @@ export const DEFAULT_COLLECTIONS = [
 		taskList: DEFAULT_TEST_2.map((i) => i.id),
 	},
 ];
+
+export const selectData = [
+	{
+		id: '1',
+		keyValue: 'selectKey1',
+		selectData: ['select1', 'select2'],
+		defaultValue: ['select2'],
+		label: 'label of filter',
+	},
+	{
+		id: '2',
+		keyValue: 'selectKey2',
+		selectData: ['select3', 'select4'],
+		defaultValue: ['select4'],
+		label: 'label of filter',
+	},
+	{
+		id: '3',
+		keyValue: 'selectKey3',
+		selectData: ['select5', 'select6'],
+		defaultValue: ['select5'],
+		label: 'label of filter',
+	},
+	{
+		id: '4',
+		keyValue: 'selectKey4',
+		selectData: ['select7', 'select8'],
+		defaultValue: ['select7'],
+		label: 'label of filter',
+	},
+];
