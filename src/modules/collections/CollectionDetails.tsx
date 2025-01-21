@@ -1,5 +1,5 @@
 import { ReactNode, useMemo } from 'react';
-import styles from './collections.module.css';
+import styles from './collectionDetails.module.css';
 import { useParams } from 'react-router-dom';
 import { List } from '@/shared/components/list/List';
 import { getCollectionById } from './services/getCollectionById';
