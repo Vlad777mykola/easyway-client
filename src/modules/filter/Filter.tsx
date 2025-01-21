@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Select } from '@/ui-components/Select';
-import { WrapperCard } from '@/ui-components/Wrapper-card';
-import { CircleButton } from '@/ui-components/CircleButton';
+import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
 import styles from './filter.module.css';
+import { Wrapper } from '@/ui-components/Wrapper';
 
 type SelectValue = {
 	[key: string]: string[];
@@ -18,10 +18,11 @@ type SelectData = {
 };
 
 type Props = {
+	title: string;
 	selectData: SelectData[];
 };
 
-export const Filter = ({ selectData }: Props) => {
+export const Filter = ({ title, selectData }: Props) => {
 	const [selectValue, setSelectValue] = useState<SelectValue>({});
 
 	useEffect(() => {
@@ -45,8 +46,9 @@ export const Filter = ({ selectData }: Props) => {
 	};
 
 	return (
-		<WrapperCard>
+		<Wrapper>
 			<div className={styles.filterContainer}>
+				<h1 className={styles.title}>{title}</h1>
 				{[...selectData].map((item) => {
 					const key: string = item.keyValue;
 					return (
@@ -64,13 +66,17 @@ export const Filter = ({ selectData }: Props) => {
 				})}
 			</div>
 			<div className={styles.buttonsContainer}>
-				<CircleButton onClick={() => search(selectValue)}>
-					<Icon icon="search" />
-				</CircleButton>
-				<CircleButton onClick={clear}>
-					<Icon icon="clear" />
-				</CircleButton>
+				<div className={styles.buttonContainer}>
+					<Button block onClick={() => search(selectValue)}>
+						<Icon icon="search" /> Search
+					</Button>
+				</div>
+				<div className={styles.buttonContainer}>
+					<Button block onClick={clear}>
+						<Icon icon="clear" /> Clear
+					</Button>
+				</div>
 			</div>
-		</WrapperCard>
+		</Wrapper>
 	);
 };

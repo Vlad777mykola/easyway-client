@@ -2,9 +2,14 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	max-width: 1200px;
+	max-width: 250px;
 	margin: 30px auto;
 	gap: 10px 20px;
+}
+
+.title {
+	font-size: 24px;
+	font-weight: bold;
 }
 
 .selectContainer {
@@ -16,7 +21,11 @@
 }
 
 .buttonsContainer {
-	width: 30%;
 	display: flex;
-	justify-content: space-between;
+	gap: 0 10px;
+	width: 200px;
+}
+
+.buttonContainer {
+	width: 95px;
 }
