@@ -1,29 +1,17 @@
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useContext, useMemo } from 'react';
 import { Filter } from '../filter';
+import { Menu } from '@/ui-components/Menu';
 import { ListCollections } from './components/lits-collections/ListCollections';
 import { getAllCollections } from './services/getAllCollections';
 import { selectData } from '@/shared/constants/data';
 import styles from './collections.module.css';
-import { Menu } from '@/ui-components/Menu';
+import { ScreenSizeContext } from '@/context/ScreenSizeContext';
 
 const DESKTOP_SCREEN_WIDTH = 1201;
 
 export const Collections = (): ReactNode => {
 	const data = useMemo(() => getAllCollections(), []);
-
-	const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-	useEffect(() => {
-		window.addEventListener('resize', handleResize);
-
-		return () => {
-			window.removeEventListener('resize', handleResize);
-		};
-	}, []);
-
-	const handleResize = () => {
-		setScreenWidth(window.innerWidth);
-	};
+	const { screenWidth } = useContext(ScreenSizeContext);
 
 	return (
 		<div className={styles.collections}>
