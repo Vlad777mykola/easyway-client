@@ -1,8 +1,9 @@
 import { createContext, useState, ReactNode, useEffect } from 'react';
 
 type ScreenSizeData = {
-	screenWidth: number;
-	screenHeight: number;
+	isMobile: boolean;
+	isLaptop: boolean;
+	isDesktop: boolean;
 };
 
 type ScreenSizeProviderType = {
@@ -10,29 +11,45 @@ type ScreenSizeProviderType = {
 };
 
 const ScreenSizeContext = createContext<ScreenSizeData>({
-	screenWidth: 0,
-	screenHeight: 0,
+	isMobile: false,
+	isLaptop: false,
+	isDesktop: false,
 });
 
+const WIDTH_SCREEN = window.innerWidth;
+
 const ScreenSizeProvider = ({ children }: ScreenSizeProviderType) => {
-	const [screenSize, setScreenSize] = useState<ScreenSizeData>({
-		screenWidth: 0,
-		screenHeight: 0,
+	const [typeOfScreen, setTypeOfScreen] = useState<ScreenSizeData>({
+		isMobile: false,
+		isLaptop: false,
+		isDesktop: false,
 	});
 
 	useEffect(() => {
-		setScreenSize({
-			screenWidth: window.innerWidth,
-			screenHeight: window.innerHeight,
-		});
+		if (WIDTH_SCREEN >= 320 && WIDTH_SCREEN <= 480) {
+			setTypeOfScreen({
+				...typeOfScreen,
+				isMobile: true,
+			});
+		}
+
+		if (WIDTH_SCREEN >= 481 && WIDTH_SCREEN <= 1024) {
+			setTypeOfScreen({
+				...typeOfScreen,
+				isLaptop: true,
+			});
+		}
+
+		if (WIDTH_SCREEN >= 1201) {
+			setTypeOfScreen({
+				...typeOfScreen,
+				isDesktop: true,
+			});
+		}
 	}, []);
 
 	return (
-		<ScreenSizeContext.Provider
-			value={{ screenWidth: screenSize.screenWidth, screenHeight: screenSize.screenHeight }}
-		>
-			{children}
-		</ScreenSizeContext.Provider>
+		<ScreenSizeContext.Provider value={{ ...typeOfScreen }}>{children}</ScreenSizeContext.Provider>
 	);
 };
 
