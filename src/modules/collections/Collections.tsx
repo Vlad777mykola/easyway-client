@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useMemo } from 'react';
-import { Filter } from '../filter';
+import { Sidebar } from '../filter';
 import { Menu } from '@/ui-components/Menu';
 import { ListCollections } from './components/lits-collections/ListCollections';
 import { getAllCollections } from './services/getAllCollections';
@@ -18,14 +18,14 @@ export const Collections = (): ReactNode => {
 					<Menu
 						icon="filter"
 						side="left"
-						Items={<Filter title="Filter" selectData={[...selectData]} />}
+						Items={<Sidebar title="Filter" selectData={selectData} />}
 					/>
 				</div>
 			)}
 			<div className={styles.collectionsContainer}>
 				{isDesktop && (
 					<div className={styles.filter}>
-						<Filter title="Filter" selectData={[...selectData]} />
+						<Sidebar title="Filter" selectData={selectData} />
 					</div>
 				)}
 				<ListCollections data={data} />
