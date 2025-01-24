@@ -1,33 +1,19 @@
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useContext, useMemo } from 'react';
 import { Filter } from '../filter';
+import { Menu } from '@/ui-components/Menu';
 import { ListCollections } from './components/lits-collections/ListCollections';
 import { getAllCollections } from './services/getAllCollections';
 import { selectData } from '@/shared/constants/data';
 import styles from './collections.module.css';
-import { Menu } from '@/ui-components/Menu';
-
-const DESKTOP_SCREEN_WIDTH = 1201;
+import { ScreenSizeContext } from '@/context/ScreenSizeContext';
 
 export const Collections = (): ReactNode => {
 	const data = useMemo(() => getAllCollections(), []);
-
-	const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-	useEffect(() => {
-		window.addEventListener('resize', handleResize);
-
-		return () => {
-			window.removeEventListener('resize', handleResize);
-		};
-	}, []);
-
-	const handleResize = () => {
-		setScreenWidth(window.innerWidth);
-	};
+	const { isMobile, isLaptop, isDesktop } = useContext(ScreenSizeContext);
 
 	return (
 		<div className={styles.collections}>
-			{screenWidth <= DESKTOP_SCREEN_WIDTH && (
+			{(isMobile || isLaptop) && (
 				<div className={styles.filterMenu}>
 					<Menu
 						icon="filter"
@@ -37,7 +23,7 @@ export const Collections = (): ReactNode => {
 				</div>
 			)}
 			<div className={styles.collectionsContainer}>
-				{screenWidth >= DESKTOP_SCREEN_WIDTH && (
+				{isDesktop && (
 					<div className={styles.filter}>
 						<Filter title="Filter" selectData={[...selectData]} />
 					</div>
