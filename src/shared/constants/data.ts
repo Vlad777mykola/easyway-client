@@ -1,17 +1,18 @@
 import { id1, id2, id3 } from './suportData';
 
-type Collection = {
+export type ExerciseType = {
 	id: string;
-	sentence: string;
-	correctAnswer: string;
-	exerciseType: string;
+	exercise: string;
+	exerciseAnswer: string;
+	explanation: string;
 	level: string;
-	topic: string;
-	category: string;
-	learningStyle: string;
+	topic: string[];
+	category: string[];
+	exerciseType: string;
 };
+
 export const DEFAULT_TASKS = [...id1, ...id2];
-export const ALL_COLLECTIONS_TASKS_BY_ID = new Map<string, Collection[]>([
+export const ALL_COLLECTIONS_TASKS_BY_ID = new Map<string, ExerciseType[]>([
 	['1', id1],
 	['2', id2],
 	['3', id3],

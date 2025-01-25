@@ -16,11 +16,11 @@ export const ShowingTestUI = ({
 	variants: VariantsType;
 }) => {
 	const {
-		sentence,
+		exercise,
 		isComplete,
-		lessonTopic,
+		explanation,
 		currentWord,
-		correctAnswer,
+		exerciseAnswer,
 		selectedAnswer,
 		isCorrectAnswer,
 	} = task;
@@ -35,19 +35,19 @@ export const ShowingTestUI = ({
 			...prev,
 			selectedAnswer: `${prev.selectedAnswer} ${word}`,
 			currentWord: prev.currentWord + 1,
-			isComplete: prev.currentWord + 1 === prev.correctAnswer.length,
+			isComplete: prev.currentWord + 1 === prev.exerciseAnswer.length,
 			isCorrectAnswer:
 				prev.isCorrectAnswer &&
-				word === prev.correctAnswer[prev.currentWord].replace(/[^a-zA-Z0-9\s]/g, ''),
+				word === prev.exerciseAnswer[prev.currentWord].replace(/[^a-zA-Z0-9\s]/g, ''),
 		}));
 	};
 
-	console.log('SENTENCE: ', lessonTopic);
+	console.log('SENTENCE: ', explanation);
 
 	return (
 		<div className={styles.testContainer}>
-			<h1 className={styles.topic}>{lessonTopic}</h1>
-			<p className={styles.sentence}>{sentence}</p>
+			<h1 className={styles.topic}>{explanation}</h1>
+			<p className={styles.exercise}>{exercise}</p>
 			<div className={styles.correctAnswerContainer}>
 				<p
 					className={classes(styles.answer, {
@@ -59,15 +59,15 @@ export const ShowingTestUI = ({
 				{isComplete && (
 					<>
 						{/* {isCorrectAnswer && <p className={styles.correctAnswer}>You Complete Test.</p>} */}
-						{!isCorrectAnswer && <p className={styles.answer}>{correctAnswer.join(' ')}</p>}
+						{!isCorrectAnswer && <p className={styles.answer}>{exerciseAnswer.join(' ')}</p>}
 						{/* {!isCorrectAnswer && <p className={styles.uncorrectAnswer}>Wrong Answer!</p>} */}
 					</>
 				)}
 			</div>
 
 			<div className={styles.words}>
-				{variants[task.correctAnswer[currentWord]] &&
-					variants[task.correctAnswer[currentWord]].map((s, i) => (
+				{variants[task.exerciseAnswer[currentWord]] &&
+					variants[task.exerciseAnswer[currentWord]].map((s, i) => (
 						<div key={i} className={styles.word}>
 							<Button size="large" type="default" onClick={() => onSelect(s)}>
 								{s}
