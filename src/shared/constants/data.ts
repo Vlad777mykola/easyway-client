@@ -124,6 +124,7 @@ export const selectData = [
 		selectData: ['select1', 'select2'],
 		defaultValue: ['select2'],
 		label: 'label of filter',
+		componentType: 'select',
 	},
 	{
 		id: '2',
@@ -131,6 +132,7 @@ export const selectData = [
 		selectData: ['select3', 'select4'],
 		defaultValue: ['select4'],
 		label: 'label of filter',
+		componentType: 'select',
 	},
 	{
 		id: '3',
@@ -138,6 +140,7 @@ export const selectData = [
 		selectData: ['select5', 'select6'],
 		defaultValue: ['select5'],
 		label: 'label of filter',
+		componentType: 'multiple',
 	},
 	{
 		id: '4',
@@ -145,5 +148,34 @@ export const selectData = [
 		selectData: ['select7', 'select8'],
 		defaultValue: ['select7'],
 		label: 'label of filter',
+		componentType: 'select',
+	},
+	{
+		id: '5',
+		keyValue: 'inputKey1',
+		defaultValue: 'default input 1',
+		placeholder: 'input',
+		componentType: 'input',
+	},
+	{
+		id: '6',
+		keyValue: 'inputKey2',
+		defaultValue: 'default input 2',
+		placeholder: 'input1',
+		componentType: 'input',
+	},
+	{
+		id: '7',
+		keyValue: 'checkbox',
+		label: 'checkbox',
+		isChecked: false,
+		componentType: 'checkbox',
+	},
+	{
+		id: '8',
+		keyValue: 'checkbox1',
+		label: 'checkbox1',
+		isChecked: false,
+		componentType: 'checkbox',
 	},
 ];
