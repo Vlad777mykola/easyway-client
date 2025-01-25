@@ -7,36 +7,58 @@ import styles from './sidebar.module.css';
 import { Input } from '@/ui-components/Input';
 import { Checkbox } from '@/ui-components/Checkbox';
 
-type SelectValue = {
-	[key: string]: string[];
+export type SelectValue = {
+	[key: string]: string | boolean | string[];
 };
 
 type SelectData = {
 	id: string;
 	keyValue: string;
-	selectData: string[];
-	defaultValue: string[];
-	label: string;
+	componentType: string;
+	selectData?: string[];
+	defaultValue?: string[] | string;
+	label?: string;
+	placeholder?: string;
+	isChecked?: boolean;
 };
 
-type Props = {
+export type Props = {
 	title: string;
 	selectData: SelectData[];
+	onSearch: (data: SelectValue) => void;
+	onChange: (data: SelectValue) => void;
 };
 
-const returnComponent = (data, selectValue, handleChange) => {
-	console.log('DATA IN FUNCTION: ', data);
+const returnComponent = (
+	data: SelectData[],
+	selectValue: SelectValue,
+	handleChange: (key: string, value: string[] | string | boolean) => void,
+) => {
 	const renderComponent = data.map((item) => {
 		if (item.componentType === 'select') {
 			return (
 				<div key={item.keyValue} className={styles.selectContainer}>
 					<Select
 						className={styles.select}
-						mode="multiple"
 						placeholder={item.label}
 						value={selectValue[item.keyValue]}
-						onChange={(value) => handleChange(item.keyValue, value)}
-						options={[...item.selectData.map((option) => ({ value: option, label: option }))]}
+						onChange={(value) => handleChange(item.keyValue as string, value as string[])}
+						options={[...item.selectData!.map((option) => ({ value: option, label: option }))]}
+					/>
+				</div>
+			);
+		}
+
+		if (item.componentType === 'multiple') {
+			return (
+				<div key={item.keyValue} className={styles.selectContainer}>
+					<Select
+						className={styles.select}
+						mode={item.componentType}
+						placeholder={item.label}
+						value={selectValue[item.keyValue]}
+						onChange={(value) => handleChange(item.keyValue as string, value as string[])}
+						options={[...item.selectData!.map((option) => ({ value: option, label: option }))]}
 					/>
 				</div>
 			);
@@ -47,9 +69,11 @@ const returnComponent = (data, selectValue, handleChange) => {
 				<div key={item.keyValue} className={styles.selectContainer}>
 					<Input
 						name="value"
+						value={selectValue[item.keyValue] as string}
 						placeholder={item.placeholder}
-						value={item.value}
-						onChange={(event) => handleChange(item.keyValue, event.target.value)}
+						onChange={(event) =>
+							handleChange(item.keyValue as string, event.target.value as string)
+						}
 					/>
 				</div>
 			);
@@ -59,9 +83,13 @@ const returnComponent = (data, selectValue, handleChange) => {
 			return (
 				<div key={item.keyValue} className={styles.selectContainer}>
 					<Checkbox
-						value={item.isChecked}
-						onChange={(event) => handleChange(item.keyValue, event.target.checked)}
-					/>
+						checked={selectValue[item.keyValue] as boolean}
+						onChange={(event) =>
+							handleChange(item.keyValue as string, event.target.checked as boolean)
+						}
+					>
+						{item.label}
+					</Checkbox>
 				</div>
 			);
 		}
@@ -81,25 +109,18 @@ export const Sidebar = ({ title, selectData, onSearch, onChange }: Props) => {
 		setSelectValue({ ...defaultValues });
 	}, []);
 
-	const handleChange = (key: string, value: string[]) => {
+	const handleChange = (key: string, value: string[] | string | boolean) => {
 		console.log('KEY: ', key);
 		console.log('VALUE: ', value);
 		setSelectValue((prev) => ({ ...prev, [key]: value }));
-		/* 		if (onChange) {
+		if (onChange) {
 			onChange({ ...selectValue, [key]: value });
-		} */
-	};
-
-	const search = (selectedValues: SelectValue) => {
-		return selectedValues;
+		}
 	};
 
 	const clear = () => {
 		setSelectValue({});
 	};
-
-	console.log('SELECT DATA: ', selectData);
-	console.log('SELECT VALUE: ', selectValue);
 
 	return (
 		<Wrapper>
@@ -110,7 +131,7 @@ export const Sidebar = ({ title, selectData, onSearch, onChange }: Props) => {
 			{onSearch && (
 				<div className={styles.buttonsContainer}>
 					<div className={styles.buttonContainer}>
-						<Button block onClick={() => search(selectValue)}>
+						<Button block onClick={() => onSearch(selectValue)}>
 							<Icon icon="search" /> Search
 						</Button>
 					</div>

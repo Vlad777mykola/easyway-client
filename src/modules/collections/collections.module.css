@@ -5,7 +5,8 @@
 	gap: 0 25px;
 }
 
-.filterMenu {
-	margin-left: 28px;
-	margin-top: 10px;
+@media(max-width: 1024px) {
+	.collectionsContainer {
+		gap: 0 0;
+	}
 }

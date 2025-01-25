@@ -140,7 +140,7 @@ export const selectData = [
 		selectData: ['select5', 'select6'],
 		defaultValue: ['select5'],
 		label: 'label of filter',
-		componentType: 'select',
+		componentType: 'multiple',
 	},
 	{
 		id: '4',
@@ -167,7 +167,14 @@ export const selectData = [
 	{
 		id: '7',
 		keyValue: 'checkbox',
-		value: 'checkbox',
+		label: 'checkbox',
+		isChecked: false,
+		componentType: 'checkbox',
+	},
+	{
+		id: '8',
+		keyValue: 'checkbox1',
+		label: 'checkbox1',
 		isChecked: false,
 		componentType: 'checkbox',
 	},
