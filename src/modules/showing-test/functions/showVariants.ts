@@ -29,18 +29,23 @@ export const showVerbs = (word: string) => {
 };
 
 export const showNounsOrAdverbs = async (word: string, maxNumbersOfAnswers: number) => {
+	console.log('WORD: ', word);
 	const response = await fetch(`https://api.datamuse.com/words?rel_syn=${word}`);
 	const data = await response.json();
 	const dataArray = data.map((item: NounData) => item.word);
 
 	let result: string[] = [];
-	for (let i = 0; i <= maxNumbersOfAnswers - 1; i++) {
-		if (i === maxNumbersOfAnswers - 1) {
+	const numbersOfAnswers =
+		dataArray.length < maxNumbersOfAnswers ? dataArray.length + 1 : maxNumbersOfAnswers;
+	for (let i = 0; i <= numbersOfAnswers - 1; i++) {
+		if (i === numbersOfAnswers - 1) {
 			result = [...result, word.toLocaleLowerCase()];
 		} else if (dataArray[i] !== word.toLocaleLowerCase()) {
 			result = [...result, dataArray[i]];
 		}
 	}
+
+	console.log('RESULT: ', result);
 
 	return result;
 };
