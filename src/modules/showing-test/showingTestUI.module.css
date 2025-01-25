@@ -6,7 +6,7 @@
 	flex-direction: column;
 }
 
-.sentence {
+.exercise {
 	font-size: 50px;
 	margin: 0px 0px 0px 0px;
 }
@@ -53,7 +53,7 @@
 		font-size: 180%;
 	}
 
-	.sentence {
+	.exercise {
 		font-size: 24px;
 	}
 	.words {
@@ -88,7 +88,7 @@
 }
 
 @media (min-width: 1920px) {
-	.sentence {
+	.exercise {
 		font-size: 35px;
 	}
 	.words {

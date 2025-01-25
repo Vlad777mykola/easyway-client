@@ -9,9 +9,9 @@ import styles from './showingTest.module.css';
 
 export type TestType = {
 	id: string;
-	sentence: string;
-	lessonTopic: string;
-	correctAnswer: string[];
+	exercise: string;
+	explanation: string;
+	exerciseAnswer: string[];
 	selectedAnswer: string;
 	currentWord: number;
 	isComplete: boolean;
@@ -20,9 +20,9 @@ export type TestType = {
 
 const DEFAULT_DATA_TEST = {
 	id: '',
-	sentence: '',
-	lessonTopic: '',
-	correctAnswer: [],
+	exercise: '',
+	explanation: '',
+	exerciseAnswer: [],
 	selectedAnswer: '',
 	currentWord: 0,
 	isComplete: false,
@@ -33,7 +33,7 @@ export const ShowingTest = () => {
 	const navigate = useNavigate();
 	const { taskId, collectionsId } = useParams();
 	const [task, setTask] = useState<TestType>(DEFAULT_DATA_TEST);
-	const data = useSelectData(task.correctAnswer);
+	const data = useSelectData(task.exerciseAnswer);
 	const taskList = useMemo(() => getTaskById(collectionsId || ''), [collectionsId]);
 
 	useEffect(() => {
@@ -42,7 +42,7 @@ export const ShowingTest = () => {
 			setTask({
 				...DEFAULT_DATA_TEST,
 				...foundTask,
-				correctAnswer: foundTask.correctAnswer.split(' '),
+				exerciseAnswer: foundTask.exerciseAnswer.split(' '),
 			});
 		}
 	}, [taskId, taskList]);
