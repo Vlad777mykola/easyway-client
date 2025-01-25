@@ -143,3 +143,5 @@ export const CONJUCTIONS_CATEGORIES: Variants = {
 };
 
 export const ARTICLES: string[] = ['a', 'an', 'the'];
+
+export const NEGATIONS: string[] = ['not', 'never', 'without', 'nor'];
