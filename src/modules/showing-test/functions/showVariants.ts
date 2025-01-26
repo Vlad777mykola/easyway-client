@@ -29,7 +29,6 @@ export const showVerbs = (word: string) => {
 };
 
 export const showNounsOrAdverbs = async (word: string, maxNumbersOfAnswers: number) => {
-	console.log('WORD: ', word);
 	const response = await fetch(`https://api.datamuse.com/words?rel_syn=${word}`);
 	const data = await response.json();
 	const dataArray = data.map((item: NounData) => item.word);
@@ -44,8 +43,6 @@ export const showNounsOrAdverbs = async (word: string, maxNumbersOfAnswers: numb
 			result = [...result, dataArray[i]];
 		}
 	}
-
-	console.log('RESULT: ', result);
 
 	return result;
 };

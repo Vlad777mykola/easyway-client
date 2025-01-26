@@ -13,7 +13,5 @@ export const useSelectData = (props: string[]) => {
 		})();
 	}, [props]);
 
-	console.log('ANSWERS USE SELECT DATA: ', answers);
-
 	return useMemo(() => answers, [answers]);
 };
