@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { ReactNode, useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Breadcrumb } from '@/ui-components/Breadcrumb';
 import styles from './navHeader.module.css';
 
 type LinkType = {
 	href: string;
-	title: string;
+	title: ReactNode;
 };
 
 export const NavHeader = () => {
@@ -29,7 +29,7 @@ export const NavHeader = () => {
 					...res,
 					{
 						href: '/',
-						title: 'Home',
+						title: <Link to="/">Home</Link>,
 					},
 				];
 			} else if (!isNaN(Number(urlArrayWithoutSlash[i]))) {
@@ -38,7 +38,7 @@ export const NavHeader = () => {
 					...res,
 					{
 						href: link,
-						title: urlArrayWithoutSlash[i],
+						title: <Link to={link}>{urlArrayWithoutSlash[i]}</Link>,
 					},
 				];
 			} else if (urlArrayWithoutSlash[i] === 'task') {
@@ -49,7 +49,7 @@ export const NavHeader = () => {
 					...res,
 					{
 						href: link,
-						title: urlArrayWithoutSlash[i],
+						title: <Link to={link}>{urlArrayWithoutSlash[i]}</Link>,
 					},
 				];
 			}
