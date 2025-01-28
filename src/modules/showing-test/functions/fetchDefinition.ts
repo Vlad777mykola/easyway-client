@@ -26,25 +26,32 @@ export const fetchDefinition = async (word: string) => {
 	let answers: string[] = [];
 
 	if (isVerb) {
-		answers = showVerbs(word);
+		answers = await showVerbs(word);
+		console.log('ISVERB WORD: ', word);
 		console.log('ANSWERS ISVERB: ', answers);
 	} else if ((isNoun && !isPronoun) || isAdjective) {
 		answers = await showNounsOrAdverbs(word, MAX_VARIANTS);
+		console.log('ISNOUN WORD: ', word);
 		console.log('ANSWERS ISNOUN: ', answers);
 	} else if (isPronoun) {
 		answers = showVariants(PRONOUN_CATEGORIES, word);
+		console.log('ISPRONOUN WORD: ', word);
 		console.log('ANSWERS ISPRONOUN: ', answers);
 	} else if (isPreposition) {
 		answers = showVariants(PREPOSITION_CATEGORIES, word);
+		console.log('ISPREPOSITION WORD: ', word);
 		console.log('ANSWERS ISPREPOSITION: ', answers);
 	} else if (isArticle) {
 		answers = getGroup(ARTICLES, word.toLocaleLowerCase());
+		console.log('ISARTICLES WORD: ', word);
 		console.log('ANSWERS ISARTICLES: ', answers);
 	} else if (isConjuction) {
 		answers = showVariants(CONJUCTIONS_CATEGORIES, word);
+		console.log('ISCONJUCTION WORD: ', word);
 		console.log('ANSWERS ISCONJUCTION: ', answers);
 	} else if (isNegation) {
 		answers = getGroup(NEGATIONS, word.toLocaleLowerCase());
+		console.log('ISNEGATIONS WORD: ', word);
 		console.log('ANSWERS ISNEGATIONS: ', answers);
 	}
 
@@ -52,9 +59,13 @@ export const fetchDefinition = async (word: string) => {
 };
 
 export const getReadyQuestion = async (correctAnswers: string[]) => {
+	const hourPattern = /(?:[01]?\d|2[0-3]):([0-5]?\d)?/;
 	let readyAnswers: VariantsType = {};
 	for (let i = 0; i < correctAnswers.length; i++) {
-		const answers: string[] = await fetchDefinition(correctAnswers[i].replace(/[^a-zA-Z0-9]/g, ''));
+		const word = hourPattern.test(correctAnswers[i])
+			? correctAnswers[i]
+			: correctAnswers[i].replace(/[^a-zA-Z0-9]/g, '');
+		const answers: string[] = await fetchDefinition(word);
 		readyAnswers[correctAnswers[i]] = answers;
 	}
 
