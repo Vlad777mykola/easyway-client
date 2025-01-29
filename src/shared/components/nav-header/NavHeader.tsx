@@ -1,11 +1,12 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { BreadcrumbItemType, BreadcrumbSeparatorType } from 'antd/es/breadcrumb/Breadcrumb';
 import { Breadcrumb } from '@/ui-components/Breadcrumb';
 import styles from './navHeader.module.css';
 
 type LinkType = {
 	href: string;
-	title: ReactNode;
+	title: string;
 };
 
 export const NavHeader = () => {
@@ -29,7 +30,7 @@ export const NavHeader = () => {
 					...res,
 					{
 						href: '/',
-						title: <Link to="/">Home</Link>,
+						title: 'Home',
 					},
 				];
 			} else if (!isNaN(Number(urlArrayWithoutSlash[i]))) {
@@ -38,7 +39,7 @@ export const NavHeader = () => {
 					...res,
 					{
 						href: link,
-						title: <Link to={link}>{urlArrayWithoutSlash[i]}</Link>,
+						title: urlArrayWithoutSlash[i],
 					},
 				];
 			} else if (urlArrayWithoutSlash[i] === 'task') {
@@ -49,7 +50,7 @@ export const NavHeader = () => {
 					...res,
 					{
 						href: link,
-						title: <Link to={link}>{urlArrayWithoutSlash[i]}</Link>,
+						title: urlArrayWithoutSlash[i],
 					},
 				];
 			}
@@ -61,9 +62,13 @@ export const NavHeader = () => {
 		setDepthRoute(makeDepthRouterLocation(location.pathname));
 	}, [location.pathname]);
 
+	const itemRender = (currentRoute: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>) => {
+		return <Link to={currentRoute.href || ''}>{currentRoute.title}</Link>;
+	};
+
 	return (
 		<div className={styles.routeDepthContainer}>
-			<Breadcrumb items={[...depthRoute]} />
+			<Breadcrumb itemRender={itemRender} items={[...depthRoute]} />
 		</div>
 	);
 };
