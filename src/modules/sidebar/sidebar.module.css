@@ -1,3 +1,9 @@
+.formContainer {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
 .filterContainer {
 	display: flex;
 	flex-wrap: wrap;
@@ -28,4 +34,8 @@
 
 .buttonContainer {
 	width: 95px;
+}
+
+.fullwidthContainer {
+	width: 100%;
 }
