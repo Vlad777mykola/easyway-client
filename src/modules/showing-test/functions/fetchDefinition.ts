@@ -29,22 +29,16 @@ export const fetchDefinition = async (word: string) => {
 		answers = showVerbs(word);
 	} else if ((isNoun && !isPronoun) || isAdjective) {
 		answers = await showNounsOrAdverbs(word, MAX_VARIANTS);
-		console.log('ANSWERS ISNOUN: ', answers);
 	} else if (isPronoun) {
 		answers = showVariants(PRONOUN_CATEGORIES, word);
-		console.log('ANSWERS ISPRONOUN: ', answers);
 	} else if (isPreposition) {
 		answers = showVariants(PREPOSITION_CATEGORIES, word);
-		console.log('ANSWERS ISPREPOSITION: ', answers);
 	} else if (isArticle) {
 		answers = getGroup(ARTICLES, word.toLocaleLowerCase());
-		console.log('ANSWERS ISARTICLES: ', answers);
 	} else if (isConjuction) {
 		answers = showVariants(CONJUCTIONS_CATEGORIES, word);
-		console.log('ANSWERS ISCONJUCTION: ', answers);
 	} else if (isNegation) {
 		answers = getGroup(NEGATIONS, word.toLocaleLowerCase());
-		console.log('ANSWERS ISNEGATIONS: ', answers);
 	}
 
 	return answers.length != 0 ? answers : await showNounsOrAdverbs(word, MAX_VARIANTS);

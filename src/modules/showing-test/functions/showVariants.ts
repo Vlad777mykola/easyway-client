@@ -21,13 +21,10 @@ export type Variants = {
 	[key: string]: string[];
 };
 
-export const showVerbs = async (word: string) => {
+export const showVerbs = (word: string) => {
 	const doc = nlp(word);
 	const verbList = doc.verbs().conjugate()[0] as VerbList;
-	console.log('VERB LIST: ', verbList);
 	let answers = Object.keys(verbList).map((key) => verbList[key]);
-	console.log('ANSWERS VERBS: ', word, ' ', answers);
-	console.log('INCLUDES VERBS: ', word, ' ', answers.includes(word));
 	if (!answers.includes(word)) {
 		answers = [...answers, word];
 	}
@@ -68,7 +65,6 @@ export const showVariants = (variants: Variants, word: string) => {
 
 export const getGroup = (variants: string[], word: string) => {
 	let result: string[] = [];
-	console.log('GET GROUP WORD: ', word);
 	for (let i = 0; i <= variants.length - 1; i++) {
 		if (i === 0 && variants.length >= MAX_VARIANTS) {
 			result = [...result, word];
