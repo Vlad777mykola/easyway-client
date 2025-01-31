@@ -1,6 +1,7 @@
 import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
 import { CircleButton } from '@/ui-components/CircleButton';
+import { getRandomInteger } from '@/shared/utils/get-random-integer';
 
 import styles from './pagination.module.css';
 
@@ -13,13 +14,21 @@ export const Pagination = ({
 	ids,
 	currentId,
 	navigateTo,
+	isRandom,
 }: {
+	isRandom: boolean;
 	currentId: string;
 	ids: { id: string }[];
 	navigateTo: (id: string) => void;
 }) => {
 	const swapQuestion = (move: string) => {
 		let currentIndex: number = ids.findIndex((item) => item.id === currentId);
+
+		if (isRandom) {
+			const moveIndex = getRandomInteger(currentIndex, ids.length - 1);
+			navigateTo(ids[moveIndex].id);
+			return;
+		}
 
 		if (move === STEP.NEXT) {
 			const moveIndex = currentIndex === ids.length - 1 ? 0 : currentIndex + 1;
@@ -46,13 +55,15 @@ export const Pagination = ({
 					<Icon icon="right" variant="dark" />
 				</CircleButton>
 			</div>
-			<div className={styles.pagination}>
-				{ids.map((item, index) => (
-					<Button key={item.id} size="small" type="default" onClick={() => navigateTo(item.id)}>
-						{index + 1}
-					</Button>
-				))}
-			</div>
+			{!isRandom && (
+				<div className={styles.pagination}>
+					{ids.map((item, index) => (
+						<Button key={item.id} size="small" type="default" onClick={() => navigateTo(item.id)}>
+							{index + 1}
+						</Button>
+					))}
+				</div>
+			)}
 		</>
 	);
 };

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { BreadcrumbItemType, BreadcrumbSeparatorType } from 'antd/es/breadcrumb/Breadcrumb';
 import { Breadcrumb } from '@/ui-components/Breadcrumb';
 import styles from './navHeader.module.css';
 
@@ -61,9 +62,13 @@ export const NavHeader = () => {
 		setDepthRoute(makeDepthRouterLocation(location.pathname));
 	}, [location.pathname]);
 
+	const itemRender = (currentRoute: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>) => {
+		return <Link to={currentRoute.href || ''}>{currentRoute.title}</Link>;
+	};
+
 	return (
 		<div className={styles.routeDepthContainer}>
-			<Breadcrumb items={[...depthRoute]} />
+			<Breadcrumb itemRender={itemRender} items={[...depthRoute]} />
 		</div>
 	);
 };

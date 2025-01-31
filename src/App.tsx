@@ -3,15 +3,15 @@ import { ApolloProvider } from '@apollo/client';
 import { router } from '@/router/Router';
 import { client } from '@/shared/apollo-client';
 import { Guard } from '@/modules/auth';
-import { AppContextProvider } from './context/AppContext';
+import { AppProvider } from './context/AppProvider';
 
 export const App = () => {
 	return (
 		<ApolloProvider client={client}>
 			<Guard>
-				<AppContextProvider>
+				<AppProvider>
 					<RouterProvider router={router} />
-				</AppContextProvider>
+				</AppProvider>
 			</Guard>
 		</ApolloProvider>
 	);

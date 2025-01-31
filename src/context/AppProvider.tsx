@@ -2,11 +2,7 @@ import { ReactNode } from 'react';
 import { UserProvider } from './UserContext';
 import { ScreenSizeProvider } from './ScreenSizeContext';
 
-type AppContextType = {
-	children: ReactNode;
-};
-
-export const AppContextProvider = ({ children }: AppContextType) => {
+export const AppProvider = ({ children }: { children: ReactNode }): ReactNode => {
 	return (
 		<UserProvider>
 			<ScreenSizeProvider>{children}</ScreenSizeProvider>

@@ -33,39 +33,36 @@
 	width: 100%;
 }
 
-/* @media (min-width: 320px) {
-	.form {
-		width: 95%;
-		padding: 0px 15px;
-		box-sizing: border-box;
-	}
-
-	.formItem {
-		display: flex;
-		flex-direction: column;
+@media (min-width: 320px) {
+	.testContainer {
+		width: 100%;
+		height: 100%;
+		justify-content: start;
+		margin-top: 50px;
 	}
 
 	.nameOfItem {
-		display: flex;
-		align-self: start;
-		width: 100%;
-		margin-bottom: 10px;
+		font-size: 20px;
+		width: 60%;
 	}
 }
 
 @media (min-width: 481px) {
-	.form {
-		width: 95%;
+	.nameOfItem {
+		font-size: 20px;
+		width: 30%;
 	}
+}
 
-	.formItem {
-		display: flex;
-		flex-direction: row;
+@media (min-width: 769px) {
+	.testContainer {
+		width: 500px;
+		justify-content: center;
+		margin-top: 0px;
 	}
 
 	.nameOfItem {
-		display: flex;
-		align-self: center;
 		width: 60%;
+		font-size: 25px;
 	}
-} */
+}
