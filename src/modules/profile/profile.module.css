@@ -89,7 +89,7 @@
 		box-shadow: none;
 		padding: 20px 20px;
 		box-sizing: border-box;
-		height: 100vh;
+		height: 100%;
 	}
 
 	.header {
@@ -123,7 +123,7 @@
 
 @media (min-width: 769px) {
 	.profileContainer {
-		height: 100vh;
+		height: 100%;
 	}
 
 	.header {
