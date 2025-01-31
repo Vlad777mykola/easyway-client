@@ -33,8 +33,6 @@ export const Login = () => {
 	};
 	const authenticated = useReactiveVar(authenticatedVar);
 
-	console.log('AUTHENTICATED: ', authenticated);
-
 	return (
 		<WrapperCard>
 			<div className={style.loginContainer}>
@@ -58,6 +56,7 @@ export const Login = () => {
 							onChange={(e) => onChange(e.target.value, 'password')}
 						/>
 					</div>
+					{authenticated}
 					<div className={style.sendLogin}>
 						<Button type="primary" onClick={() => login(auth)} size="large" block>
 							Login

@@ -32,13 +32,11 @@ export const Pagination = ({
 
 		if (move === STEP.NEXT) {
 			const moveIndex = currentIndex === ids.length - 1 ? 0 : currentIndex + 1;
-			console.log(ids[moveIndex]);
 			navigateTo(ids[moveIndex].id);
 		}
 
 		if (move === STEP.PREV) {
 			const moveIndex = currentIndex === 0 ? ids.length - 1 : currentIndex - 1;
-			console.log(ids[moveIndex]);
 			navigateTo(ids[moveIndex].id);
 		}
 	};

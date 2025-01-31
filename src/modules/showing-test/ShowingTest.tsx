@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelectData } from './hooks/useSelectData';
 import { useNavigate, useParams } from 'react-router-dom';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
@@ -41,9 +41,12 @@ export const ShowingTest = () => {
 	const data = useSelectData(task.exerciseAnswer);
 	const taskList = useMemo(() => getTaskById(collectionsId || ''), [collectionsId]);
 
-	const onNavigate = (id: string) => {
-		navigate(`/collections/${collectionsId}/task/${id}`);
-	};
+	const onNavigate = useCallback(
+		(id: string) => {
+			navigate(`/collections/${collectionsId}/task/${id}`);
+		},
+		[navigate, collectionsId],
+	);
 
 	useEffect(() => {
 		const foundTask = taskList && taskList.find((i) => i.id === taskId);
