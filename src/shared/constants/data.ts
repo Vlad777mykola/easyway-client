@@ -120,22 +120,6 @@ export const DEFAULT_COLLECTIONS = [
 
 export const selectData = [
 	{
-		id: '11',
-		keyValue: 'selectKey1',
-		selectData: ['select1', 'select2'],
-		defaultValue: ['select2'],
-		label: 'label of filter',
-		componentType: 'select',
-	},
-	{
-		id: '12',
-		keyValue: 'selectKey2',
-		selectData: ['select3', 'select4'],
-		defaultValue: ['select4'],
-		label: 'label of filter',
-		componentType: 'select',
-	},
-	{
 		id: '13',
 		keyValue: 'selectKey3',
 		selectData: ['select5', 'select6'],
@@ -159,23 +143,9 @@ export const selectData = [
 		componentType: 'input',
 	},
 	{
-		id: '16',
-		keyValue: 'inputKey2',
-		defaultValue: 'default input 2',
-		placeholder: 'input1',
-		componentType: 'input',
-	},
-	{
 		id: '17',
 		keyValue: 'checkbox',
 		label: 'checkbox',
-		isChecked: false,
-		componentType: 'checkbox',
-	},
-	{
-		id: '18',
-		keyValue: 'checkbox1',
-		label: 'checkbox1',
 		isChecked: false,
 		componentType: 'checkbox',
 	},

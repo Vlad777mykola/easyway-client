@@ -6,6 +6,7 @@ import { ShowingTestUI } from './ShowingTestUI';
 import { Pagination } from './Pagination';
 import { getTaskById } from './services/getTaskById';
 import styles from './showingTest.module.css';
+import { EXERCISE_MODE, useExerciseProgressStore } from '@/store/exercise-progress';
 
 export type TestType = {
 	id: string;
@@ -32,9 +33,17 @@ const DEFAULT_DATA_TEST = {
 export const ShowingTest = () => {
 	const navigate = useNavigate();
 	const { taskId, collectionsId } = useParams();
+	const isRandomMode = useExerciseProgressStore(
+		(store) => store.collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.RANDOM_MODE,
+	);
+
 	const [task, setTask] = useState<TestType>(DEFAULT_DATA_TEST);
 	const data = useSelectData(task.exerciseAnswer);
 	const taskList = useMemo(() => getTaskById(collectionsId || ''), [collectionsId]);
+
+	const onNavigate = (id: string) => {
+		navigate(`/collections/${collectionsId}/task/${id}`);
+	};
 
 	useEffect(() => {
 		const foundTask = taskList && taskList.find((i) => i.id === taskId);
@@ -47,6 +56,12 @@ export const ShowingTest = () => {
 		}
 	}, [taskId, taskList]);
 
+	useEffect(() => {
+		if (task.isComplete) {
+			onNavigate(taskId || '');
+		}
+	}, [task.isComplete, onNavigate, taskId]);
+
 	return (
 		<WrapperCard>
 			<div className={styles.taskContainer}>
@@ -54,8 +69,9 @@ export const ShowingTest = () => {
 				{taskList && (
 					<Pagination
 						currentId={`${taskId}`}
+						isRandom={isRandomMode}
 						ids={taskList.map((i) => ({ id: `${i.id}` }))}
-						navigateTo={(id: string) => navigate(`/collections/${collectionsId}/task/${id}`)}
+						navigateTo={(id: string) => onNavigate(id)}
 					/>
 				)}
 			</div>

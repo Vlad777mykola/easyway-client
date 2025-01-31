@@ -1,1 +1,2 @@
-export { SidebarMenu } from './SidebarMenu';
+export { Sidebar } from './Sidebar';
+export type { FieldsDataType } from './type';

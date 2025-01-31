@@ -17,6 +17,7 @@ import {
 	SearchOutlined,
 	ClearOutlined,
 	FilterOutlined,
+	CheckOutlined,
 } from '@ant-design/icons';
 
 import styles from './icon.module.css';
@@ -35,6 +36,7 @@ const IconVariants = {
 	search: SearchOutlined,
 	clear: ClearOutlined,
 	filter: FilterOutlined,
+	check: CheckOutlined,
 };
 
 export type IconVariantsType = keyof typeof IconVariants;

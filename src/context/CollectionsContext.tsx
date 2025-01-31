@@ -1,7 +1,7 @@
 import { createContext, useState, Dispatch, SetStateAction, ReactNode } from 'react';
 
 type CollectionsDataType = {
-	getRandomExercise: boolean;
+	selectRandomExercise: boolean;
 	correctResponse: number;
 };
 
@@ -11,7 +11,7 @@ type UserContextType = {
 };
 
 const configData = {
-	getRandomExercise: false,
+	selectRandomExercise: false,
 	correctResponse: 0,
 };
 
