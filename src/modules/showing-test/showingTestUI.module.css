@@ -24,19 +24,12 @@
 	color: rgb(211, 47, 47);
 }
 
-/* .correctAnswer {
+.correctAnswer {
 	text-align: center;
 	font-size: 30px;
 	margin: 15px 0px;
 	color: rgb(46, 125, 50);
 }
-
-.uncorrectAnswer {
-	text-align: center;
-	font-size: 30px;
-	margin: 15px 0px;
-	color: rgb(211, 47, 47);
-} */
 
 .words {
 	display: flex;

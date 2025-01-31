@@ -12,14 +12,6 @@
 	font-weight: bold;
 }
 
-.selectContainer {
-	width: 200px;
-}
-
-.select {
-	min-width: 200px;
-}
-
 .buttonsContainer {
 	display: flex;
 	gap: 0 10px;
@@ -28,4 +20,9 @@
 
 .buttonContainer {
 	width: 95px;
+}
+
+.filterMenu {
+	margin-left: 0px;
+	margin-top: 0px;
 }
