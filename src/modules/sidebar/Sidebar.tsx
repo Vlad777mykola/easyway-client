@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Select } from '@/ui-components/Select';
@@ -6,23 +7,29 @@ import { Icon } from '@/ui-components/Icon';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Input } from '@/ui-components/Input';
 import { Checkbox } from '@/ui-components/Checkbox';
+=======
+import { useContext } from 'react';
+import { Button } from '@/ui-components/Button';
+import { Icon } from '@/ui-components/Icon';
+import { Wrapper } from '@/ui-components/Wrapper';
+>>>>>>> develop
 import styles from './sidebar.module.css';
 
-export type SelectValue = {
-	[key: string]: string | boolean | string[];
-};
+import { Menu } from '@/ui-components/Menu';
+import { ScreenSizeContext } from '@/context/ScreenSizeContext';
+import { FieldsDataType, SideBarType } from './type';
+import { FieldComponent } from './FieldComponent';
 
-type SelectData = {
-	id: string;
-	keyValue: string;
-	componentType: string;
-	selectData?: string[];
-	defaultValue?: string[] | string;
-	label?: string;
-	placeholder?: string;
-	isChecked?: boolean;
-};
+export const Sidebar = <T extends FieldsDataType>({
+	title,
+	fieldsData,
+	onClear,
+	onSearch,
+	onChange,
+}: SideBarType<T>) => {
+	const { isMobile, isLaptop } = useContext(ScreenSizeContext);
 
+<<<<<<< HEAD
 export type Props = {
 	title: string;
 	selectData: SelectData[];
@@ -119,17 +126,50 @@ export const Sidebar = ({ title, selectData, onSearch, onChange }: Props) => {
 					{onSearch && (
 						<div className={styles.buttonContainer}>
 							<Button block htmlType="submit">
+=======
+	const sideConfigComponent = (
+		<Wrapper>
+			<div className={styles.filterContainer}>
+				<h1 className={styles.title}>{title}</h1>
+				{fieldsData && fieldsData.map((item) => <FieldComponent item={item} onChange={onChange} />)}
+			</div>
+			{(onSearch || onClear) && (
+				<div className={styles.buttonsContainer}>
+					{onSearch && (
+						<div className={styles.buttonContainer}>
+							<Button block onClick={onSearch}>
+>>>>>>> develop
 								<Icon icon="search" /> Search
 							</Button>
 						</div>
 					)}
+<<<<<<< HEAD
 					<div className={onSearch ? styles.buttonContainer : styles.fullwidthContainer}>
 						<Button block onClick={() => reset()}>
 							<Icon icon="clear" /> Clear
 						</Button>
 					</div>
+=======
+					{onClear && (
+						<div className={styles.buttonContainer}>
+							<Button block onClick={onClear}>
+								<Icon icon="clear" /> Clear
+							</Button>
+						</div>
+					)}
+>>>>>>> develop
 				</div>
 			</form>
 		</Wrapper>
 	);
+
+	if (isMobile || isLaptop) {
+		return (
+			<div className={styles.filterMenu}>
+				<Menu icon="filter" side="left" Items={sideConfigComponent} />
+			</div>
+		);
+	}
+
+	return <div className={styles.filter}>{sideConfigComponent}</div>;
 };
