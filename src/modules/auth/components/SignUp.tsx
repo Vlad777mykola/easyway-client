@@ -60,8 +60,6 @@ export const SignUp = () => {
 		}
 	}, [data, navigate]);
 
-	console.log('AUTH: ', auth);
-
 	return (
 		<WrapperCard>
 			<div className={style.signUpContainer}>
