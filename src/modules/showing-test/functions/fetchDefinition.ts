@@ -26,33 +26,19 @@ export const fetchDefinition = async (word: string) => {
 	let answers: string[] = [];
 
 	if (isVerb) {
-		answers = await showVerbs(word);
-		console.log('ISVERB WORD: ', word);
-		console.log('ANSWERS ISVERB: ', answers);
+		answers = showVerbs(word);
 	} else if ((isNoun && !isPronoun) || isAdjective) {
 		answers = await showNounsOrAdverbs(word, MAX_VARIANTS);
-		console.log('ISNOUN WORD: ', word);
-		console.log('ANSWERS ISNOUN: ', answers);
 	} else if (isPronoun) {
 		answers = showVariants(PRONOUN_CATEGORIES, word);
-		console.log('ISPRONOUN WORD: ', word);
-		console.log('ANSWERS ISPRONOUN: ', answers);
 	} else if (isPreposition) {
 		answers = showVariants(PREPOSITION_CATEGORIES, word);
-		console.log('ISPREPOSITION WORD: ', word);
-		console.log('ANSWERS ISPREPOSITION: ', answers);
 	} else if (isArticle) {
 		answers = getGroup(ARTICLES, word.toLocaleLowerCase());
-		console.log('ISARTICLES WORD: ', word);
-		console.log('ANSWERS ISARTICLES: ', answers);
 	} else if (isConjuction) {
 		answers = showVariants(CONJUCTIONS_CATEGORIES, word);
-		console.log('ISCONJUCTION WORD: ', word);
-		console.log('ANSWERS ISCONJUCTION: ', answers);
 	} else if (isNegation) {
 		answers = getGroup(NEGATIONS, word.toLocaleLowerCase());
-		console.log('ISNEGATIONS WORD: ', word);
-		console.log('ANSWERS ISNEGATIONS: ', answers);
 	}
 
 	return answers.length != 0 ? answers : await showNounsOrAdverbs(word, MAX_VARIANTS);

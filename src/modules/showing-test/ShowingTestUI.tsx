@@ -39,6 +39,10 @@ export const ShowingTestUI = ({
 			word = answer.charAt(0).toUpperCase() + answer.slice(1);
 		}
 
+		const utterance = new SpeechSynthesisUtterance(answer);
+		utterance.lang = 'en-US';
+		window.speechSynthesis.speak(utterance);
+
 		setTask((prev: TestType) => {
 			const isCorrectWord =
 				word.toLowerCase() ===

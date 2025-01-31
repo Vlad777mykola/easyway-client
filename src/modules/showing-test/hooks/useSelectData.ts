@@ -4,8 +4,6 @@ import { getReadyQuestion, VariantsType } from '../functions/fetchDefinition';
 export const useSelectData = (props: string[]) => {
 	const [answers, setAnswers] = useState<VariantsType | null>(null);
 
-	console.log('PROPS USE SELECT DATA: ', props);
-
 	useEffect(() => {
 		(async () => {
 			const result = await getReadyQuestion(props);
@@ -14,8 +12,6 @@ export const useSelectData = (props: string[]) => {
 			}
 		})();
 	}, [props]);
-
-	console.log('ANSWERS USE SELECT DATA: ', answers);
 
 	return useMemo(() => answers, [answers]);
 };

@@ -21,13 +21,10 @@ export type Variants = {
 	[key: string]: string[];
 };
 
-export const showVerbs = async (word: string) => {
+export const showVerbs = (word: string) => {
 	const doc = nlp(word);
 	const verbList = doc.verbs().conjugate()[0] as VerbList;
-	console.log('VERB LIST: ', verbList);
 	let answers = Object.keys(verbList).map((key) => verbList[key]);
-	console.log('ANSWERS VERBS: ', word, ' ', answers);
-	console.log('INCLUDES VERBS: ', word, ' ', answers.includes(word));
 	if (!answers.includes(word)) {
 		answers = [...answers, word];
 	}
@@ -36,7 +33,6 @@ export const showVerbs = async (word: string) => {
 };
 
 export const showNounsOrAdverbs = async (word: string, maxNumbersOfAnswers: number) => {
-	console.log('WORD: ', word);
 	const response = await fetch(`https://api.datamuse.com/words?rel_syn=${word}`);
 	const data = await response.json();
 	const dataArray = data.map((item: NounData) => item.word);
@@ -51,8 +47,6 @@ export const showNounsOrAdverbs = async (word: string, maxNumbersOfAnswers: numb
 			result = [...result, dataArray[i]];
 		}
 	}
-
-	console.log('RESULT: ', result);
 
 	return result;
 };
@@ -71,7 +65,6 @@ export const showVariants = (variants: Variants, word: string) => {
 
 export const getGroup = (variants: string[], word: string) => {
 	let result: string[] = [];
-	console.log('GET GROUP WORD: ', word);
 	for (let i = 0; i <= variants.length - 1; i++) {
 		if (i === 0 && variants.length >= MAX_VARIANTS) {
 			result = [...result, word];
