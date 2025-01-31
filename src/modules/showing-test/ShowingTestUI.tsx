@@ -43,8 +43,6 @@ export const ShowingTestUI = ({
 		utterance.lang = 'en-US';
 		window.speechSynthesis.speak(utterance);
 
-		console.log('ANSWER: ', answer);
-
 		setTask((prev: TestType) => {
 			const isCorrectWord =
 				word.toLowerCase() ===
