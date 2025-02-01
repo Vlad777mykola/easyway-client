@@ -1,25 +1,22 @@
-import { Button } from '@/ui-components/Button';
 import { Dispatch, SetStateAction } from 'react';
-import type { TestType } from './ShowingTest';
+import { Button } from '@/ui-components/Button';
+import { Icon } from '@/ui-components/Icon';
+import { ExerciseListType } from '@/store/exercise-progress';
 import { classes } from '@/shared/utils/classes';
 
 import styles from './showingTestUI.module.css';
-import { VariantsType } from './functions/fetchDefinition';
-import { Icon } from '@/ui-components/Icon';
-import { useExerciseProgressStore } from '@/store/exercise-progress';
 
 export const ShowingTestUI = ({
 	task,
 	setTask,
-	variants,
-	// updateProgress,
+	updateProgress,
 }: {
-	task: TestType;
-	setTask: Dispatch<SetStateAction<TestType>>;
-	variants: VariantsType;
-	// updateProgress: (id: string, isCorrectWord: boolean) => void;
+	task: ExerciseListType;
+	setTask: Dispatch<SetStateAction<ExerciseListType>>;
+	updateProgress: (id: string, isCorrectWord: boolean) => void;
 }) => {
 	const {
+		variants,
 		exercise,
 		isComplete,
 		explanation,
@@ -29,30 +26,25 @@ export const ShowingTestUI = ({
 		isCorrectAnswer,
 	} = task;
 
-	const setExerciseListProgress = useExerciseProgressStore(
-		(store) => store.setExerciseListProgress,
-	);
-
 	const onSelect = (answer: string) => {
 		let word = answer;
 		if (currentWord === 0) {
 			word = answer.charAt(0).toUpperCase() + answer.slice(1);
 		}
 
-		const utterance = new SpeechSynthesisUtterance(answer);
-		utterance.lang = 'en-US';
-		window.speechSynthesis.speak(utterance);
+		const isCorrectWord =
+			word.toLowerCase() ===
+			exerciseAnswer[currentWord].replace(/[^a-zA-Z0-9\s]/g, '').toLocaleLowerCase();
+		const isComplete = currentWord + 1 === exerciseAnswer.length;
+		if (isComplete) {
+			console.log('//////isComplete', isCorrectWord);
+			updateProgress(task.id, isCorrectWord);
+		}
+		// const utterance = new SpeechSynthesisUtterance(answer);
+		// utterance.lang = 'en-US';
+		// window.speechSynthesis.speak(utterance);
 
-		setTask((prev: TestType) => {
-			const isCorrectWord =
-				word.toLowerCase() ===
-				prev.exerciseAnswer[prev.currentWord].replace(/[^a-zA-Z0-9\s]/g, '').toLocaleLowerCase();
-			const isComplete = prev.currentWord + 1 === prev.exerciseAnswer.length;
-
-			if (isComplete) {
-				setExerciseListProgress(task.id, isCorrectWord);
-			}
-
+		setTask((prev: ExerciseListType) => {
 			return {
 				...prev,
 				selectedAnswer: `${prev.selectedAnswer} ${word}`,

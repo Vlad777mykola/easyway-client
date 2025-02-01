@@ -6,9 +6,7 @@ export const EXERCISE_MODE = {
 	INFINITIVE_MODE: 'infinitiveMode',
 } as const;
 
-type ExerciseModeType = (typeof EXERCISE_MODE)[keyof typeof EXERCISE_MODE];
-
-type ExerciseListType = {
+export type ExerciseListType = {
 	id: string;
 	exercise: string;
 	explanation: string;
@@ -17,7 +15,10 @@ type ExerciseListType = {
 	currentWord: number;
 	isComplete: boolean;
 	isCorrectAnswer: boolean;
+	variants: { [key: string]: string[] };
 };
+
+type ExerciseModeType = (typeof EXERCISE_MODE)[keyof typeof EXERCISE_MODE];
 
 type ExerciseListProgressType = {
 	id: string;
@@ -36,6 +37,7 @@ type CollectionExerciseConfigType = {
 };
 
 type ExerciseStoreState = {
+	exerciseListIds: { id: string }[];
 	exerciseList: ExerciseListType[];
 	exerciseListProgress: ExerciseListProgressType[];
 	commonProgressData: CommonProgressDataType;
@@ -43,6 +45,7 @@ type ExerciseStoreState = {
 };
 
 type ExerciseStoreActions = {
+	setExerciseListIds: <T extends { id: string }>(exerciseList: T[]) => void;
 	getExerciseMode: () => ExerciseModeType;
 	getExerciseCorrectResponseCount: () => number;
 	setCollectionsExerciseConfig: (
@@ -51,12 +54,15 @@ type ExerciseStoreActions = {
 	) => void;
 	getExerciseById: (id: string) => ExerciseListType | null;
 	setExerciseList: (exercise: ExerciseListType) => void;
+
 	setExerciseListProgress: (id: string, isResolved: boolean) => void;
+	getExerciseProgressById: (id: string) => ExerciseListProgressType | null;
 };
 
 export type ExerciseStoreType = ExerciseStoreState & ExerciseStoreActions;
 
 export const useExerciseProgressStore = create<ExerciseStoreType>()((set, get) => ({
+	exerciseListIds: [],
 	exerciseList: [],
 	exerciseListProgress: [],
 	commonProgressData: {
@@ -76,18 +82,32 @@ export const useExerciseProgressStore = create<ExerciseStoreType>()((set, get) =
 			},
 		}));
 	},
-	getExerciseById: (id) => {
-		const state = get().exerciseList;
-		return state.find((item) => item.id === id) || null;
+
+	setExerciseListIds: (exerciseList) => {
+		set((state) => ({
+			...state,
+			exerciseListIds: exerciseList.map((item) => ({ id: item.id })),
+		}));
 	},
+
 	getExerciseCorrectResponseCount: () => {
 		return get().collectionsExerciseConfig.exerciseCorrectResponse;
 	},
 	getExerciseMode: () => {
 		return get().collectionsExerciseConfig.exerciseMode;
 	},
+
+	getExerciseById: (id) => {
+		const state = get().exerciseList;
+		return state.find((item) => item.id === id) || null;
+	},
 	setExerciseList: (exercise) => {
-		set((state) => ({ exerciseList: [...state.exerciseList, exercise] }));
+		set((state) => ({ ...state, exerciseList: [...state.exerciseList, exercise] }));
+	},
+
+	getExerciseProgressById: (id) => {
+		const state = get().exerciseListProgress;
+		return state.find((item) => item.id === id) || null;
 	},
 	setExerciseListProgress: (id, isResolved) => {
 		set((state) => {
@@ -101,7 +121,7 @@ export const useExerciseProgressStore = create<ExerciseStoreType>()((set, get) =
 				updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers: 0 }];
 			}
 
-			return { exerciseListProgress: updatedProgressList };
+			return { ...state, exerciseListProgress: updatedProgressList };
 		});
 	},
 }));
