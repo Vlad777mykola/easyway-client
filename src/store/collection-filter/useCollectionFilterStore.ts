@@ -10,13 +10,15 @@ type levelType = (typeof LEVEL)[keyof typeof LEVEL];
 type learningStyleType = (typeof LEARNING_STYLE)[keyof typeof LEARNING_STYLE];
 
 type CollectionFilterStoreState = {
-	id: string;
-	title: string;
-	topic: collectionTensesType[];
-	subtitle: string;
-	category: collectionTensesType[];
-	level: levelType;
-	learningStyle: learningStyleType;
+	filterCollectionData: {
+		id: string;
+		title: string;
+		topic: collectionTensesType[];
+		subtitle: string;
+		category: collectionTensesType[];
+		level: levelType;
+		learningStyle: learningStyleType;
+	};
 };
 
 type CollectionFilterStoreActions = {
@@ -24,28 +26,50 @@ type CollectionFilterStoreActions = {
 	getTopic: () => collectionTensesType[];
 	getTitle: () => string;
 	getSubtitle: () => string;
+	getCategory: () => collectionTensesType[];
+	getLearningStyle: () => learningStyleType;
+	setFilter: (key: string, value: number[] | string | boolean | string[] | number) => void;
+	setClear: () => void;
 };
 
 export type CollectionFilterStoreType = CollectionFilterStoreState & CollectionFilterStoreActions;
 
 export const useCollectionFilter = create<CollectionFilterStoreType>()((set, get) => ({
-	id: '123',
-	title: 'Present and Past',
-	subtitle: 'Practice the sentence',
-	topic: [TOPIC_TENSES.ASPECTS, TOPIC_TENSES.FUTURE_CONTINUOUS],
-	category: [TOPIC_TENSES.FUTURE_CONTINUOUS, TOPIC_TENSES.FUTURE_PERFECT],
-	level: LEVEL.ADVANCED,
-	learningStyle: LEARNING_STYLE.SELECTING_MATCHING,
+	filterCollectionData: {
+		id: '123',
+		title: '',
+		subtitle: 'Practice the sentence',
+		topic: [TOPIC_TENSES.ASPECTS, TOPIC_TENSES.FUTURE_CONTINUOUS],
+		category: [TOPIC_TENSES.FUTURE_CONTINUOUS, TOPIC_TENSES.FUTURE_PERFECT],
+		level: LEVEL.ADVANCED,
+		learningStyle: LEARNING_STYLE.SELECTING_MATCHING,
+	},
 	getLevel: () => {
-		return get().level;
+		return get().filterCollectionData.level;
 	},
 	getTopic: () => {
-		return get().topic;
+		return get().filterCollectionData.topic;
 	},
 	getTitle: () => {
-		return get().title;
+		return get().filterCollectionData.title;
 	},
 	getSubtitle: () => {
-		return get().subtitle;
+		return get().filterCollectionData.subtitle;
+	},
+	getCategory: () => {
+		return get().filterCollectionData.category;
+	},
+	getLearningStyle: () => {
+		return get().filterCollectionData.learningStyle;
+	},
+	setFilter: (key, value) => {
+		set((state) => {
+			return { ...state, filterCollectionData: { ...state.filterCollectionData, [key]: value } };
+		});
+	},
+	setClear: () => {
+		set((state) => {
+			return { ...state };
+		});
 	},
 }));
