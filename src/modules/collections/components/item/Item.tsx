@@ -2,7 +2,17 @@ import { ReactNode } from 'react';
 import styles from './item.module.css';
 import { useNavigate } from 'react-router-dom';
 
-export const Item = <T extends { title: string; id: string; subtitle: string }>({
+export const Item = <
+	T extends {
+		title: string;
+		id: string;
+		subtitle: string;
+		category: string[];
+		learningStyle: string;
+		level: string;
+		topic: string[];
+	},
+>({
 	data,
 }: {
 	data: T;
@@ -15,8 +25,33 @@ export const Item = <T extends { title: string; id: string; subtitle: string }>(
 
 	return (
 		<section onClick={() => onClick(data.id)} className={styles.itemContainer}>
-			<div className={styles.title}>{data.title}</div>
-			<div className={styles.subtitle}>{data.subtitle}</div>
+			<h1 className={styles.title}>{data.title}</h1>
+			<h2 className={styles.subtitle}>{data.subtitle}</h2>
+			<p className={styles.subtitle}>{data.level}</p>
+			<div className={styles.infoCard}>
+				<div className={styles.topicContainer}>
+					<p className={styles.nameOfTopic}>Topic:</p>
+					{data.topic.map((item, index) => (
+						<p key={item} className={styles.dataInfo}>
+							{item}
+							{index < data.topic.length - 1 ? ',' : '.'}
+						</p>
+					))}
+				</div>
+				<div className={styles.topicContainer}>
+					<p className={styles.nameOfTopic}>Category: </p>
+					{data.category.map((item, index) => (
+						<p key={item} className={styles.dataInfo}>
+							{item}
+							{index < data.category.length - 1 ? ',' : '.'}
+						</p>
+					))}
+				</div>
+				<div className={styles.topicContainer}>
+					<p className={styles.nameOfTopic}>Learning style:</p>
+					<p className={styles.dataInfo}>{data.learningStyle}.</p>
+				</div>
+			</div>
 		</section>
 	);
 };

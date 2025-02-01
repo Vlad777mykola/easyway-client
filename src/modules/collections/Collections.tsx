@@ -1,11 +1,16 @@
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { ListCollections } from './components/lits-collections/ListCollections';
 import { getAllCollections } from './services/getAllCollections';
-import { selectData } from '@/shared/constants/data';
+import { DefaultCollectionType, selectData } from '@/shared/constants/data';
 import { FieldsDataType, Sidebar } from '../sidebar';
 import styles from './collections.module.css';
 import { useCollectionFilter } from '@/store/collection-filter';
-import { LEVEL, TOPIC_TENSES, LEARNING_STYLE } from './constants/store-constants';
+import {
+	LEVEL,
+	TOPIC_TENSES,
+	LEARNING_STYLE,
+	LEARN_BY_INTEREST,
+} from './constants/store-constants';
 
 export const Collections = (): ReactNode => {
 	const data = useMemo(() => getAllCollections(), []);
@@ -16,6 +21,7 @@ export const Collections = (): ReactNode => {
 	const getTopic = useCollectionFilter((store) => store.getTopic);
 	const getTitle = useCollectionFilter((store) => store.getTitle);
 	const getSubtitle = useCollectionFilter((store) => store.getSubtitle);
+	const getLearnByInterest = useCollectionFilter((store) => store.getLearnByInterest);
 	const setFilter = useCollectionFilter((store) => store.setFilter);
 
 	console.log('DATA STORE: ', dataStore);
@@ -28,6 +34,7 @@ export const Collections = (): ReactNode => {
 			getDefaultValue: getTitle,
 			label: 'Title',
 			componentType: 'input',
+			placeholder: 'Title',
 		},
 		{
 			id: '18',
@@ -35,6 +42,7 @@ export const Collections = (): ReactNode => {
 			getDefaultValue: getSubtitle,
 			label: 'Subtitle',
 			componentType: 'input',
+			placeholder: 'Subtitle',
 		},
 		{
 			id: '14',
@@ -67,12 +75,17 @@ export const Collections = (): ReactNode => {
 			],
 			getDefaultValue: getCategory,
 			label: 'Category',
-			componentType: 'multiple',
+			componentType: 'select',
 		} as const,
 		{
 			id: '16',
 			keyValue: 'learningStyle',
-			options: [LEARNING_STYLE.SELECTING_MATCHING],
+			options: [
+				LEARNING_STYLE.SELECTING_MATCHING,
+				LEARNING_STYLE.AUDITORY_LEARNER,
+				LEARNING_STYLE.WRITING_LEARNER,
+				LEARNING_STYLE.VISUAL_LEARNER,
+			],
 			getDefaultValue: getLearningStyle,
 			label: 'Learning Style',
 			componentType: 'select',
@@ -100,7 +113,20 @@ export const Collections = (): ReactNode => {
 			],
 			getDefaultValue: getTopic,
 			label: 'Topic',
-			componentType: 'multiple',
+			componentType: 'select',
+		},
+		{
+			id: '18',
+			keyValue: 'learnByInterest',
+			options: [
+				LEARN_BY_INTEREST.BOOKS,
+				LEARN_BY_INTEREST.MOVIES_INTEREST,
+				LEARN_BY_INTEREST.MUSIC,
+				LEARN_BY_INTEREST.NEWS_BLOGS,
+			],
+			getDefaultValue: getLearnByInterest,
+			label: 'Learn by interest',
+			componentType: 'select',
 		},
 	];
 
@@ -108,7 +134,7 @@ export const Collections = (): ReactNode => {
 		console.log('ON SEARCH');
 	};
 
-	const filterCollectionData = (data, title: string, subtitle: string) => {
+	const filterCollectionData = (data: DefaultCollectionType[], title: string, subtitle: string) => {
 		if (title !== '' || subtitle !== '') {
 			return data.filter(
 				(item) =>
@@ -133,7 +159,9 @@ export const Collections = (): ReactNode => {
 	return (
 		<div className={styles.collectionsContainer}>
 			<Sidebar title="Filter" fieldsData={fieldsData} onChange={onChange} onSearch={onSearch} />
-			<ListCollections data={filterCollectionData(data, dataStore.title, dataStore.subtitle)} />
+			<ListCollections
+				data={filterCollectionData(data, dataStore.title, dataStore.subtitle) || []}
+			/>
 		</div>
 	);
 };

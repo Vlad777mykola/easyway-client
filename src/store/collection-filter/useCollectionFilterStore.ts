@@ -2,32 +2,40 @@ import {
 	TOPIC_TENSES,
 	LEVEL,
 	LEARNING_STYLE,
+	LEARN_BY_INTEREST,
+	LEARN_BY_SKILL,
 } from '@/modules/collections/constants/store-constants';
 import { create } from 'zustand';
 
 type collectionTensesType = (typeof TOPIC_TENSES)[keyof typeof TOPIC_TENSES];
 type levelType = (typeof LEVEL)[keyof typeof LEVEL];
 type learningStyleType = (typeof LEARNING_STYLE)[keyof typeof LEARNING_STYLE];
+type learnByInterestType = (typeof LEARN_BY_INTEREST)[keyof typeof LEARN_BY_INTEREST];
+type learnBySkillType = (typeof LEARN_BY_SKILL)[keyof typeof LEARN_BY_SKILL];
 
 type CollectionFilterStoreState = {
 	filterCollectionData: {
 		id: string;
 		title: string;
-		topic: collectionTensesType[];
+		topic: collectionTensesType;
 		subtitle: string;
-		category: collectionTensesType[];
+		category: collectionTensesType;
 		level: levelType;
 		learningStyle: learningStyleType;
+		learnByInterest: learnByInterestType;
+		learnBySkill: learnBySkillType;
 	};
 };
 
 type CollectionFilterStoreActions = {
 	getLevel: () => levelType;
-	getTopic: () => collectionTensesType[];
+	getTopic: () => collectionTensesType;
 	getTitle: () => string;
 	getSubtitle: () => string;
-	getCategory: () => collectionTensesType[];
+	getCategory: () => collectionTensesType;
 	getLearningStyle: () => learningStyleType;
+	getLearnByInterest: () => learnByInterestType;
+	getLearnBySkill: () => learnBySkillType;
 	setFilter: (key: string, value: number[] | string | boolean | string[] | number) => void;
 	setClear: () => void;
 };
@@ -38,11 +46,13 @@ export const useCollectionFilter = create<CollectionFilterStoreType>()((set, get
 	filterCollectionData: {
 		id: '123',
 		title: '',
-		subtitle: 'Practice the sentence',
-		topic: [TOPIC_TENSES.ASPECTS, TOPIC_TENSES.FUTURE_CONTINUOUS],
-		category: [TOPIC_TENSES.FUTURE_CONTINUOUS, TOPIC_TENSES.FUTURE_PERFECT],
+		subtitle: '',
+		topic: TOPIC_TENSES.ASPECTS,
+		category: TOPIC_TENSES.FUTURE_CONTINUOUS,
 		level: LEVEL.ADVANCED,
 		learningStyle: LEARNING_STYLE.SELECTING_MATCHING,
+		learnByInterest: LEARN_BY_INTEREST.BOOKS,
+		learnBySkill: LEARN_BY_SKILL.LISTENING,
 	},
 	getLevel: () => {
 		return get().filterCollectionData.level;
@@ -61,6 +71,12 @@ export const useCollectionFilter = create<CollectionFilterStoreType>()((set, get
 	},
 	getLearningStyle: () => {
 		return get().filterCollectionData.learningStyle;
+	},
+	getLearnByInterest: () => {
+		return get().filterCollectionData.learnByInterest;
+	},
+	getLearnBySkill: () => {
+		return get().filterCollectionData.learnBySkill;
 	},
 	setFilter: (key, value) => {
 		set((state) => {

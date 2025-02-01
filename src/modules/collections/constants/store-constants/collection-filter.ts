@@ -25,4 +25,21 @@ export const LEVEL = {
 
 export const LEARNING_STYLE = {
 	SELECTING_MATCHING: 'Selecting/Matching',
+	VISUAL_LEARNER: 'Visual Learner',
+	AUDITORY_LEARNER: 'Auditory Learner',
+	WRITING_LEARNER: 'Writing Learner',
 } as const;
+
+export const LEARN_BY_INTEREST = {
+	MOVIES_INTEREST: 'Movies/Series',
+	MUSIC: 'Music',
+	BOOKS: 'Books',
+	NEWS_BLOGS: 'News/Blogs',
+};
+
+export const LEARN_BY_SKILL = {
+	LISTENING: 'Listening',
+	SPEAKING: 'Speaking',
+	READING: 'Reading',
+	WRITING: 'Writing',
+};

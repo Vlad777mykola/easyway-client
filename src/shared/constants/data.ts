@@ -11,6 +11,16 @@ export type ExerciseType = {
 	exerciseType: string;
 };
 
+export type DefaultCollectionType = {
+	id: string;
+	title: string;
+	subtitle: string;
+	level: string;
+	category: string[];
+	topic: string[];
+	learningStyle: string;
+};
+
 export const DEFAULT_TASKS = [...id1, ...id2];
 export const ALL_COLLECTIONS_TASKS_BY_ID = new Map<string, ExerciseType[]>([
 	['1', id1],
