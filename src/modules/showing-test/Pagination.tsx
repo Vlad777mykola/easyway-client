@@ -2,6 +2,7 @@ import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { getRandomInteger } from '@/shared/utils/get-random-integer';
+import { Flex, Progress } from 'antd';
 
 import styles from './pagination.module.css';
 
@@ -15,11 +16,15 @@ export const Pagination = ({
 	currentId,
 	navigateTo,
 	isRandom,
+	totalCountOfQuestions,
+	correctQuestions,
 }: {
 	isRandom: boolean;
 	currentId: string;
 	ids: { id: string }[];
 	navigateTo: (id: string) => void;
+	totalCountOfQuestions: number;
+	correctQuestions: number;
 }) => {
 	const swapQuestion = (move: string) => {
 		let currentIndex: number = ids.findIndex((item) => item.id === currentId);
@@ -61,6 +66,15 @@ export const Pagination = ({
 						</Button>
 					))}
 				</div>
+			)}
+			{isRandom && (
+				<Flex gap="small" vertical>
+					<Progress
+						percent={+`${correctQuestions}0`}
+						steps={totalCountOfQuestions}
+						showInfo={false}
+					/>
+				</Flex>
 			)}
 		</>
 	);

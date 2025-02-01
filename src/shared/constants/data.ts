@@ -1,6 +1,6 @@
 import { id1, id2, id3 } from './suportData';
 
-export type ExerciseType = {
+export type ExerciseResponseType = {
 	id: string;
 	exercise: string;
 	exerciseAnswer: string;
@@ -12,7 +12,7 @@ export type ExerciseType = {
 };
 
 export const DEFAULT_TASKS = [...id1, ...id2];
-export const ALL_COLLECTIONS_TASKS_BY_ID = new Map<string, ExerciseType[]>([
+export const ALL_COLLECTIONS_TASKS_BY_ID = new Map<string, ExerciseResponseType[]>([
 	['1', id1],
 	['2', id2],
 	['3', id3],
