@@ -144,7 +144,6 @@ export const Collections = (): ReactNode => {
 	};
 
 	const onSearch = () => {
-		console.log('WORK SEARCH');
 		setFilterDataOnSearch();
 	};
 

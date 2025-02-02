@@ -15,8 +15,6 @@ export const ListCollections = (): ReactNode => {
 		}
 	}, []);
 
-	console.log('FILTERED COLLECTIONS: ', filteredCollectionsData);
-
 	return (
 		<div className={styles.listContainer}>
 			{filteredCollectionsData.map((i) => (

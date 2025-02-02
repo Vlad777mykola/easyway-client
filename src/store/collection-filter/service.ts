@@ -1,9 +1,8 @@
-import { CollectionType, filterDatatype } from './useCollectionFilterStore';
+import type { CollectionType, FilterDatatype } from './useCollectionFilterStore';
 
-export const filterCollections = (data: CollectionType[], filterData: filterDatatype) => {
+export const filterCollections = (data: CollectionType[], filterData: FilterDatatype) => {
 	const { title, topic, subtitle, category, level, learningStyle, learnByInterest, learnBySkill } =
 		filterData;
-	console.log('2', data, filterData);
 	return data.filter((item) => {
 		return (
 			(title ? item.title.toLowerCase().includes(title.toLowerCase()) : true) &&

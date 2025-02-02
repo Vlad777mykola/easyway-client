@@ -8,11 +8,11 @@ import {
 import { create } from 'zustand';
 import { filterCollections } from './service';
 
-type collectionTensesType = (typeof TOPIC_TENSES)[keyof typeof TOPIC_TENSES];
-type levelType = (typeof LEVEL)[keyof typeof LEVEL];
-type learningStyleType = (typeof LEARNING_STYLE)[keyof typeof LEARNING_STYLE];
-type learnByInterestType = (typeof LEARN_BY_INTEREST)[keyof typeof LEARN_BY_INTEREST];
-type learnBySkillType = (typeof LEARN_BY_SKILL)[keyof typeof LEARN_BY_SKILL];
+type CollectionTensesType = (typeof TOPIC_TENSES)[keyof typeof TOPIC_TENSES];
+type LevelType = (typeof LEVEL)[keyof typeof LEVEL];
+type LearningStyleType = (typeof LEARNING_STYLE)[keyof typeof LEARNING_STYLE];
+type LearnByInterestType = (typeof LEARN_BY_INTEREST)[keyof typeof LEARN_BY_INTEREST];
+type LearnBySkillType = (typeof LEARN_BY_SKILL)[keyof typeof LEARN_BY_SKILL];
 
 export type CollectionType = {
 	id: string;
@@ -26,32 +26,32 @@ export type CollectionType = {
 	learnBySkill: string;
 };
 
-export type filterDatatype = {
+export type FilterDatatype = {
 	title: string;
-	topic: collectionTensesType[];
+	topic: CollectionTensesType[];
 	subtitle: string;
-	category: collectionTensesType[];
-	level: levelType;
-	learningStyle: learningStyleType;
-	learnByInterest: learnByInterestType;
-	learnBySkill: learnBySkillType;
+	category: CollectionTensesType[];
+	level: LevelType;
+	learningStyle: LearningStyleType;
+	learnByInterest: LearnByInterestType;
+	learnBySkill: LearnBySkillType;
 };
 
 type CollectionFilterStoreState = {
-	filterCollectionData: filterDatatype;
+	filterCollectionData: FilterDatatype;
 	collectionsData: CollectionType[];
 	filteredCollectionsData: CollectionType[];
 };
 
 type CollectionFilterStoreActions = {
-	getLevel: () => levelType;
-	getTopic: () => collectionTensesType[];
+	getLevel: () => LevelType;
+	getTopic: () => CollectionTensesType[];
 	getTitle: () => string;
 	getSubtitle: () => string;
-	getCategory: () => collectionTensesType[];
-	getLearningStyle: () => learningStyleType;
-	getLearnByInterest: () => learnByInterestType;
-	getLearnBySkill: () => learnBySkillType;
+	getCategory: () => CollectionTensesType[];
+	getLearningStyle: () => LearningStyleType;
+	getLearnByInterest: () => LearnByInterestType;
+	getLearnBySkill: () => LearnBySkillType;
 	setFilter: (key: string, value: number[] | string | boolean | string[] | number) => void;
 	setCollections: (collections: CollectionType[]) => void;
 	setFilterDataOnSearch: () => void;
@@ -110,7 +110,6 @@ export const useCollectionFilter = create<CollectionFilterStoreType>()((set, get
 		const filterCollectionData = get().filterCollectionData;
 		const collectionsData = get().collectionsData;
 		const filteredData = filterCollections(collectionsData, filterCollectionData);
-		console.log(filterCollectionData, collectionsData, filteredData);
 
 		set((state) => {
 			return { ...state, filteredCollectionsData: filteredData };
