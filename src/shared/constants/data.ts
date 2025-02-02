@@ -19,6 +19,8 @@ export type DefaultCollectionType = {
 	category: string[];
 	topic: string[];
 	learningStyle: string;
+	learnByInterest: string;
+	learnBySkill: string;
 };
 
 export const DEFAULT_TASKS = [...id1, ...id2];
@@ -44,6 +46,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Present Simple', 'Past Simple'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
+		learnByInterest: 'Movies/Series',
+		learnBySkill: 'Listening',
 	},
 	{
 		id: '2',
@@ -53,6 +57,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Present perfect', 'Past Simple'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
+		learnByInterest: 'Music',
+		learnBySkill: 'Speaking',
 	},
 	{
 		id: '3',
@@ -62,6 +68,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Future'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
+		learnByInterest: 'Books',
+		learnBySkill: 'Reading',
 	},
 	{
 		id: '4',
@@ -71,6 +79,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Modals'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
+		learnByInterest: 'News/Blogs',
+		learnBySkill: 'Writing',
 	},
 	{
 		id: '5',
@@ -80,6 +90,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Future'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
+		learnByInterest: 'Movies/Series',
+		learnBySkill: 'Listening',
 	},
 	{
 		id: '6',
@@ -89,6 +101,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Passive'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
+		learnByInterest: 'Music',
+		learnBySkill: 'Listening',
 	},
 	{
 		id: '7',
@@ -98,6 +112,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Present Simple', 'Past Simple'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
+		learnByInterest: 'Music',
+		learnBySkill: 'Writing',
 	},
 	{
 		id: '8',
@@ -107,6 +123,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Present Simple', 'Past Simple'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
+		learnByInterest: 'Books',
+		learnBySkill: 'Reading',
 	},
 	{
 		id: '9',
@@ -116,6 +134,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Present Simple', 'Past Simple'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
+		learnByInterest: 'News/Blogs',
+		learnBySkill: 'Writing',
 	},
 	{
 		id: '10',
@@ -125,6 +145,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Articles', 'Nouns'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
+		learnByInterest: 'Movies/Series',
+		learnBySkill: 'Listening',
 	},
 ];
 

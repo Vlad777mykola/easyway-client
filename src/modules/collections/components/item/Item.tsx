@@ -11,6 +11,8 @@ export const Item = <
 		learningStyle: string;
 		level: string;
 		topic: string[];
+		learnByInterest: string;
+		learnBySkill: string;
 	},
 >({
 	data,
@@ -50,6 +52,14 @@ export const Item = <
 				<div className={styles.topicContainer}>
 					<p className={styles.nameOfTopic}>Learning style:</p>
 					<p className={styles.dataInfo}>{data.learningStyle}.</p>
+				</div>
+				<div className={styles.topicContainer}>
+					<p className={styles.nameOfTopic}>Learning by interest:</p>
+					<p className={styles.dataInfo}>{data.learnByInterest}.</p>
+				</div>
+				<div className={styles.topicContainer}>
+					<p className={styles.nameOfTopic}>Learning by skill:</p>
+					<p className={styles.dataInfo}>{data.learnBySkill}.</p>
 				</div>
 			</div>
 		</section>

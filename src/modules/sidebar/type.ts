@@ -13,7 +13,7 @@ export type CheckboxFieldsType = BaseFieldsDataType & {
 
 export type SelectOrMultipleFieldsType = BaseFieldsDataType & {
 	componentType: 'select' | 'multiple';
-	getDefaultValue: () => string | number;
+	getDefaultValue: () => string | number | string[];
 	options: string[] | number[];
 };
 

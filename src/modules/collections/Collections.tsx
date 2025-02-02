@@ -1,7 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 import { ListCollections } from './components/lits-collections/ListCollections';
 import { getAllCollections } from './services/getAllCollections';
-import { DefaultCollectionType, selectData } from '@/shared/constants/data';
+import { DefaultCollectionType } from '@/shared/constants/data';
 import { FieldsDataType, Sidebar } from '../sidebar';
 import styles from './collections.module.css';
 import { useCollectionFilter } from '@/store/collection-filter';
@@ -10,6 +10,7 @@ import {
 	TOPIC_TENSES,
 	LEARNING_STYLE,
 	LEARN_BY_INTEREST,
+	LEARN_BY_SKILL,
 } from './constants/store-constants';
 
 export const Collections = (): ReactNode => {
@@ -22,10 +23,8 @@ export const Collections = (): ReactNode => {
 	const getTitle = useCollectionFilter((store) => store.getTitle);
 	const getSubtitle = useCollectionFilter((store) => store.getSubtitle);
 	const getLearnByInterest = useCollectionFilter((store) => store.getLearnByInterest);
+	const getLearnBySkill = useCollectionFilter((store) => store.getLearnBySkill);
 	const setFilter = useCollectionFilter((store) => store.setFilter);
-
-	console.log('DATA STORE: ', dataStore);
-	console.log('DATA COLLECTIONS: ', data);
 
 	const fieldsData: FieldsDataType[] = [
 		{
@@ -75,7 +74,7 @@ export const Collections = (): ReactNode => {
 			],
 			getDefaultValue: getCategory,
 			label: 'Category',
-			componentType: 'select',
+			componentType: 'multiple',
 		} as const,
 		{
 			id: '16',
@@ -113,7 +112,7 @@ export const Collections = (): ReactNode => {
 			],
 			getDefaultValue: getTopic,
 			label: 'Topic',
-			componentType: 'select',
+			componentType: 'multiple',
 		},
 		{
 			id: '18',
@@ -128,40 +127,82 @@ export const Collections = (): ReactNode => {
 			label: 'Learn by interest',
 			componentType: 'select',
 		},
+		{
+			id: '19',
+			keyValue: 'learnBySkill',
+			options: [
+				LEARN_BY_SKILL.LISTENING,
+				LEARN_BY_SKILL.READING,
+				LEARN_BY_SKILL.SPEAKING,
+				LEARN_BY_SKILL.WRITING,
+			],
+			getDefaultValue: getLearnBySkill,
+			label: 'Learn by skill',
+			componentType: 'select',
+		},
 	];
 
 	const onSearch = () => {
 		console.log('ON SEARCH');
 	};
 
-	const filterCollectionData = (data: DefaultCollectionType[], title: string, subtitle: string) => {
-		if (title !== '' || subtitle !== '') {
-			return data.filter(
-				(item) =>
-					(title ? item.title.toLowerCase().includes(title.toLowerCase()) : true) &&
-					(subtitle ? item.subtitle.toLowerCase().includes(subtitle.toLowerCase()) : true),
+	const filterCollectionData = (
+		data: DefaultCollectionType[],
+		title: string,
+		subtitle: string,
+		level: string,
+		category: string[],
+		learningStyle: string,
+		topic: string[],
+		learnByInterest: string,
+		learnBySkill: string,
+	) => {
+		return data.filter((item) => {
+			return (
+				(title ? item.title.toLowerCase().includes(title.toLowerCase()) : true) &&
+				(subtitle ? item.subtitle.toLowerCase().includes(subtitle.toLowerCase()) : true) &&
+				(level ? item.level.toLocaleLowerCase() === level.toLocaleLowerCase() : true) &&
+				(category.length > 0 ? category.some((cat) => item.category.includes(cat)) : true) &&
+				(learningStyle
+					? item.learningStyle.toLocaleLowerCase() === learningStyle.toLocaleLowerCase()
+					: true) &&
+				(topic.length > 0 ? topic.some((top) => item.topic.includes(top)) : true) &&
+				(learnBySkill
+					? item.learnBySkill.toLocaleLowerCase() === learnBySkill.toLocaleLowerCase()
+					: true) &&
+				(learnByInterest
+					? item.learnByInterest.toLocaleLowerCase() === learnByInterest.toLocaleLowerCase()
+					: true)
 			);
-		}
-
-		if (title === '' || subtitle === '') {
-			return data;
-		}
+		});
 	};
 
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
-		console.log('KEY: ', key);
-		console.log('VALUE: ', value);
 		setFilter(key, value);
 	};
 
-	console.log('SELECT DATA: ', selectData);
-
 	return (
 		<div className={styles.collectionsContainer}>
-			<Sidebar title="Filter" fieldsData={fieldsData} onChange={onChange} onSearch={onSearch} />
-			<ListCollections
-				data={filterCollectionData(data, dataStore.title, dataStore.subtitle) || []}
-			/>
+			<div className={styles.sidebarContainer}>
+				<Sidebar title="Filter" fieldsData={fieldsData} onChange={onChange} onSearch={onSearch} />
+			</div>
+			<div className={styles.listCollectionsContainer}>
+				<ListCollections
+					data={
+						filterCollectionData(
+							data,
+							dataStore.title,
+							dataStore.subtitle,
+							dataStore.level,
+							dataStore.category,
+							dataStore.learningStyle,
+							dataStore.topic,
+							dataStore.learnByInterest,
+							dataStore.learnBySkill,
+						) || []
+					}
+				/>
+			</div>
 		</div>
 	);
 };

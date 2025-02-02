@@ -3,6 +3,15 @@
 	display: flex;
 	justify-content: center;
 	gap: 0 25px;
+	width: 100%;
+}
+
+.sidebarContainer {
+	width: 30%;
+}
+
+.listCollectionsContainer {
+	width: 70%;
 }
 
 @media (max-width: 1024px) {
