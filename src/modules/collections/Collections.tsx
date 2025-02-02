@@ -1,7 +1,5 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode } from 'react';
 import { ListCollections } from './components/lits-collections/ListCollections';
-import { getAllCollections } from './services/getAllCollections';
-import { DefaultCollectionType } from '@/shared/constants/data';
 import { FieldsDataType, Sidebar } from '../sidebar';
 import styles from './collections.module.css';
 import { useCollectionFilter } from '@/store/collection-filter';
@@ -14,8 +12,7 @@ import {
 } from './constants/store-constants';
 
 export const Collections = (): ReactNode => {
-	const data = useMemo(() => getAllCollections(), []);
-	const dataStore = useCollectionFilter((store) => store.filterCollectionData);
+	const setFilterDataOnSearch = useCollectionFilter((store) => store.setFilterDataOnSearch);
 	const getLevel = useCollectionFilter((store) => store.getLevel);
 	const getCategory = useCollectionFilter((store) => store.getCategory);
 	const getLearningStyle = useCollectionFilter((store) => store.getLearningStyle);
@@ -142,43 +139,13 @@ export const Collections = (): ReactNode => {
 		},
 	];
 
-	const onSearch = () => {
-		console.log('ON SEARCH');
-	};
-
-	const filterCollectionData = (
-		data: DefaultCollectionType[],
-		title: string,
-		subtitle: string,
-		level: string,
-		category: string[],
-		learningStyle: string,
-		topic: string[],
-		learnByInterest: string,
-		learnBySkill: string,
-	) => {
-		return data.filter((item) => {
-			return (
-				(title ? item.title.toLowerCase().includes(title.toLowerCase()) : true) &&
-				(subtitle ? item.subtitle.toLowerCase().includes(subtitle.toLowerCase()) : true) &&
-				(level ? item.level.toLocaleLowerCase() === level.toLocaleLowerCase() : true) &&
-				(category.length > 0 ? category.some((cat) => item.category.includes(cat)) : true) &&
-				(learningStyle
-					? item.learningStyle.toLocaleLowerCase() === learningStyle.toLocaleLowerCase()
-					: true) &&
-				(topic.length > 0 ? topic.some((top) => item.topic.includes(top)) : true) &&
-				(learnBySkill
-					? item.learnBySkill.toLocaleLowerCase() === learnBySkill.toLocaleLowerCase()
-					: true) &&
-				(learnByInterest
-					? item.learnByInterest.toLocaleLowerCase() === learnByInterest.toLocaleLowerCase()
-					: true)
-			);
-		});
-	};
-
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setFilter(key, value);
+	};
+
+	const onSearch = () => {
+		console.log('WORK SEARCH');
+		setFilterDataOnSearch();
 	};
 
 	return (
@@ -187,21 +154,7 @@ export const Collections = (): ReactNode => {
 				<Sidebar title="Filter" fieldsData={fieldsData} onChange={onChange} onSearch={onSearch} />
 			</div>
 			<div className={styles.listCollectionsContainer}>
-				<ListCollections
-					data={
-						filterCollectionData(
-							data,
-							dataStore.title,
-							dataStore.subtitle,
-							dataStore.level,
-							dataStore.category,
-							dataStore.learningStyle,
-							dataStore.topic,
-							dataStore.learnByInterest,
-							dataStore.learnBySkill,
-						) || []
-					}
-				/>
+				<ListCollections />
 			</div>
 		</div>
 	);

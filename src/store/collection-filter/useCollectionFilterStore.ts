@@ -6,6 +6,7 @@ import {
 	LEARN_BY_SKILL,
 } from '@/modules/collections/constants/store-constants';
 import { create } from 'zustand';
+import { filterCollections } from './service';
 
 type collectionTensesType = (typeof TOPIC_TENSES)[keyof typeof TOPIC_TENSES];
 type levelType = (typeof LEVEL)[keyof typeof LEVEL];
@@ -13,18 +14,33 @@ type learningStyleType = (typeof LEARNING_STYLE)[keyof typeof LEARNING_STYLE];
 type learnByInterestType = (typeof LEARN_BY_INTEREST)[keyof typeof LEARN_BY_INTEREST];
 type learnBySkillType = (typeof LEARN_BY_SKILL)[keyof typeof LEARN_BY_SKILL];
 
+export type CollectionType = {
+	id: string;
+	title: string;
+	subtitle: string;
+	level: string;
+	category: string[];
+	topic: string[];
+	learningStyle: string;
+	learnByInterest: string;
+	learnBySkill: string;
+};
+
+export type filterDatatype = {
+	title: string;
+	topic: collectionTensesType[];
+	subtitle: string;
+	category: collectionTensesType[];
+	level: levelType;
+	learningStyle: learningStyleType;
+	learnByInterest: learnByInterestType;
+	learnBySkill: learnBySkillType;
+};
+
 type CollectionFilterStoreState = {
-	filterCollectionData: {
-		id: string;
-		title: string;
-		topic: collectionTensesType[];
-		subtitle: string;
-		category: collectionTensesType[];
-		level: levelType;
-		learningStyle: learningStyleType;
-		learnByInterest: learnByInterestType;
-		learnBySkill: learnBySkillType;
-	};
+	filterCollectionData: filterDatatype;
+	collectionsData: CollectionType[];
+	filteredCollectionsData: CollectionType[];
 };
 
 type CollectionFilterStoreActions = {
@@ -37,13 +53,14 @@ type CollectionFilterStoreActions = {
 	getLearnByInterest: () => learnByInterestType;
 	getLearnBySkill: () => learnBySkillType;
 	setFilter: (key: string, value: number[] | string | boolean | string[] | number) => void;
+	setCollections: (collections: CollectionType[]) => void;
+	setFilterDataOnSearch: () => void;
 };
 
 export type CollectionFilterStoreType = CollectionFilterStoreState & CollectionFilterStoreActions;
 
 export const useCollectionFilter = create<CollectionFilterStoreType>()((set, get) => ({
 	filterCollectionData: {
-		id: '123',
 		title: '',
 		subtitle: '',
 		topic: [TOPIC_TENSES.ASPECTS, TOPIC_TENSES.FUTURE_CONTINUOUS],
@@ -53,6 +70,8 @@ export const useCollectionFilter = create<CollectionFilterStoreType>()((set, get
 		learnByInterest: LEARN_BY_INTEREST.BOOKS,
 		learnBySkill: LEARN_BY_SKILL.LISTENING,
 	},
+	collectionsData: [],
+	filteredCollectionsData: [],
 	getLevel: () => {
 		return get().filterCollectionData.level;
 	},
@@ -80,6 +99,21 @@ export const useCollectionFilter = create<CollectionFilterStoreType>()((set, get
 	setFilter: (key, value) => {
 		set((state) => {
 			return { ...state, filterCollectionData: { ...state.filterCollectionData, [key]: value } };
+		});
+	},
+	setCollections: (collections) => {
+		set((state) => {
+			return { ...state, collectionsData: collections };
+		});
+	},
+	setFilterDataOnSearch: () => {
+		const filterCollectionData = get().filterCollectionData;
+		const collectionsData = get().collectionsData;
+		const filteredData = filterCollections(collectionsData, filterCollectionData);
+		console.log(filterCollectionData, collectionsData, filteredData);
+
+		set((state) => {
+			return { ...state, filteredCollectionsData: filteredData };
 		});
 	},
 }));
