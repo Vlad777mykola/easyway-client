@@ -2,7 +2,19 @@ import { ReactNode } from 'react';
 import { Item } from '../item/Item';
 import styles from './listCollections.module.css';
 
-export const ListCollections = <T extends { title: string; id: string; subtitle: string }>({
+export const ListCollections = <
+	T extends {
+		title: string;
+		id: string;
+		subtitle: string;
+		topic: string[];
+		category: string[];
+		level: string;
+		learningStyle: string;
+		learnByInterest: string;
+		learnBySkill: string;
+	},
+>({
 	data,
 }: {
 	data: T[];
