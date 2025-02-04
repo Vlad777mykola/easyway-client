@@ -1,3 +1,4 @@
+import { localstorage } from '@/shared/utils/local-storage/localstorage';
 import { create } from 'zustand';
 
 export const EXERCISE_MODE = {
@@ -57,6 +58,9 @@ type ExerciseStoreActions = {
 
 	setExerciseListProgress: (id: string, isResolved: boolean) => void;
 	getExerciseProgressById: (id: string) => ExerciseListProgressType | null;
+
+	saveProgressToLocalStore: (collectionId: string) => void;
+	setProgressFromLocalStore: (collectionId: string) => void;
 };
 
 export type ExerciseStoreType = ExerciseStoreState & ExerciseStoreActions;
@@ -123,5 +127,20 @@ export const useExerciseProgressStore = create<ExerciseStoreType>()((set, get) =
 
 			return { ...state, exerciseListProgress: updatedProgressList };
 		});
+	},
+
+	saveProgressToLocalStore: (collectionId) => {
+		localstorage.removeItem(collectionId);
+		const exerciseListProgress = get().exerciseListProgress;
+		localstorage.setItem(collectionId, exerciseListProgress);
+	},
+	setProgressFromLocalStore: (collectionId) => {
+		const existProgress = get().exerciseListProgress.length > 0;
+		if (existProgress) {
+			return;
+		}
+		const storedExerciseListProgress: ExerciseListProgressType[] =
+			localstorage.getItem(collectionId) || [];
+		set((state) => ({ ...state, exerciseListProgress: storedExerciseListProgress }));
 	},
 }));

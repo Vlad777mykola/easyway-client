@@ -26,14 +26,18 @@ const DEFAULT_DATA_TEST = {
 
 export const ShowingTest = () => {
 	const navigate = useNavigate();
-	const { taskId, collectionsId } = useParams();
+	const { taskId = '', collectionsId = '' } = useParams();
+	const [task, setTask] = useState<ExerciseListType>(DEFAULT_DATA_TEST);
+	const taskList = getTaskById(collectionsId);
+
+	const exerciseListId = useExerciseProgressStore((store) => store.exerciseListIds);
 	const isRandomMode = useExerciseProgressStore(
 		(store) => store.collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.RANDOM_MODE,
 	);
 	const totalExerciseCorrectResponse = useExerciseProgressStore(
 		(store) => store.collectionsExerciseConfig.exerciseCorrectResponse,
 	);
-	const exerciseListId = useExerciseProgressStore((store) => store.exerciseListIds);
+
 	const getExerciseById = useExerciseProgressStore((store) => store.getExerciseById);
 	const setExerciseList = useExerciseProgressStore((store) => store.setExerciseList);
 	const setExerciseListIds = useExerciseProgressStore((store) => store.setExerciseListIds);
@@ -43,9 +47,12 @@ export const ShowingTest = () => {
 	const setExerciseListProgress = useExerciseProgressStore(
 		(store) => store.setExerciseListProgress,
 	);
-
-	const [task, setTask] = useState<ExerciseListType>(DEFAULT_DATA_TEST);
-	const taskList = getTaskById(collectionsId || '');
+	const saveProgressToLocalStore = useExerciseProgressStore(
+		(store) => store.saveProgressToLocalStore,
+	);
+	const setProgressFromLocalStore = useExerciseProgressStore(
+		(store) => store.setProgressFromLocalStore,
+	);
 
 	const onNavigate = useCallback(
 		(id: string) => {
@@ -77,25 +84,28 @@ export const ShowingTest = () => {
 				}
 			})();
 		}
+		setProgressFromLocalStore(collectionsId);
 	}, [taskId]);
 
 	useEffect(() => {
 		if (taskList) {
 			setExerciseListIds(taskList);
 		}
+		return () => {
+			saveProgressToLocalStore(collectionsId);
+		};
 	}, [taskList]);
 
 	useEffect(() => {
 		if (task.isComplete) {
-			onNavigate(taskId || '');
+			onNavigate(taskId);
 		}
 	}, [task.isComplete, onNavigate, taskId]);
-
-	console.log();
 
 	return (
 		<WrapperCard>
 			<div className={styles.taskContainer}>
+				<button onClick={() => saveProgressToLocalStore(collectionsId)}>Save Progress</button>
 				{task && (
 					<ShowingTestUI
 						key={taskId}
@@ -111,7 +121,7 @@ export const ShowingTest = () => {
 						ids={exerciseListId.map((i) => ({ id: `${i.id}` }))}
 						navigateTo={(id: string) => onNavigate(id)}
 						totalCountOfQuestions={totalExerciseCorrectResponse}
-						correctQuestions={getExerciseProgressById(taskId || '')?.countCorrectAnswers || 0}
+						correctQuestions={getExerciseProgressById(taskId)?.countCorrectAnswers || 0}
 					/>
 				)}
 			</div>
