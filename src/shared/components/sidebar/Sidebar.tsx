@@ -7,7 +7,7 @@ import styles from './sidebar.module.css';
 import { Menu } from '@/ui-components/Menu';
 import { ScreenSizeContext } from '@/context/ScreenSizeContext';
 import { FieldsDataType, SideBarType } from './type';
-import { FieldComponent } from './FieldComponent';
+import { FieldComponent } from './components/FieldComponent';
 
 export const Sidebar = <T extends FieldsDataType>({
 	title,
@@ -21,7 +21,7 @@ export const Sidebar = <T extends FieldsDataType>({
 	const sideConfigComponent = (
 		<Wrapper>
 			<div className={styles.filterContainer}>
-				<h1 className={styles.title}>{title}</h1>
+				<h2 className={styles.title}>{title}</h2>
 				{fieldsData && fieldsData.map((item) => <FieldComponent item={item} onChange={onChange} />)}
 			</div>
 			{(onSearch || onClear) && (

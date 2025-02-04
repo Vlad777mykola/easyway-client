@@ -8,7 +8,7 @@ const CreateTest = lazy(() => import('@/pages/CreateTest'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const CompleteTest = lazy(() => import('@/pages/CompleteTest'));
 const CollectionsPage = lazy(() => import('@/pages/CollectionsPage'));
-const CollectionDetails = lazy(() => import('@/pages/CollectionDetailsPage'));
+const ExerciseDetails = lazy(() => import('@/pages/ExerciseDetailsPage'));
 
 export const router = createBrowserRouter([
 	{
@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
 			{ path: 'test', element: <CreateTest /> },
 			{ path: 'collections', element: <CollectionsPage /> },
 			{ path: 'complete-test', element: <CompleteTest /> },
-			{ path: 'collections/:collectionsId', element: <CollectionDetails /> },
+			{ path: 'collections/:collectionsId', element: <ExerciseDetails /> },
 			{ path: 'collections/:collectionsId/task/:taskId', element: <CompleteTest /> },
 		],
 	},

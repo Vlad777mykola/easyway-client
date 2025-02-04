@@ -1,5 +1,4 @@
 export type BaseFieldsDataType = {
-	id: string;
 	keyValue: string;
 	label?: string;
 	placeholder?: string;
