@@ -1,7 +1,7 @@
-import { ShowingTest } from '@/modules/showing-test';
+import { ExerciseCard } from '@/modules/showing-test';
 
 export const CompleteTest = () => {
-	return <ShowingTest />;
+	return <ExerciseCard />;
 };
 
 export default CompleteTest;

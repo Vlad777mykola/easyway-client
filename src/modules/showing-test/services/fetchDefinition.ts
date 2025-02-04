@@ -1,5 +1,5 @@
 import { detectPartOfSpeech } from './detectPartOfSpeech';
-import { getGroup, showNounsOrAdverbs, showVariants, showVerbs } from './showVariants';
+import { getGroup, showNounsOrAdverbs, showVariants, showVerbs } from '../services/showVariants';
 import {
 	ARTICLES,
 	CONJUCTIONS_CATEGORIES,

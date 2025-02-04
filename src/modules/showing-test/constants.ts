@@ -1,4 +1,4 @@
-import type { Variants } from './functions/showVariants';
+import type { Variants } from './services/showVariants';
 
 export const MAX_VARIANTS = 8;
 

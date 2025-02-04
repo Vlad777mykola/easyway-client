@@ -4,15 +4,17 @@ import { Icon } from '@/ui-components/Icon';
 import { ExerciseListType } from '@/store/exercise-progress';
 import { classes } from '@/shared/utils/classes';
 
-import styles from './showingTestUI.module.css';
+import styles from './exerciseUI.module.css';
 
-export const ShowingTestUI = ({
+export const ExerciseUI = ({
 	task,
 	setTask,
 	updateProgress,
+	setIsAutoNavigate,
 }: {
 	task: ExerciseListType;
 	setTask: Dispatch<SetStateAction<ExerciseListType>>;
+	setIsAutoNavigate: Dispatch<SetStateAction<boolean>>;
 	updateProgress: (id: string, isCorrectWord: boolean) => void;
 }) => {
 	const {
@@ -38,6 +40,9 @@ export const ShowingTestUI = ({
 		const isComplete = currentWord + 1 === exerciseAnswer.length;
 		if (isComplete) {
 			updateProgress(task.id, isCorrectWord);
+		}
+		if (isComplete && isCorrectAnswer && isCorrectWord) {
+			setIsAutoNavigate(true);
 		}
 		// const utterance = new SpeechSynthesisUtterance(answer);
 		// utterance.lang = 'en-US';

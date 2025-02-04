@@ -2,9 +2,10 @@ import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { getRandomInteger } from '@/shared/utils/get-random-integer';
+import { Progress } from '@/shared/components/progress';
 
 import styles from './pagination.module.css';
-import { Progress } from '@/shared/components/progress';
+import { useEffect } from 'react';
 
 const STEP = {
 	PREV: 'prev',
@@ -16,16 +17,24 @@ export const Pagination = ({
 	currentId,
 	navigateTo,
 	isRandom,
-	totalCountOfQuestions,
-	correctQuestions,
+	totalCount,
+	filedCount,
+	isAutoNavigate,
 }: {
 	isRandom: boolean;
 	currentId: string;
 	ids: { id: string }[];
 	navigateTo: (id: string) => void;
-	totalCountOfQuestions: number;
-	correctQuestions: number;
+	totalCount: number;
+	filedCount: number;
+	isAutoNavigate?: boolean;
 }) => {
+	useEffect(() => {
+		if (isAutoNavigate) {
+			swapQuestion(STEP.NEXT);
+		}
+	}, [isAutoNavigate]);
+
 	const swapQuestion = (move: string) => {
 		let currentIndex: number = ids.findIndex((item) => item.id === currentId);
 
@@ -67,7 +76,7 @@ export const Pagination = ({
 					))}
 				</div>
 			)}
-			{isRandom && <Progress filledSteps={correctQuestions} totalSteps={totalCountOfQuestions} />}
+			{isRandom && <Progress filledSteps={filedCount} totalSteps={totalCount} />}
 		</>
 	);
 };

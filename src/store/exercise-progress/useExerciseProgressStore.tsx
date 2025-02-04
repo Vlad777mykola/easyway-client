@@ -32,7 +32,7 @@ type CommonProgressDataType = {
 	resolvedExerciseIds: string[];
 };
 
-type CollectionExerciseConfigType = {
+type ExerciseConfigType = {
 	exerciseMode: ExerciseModeType;
 	exerciseCorrectResponse: number;
 };
@@ -42,7 +42,7 @@ type ExerciseStoreState = {
 	exerciseList: ExerciseListType[];
 	exerciseListProgress: ExerciseListProgressType[];
 	commonProgressData: CommonProgressDataType;
-	collectionsExerciseConfig: CollectionExerciseConfigType;
+	collectionsExerciseConfig: ExerciseConfigType;
 };
 
 type ExerciseStoreActions = {
