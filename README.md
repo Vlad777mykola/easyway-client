@@ -1,3 +1,7 @@
+## Run Project
+
+1. install npm install -g yarn
+
 ## UI
 
 1. PartialComponent in React refers to breaking down UI into smaller, reusable, and independent components that represent parts of the application.

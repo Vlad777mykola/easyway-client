@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
+import { Pagination } from '@/shared/components/pagination/Pagination';
 import { ShowingTestUI } from './ShowingTestUI';
-import { Pagination } from './Pagination';
 import { getTaskById } from './services/getTaskById';
 import styles from './showingTest.module.css';
 import {

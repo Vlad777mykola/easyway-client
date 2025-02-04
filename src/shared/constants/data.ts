@@ -46,8 +46,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Present Simple', 'Past Simple'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
-		learnByInterest: 'Movies/Series',
-		learnBySkill: 'Listening',
+		learnByInterest: 'Books',
+		learnBySkill: 'Reading',
 	},
 	{
 		id: '2',
@@ -57,8 +57,8 @@ export const DEFAULT_COLLECTIONS = [
 		category: ['Present perfect', 'Past Simple'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
-		learnByInterest: 'Music',
-		learnBySkill: 'Speaking',
+		learnByInterest: 'Books',
+		learnBySkill: 'Reading',
 	},
 	{
 		id: '3',
