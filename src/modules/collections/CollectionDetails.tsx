@@ -3,7 +3,7 @@ import styles from './collectionDetails.module.css';
 import { useParams } from 'react-router-dom';
 import { List } from '@/shared/components/list/List';
 import { getCollectionById } from './services/getCollectionById';
-import { FieldsDataType, Sidebar } from '../sidebar';
+import { FieldsDataType, Sidebar } from '../../shared/components/sidebar';
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
 
 export const CollectionDetails = (): ReactNode => {
@@ -22,7 +22,7 @@ export const CollectionDetails = (): ReactNode => {
 		{
 			id: '14',
 			keyValue: 'exerciseMode',
-			options: [EXERCISE_MODE.EXAM_MODE, EXERCISE_MODE.INFINITIVE_MODE, EXERCISE_MODE.RANDOM_MODE],
+			options: Object.values(EXERCISE_MODE),
 			getDefaultValue: getExerciseMode,
 			label: 'Exercise Mode',
 			componentType: 'select',

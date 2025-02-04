@@ -1,1 +1,1 @@
-export { ShowingTest } from './ShowingTest';
+export { ExerciseCard } from './ExerciseCard';

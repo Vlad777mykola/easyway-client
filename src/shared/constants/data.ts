@@ -65,7 +65,7 @@ export const DEFAULT_COLLECTIONS = [
 		title: 'Future',
 		subtitle: 'Practice the Future',
 		level: 'Intermediate',
-		category: ['Future'],
+		category: ['Present Simple', 'Past Simple'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
 		learnByInterest: 'Books',

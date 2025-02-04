@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { ListCollections } from './components/lits-collections/ListCollections';
-import { FieldsDataType, Sidebar } from '../sidebar';
+import { FieldsDataType, Sidebar } from '../../shared/components/sidebar';
 import styles from './collections.module.css';
 import { useCollectionFilter } from '@/store/collection-filter';
 import {
@@ -51,24 +51,7 @@ export const Collections = (): ReactNode => {
 		{
 			id: '15',
 			keyValue: 'category',
-			options: [
-				TOPIC_TENSES.ASPECTS,
-				TOPIC_TENSES.FUTURE_CONTINUOUS,
-				TOPIC_TENSES.FUTURE_PERFECT,
-				TOPIC_TENSES.FUTURE_PERFECT_CONTINUOUS,
-				TOPIC_TENSES.FUTURE_SIMPLE,
-				TOPIC_TENSES.FUTURE_WITH_GOING_TO,
-				TOPIC_TENSES.PAST_CONTINUOUS,
-				TOPIC_TENSES.PAST_SIMPLE,
-				TOPIC_TENSES.PAST_WITH_GOING_TO,
-				TOPIC_TENSES.PRESENT_CONTINUOUS,
-				TOPIC_TENSES.PRESENT_PERFECT,
-				TOPIC_TENSES.PRESENT_PERFECT_CONTINUOUS,
-				TOPIC_TENSES.PRESENT_SIMPLE,
-				TOPIC_TENSES.TALKING_ABOUT_THE_FUTURE,
-				TOPIC_TENSES.TALKING_ABOUT_THE_PAST,
-				TOPIC_TENSES.TALKING_ABOUT_THE_PRESENT,
-			],
+			options: Object.values(TOPIC_TENSES),
 			getDefaultValue: getCategory,
 			label: 'Category',
 			componentType: 'multiple',

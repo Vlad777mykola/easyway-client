@@ -8,19 +8,19 @@ export type BaseFieldsDataType = {
 export type CheckboxFieldsType = BaseFieldsDataType & {
 	componentType: 'checkbox';
 	getDefaultValue: () => boolean;
-	options?: never;
+	readonly options?: never;
 };
 
 export type SelectOrMultipleFieldsType = BaseFieldsDataType & {
 	componentType: 'select' | 'multiple';
 	getDefaultValue: () => string | number | string[];
-	options: string[] | number[];
+	readonly options: string[] | number[];
 };
 
 export type InputFieldsType = BaseFieldsDataType & {
 	componentType: 'input';
 	getDefaultValue: () => string;
-	options?: never;
+	readonly options?: never;
 };
 
 export type SelectValueType<T> = {

@@ -2,15 +2,16 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { Pagination } from '@/shared/components/pagination/Pagination';
-import { ShowingTestUI } from './ShowingTestUI';
+import { ExerciseUI } from './ExerciseUI';
 import { getTaskById } from './services/getTaskById';
-import styles from './showingTest.module.css';
+import styles from './exerciseCard.module.css';
+import { getReadyQuestion } from './services/fetchDefinition';
 import {
 	EXERCISE_MODE,
 	ExerciseListType,
 	useExerciseProgressStore,
 } from '@/store/exercise-progress';
-import { getReadyQuestion } from './functions/fetchDefinition';
+import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
 
 const DEFAULT_DATA_TEST = {
 	id: '',
@@ -24,9 +25,10 @@ const DEFAULT_DATA_TEST = {
 	variants: {},
 };
 
-export const ShowingTest = () => {
+export const ExerciseCard = () => {
 	const navigate = useNavigate();
 	const { taskId = '', collectionsId = '' } = useParams();
+	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseListType>(DEFAULT_DATA_TEST);
 	const taskList = getTaskById(collectionsId);
 
@@ -53,6 +55,8 @@ export const ShowingTest = () => {
 	const setProgressFromLocalStore = useExerciseProgressStore(
 		(store) => store.setProgressFromLocalStore,
 	);
+
+	useBeforeunload(() => saveProgressToLocalStore(collectionsId));
 
 	const onNavigate = useCallback(
 		(id: string) => {
@@ -85,7 +89,8 @@ export const ShowingTest = () => {
 			})();
 		}
 		setProgressFromLocalStore(collectionsId);
-	}, [taskId]);
+		setIsAutoNavigate(false);
+	}, [taskId, taskList]);
 
 	useEffect(() => {
 		if (taskList) {
@@ -96,32 +101,27 @@ export const ShowingTest = () => {
 		};
 	}, [taskList]);
 
-	useEffect(() => {
-		if (task.isComplete) {
-			onNavigate(taskId);
-		}
-	}, [task.isComplete, onNavigate, taskId]);
-
 	return (
 		<WrapperCard>
 			<div className={styles.taskContainer}>
-				<button onClick={() => saveProgressToLocalStore(collectionsId)}>Save Progress</button>
 				{task && (
-					<ShowingTestUI
+					<ExerciseUI
 						key={taskId}
 						task={task}
+						setIsAutoNavigate={setIsAutoNavigate}
 						setTask={setTask}
 						updateProgress={setExerciseListProgress}
 					/>
 				)}
 				{exerciseListId && (
 					<Pagination
+						ids={exerciseListId}
 						currentId={`${taskId}`}
 						isRandom={isRandomMode}
-						ids={exerciseListId.map((i) => ({ id: `${i.id}` }))}
+						isAutoNavigate={isAutoNavigate}
 						navigateTo={(id: string) => onNavigate(id)}
-						totalCountOfQuestions={totalExerciseCorrectResponse}
-						correctQuestions={getExerciseProgressById(taskId)?.countCorrectAnswers || 0}
+						totalCount={totalExerciseCorrectResponse}
+						filedCount={getExerciseProgressById(taskId)?.countCorrectAnswers || 0}
 					/>
 				)}
 			</div>

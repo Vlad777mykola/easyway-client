@@ -5,6 +5,7 @@ import { getRandomInteger } from '@/shared/utils/get-random-integer';
 import { Flex, Progress } from 'antd';
 
 import styles from './pagination.module.css';
+import { useEffect } from 'react';
 
 const STEP = {
 	PREV: 'prev',
@@ -16,16 +17,24 @@ export const Pagination = ({
 	currentId,
 	navigateTo,
 	isRandom,
-	totalCountOfQuestions,
-	correctQuestions,
+	totalCount,
+	filedCount,
+	isAutoNavigate,
 }: {
 	isRandom: boolean;
 	currentId: string;
 	ids: { id: string }[];
 	navigateTo: (id: string) => void;
-	totalCountOfQuestions: number;
-	correctQuestions: number;
+	totalCount: number;
+	filedCount: number;
+	isAutoNavigate?: boolean;
 }) => {
+	useEffect(() => {
+		if (isAutoNavigate) {
+			swapQuestion(STEP.NEXT);
+		}
+	}, [isAutoNavigate]);
+
 	const swapQuestion = (move: string) => {
 		let currentIndex: number = ids.findIndex((item) => item.id === currentId);
 
@@ -69,11 +78,7 @@ export const Pagination = ({
 			)}
 			{isRandom && (
 				<Flex gap="small" vertical>
-					<Progress
-						percent={+`${correctQuestions}0`}
-						steps={totalCountOfQuestions}
-						showInfo={false}
-					/>
+					<Progress percent={+`${filedCount}0`} steps={totalCount} showInfo={false} />
 				</Flex>
 			)}
 		</>
