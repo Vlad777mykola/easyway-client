@@ -1,41 +1,38 @@
 import { ReactNode, useMemo } from 'react';
-import styles from './collectionDetails.module.css';
+import styles from './exerciseDetails.module.css';
 import { useParams } from 'react-router-dom';
 import { List } from '@/shared/components/list/List';
-import { getCollectionById } from './services/getCollectionById';
-import { FieldsDataType, Sidebar } from '../../shared/components/sidebar';
+import { getCollectionById } from '../collections/services/getCollectionById';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
+import { EXERCISE_CONFIG } from '@/store/exercise-progress/useExerciseProgressStore';
+import { EXERCISE_CONFIG_LABELS } from './constants';
 
-export const CollectionDetails = (): ReactNode => {
+export const ExerciseDetails = (): ReactNode => {
 	const { collectionsId } = useParams();
 	const setCollectionsExerciseConfig = useExerciseProgressStore(
 		(store) => store.setCollectionsExerciseConfig,
 	);
-	const getExerciseMode = useExerciseProgressStore((store) => store.getExerciseMode);
-	const getExerciseCorrectResponseCount = useExerciseProgressStore(
-		(store) => store.getExerciseCorrectResponseCount,
-	);
+	const getExerciseConfig = useExerciseProgressStore((store) => store.getExerciseConfig);
 
 	const data = useMemo(() => getCollectionById(collectionsId || ''), [collectionsId]);
 
 	const fieldsData: FieldsDataType[] = [
 		{
-			id: '14',
-			keyValue: 'exerciseMode',
+			keyValue: EXERCISE_CONFIG.MODE,
 			options: Object.values(EXERCISE_MODE),
-			getDefaultValue: getExerciseMode,
-			label: 'Exercise Mode',
-			componentType: 'select',
+			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.MODE),
+			label: EXERCISE_CONFIG_LABELS.MODE,
+			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
 		},
 		{
-			id: '12',
-			keyValue: 'exerciseCorrectResponse',
+			keyValue: EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE,
 			options: [5, 10],
-			getDefaultValue: getExerciseCorrectResponseCount,
-			label: 'Exercise correct response',
-			componentType: 'select' as const,
-		} as const,
-	];
+			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE),
+			label: EXERCISE_CONFIG_LABELS.CORRECT_RESPONSE,
+			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
+		},
+	] as const;
 
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setCollectionsExerciseConfig(key, value);

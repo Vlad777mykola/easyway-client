@@ -1,3 +1,4 @@
+import { SIDE_BAR_COMPONENT_TYPE } from './constants';
 import {
 	FieldsType,
 	InputFieldsType,
@@ -6,13 +7,16 @@ import {
 } from './type';
 
 export const isCheckbox = (item: FieldsType): item is CheckboxFieldsType => {
-	return item.componentType === 'checkbox';
+	return item.componentType === SIDE_BAR_COMPONENT_TYPE.CHECKBOX;
 };
 
 export const isInput = (item: FieldsType): item is InputFieldsType => {
-	return item.componentType === 'input';
+	return item.componentType === SIDE_BAR_COMPONENT_TYPE.INPUT;
 };
 
 export const isSelectOrMultiple = (item: FieldsType): item is SelectOrMultipleFieldsType => {
-	return item.componentType === 'select' || item.componentType === 'multiple';
+	return (
+		item.componentType === SIDE_BAR_COMPONENT_TYPE.SELECT ||
+		item.componentType === SIDE_BAR_COMPONENT_TYPE.MULTIPLE
+	);
 };

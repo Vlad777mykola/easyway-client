@@ -25,7 +25,6 @@ export const Collections = (): ReactNode => {
 
 	const fieldsData: FieldsDataType[] = [
 		{
-			id: '13',
 			keyValue: 'title',
 			getDefaultValue: getTitle,
 			label: 'Title',
@@ -33,7 +32,6 @@ export const Collections = (): ReactNode => {
 			placeholder: 'Title',
 		},
 		{
-			id: '18',
 			keyValue: 'subtitle',
 			getDefaultValue: getSubtitle,
 			label: 'Subtitle',
@@ -41,7 +39,6 @@ export const Collections = (): ReactNode => {
 			placeholder: 'Subtitle',
 		},
 		{
-			id: '14',
 			keyValue: 'level',
 			options: [LEVEL.ADVANCED, LEVEL.BEGINNER, LEVEL.INTERMEDIATE],
 			getDefaultValue: getLevel,
@@ -49,7 +46,6 @@ export const Collections = (): ReactNode => {
 			componentType: 'select',
 		} as const,
 		{
-			id: '15',
 			keyValue: 'category',
 			options: Object.values(TOPIC_TENSES),
 			getDefaultValue: getCategory,
@@ -57,7 +53,6 @@ export const Collections = (): ReactNode => {
 			componentType: 'multiple',
 		} as const,
 		{
-			id: '16',
 			keyValue: 'learningStyle',
 			options: [
 				LEARNING_STYLE.SELECTING_MATCHING,
@@ -70,7 +65,6 @@ export const Collections = (): ReactNode => {
 			componentType: 'select',
 		},
 		{
-			id: '17',
 			keyValue: 'topic',
 			options: [
 				TOPIC_TENSES.ASPECTS,
@@ -95,7 +89,6 @@ export const Collections = (): ReactNode => {
 			componentType: 'multiple',
 		},
 		{
-			id: '18',
 			keyValue: 'learnByInterest',
 			options: [
 				LEARN_BY_INTEREST.BOOKS,
@@ -108,7 +101,6 @@ export const Collections = (): ReactNode => {
 			componentType: 'select',
 		},
 		{
-			id: '19',
 			keyValue: 'learnBySkill',
 			options: [
 				LEARN_BY_SKILL.LISTENING,

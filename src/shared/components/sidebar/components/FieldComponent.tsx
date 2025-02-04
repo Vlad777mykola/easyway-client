@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Select } from '@/ui-components/Select';
 import { Input } from '@/ui-components/Input';
 import { Checkbox } from '@/ui-components/Checkbox';
-import { CommonStateType, FieldsType } from './type';
-import { isCheckbox, isInput, isSelectOrMultiple } from './utils';
+import { CommonStateType, FieldsType } from '../type';
+import { isCheckbox, isInput, isSelectOrMultiple } from '../utils';
 import styles from './fieldComponent.module.css';
+import { SIDE_BAR_COMPONENT_TYPE } from '../constants';
 
 export const FieldComponent = ({
 	item,
@@ -29,7 +30,11 @@ export const FieldComponent = ({
 					className={styles.select}
 					placeholder={item.label}
 					value={selectValue}
-					mode={item.componentType === 'multiple' ? 'multiple' : undefined}
+					mode={
+						item.componentType === SIDE_BAR_COMPONENT_TYPE.MULTIPLE
+							? SIDE_BAR_COMPONENT_TYPE.MULTIPLE
+							: undefined
+					}
 					onChange={(value) => change(item.keyValue, value)}
 					options={item.options.map((option) => ({ value: option, label: option }))}
 				/>

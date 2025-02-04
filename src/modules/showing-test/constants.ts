@@ -1,5 +1,10 @@
 import type { Variants } from './services/showVariants';
 
+export const EXERCISE_CONFIG_LABELS = {
+	MODE: 'Exercise Mode',
+	CORRECT_RESPONSE: 'Exercise correct response',
+} as const;
+
 export const MAX_VARIANTS = 8;
 
 export const PRONOUN_CATEGORIES: Variants = {

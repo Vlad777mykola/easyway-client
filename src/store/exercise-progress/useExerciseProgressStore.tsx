@@ -7,6 +7,11 @@ export const EXERCISE_MODE = {
 	INFINITIVE_MODE: 'infinitiveMode',
 } as const;
 
+export const EXERCISE_CONFIG = {
+	MODE: 'exerciseMode',
+	TOTAL_CORRECT_RESPONSE: 'exerciseCorrectResponse',
+} as const;
+
 export type ExerciseListType = {
 	id: string;
 	exercise: string;
@@ -36,6 +41,7 @@ type ExerciseConfigType = {
 	exerciseMode: ExerciseModeType;
 	exerciseCorrectResponse: number;
 };
+type ExerciseConfigKeyType = keyof ExerciseConfigType;
 
 type ExerciseStoreState = {
 	exerciseListIds: { id: string }[];
@@ -47,8 +53,7 @@ type ExerciseStoreState = {
 
 type ExerciseStoreActions = {
 	setExerciseListIds: <T extends { id: string }>(exerciseList: T[]) => void;
-	getExerciseMode: () => ExerciseModeType;
-	getExerciseCorrectResponseCount: () => number;
+	getExerciseConfig: (key: ExerciseConfigKeyType) => ExerciseModeType | number;
 	setCollectionsExerciseConfig: (
 		key: string,
 		value: number[] | string | boolean | string[] | number,
@@ -94,11 +99,8 @@ export const useExerciseProgressStore = create<ExerciseStoreType>()((set, get) =
 		}));
 	},
 
-	getExerciseCorrectResponseCount: () => {
-		return get().collectionsExerciseConfig.exerciseCorrectResponse;
-	},
-	getExerciseMode: () => {
-		return get().collectionsExerciseConfig.exerciseMode;
+	getExerciseConfig: (key) => {
+		return get().collectionsExerciseConfig[key];
 	},
 
 	getExerciseById: (id) => {
