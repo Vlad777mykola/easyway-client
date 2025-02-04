@@ -2,9 +2,9 @@ import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { getRandomInteger } from '@/shared/utils/get-random-integer';
-import { Flex, Progress } from 'antd';
 
 import styles from './pagination.module.css';
+import { Progress } from '@/shared/components/progress';
 
 const STEP = {
 	PREV: 'prev',
@@ -67,15 +67,7 @@ export const Pagination = ({
 					))}
 				</div>
 			)}
-			{isRandom && (
-				<Flex gap="small" vertical>
-					<Progress
-						percent={+`${correctQuestions}0`}
-						steps={totalCountOfQuestions}
-						showInfo={false}
-					/>
-				</Flex>
-			)}
+			{isRandom && <Progress filledSteps={correctQuestions} totalSteps={totalCountOfQuestions} />}
 		</>
 	);
 };
