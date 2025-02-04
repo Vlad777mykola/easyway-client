@@ -37,7 +37,6 @@ export const ShowingTestUI = ({
 			exerciseAnswer[currentWord].replace(/[^a-zA-Z0-9\s]/g, '').toLocaleLowerCase();
 		const isComplete = currentWord + 1 === exerciseAnswer.length;
 		if (isComplete) {
-			console.log('//////isComplete', isCorrectWord);
 			updateProgress(task.id, isCorrectWord);
 		}
 		// const utterance = new SpeechSynthesisUtterance(answer);
