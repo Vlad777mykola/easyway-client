@@ -1,14 +1,14 @@
 .progress {
-  display: flex;
-  gap: 10px;;
+	display: flex;
+	gap: 10px;
 }
 
 .progressItem {
-  width: 10px;
-  height: 10px;
-  background: grey;
+	width: 10px;
+	height: 10px;
+	background: grey;
 }
 
 .filledPass {
-  background: green;
+	background: green;
 }
