@@ -6,13 +6,8 @@ export const Item = <
 	T extends {
 		title: string;
 		id: string;
-		subtitle: string;
 		category: string[];
-		learningStyle: string;
-		level: string;
 		topic: string[];
-		learnByInterest: string;
-		learnBySkill: string;
 	},
 >({
 	data,
@@ -28,8 +23,6 @@ export const Item = <
 	return (
 		<section onClick={() => onClick(data.id)} className={styles.itemContainer}>
 			<h1 className={styles.title}>{data.title}</h1>
-			<h2 className={styles.subtitle}>{data.subtitle}</h2>
-			<p className={styles.subtitle}>{data.level}</p>
 			<div className={styles.infoCard}>
 				<div className={styles.topicContainer}>
 					<p className={styles.nameOfTopic}>Topic:</p>
@@ -48,18 +41,6 @@ export const Item = <
 							{index < data.category.length - 1 ? ',' : '.'}
 						</p>
 					))}
-				</div>
-				<div className={styles.topicContainer}>
-					<p className={styles.nameOfTopic}>Learning style:</p>
-					<p className={styles.dataInfo}>{data.learningStyle}.</p>
-				</div>
-				<div className={styles.topicContainer}>
-					<p className={styles.nameOfTopic}>Learning by interest:</p>
-					<p className={styles.dataInfo}>{data.learnByInterest}.</p>
-				</div>
-				<div className={styles.topicContainer}>
-					<p className={styles.nameOfTopic}>Learning by skill:</p>
-					<p className={styles.dataInfo}>{data.learnBySkill}.</p>
 				</div>
 			</div>
 		</section>

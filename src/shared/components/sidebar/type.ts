@@ -1,3 +1,5 @@
+import { Ref } from './Sidebar';
+
 export type BaseFieldsDataType = {
 	keyValue: string;
 	label?: string;
@@ -35,7 +37,7 @@ export type CommonStateType<T extends FieldsType> = T extends CheckboxFieldsType
 export type SideBarType<T> = {
 	title: string;
 	fieldsData: T[];
-	onClear?: () => void;
+	onClear?: (refs: Ref) => void;
 	onSearch?: () => void;
 	onChange: (key: string, value: number[] | string | boolean | string[] | number) => void;
 };
