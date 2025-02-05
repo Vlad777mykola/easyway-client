@@ -23,9 +23,14 @@ export const Sidebar = <T extends FieldsDataType>({
 }: SideBarType<T>) => {
 	const { isMobile, isLaptop } = useContext(ScreenSizeContext);
 
-	const refs: Ref = useRef([]);
+	const refs: Ref = useRef<Clear[]>([]);
 
-	console.log('REFS', refs);
+	const handleClear = () => {
+		if (onClear) {
+			onClear();
+		}
+		refs.current.forEach((_, index) => refs.current[index].clear());
+	};
 
 	const sideConfigComponent = (
 		<Wrapper>
@@ -34,7 +39,9 @@ export const Sidebar = <T extends FieldsDataType>({
 				{fieldsData &&
 					fieldsData.map((item, index) => (
 						<FieldComponent
-							ref={(el) => (refs.current[index] = el as Clear)}
+							ref={(el: Clear) => {
+								refs.current[index] = el;
+							}}
 							key={item.keyValue}
 							item={item}
 							onChange={onChange}
@@ -52,7 +59,7 @@ export const Sidebar = <T extends FieldsDataType>({
 					)}
 					{onClear && (
 						<div className={styles.buttonContainer}>
-							<Button block onClick={() => onClear(refs)}>
+							<Button block onClick={handleClear}>
 								<Icon icon="clear" /> Clear
 							</Button>
 						</div>

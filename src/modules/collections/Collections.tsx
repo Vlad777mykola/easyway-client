@@ -4,7 +4,6 @@ import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/c
 import { TOPIC_TENSES } from './constants/store-constants';
 import { useCollectionFilter } from '@/store/collection-filter';
 import { FilterDataKeyType } from '@/store/collection-filter/useCollectionFilterStore';
-import { Ref } from '@/shared/components/sidebar/Sidebar';
 import { FILTER_LABELS } from '@/shared/constants/data';
 import styles from './collections.module.css';
 
@@ -12,12 +11,7 @@ export const Collections = (): ReactNode => {
 	const setFilterDataOnSearch = useCollectionFilter((store) => store.setFilterDataOnSearch);
 	const setFilter = useCollectionFilter((store) => store.setFilter);
 	const setClean = useCollectionFilter((store) => store.setClean);
-
-	const filterCollectionData = useCollectionFilter((store) => store.filterCollectionData);
 	const getFilterCollectionData = useCollectionFilter((store) => store.getFilterCollectionData);
-	const store = useCollectionFilter((store) => store);
-	console.log('FILTER COLLECTION DATA', filterCollectionData);
-	console.log('STORE', store);
 
 	const fieldsData: FieldsDataType[] = [
 		{
@@ -58,11 +52,8 @@ export const Collections = (): ReactNode => {
 		setFilterDataOnSearch();
 	};
 
-	const onClear = (refs: Ref) => {
-		console.log('COMPONENT REF CLEAR: ', refs);
-		console.log('COMPONENT REF CLEAR VALUE: ', refs.current);
+	const onClear = () => {
 		setClean();
-		refs.current.forEach((_, index) => refs.current[index].clear());
 	};
 
 	return (
