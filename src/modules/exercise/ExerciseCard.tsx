@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { Pagination } from '@/shared/components/pagination/Pagination';
-import { ExerciseUI } from './ExerciseUI';
+import { ExerciseUI } from './components/ExerciseUI';
 import { getTaskById } from './services/getTaskById';
 import styles from './exerciseCard.module.css';
 import { getReadyQuestion } from './services/fetchDefinition';
