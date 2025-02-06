@@ -1,22 +1,31 @@
-import { useState } from 'react';
+import { useImperativeHandle, useState } from 'react';
 import { Select } from '@/ui-components/Select';
 import { Input } from '@/ui-components/Input';
 import { Checkbox } from '@/ui-components/Checkbox';
-import { CommonStateType, FieldsType } from '../type';
+import { SIDE_BAR_COMPONENT_TYPE } from '../constants';
+import type { CommonStateType, FieldsType } from '../type';
 import { isCheckbox, isInput, isSelectOrMultiple } from '../utils';
 import styles from './fieldComponent.module.css';
-import { SIDE_BAR_COMPONENT_TYPE } from '../constants';
+import { Clear } from '../Sidebar';
 
 export const FieldComponent = ({
 	item,
 	onChange,
+	ref,
 }: {
 	item: FieldsType;
 	onChange: (key: string, value: string | boolean | string[] | number[] | number) => void;
+	ref: (el: Clear) => void;
 }) => {
 	const [selectValue, setSelectValue] = useState<CommonStateType<FieldsType>>(
 		item.getDefaultValue(),
 	);
+
+	useImperativeHandle(ref, () => ({
+		clear: () => {
+			setSelectValue(item.getDefaultValue());
+		},
+	}));
 
 	const change = (key: string, value: CommonStateType<FieldsType>) => {
 		setSelectValue(value);

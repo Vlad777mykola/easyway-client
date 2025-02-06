@@ -1,131 +1,71 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { ListCollections } from './components/lits-collections/ListCollections';
-import { FieldsDataType, Sidebar } from '../../shared/components/sidebar';
-import styles from './collections.module.css';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
+import { TOPIC_TENSES } from './constants/store-constants';
 import { useCollectionFilter } from '@/store/collection-filter';
-import {
-	LEVEL,
-	TOPIC_TENSES,
-	LEARNING_STYLE,
-	LEARN_BY_INTEREST,
-	LEARN_BY_SKILL,
-} from './constants/store-constants';
+import { FilterDataKeyType } from '@/store/collection-filter/useCollectionFilterStore';
+import { FILTER_LABELS } from '@/shared/constants/data';
+import styles from './collections.module.css';
 
 export const Collections = (): ReactNode => {
 	const setFilterDataOnSearch = useCollectionFilter((store) => store.setFilterDataOnSearch);
-	const getLevel = useCollectionFilter((store) => store.getLevel);
-	const getCategory = useCollectionFilter((store) => store.getCategory);
-	const getLearningStyle = useCollectionFilter((store) => store.getLearningStyle);
-	const getTopic = useCollectionFilter((store) => store.getTopic);
-	const getTitle = useCollectionFilter((store) => store.getTitle);
-	const getSubtitle = useCollectionFilter((store) => store.getSubtitle);
-	const getLearnByInterest = useCollectionFilter((store) => store.getLearnByInterest);
-	const getLearnBySkill = useCollectionFilter((store) => store.getLearnBySkill);
 	const setFilter = useCollectionFilter((store) => store.setFilter);
+	const setClean = useCollectionFilter((store) => store.setClean);
+	const getFilterCollectionData = useCollectionFilter((store) => store.getFilterCollectionData);
 
 	const fieldsData: FieldsDataType[] = [
 		{
-			keyValue: 'title',
-			getDefaultValue: getTitle,
-			label: 'Title',
-			componentType: 'input',
-			placeholder: 'Title',
+			keyValue: FILTER_LABELS.title,
+			getDefaultValue: () =>
+				getFilterCollectionData(FILTER_LABELS.title as FilterDataKeyType) as string,
+			label: FILTER_LABELS.title,
+			componentType: SIDE_BAR_COMPONENT_TYPE.INPUT,
+			placeholder: FILTER_LABELS.title,
 		},
 		{
-			keyValue: 'subtitle',
-			getDefaultValue: getSubtitle,
-			label: 'Subtitle',
-			componentType: 'input',
-			placeholder: 'Subtitle',
-		},
-		{
-			keyValue: 'level',
-			options: [LEVEL.ADVANCED, LEVEL.BEGINNER, LEVEL.INTERMEDIATE],
-			getDefaultValue: getLevel,
-			label: 'Level',
-			componentType: 'select',
-		} as const,
-		{
-			keyValue: 'category',
+			keyValue: FILTER_LABELS.category,
 			options: Object.values(TOPIC_TENSES),
-			getDefaultValue: getCategory,
-			label: 'Category',
-			componentType: 'multiple',
-		} as const,
-		{
-			keyValue: 'learningStyle',
-			options: [
-				LEARNING_STYLE.SELECTING_MATCHING,
-				LEARNING_STYLE.AUDITORY_LEARNER,
-				LEARNING_STYLE.WRITING_LEARNER,
-				LEARNING_STYLE.VISUAL_LEARNER,
-			],
-			getDefaultValue: getLearningStyle,
-			label: 'Learning Style',
-			componentType: 'select',
+			getDefaultValue: () =>
+				getFilterCollectionData(FILTER_LABELS.category as FilterDataKeyType) as string[],
+			label: FILTER_LABELS.category,
+			componentType: SIDE_BAR_COMPONENT_TYPE.MULTIPLE,
 		},
 		{
-			keyValue: 'topic',
-			options: [
-				TOPIC_TENSES.ASPECTS,
-				TOPIC_TENSES.FUTURE_CONTINUOUS,
-				TOPIC_TENSES.FUTURE_PERFECT,
-				TOPIC_TENSES.FUTURE_PERFECT_CONTINUOUS,
-				TOPIC_TENSES.FUTURE_SIMPLE,
-				TOPIC_TENSES.FUTURE_WITH_GOING_TO,
-				TOPIC_TENSES.PAST_CONTINUOUS,
-				TOPIC_TENSES.PAST_SIMPLE,
-				TOPIC_TENSES.PAST_WITH_GOING_TO,
-				TOPIC_TENSES.PRESENT_CONTINUOUS,
-				TOPIC_TENSES.PRESENT_PERFECT,
-				TOPIC_TENSES.PRESENT_PERFECT_CONTINUOUS,
-				TOPIC_TENSES.PRESENT_SIMPLE,
-				TOPIC_TENSES.TALKING_ABOUT_THE_FUTURE,
-				TOPIC_TENSES.TALKING_ABOUT_THE_PAST,
-				TOPIC_TENSES.TALKING_ABOUT_THE_PRESENT,
-			],
-			getDefaultValue: getTopic,
-			label: 'Topic',
-			componentType: 'multiple',
+			keyValue: FILTER_LABELS.topic,
+			options: Object.values(TOPIC_TENSES),
+			getDefaultValue: () =>
+				getFilterCollectionData(FILTER_LABELS.topic as FilterDataKeyType) as string[],
+			label: FILTER_LABELS.topic,
+			componentType: SIDE_BAR_COMPONENT_TYPE.MULTIPLE,
 		},
-		{
-			keyValue: 'learnByInterest',
-			options: [
-				LEARN_BY_INTEREST.BOOKS,
-				LEARN_BY_INTEREST.MOVIES_INTEREST,
-				LEARN_BY_INTEREST.MUSIC,
-				LEARN_BY_INTEREST.NEWS_BLOGS,
-			],
-			getDefaultValue: getLearnByInterest,
-			label: 'Learn by interest',
-			componentType: 'select',
-		},
-		{
-			keyValue: 'learnBySkill',
-			options: [
-				LEARN_BY_SKILL.LISTENING,
-				LEARN_BY_SKILL.READING,
-				LEARN_BY_SKILL.SPEAKING,
-				LEARN_BY_SKILL.WRITING,
-			],
-			getDefaultValue: getLearnBySkill,
-			label: 'Learn by skill',
-			componentType: 'select',
-		},
-	];
+	] as const;
 
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setFilter(key, value);
 	};
 
+	useEffect(() => {
+		setFilterDataOnSearch();
+	}, []);
+
 	const onSearch = () => {
 		setFilterDataOnSearch();
+	};
+
+	const onClear = () => {
+		setClean();
 	};
 
 	return (
 		<div className={styles.collectionsContainer}>
 			<div className={styles.sidebarContainer}>
-				<Sidebar title="Filter" fieldsData={fieldsData} onChange={onChange} onSearch={onSearch} />
+				<Sidebar
+					title="Filter"
+					fieldsData={fieldsData}
+					onChange={onChange}
+					onSearch={onSearch}
+					onClear={onClear}
+				/>
 			</div>
 			<div className={styles.listCollectionsContainer}>
 				<ListCollections />
