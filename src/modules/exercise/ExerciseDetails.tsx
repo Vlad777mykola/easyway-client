@@ -1,12 +1,12 @@
 import { ReactNode, useMemo } from 'react';
-import styles from './exerciseDetails.module.css';
 import { useParams } from 'react-router-dom';
 import { List } from '@/shared/components/list/List';
+import { EXERCISE_CONFIG } from '@/store/exercise-progress/useExerciseProgressStore';
+import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
 import { getCollectionById } from '../collections/services/getCollectionById';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
-import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
-import { EXERCISE_CONFIG } from '@/store/exercise-progress/useExerciseProgressStore';
 import { EXERCISE_CONFIG_LABELS } from './constants';
+import styles from './exerciseDetails.module.css';
 
 export const ExerciseDetails = (): ReactNode => {
 	const { collectionsId } = useParams();
@@ -14,7 +14,6 @@ export const ExerciseDetails = (): ReactNode => {
 		(store) => store.setCollectionsExerciseConfig,
 	);
 	const getExerciseConfig = useExerciseProgressStore((store) => store.getExerciseConfig);
-
 	const data = useMemo(() => getCollectionById(collectionsId || ''), [collectionsId]);
 
 	const fieldsData: FieldsDataType[] = [

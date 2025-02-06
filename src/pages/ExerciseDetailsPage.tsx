@@ -1,4 +1,4 @@
-import { ExerciseDetails } from '@/modules/showing-test';
+import { ExerciseDetails } from '@/modules/exercise';
 
 const ExerciseDetailsPage = () => {
 	return <ExerciseDetails />;

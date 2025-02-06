@@ -1,4 +1,4 @@
-import { ExerciseCard } from '@/modules/showing-test';
+import { ExerciseCard } from '@/modules/exercise';
 
 export const CompleteTest = () => {
 	return <ExerciseCard />;

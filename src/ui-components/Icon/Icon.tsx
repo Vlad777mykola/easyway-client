@@ -1,6 +1,6 @@
 /* eslint-disable css-modules/no-unused-class */
-import { Size, Variant } from '@/shared/common-ui/parameters';
-import type { SizeType, VariantType } from '@/shared/common-ui/parameters';
+import { Size, Variant } from '@/shared/constants/parameters';
+import type { SizeType, VariantType } from '@/shared/constants/parameters';
 import { classes } from '@/shared/utils/classes';
 
 import {
