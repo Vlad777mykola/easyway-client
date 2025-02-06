@@ -1,100 +1,72 @@
 import {
 	TOPIC_TENSES,
-	LEVEL,
+	/* 	LEVEL,
 	LEARNING_STYLE,
 	LEARN_BY_INTEREST,
-	LEARN_BY_SKILL,
+	LEARN_BY_SKILL, */
 } from '@/modules/collections/constants/store-constants';
 import { create } from 'zustand';
 import { filterCollections } from './service';
 
+const DEFAULT_FILTER = {
+	title: '',
+	topic: [],
+	category: [],
+};
+
 type CollectionTensesType = (typeof TOPIC_TENSES)[keyof typeof TOPIC_TENSES];
-type LevelType = (typeof LEVEL)[keyof typeof LEVEL];
+/* type LevelType = (typeof LEVEL)[keyof typeof LEVEL];
 type LearningStyleType = (typeof LEARNING_STYLE)[keyof typeof LEARNING_STYLE];
 type LearnByInterestType = (typeof LEARN_BY_INTEREST)[keyof typeof LEARN_BY_INTEREST];
-type LearnBySkillType = (typeof LEARN_BY_SKILL)[keyof typeof LEARN_BY_SKILL];
+type LearnBySkillType = (typeof LEARN_BY_SKILL)[keyof typeof LEARN_BY_SKILL]; */
 
 export type CollectionType = {
 	id: string;
 	title: string;
-	subtitle: string;
-	level: string;
+	/* subtitle: string; */
+	/* level: string; */
 	category: string[];
 	topic: string[];
-	learningStyle: string;
+	/* 	learningStyle: string;
 	learnByInterest: string;
-	learnBySkill: string;
+	learnBySkill: string; */
 };
 
-export type FilterDatatype = {
+export type FilterDataType = {
 	title: string;
 	topic: CollectionTensesType[];
-	subtitle: string;
+	/* subtitle: string; */
 	category: CollectionTensesType[];
-	level: LevelType;
+	/* level: LevelType;
 	learningStyle: LearningStyleType;
 	learnByInterest: LearnByInterestType;
-	learnBySkill: LearnBySkillType;
+	learnBySkill: LearnBySkillType; */
 };
 
+export type FilterDataKeyType = keyof FilterDataType;
+
 type CollectionFilterStoreState = {
-	filterCollectionData: FilterDatatype;
+	filterCollectionData: FilterDataType;
 	collectionsData: CollectionType[];
 	filteredCollectionsData: CollectionType[];
 };
 
 type CollectionFilterStoreActions = {
-	getLevel: () => LevelType;
-	getTopic: () => CollectionTensesType[];
-	getTitle: () => string;
-	getSubtitle: () => string;
-	getCategory: () => CollectionTensesType[];
-	getLearningStyle: () => LearningStyleType;
-	getLearnByInterest: () => LearnByInterestType;
-	getLearnBySkill: () => LearnBySkillType;
+	getFilterCollectionData: (key: FilterDataKeyType) => string | string[];
 	setFilter: (key: string, value: number[] | string | boolean | string[] | number) => void;
 	setCollections: (collections: CollectionType[]) => void;
 	setFilterDataOnSearch: () => void;
+	setClean: () => void;
 };
 
 export type CollectionFilterStoreType = CollectionFilterStoreState & CollectionFilterStoreActions;
 
 export const useCollectionFilter = create<CollectionFilterStoreType>()((set, get) => ({
-	filterCollectionData: {
-		title: '',
-		subtitle: '',
-		topic: [TOPIC_TENSES.ASPECTS, TOPIC_TENSES.FUTURE_CONTINUOUS],
-		category: [TOPIC_TENSES.PRESENT_SIMPLE, TOPIC_TENSES.PAST_SIMPLE],
-		level: LEVEL.INTERMEDIATE,
-		learningStyle: LEARNING_STYLE.SELECTING_MATCHING,
-		learnByInterest: LEARN_BY_INTEREST.BOOKS,
-		learnBySkill: LEARN_BY_SKILL.LISTENING,
-	},
+	filterCollectionData: DEFAULT_FILTER,
 	collectionsData: [],
 	filteredCollectionsData: [],
-	getLevel: () => {
-		return get().filterCollectionData.level;
-	},
-	getTopic: () => {
-		return get().filterCollectionData.topic;
-	},
-	getTitle: () => {
-		return get().filterCollectionData.title;
-	},
-	getSubtitle: () => {
-		return get().filterCollectionData.subtitle;
-	},
-	getCategory: () => {
-		return get().filterCollectionData.category;
-	},
-	getLearningStyle: () => {
-		return get().filterCollectionData.learningStyle;
-	},
-	getLearnByInterest: () => {
-		return get().filterCollectionData.learnByInterest;
-	},
-	getLearnBySkill: () => {
-		return get().filterCollectionData.learnBySkill;
+	getFilterCollectionData: (key: FilterDataKeyType) => {
+		return get().filterCollectionData[key];
 	},
 	setFilter: (key, value) => {
 		set((state) => {
@@ -113,6 +85,11 @@ export const useCollectionFilter = create<CollectionFilterStoreType>()((set, get
 
 		set((state) => {
 			return { ...state, filteredCollectionsData: filteredData };
+		});
+	},
+	setClean: () => {
+		set((state) => {
+			return { ...state, filterCollectionData: DEFAULT_FILTER };
 		});
 	},
 }));

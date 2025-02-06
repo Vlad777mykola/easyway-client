@@ -1,24 +1,12 @@
-import type { CollectionType, FilterDatatype } from './useCollectionFilterStore';
+import type { CollectionType, FilterDataType } from './useCollectionFilterStore';
 
-export const filterCollections = (data: CollectionType[], filterData: FilterDatatype) => {
-	const { title, topic, subtitle, category, level, learningStyle, learnByInterest, learnBySkill } =
-		filterData;
+export const filterCollections = (data: CollectionType[], filterData: FilterDataType) => {
+	const { title, topic, category } = filterData;
 	return data.filter((item) => {
 		return (
 			(title ? item.title.toLowerCase().includes(title.toLowerCase()) : true) &&
-			(subtitle ? item.subtitle.toLowerCase().includes(subtitle.toLowerCase()) : true) &&
-			(level ? item.level.toLocaleLowerCase() === level.toLocaleLowerCase() : true) &&
 			(category.length > 0 ? category.some((cat) => item.category.includes(cat)) : true) &&
-			(learningStyle
-				? item.learningStyle.toLocaleLowerCase() === learningStyle.toLocaleLowerCase()
-				: true) &&
-			(topic.length > 0 ? topic.some((top) => item.topic.includes(top)) : true) &&
-			(learnBySkill
-				? item.learnBySkill.toLocaleLowerCase() === learnBySkill.toLocaleLowerCase()
-				: true) &&
-			(learnByInterest
-				? item.learnByInterest.toLocaleLowerCase() === learnByInterest.toLocaleLowerCase()
-				: true)
+			(topic.length > 0 ? topic.some((top) => item.topic.includes(top)) : true)
 		);
 	});
 };

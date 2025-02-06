@@ -37,6 +37,12 @@ export const ALL_COLLECTIONS_TASKS_BY_ID = new Map<string, ExerciseResponseType[
 	['10', id3],
 ]);
 
+export const FILTER_LABELS = {
+	title: 'title',
+	topic: 'topic',
+	category: 'category',
+};
+
 export const DEFAULT_COLLECTIONS = [
 	{
 		id: '1',
@@ -54,7 +60,7 @@ export const DEFAULT_COLLECTIONS = [
 		title: 'Present perfect and past',
 		subtitle: 'Practice the sentence',
 		level: 'Intermediate',
-		category: ['Present perfect', 'Past Simple'],
+		category: ['Present Perfect', 'Past Simple'],
 		topic: ['Programming'],
 		learningStyle: 'Selecting/Matching',
 		learnByInterest: 'Books',
