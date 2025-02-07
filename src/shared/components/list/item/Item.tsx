@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './item.module.css';
 
-export const Item = <T extends { exerciseAnswer: string; id: string }>({
+export const Item = <T extends { explanation: string; exerciseAnswer: string; id: string }>({
 	data,
 }: {
 	data: T;
@@ -15,7 +15,8 @@ export const Item = <T extends { exerciseAnswer: string; id: string }>({
 	};
 	return (
 		<section onClick={() => onClick(data.id)} className={styles.itemContainer}>
-			{data.exerciseAnswer}
+			<p className={styles.dataItem}>{data.exerciseAnswer}</p>
+			<p className={styles.dataItem}>{data.explanation}</p>
 		</section>
 	);
 };
