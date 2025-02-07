@@ -1,4 +1,5 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useEffect, useMemo } from 'react';
+import { Statistics } from './components/Statistics';
 import { useParams } from 'react-router-dom';
 import { List } from '@/shared/components/list/List';
 import { EXERCISE_CONFIG } from '@/store/exercise-progress/useExerciseProgressStore';
@@ -7,17 +8,6 @@ import { getCollectionById } from '../collections/services/getCollectionById';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
 import styles from './exerciseDetails.module.css';
-import { Progress } from '@/ui-components/Progress';
-import { Wrapper } from '@/ui-components/Wrapper';
-
-const WRONG_CORRECT = {
-	wrong: 30,
-	correct: 40,
-};
-const INPROGRESS_RESOLVED = {
-	resolved: 30,
-	inProgress: 40,
-};
 
 export const ExerciseDetails = (): ReactNode => {
 	const { collectionsId } = useParams();
@@ -26,9 +16,10 @@ export const ExerciseDetails = (): ReactNode => {
 	);
 	const exersiceStore = useExerciseProgressStore((store) => store);
 	const getExerciseConfig = useExerciseProgressStore((store) => store.getExerciseConfig);
+	const setProgressFromLocalStore = useExerciseProgressStore(
+		(store) => store.setProgressFromLocalStore,
+	);
 	const data = useMemo(() => getCollectionById(collectionsId || ''), [collectionsId]);
-
-	console.log('exersiceStore', exersiceStore);
 
 	const fieldsData: FieldsDataType[] = [
 		{
@@ -47,38 +38,20 @@ export const ExerciseDetails = (): ReactNode => {
 		},
 	] as const;
 
+	useEffect(() => {
+		setProgressFromLocalStore(collectionsId || '');
+	}, []);
+
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setCollectionsExerciseConfig(key, value);
 	};
 
 	return (
 		<div className={styles.collectionsContainer}>
-			<Wrapper>
-				<div className={styles.progress}>
-					<h1 className={styles.collectionTitle}>Collection Progress</h1>
-					<div className={styles.statistics}>
-						<div className={styles.modeContainer}>
-							<h2 className={styles.modeTitle}>Random Mode</h2>
-							<Progress
-								success={{ percent: WRONG_CORRECT.correct }}
-								type="circle"
-								percent={WRONG_CORRECT.correct + WRONG_CORRECT.wrong}
-								strokeColor={'rgb(211, 47, 47)'}
-								format={() => `${WRONG_CORRECT.correct}%`}
-							/>
-						</div>
-						<div className={styles.modeContainer}>
-							<h2 className={styles.modeTitle}>Exam Mode</h2>
-							<Progress
-								type="circle"
-								success={{ percent: INPROGRESS_RESOLVED.resolved }}
-								percent={INPROGRESS_RESOLVED.resolved + INPROGRESS_RESOLVED.inProgress}
-								format={() => `${INPROGRESS_RESOLVED.resolved}%`}
-							/>
-						</div>
-					</div>
-				</div>
-			</Wrapper>
+			<Statistics
+				exerciseListProgress={exersiceStore.exerciseListProgress}
+				collectionsId={collectionsId || ''}
+			/>
 			<div className={styles.contentCollection}>
 				<div className={styles.sidebarContainer}>
 					<Sidebar title="Collection options" fieldsData={fieldsData} onChange={onChange} />

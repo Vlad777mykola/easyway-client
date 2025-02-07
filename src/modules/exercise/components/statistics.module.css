@@ -1,0 +1,52 @@
+.progress {
+	grid-area: progress;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-width: 1000px;
+	height: 200px;
+}
+
+.collectionTitle {
+	margin-bottom: 24px;
+}
+
+.clearProgress {
+	width: 100%;
+	display: flex;
+	justify-content: end;
+}
+
+.statistics {
+	display: flex;
+	justify-content: center;
+	gap: 0px 20%;
+	width: 100%;
+}
+
+.modeContainer {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+@media (max-width: 344px) {
+	.collectionTitle {
+		font-size: var(--font-size-l);
+	}
+}
+
+@media (max-width: 1024px) {
+	.progress {
+		min-width: 100%;
+		align-content: center;
+	}
+	.clearProgress {
+		margin-bottom: 20px;
+	}
+	.modeTitle {
+		font-size: var(--font-size-s);
+		margin-bottom: 15px;
+	}
+}
