@@ -1,4 +1,5 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useEffect, useMemo } from 'react';
+import { Statistics } from './components/Statistics';
 import { useParams } from 'react-router-dom';
 import { List } from '@/shared/components/list/List';
 import { EXERCISE_CONFIG } from '@/store/exercise-progress/useExerciseProgressStore';
@@ -13,7 +14,11 @@ export const ExerciseDetails = (): ReactNode => {
 	const setCollectionsExerciseConfig = useExerciseProgressStore(
 		(store) => store.setCollectionsExerciseConfig,
 	);
+	const exersiceStore = useExerciseProgressStore((store) => store);
 	const getExerciseConfig = useExerciseProgressStore((store) => store.getExerciseConfig);
+	const setProgressFromLocalStore = useExerciseProgressStore(
+		(store) => store.setProgressFromLocalStore,
+	);
 	const data = useMemo(() => getCollectionById(collectionsId || ''), [collectionsId]);
 
 	const fieldsData: FieldsDataType[] = [
@@ -33,15 +38,26 @@ export const ExerciseDetails = (): ReactNode => {
 		},
 	] as const;
 
+	useEffect(() => {
+		setProgressFromLocalStore(collectionsId || '');
+	}, []);
+
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setCollectionsExerciseConfig(key, value);
 	};
 
 	return (
 		<div className={styles.collectionsContainer}>
-			<div>Collections {collectionsId}</div>
-			<Sidebar title="Collection options" fieldsData={fieldsData} onChange={onChange} />
-			{data && <List data={data} />}
+			<Statistics
+				exerciseListProgress={exersiceStore.exerciseListProgress}
+				collectionsId={collectionsId || ''}
+			/>
+			<div className={styles.contentCollection}>
+				<div className={styles.sidebarContainer}>
+					<Sidebar title="Collection options" fieldsData={fieldsData} onChange={onChange} />
+				</div>
+				<div className={styles.listContainer}>{data && <List data={data} />}</div>
+			</div>
 		</div>
 	);
 };
