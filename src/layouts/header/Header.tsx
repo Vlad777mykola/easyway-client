@@ -13,10 +13,6 @@ const sideMenuItems = [
 		name: 'Collections',
 		link: '/collections',
 	},
-	{
-		name: 'Create Test',
-		link: '/test',
-	},
 ];
 
 const profileMenuItems = [

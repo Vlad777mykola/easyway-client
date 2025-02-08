@@ -1,11 +1,12 @@
+import { useEffect } from 'react';
 import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { getRandomInteger } from '@/shared/utils/get-random-integer';
 import { Progress } from '@/shared/components/progress';
+import { useDebounce } from '@/shared/hooks/use-debounce';
 
 import styles from './pagination.module.css';
-import { useEffect } from 'react';
 
 const STEP = {
 	PREV: 'prev',
@@ -29,11 +30,13 @@ export const Pagination = ({
 	filedCount: number;
 	isAutoNavigate?: boolean;
 }) => {
+	const debouncedAutoNavigate = useDebounce(isAutoNavigate, 1000);
+
 	useEffect(() => {
-		if (isAutoNavigate) {
+		if (debouncedAutoNavigate) {
 			swapQuestion(STEP.NEXT);
 		}
-	}, [isAutoNavigate]);
+	}, [debouncedAutoNavigate]);
 
 	const swapQuestion = (move: string) => {
 		let currentIndex: number = ids.findIndex((item) => item.id === currentId);

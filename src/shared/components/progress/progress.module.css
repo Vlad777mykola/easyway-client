@@ -10,5 +10,5 @@
 }
 
 .filledPass {
-	background: green;
+	background: var(--color-primary);
 }

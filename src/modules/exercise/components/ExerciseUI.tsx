@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
 import { ExerciseListType } from '@/store/exercise-progress';
+import { Typography } from '@/ui-components/Typography';
 import { classes } from '@/shared/utils/classes';
 
 import styles from './exerciseUI.module.css';
@@ -44,9 +45,9 @@ export const ExerciseUI = ({
 		if (isComplete && isCorrectAnswer && isCorrectWord) {
 			setIsAutoNavigate(true);
 		}
-		// const utterance = new SpeechSynthesisUtterance(answer);
-		// utterance.lang = 'en-US';
-		// window.speechSynthesis.speak(utterance);
+		const utterance = new SpeechSynthesisUtterance(answer);
+		utterance.lang = 'en-US';
+		window.speechSynthesis.speak(utterance);
 
 		setTask((prev: ExerciseListType) => {
 			return {
@@ -61,7 +62,9 @@ export const ExerciseUI = ({
 
 	return (
 		<div className={styles.testContainer}>
-			<h1 className={styles.topic}>{explanation}</h1>
+			<Typography type="secondary" className={styles.topic}>
+				{explanation}
+			</Typography>
 			<div className={styles.exercise}>{exercise}</div>
 			<div className={styles.correctAnswerContainer}>
 				<div
