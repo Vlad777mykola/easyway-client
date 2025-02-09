@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
-import { ExerciseListType } from '@/store/exercise-progress';
+import { ExerciseType } from '@/store/exercise-progress';
+import { Typography } from '@/ui-components/Typography';
 import { classes } from '@/shared/utils/classes';
 
 import styles from './exerciseUI.module.css';
@@ -12,8 +13,8 @@ export const ExerciseUI = ({
 	updateProgress,
 	setIsAutoNavigate,
 }: {
-	task: ExerciseListType;
-	setTask: Dispatch<SetStateAction<ExerciseListType>>;
+	task: ExerciseType;
+	setTask: Dispatch<SetStateAction<ExerciseType>>;
 	setIsAutoNavigate: Dispatch<SetStateAction<boolean>>;
 	updateProgress: (id: string, isCorrectWord: boolean) => void;
 }) => {
@@ -44,11 +45,11 @@ export const ExerciseUI = ({
 		if (isComplete && isCorrectAnswer && isCorrectWord) {
 			setIsAutoNavigate(true);
 		}
-		// const utterance = new SpeechSynthesisUtterance(answer);
-		// utterance.lang = 'en-US';
-		// window.speechSynthesis.speak(utterance);
+		const utterance = new SpeechSynthesisUtterance(answer);
+		utterance.lang = 'en-US';
+		window.speechSynthesis.speak(utterance);
 
-		setTask((prev: ExerciseListType) => {
+		setTask((prev: ExerciseType) => {
 			return {
 				...prev,
 				selectedAnswer: `${prev.selectedAnswer} ${word}`,
@@ -61,7 +62,9 @@ export const ExerciseUI = ({
 
 	return (
 		<div className={styles.testContainer}>
-			<h1 className={styles.topic}>{explanation}</h1>
+			<Typography type="secondary" className={styles.topic}>
+				{explanation}
+			</Typography>
 			<div className={styles.exercise}>{exercise}</div>
 			<div className={styles.correctAnswerContainer}>
 				<div

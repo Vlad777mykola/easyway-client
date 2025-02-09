@@ -7,9 +7,6 @@ type Props = {
 };
 
 export const Progress = ({ filledSteps, totalSteps }: Props) => {
-	console.log('FILLED STEPS', filledSteps);
-	console.log('TOTAL STEPS', totalSteps);
-
 	return (
 		<div className={styles.progress}>
 			{Array.from({ length: totalSteps }).map((_, index) => (
