@@ -46,8 +46,8 @@ export const FILTER_LABELS = {
 export const DEFAULT_COLLECTIONS = [
 	{
 		id: '1',
-		title: 'Words',
-		subtitle: 'Practice the Words',
+		title: 'JS Practice',
+		subtitle: 'Practice the questions',
 		level: 'Intermediate',
 		category: ['Present Simple', 'Past Simple'],
 		topic: ['Programming'],
@@ -57,8 +57,8 @@ export const DEFAULT_COLLECTIONS = [
 	},
 	{
 		id: '2',
-		title: 'Present perfect and past',
-		subtitle: 'Practice the sentence',
+		title: 'Css Practice',
+		subtitle: 'Practice the questions',
 		level: 'Intermediate',
 		category: ['Present Perfect', 'Past Simple'],
 		topic: ['Programming'],

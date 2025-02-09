@@ -3,15 +3,30 @@ import { create } from 'zustand';
 import { ExerciseResponseType } from '@/shared/constants/data';
 import { getReadyQuestion } from '@/modules/exercise/services/fetchDefinition';
 
+function shuffleArray(array: string[]) {
+	const newArr = [...array];
+	for (let i = newArr.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+	}
+	return newArr;
+}
+
 export const EXERCISE_MODE = {
 	isExam: 'examMode',
 	isRandom: 'randomMode',
 	isInfinitive: 'infinitiveMode',
 } as const;
 
+export const EXERCISE_FORMATE = {
+	isSelecting: 'selectingFormate',
+	isClassic: 'classicFormate',
+} as const;
+
 export const EXERCISE_CONFIG = {
 	MODE: 'exerciseMode',
 	TOTAL_CORRECT_RESPONSE: 'exerciseCorrectResponse',
+	FORMATE: 'exerciseFormate',
 } as const;
 
 export const DEFAULT_DATA_TEST = {
@@ -23,6 +38,8 @@ export const DEFAULT_DATA_TEST = {
 	currentWord: 0,
 	isComplete: false,
 	isCorrectAnswer: true,
+	explanationAnswer: [],
+	explanationVariants: [],
 	variants: {},
 };
 
@@ -35,12 +52,18 @@ export type ExerciseType = {
 	currentWord: number;
 	isComplete: boolean;
 	isCorrectAnswer: boolean;
+	explanationAnswer: string[];
+	explanationVariants: string[];
 	variants: { [key: string]: string[] };
 };
 
 type ExerciseModeType = (typeof EXERCISE_MODE)[keyof typeof EXERCISE_MODE];
+type ExerciseFormateType = (typeof EXERCISE_FORMATE)[keyof typeof EXERCISE_FORMATE];
 type AllExerciseModesType = {
 	[key in keyof typeof EXERCISE_MODE]: boolean;
+};
+type AllExerciseFormateType = {
+	[key in keyof typeof EXERCISE_FORMATE]: boolean;
 };
 type ExerciseListProgressType = {
 	id: string;
@@ -48,13 +71,14 @@ type ExerciseListProgressType = {
 };
 
 type CommonProgressDataType = {
-	collection: string;
+	collectionId: string;
 	resolvedExerciseIds: string[];
 };
 
 type ExerciseConfigType = {
 	exerciseMode: ExerciseModeType;
 	exerciseCorrectResponse: number;
+	exerciseFormate: ExerciseFormateType;
 };
 type ExerciseConfigKeyType = keyof ExerciseConfigType;
 
@@ -70,14 +94,17 @@ type ExerciseStoreState = {
 };
 
 type ExerciseStoreActions = {
-	setExerciseListResponse: (exerciseList: ExerciseResponseType[]) => void;
-	getExerciseConfig: (key: ExerciseConfigKeyType) => ExerciseModeType | number;
+	setExerciseListResponse: (exerciseList: ExerciseResponseType[], collectionId: string) => void;
+	getExerciseConfig: (
+		key: ExerciseConfigKeyType,
+	) => ExerciseModeType | number | ExerciseFormateType;
 	setCollectionsExerciseConfig: (
 		key: string,
 		value: number[] | string | boolean | string[] | number,
 	) => void;
 	getExerciseById: (id: string) => Promise<ExerciseType | null>;
 	getExerciseMode: () => AllExerciseModesType;
+	getExerciseFormate: () => AllExerciseFormateType;
 
 	setExerciseListProgress: (id: string, isResolved: boolean) => void;
 	getExerciseProgressById: (id: string) => ExerciseListProgressType | null;
@@ -96,17 +123,20 @@ export const useExerciseProgressStoreBase = create<ExerciseStoreType>()((set, ge
 	exerciseListProgress: [],
 	resolvedExerciseId: [],
 	commonProgressData: {
-		collection: '',
+		collectionId: '',
 		resolvedExerciseIds: [],
 	},
 	collectionsExerciseConfig: {
 		exerciseMode: EXERCISE_MODE.isRandom,
-		exerciseCorrectResponse: 1,
+		exerciseCorrectResponse: 5,
+		exerciseFormate: EXERCISE_FORMATE.isSelecting,
 	},
 
-	setExerciseListResponse: (exerciseList) => {
+	setExerciseListResponse: (exerciseList, collectionId) => {
 		const exerciseListResponse = get().exerciseListResponse;
-		if (exerciseListResponse?.length > 0) {
+		const id = get().commonProgressData.collectionId;
+
+		if (exerciseListResponse?.length > 0 && collectionId === id) {
 			return;
 		}
 		const isUntracedMode =
@@ -123,6 +153,7 @@ export const useExerciseProgressStoreBase = create<ExerciseStoreType>()((set, ge
 			...state,
 			exerciseListIds: ids,
 			exerciseListResponse: exerciseList,
+			commonProgressData: { ...state.commonProgressData, collectionId },
 		}));
 	},
 
@@ -148,6 +179,14 @@ export const useExerciseProgressStoreBase = create<ExerciseStoreType>()((set, ge
 		};
 	},
 
+	getExerciseFormate: () => {
+		const formate = get().collectionsExerciseConfig.exerciseFormate;
+		return {
+			isClassic: formate === EXERCISE_FORMATE.isClassic,
+			isSelecting: formate === EXERCISE_FORMATE.isSelecting,
+		};
+	},
+
 	getExerciseById: async (id) => {
 		let exercise = null;
 		const exerciseListPrepared = get().exerciseList;
@@ -162,11 +201,15 @@ export const useExerciseProgressStoreBase = create<ExerciseStoreType>()((set, ge
 
 		if (exercise) {
 			const exerciseAnswer = exercise.exerciseAnswer.split(' ');
+			const explanationAnswer = exercise.explanation.split(' ');
+			const explanationVariants = shuffleArray(explanationAnswer);
 			const variants = await getReadyQuestion(exerciseAnswer);
 			exercise = {
 				...DEFAULT_DATA_TEST,
 				...exercise,
 				exerciseAnswer,
+				explanationAnswer,
+				explanationVariants,
 				variants,
 			};
 			set({ exerciseList: [...exerciseListPrepared, exercise] });

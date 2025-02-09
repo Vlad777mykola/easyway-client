@@ -12,6 +12,8 @@ import { Button, Result } from 'antd';
 
 import styles from './exerciseCard.module.css';
 import { useExerciseProgressStore, DEFAULT_DATA_TEST } from '@/store/exercise-progress';
+import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
+import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 
 export const ExerciseCard = () => {
 	const navigate = useNavigate();
@@ -23,6 +25,9 @@ export const ExerciseCard = () => {
 	const totalExerciseCorrectResponse =
 		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseCorrectResponse;
 	const isDoneExercise = taskId === 'done' || exerciseListId.length === 0;
+	const isSelectingFormate =
+		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseFormate ===
+		EXERCISE_FORMATE.isSelecting;
 
 	const getExerciseMode = useExerciseProgressStore.use.getExerciseMode();
 	const getExerciseById = useExerciseProgressStore.use.getExerciseById();
@@ -74,8 +79,17 @@ export const ExerciseCard = () => {
 					/>
 				)}
 
-				{!isDoneExercise && task && (
+				{!isDoneExercise && task && !isSelectingFormate && (
 					<ExerciseUI
+						key={taskId}
+						task={task}
+						setIsAutoNavigate={setIsAutoNavigate}
+						setTask={setTask}
+						updateProgress={setExerciseListProgress}
+					/>
+				)}
+				{!isDoneExercise && task && isSelectingFormate && (
+					<SelectingUI
 						key={taskId}
 						task={task}
 						setIsAutoNavigate={setIsAutoNavigate}
