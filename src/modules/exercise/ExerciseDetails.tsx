@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useMemo } from 'react';
 import { Statistics } from './components/Statistics';
 import { useParams } from 'react-router-dom';
+import { Container } from '@/shared/components/container';
 import { List } from '@/shared/components/list/List';
 import { EXERCISE_CONFIG } from '@/store/exercise-progress/useExerciseProgressStore';
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
@@ -48,15 +49,21 @@ export const ExerciseDetails = (): ReactNode => {
 
 	return (
 		<div className={styles.collectionsContainer}>
-			<Statistics
-				exerciseListProgress={exersiceStore.exerciseListProgress}
-				collectionsId={collectionsId || ''}
-			/>
-			<div className={styles.contentCollection}>
-				<div className={styles.sidebarContainer}>
+			<div className={styles.header}>
+				<Container.Header>
+					<Statistics
+						exerciseListProgress={exersiceStore.exerciseListProgress}
+						collectionsId={collectionsId || ''}
+					/>
+				</Container.Header>
+			</div>
+			<div className={styles.sidebar}>
+				<Container.Nav>
 					<Sidebar title="Collection options" fieldsData={fieldsData} onChange={onChange} />
-				</div>
-				<div className={styles.listContainer}>{data && <List data={data} />}</div>
+				</Container.Nav>
+			</div>
+			<div className={styles.content}>
+				<Container.Content>{data && <List data={data} />}</Container.Content>
 			</div>
 		</div>
 	);
