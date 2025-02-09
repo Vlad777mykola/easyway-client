@@ -5,13 +5,13 @@ import { SideMenu } from './SideMenu';
 import styles from './header.module.css';
 
 const sideMenuItems = [
-	{
-		name: 'Home',
-		link: '/',
-	},
+	// {
+	// 	name: 'Home',
+	// 	link: '/',
+	// },
 	{
 		name: 'Collections',
-		link: '/collections',
+		link: '/',
 	},
 ];
 

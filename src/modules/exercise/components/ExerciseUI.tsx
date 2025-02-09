@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
-import { ExerciseListType } from '@/store/exercise-progress';
+import { ExerciseType } from '@/store/exercise-progress';
 import { Typography } from '@/ui-components/Typography';
 import { classes } from '@/shared/utils/classes';
 
@@ -13,8 +13,8 @@ export const ExerciseUI = ({
 	updateProgress,
 	setIsAutoNavigate,
 }: {
-	task: ExerciseListType;
-	setTask: Dispatch<SetStateAction<ExerciseListType>>;
+	task: ExerciseType;
+	setTask: Dispatch<SetStateAction<ExerciseType>>;
 	setIsAutoNavigate: Dispatch<SetStateAction<boolean>>;
 	updateProgress: (id: string, isCorrectWord: boolean) => void;
 }) => {
@@ -49,7 +49,7 @@ export const ExerciseUI = ({
 		utterance.lang = 'en-US';
 		window.speechSynthesis.speak(utterance);
 
-		setTask((prev: ExerciseListType) => {
+		setTask((prev: ExerciseType) => {
 			return {
 				...prev,
 				selectedAnswer: `${prev.selectedAnswer} ${word}`,

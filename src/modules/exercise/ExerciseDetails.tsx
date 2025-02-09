@@ -1,25 +1,23 @@
-import { ReactNode, useEffect, useMemo } from 'react';
-import { Statistics } from './components/Statistics';
+import { ReactNode, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { List } from '@/shared/components/list/List';
 import { EXERCISE_CONFIG } from '@/store/exercise-progress/useExerciseProgressStore';
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
-import { getCollectionById } from '../collections/services/getCollectionById';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
 import styles from './exerciseDetails.module.css';
+import { Statistics } from './components/Statistics';
+import { useExerciseListData } from './hooks/useExerciseListData';
 
 export const ExerciseDetails = (): ReactNode => {
-	const { collectionsId } = useParams();
-	const setCollectionsExerciseConfig = useExerciseProgressStore(
-		(store) => store.setCollectionsExerciseConfig,
-	);
-	const exersiceStore = useExerciseProgressStore((store) => store);
-	const getExerciseConfig = useExerciseProgressStore((store) => store.getExerciseConfig);
-	const setProgressFromLocalStore = useExerciseProgressStore(
-		(store) => store.setProgressFromLocalStore,
-	);
-	const data = useMemo(() => getCollectionById(collectionsId || ''), [collectionsId]);
+	const { collectionsId = '' } = useParams();
+	const exerciseListResponse = useExerciseProgressStore.use.exerciseListResponse();
+	const getExerciseConfig = useExerciseProgressStore.use.getExerciseConfig();
+	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
+	const getProgressFromLocalStore = useExerciseProgressStore.use.getProgressFromLocalStore();
+	const setCollectionsExerciseConfig = useExerciseProgressStore.use.setCollectionsExerciseConfig();
+
+	useExerciseListData(setExerciseListResponse, collectionsId);
 
 	const fieldsData: FieldsDataType[] = [
 		{
@@ -31,7 +29,7 @@ export const ExerciseDetails = (): ReactNode => {
 		},
 		{
 			keyValue: EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE,
-			options: [5, 10],
+			options: [5, 10, 15],
 			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE),
 			label: EXERCISE_CONFIG_LABELS.CORRECT_RESPONSE,
 			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
@@ -39,24 +37,25 @@ export const ExerciseDetails = (): ReactNode => {
 	] as const;
 
 	useEffect(() => {
-		setProgressFromLocalStore(collectionsId || '');
+		getProgressFromLocalStore(collectionsId || '');
 	}, []);
 
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setCollectionsExerciseConfig(key, value);
 	};
 
+	console.log(exerciseListResponse);
+
 	return (
 		<div className={styles.collectionsContainer}>
-			<Statistics
-				exerciseListProgress={exersiceStore.exerciseListProgress}
-				collectionsId={collectionsId || ''}
-			/>
+			<Statistics collectionsId={collectionsId || ''} />
 			<div className={styles.contentCollection}>
 				<div className={styles.sidebarContainer}>
 					<Sidebar title="Collection options" fieldsData={fieldsData} onChange={onChange} />
 				</div>
-				<div className={styles.listContainer}>{data && <List data={data} />}</div>
+				<div className={styles.listContainer}>
+					{exerciseListResponse && <List data={exerciseListResponse} />}
+				</div>
 			</div>
 		</div>
 	);
