@@ -1,5 +1,7 @@
+import { localstorage } from '@/shared/utils/local-storage/localstorage';
+
 export const removeLocalStorage = (key: string) => {
-	if (localStorage.getItem(key)) {
-		localStorage.removeItem(key);
+	if (localstorage.getItem(key)) {
+		localstorage.removeItem(key);
 	}
 };

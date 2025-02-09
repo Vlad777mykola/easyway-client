@@ -46,8 +46,8 @@ export const FILTER_LABELS = {
 export const DEFAULT_COLLECTIONS = [
 	{
 		id: '1',
-		title: 'Present and past',
-		subtitle: 'Practice the sentence',
+		title: 'Words',
+		subtitle: 'Practice the Words',
 		level: 'Intermediate',
 		category: ['Present Simple', 'Past Simple'],
 		topic: ['Programming'],

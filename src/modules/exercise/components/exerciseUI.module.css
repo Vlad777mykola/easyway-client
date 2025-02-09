@@ -4,6 +4,7 @@
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+	gap: 20px;
 }
 
 .exercise {
@@ -16,6 +17,7 @@
 }
 
 .answer {
+	text-align: center;
 	font-size: 20px;
 	margin: 20px 0px;
 	color: rgb(46, 125, 50);
@@ -37,7 +39,7 @@
 	flex-wrap: wrap;
 	justify-content: center;
 	align-content: center;
-	width: 70%;
+	width: 100%;
 	gap: 10px;
 }
 
@@ -69,14 +71,6 @@
 	.words {
 		width: 80%;
 		height: 100%;
-	}
-}
-
-@media (min-width: 1201px) {
-	.words {
-		margin-top: 0px;
-		height: 100%;
-		width: 70%;
 	}
 }
 

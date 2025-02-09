@@ -1,10 +1,12 @@
 import { localstorage } from '@/shared/utils/local-storage/localstorage';
 import { create } from 'zustand';
+import { ExerciseResponseType } from '@/shared/constants/data';
+import { getReadyQuestion } from '@/modules/exercise/services/fetchDefinition';
 
 export const EXERCISE_MODE = {
-	EXAM_MODE: 'examMode',
-	RANDOM_MODE: 'randomMode',
-	INFINITIVE_MODE: 'infinitiveMode',
+	isExam: 'examMode',
+	isRandom: 'randomMode',
+	isInfinitive: 'infinitiveMode',
 } as const;
 
 export const EXERCISE_CONFIG = {
@@ -12,7 +14,19 @@ export const EXERCISE_CONFIG = {
 	TOTAL_CORRECT_RESPONSE: 'exerciseCorrectResponse',
 } as const;
 
-export type ExerciseListType = {
+export const DEFAULT_DATA_TEST = {
+	id: '',
+	exercise: '',
+	explanation: '',
+	exerciseAnswer: [],
+	selectedAnswer: '',
+	currentWord: 0,
+	isComplete: false,
+	isCorrectAnswer: true,
+	variants: {},
+};
+
+export type ExerciseType = {
 	id: string;
 	exercise: string;
 	explanation: string;
@@ -25,7 +39,9 @@ export type ExerciseListType = {
 };
 
 type ExerciseModeType = (typeof EXERCISE_MODE)[keyof typeof EXERCISE_MODE];
-
+type AllExerciseModesType = {
+	[key in keyof typeof EXERCISE_MODE]: boolean;
+};
 type ExerciseListProgressType = {
 	id: string;
 	countCorrectAnswers: number;
@@ -33,7 +49,6 @@ type ExerciseListProgressType = {
 
 type CommonProgressDataType = {
 	collection: string;
-	countCorrectAnswers: number;
 	resolvedExerciseIds: string[];
 };
 
@@ -44,45 +59,73 @@ type ExerciseConfigType = {
 type ExerciseConfigKeyType = keyof ExerciseConfigType;
 
 type ExerciseStoreState = {
-	exerciseListIds: { id: string }[];
-	exerciseList: ExerciseListType[];
+	exerciseListResponse: ExerciseResponseType[];
+	exerciseListIds: string[];
+	exerciseList: ExerciseType[];
+	resolvedExerciseId: string[];
+	collectionsExerciseConfig: ExerciseConfigType;
+
 	exerciseListProgress: ExerciseListProgressType[];
 	commonProgressData: CommonProgressDataType;
-	collectionsExerciseConfig: ExerciseConfigType;
 };
 
 type ExerciseStoreActions = {
-	setExerciseListIds: <T extends { id: string }>(exerciseList: T[]) => void;
+	setExerciseListResponse: (exerciseList: ExerciseResponseType[]) => void;
 	getExerciseConfig: (key: ExerciseConfigKeyType) => ExerciseModeType | number;
 	setCollectionsExerciseConfig: (
 		key: string,
 		value: number[] | string | boolean | string[] | number,
 	) => void;
-	getExerciseById: (id: string) => ExerciseListType | null;
-	setExerciseList: (exercise: ExerciseListType) => void;
+	getExerciseById: (id: string) => Promise<ExerciseType | null>;
+	getExerciseMode: () => AllExerciseModesType;
 
 	setExerciseListProgress: (id: string, isResolved: boolean) => void;
 	getExerciseProgressById: (id: string) => ExerciseListProgressType | null;
 
 	saveProgressToLocalStore: (collectionId: string) => void;
-	setProgressFromLocalStore: (collectionId: string) => void;
+	getProgressFromLocalStore: (collectionId: string) => void;
+	removeProgress: (collectionId: string) => void;
 };
 
 export type ExerciseStoreType = ExerciseStoreState & ExerciseStoreActions;
 
-export const useExerciseProgressStore = create<ExerciseStoreType>()((set, get) => ({
+export const useExerciseProgressStoreBase = create<ExerciseStoreType>()((set, get) => ({
+	exerciseListResponse: [],
 	exerciseListIds: [],
 	exerciseList: [],
 	exerciseListProgress: [],
+	resolvedExerciseId: [],
 	commonProgressData: {
 		collection: '',
-		countCorrectAnswers: 0,
 		resolvedExerciseIds: [],
 	},
 	collectionsExerciseConfig: {
-		exerciseMode: EXERCISE_MODE.RANDOM_MODE,
-		exerciseCorrectResponse: 5,
+		exerciseMode: EXERCISE_MODE.isRandom,
+		exerciseCorrectResponse: 1,
 	},
+
+	setExerciseListResponse: (exerciseList) => {
+		const exerciseListResponse = get().exerciseListResponse;
+		if (exerciseListResponse?.length > 0) {
+			return;
+		}
+		const isUntracedMode =
+			get().collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isInfinitive;
+
+		let ids = exerciseList.map((item) => item.id);
+
+		if (!isUntracedMode) {
+			const resolvedExerciseId = get().resolvedExerciseId;
+			ids = ids.filter((i) => !resolvedExerciseId.includes(i));
+		}
+
+		set((state) => ({
+			...state,
+			exerciseListIds: ids,
+			exerciseListResponse: exerciseList,
+		}));
+	},
+
 	setCollectionsExerciseConfig: (key, value) => {
 		set((state) => ({
 			collectionsExerciseConfig: {
@@ -92,23 +135,44 @@ export const useExerciseProgressStore = create<ExerciseStoreType>()((set, get) =
 		}));
 	},
 
-	setExerciseListIds: (exerciseList) => {
-		set((state) => ({
-			...state,
-			exerciseListIds: exerciseList.map((item) => ({ id: item.id })),
-		}));
-	},
-
 	getExerciseConfig: (key) => {
 		return get().collectionsExerciseConfig[key];
 	},
 
-	getExerciseById: (id) => {
-		const state = get().exerciseList;
-		return state.find((item) => item.id === id) || null;
+	getExerciseMode: () => {
+		const mode = get().collectionsExerciseConfig.exerciseMode;
+		return {
+			isExam: mode === EXERCISE_MODE.isExam,
+			isRandom: mode === EXERCISE_MODE.isRandom,
+			isInfinitive: mode === EXERCISE_MODE.isInfinitive,
+		};
 	},
-	setExerciseList: (exercise) => {
-		set((state) => ({ ...state, exerciseList: [...state.exerciseList, exercise] }));
+
+	getExerciseById: async (id) => {
+		let exercise = null;
+		const exerciseListPrepared = get().exerciseList;
+		exercise = exerciseListPrepared.find((item) => item.id === id);
+
+		if (exercise) {
+			return exercise;
+		}
+
+		const exerciseListResponse = get().exerciseListResponse;
+		exercise = exerciseListResponse.find((item) => item.id === id) || null;
+
+		if (exercise) {
+			const exerciseAnswer = exercise.exerciseAnswer.split(' ');
+			const variants = await getReadyQuestion(exerciseAnswer);
+			exercise = {
+				...DEFAULT_DATA_TEST,
+				...exercise,
+				exerciseAnswer,
+				variants,
+			};
+			set({ exerciseList: [...exerciseListPrepared, exercise] });
+		}
+
+		return exercise;
 	},
 
 	getExerciseProgressById: (id) => {
@@ -121,8 +185,25 @@ export const useExerciseProgressStore = create<ExerciseStoreType>()((set, get) =
 			let updatedProgressList = state.exerciseListProgress.filter((e) => e.id !== id);
 
 			if (isResolved) {
+				const isUntracedMode =
+					get().collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isInfinitive;
+				const exerciseCorrectResponse = get().collectionsExerciseConfig.exerciseCorrectResponse;
 				const countCorrectAnswers = (existingProgress?.countCorrectAnswers || 0) + 1;
-				updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers }];
+
+				if (!isUntracedMode && exerciseCorrectResponse === countCorrectAnswers) {
+					const exerciseListIds = get().exerciseListIds;
+					const resolvedExerciseId = get().resolvedExerciseId;
+					const removedExercise = exerciseListIds.filter((i) => i !== id);
+
+					return {
+						...state,
+						exerciseListProgress: updatedProgressList,
+						exerciseListIds: removedExercise,
+						resolvedExerciseId: [...resolvedExerciseId, id],
+					};
+				} else {
+					updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers }];
+				}
 			} else {
 				updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers: 0 }];
 			}
@@ -134,15 +215,35 @@ export const useExerciseProgressStore = create<ExerciseStoreType>()((set, get) =
 	saveProgressToLocalStore: (collectionId) => {
 		localstorage.removeItem(collectionId);
 		const exerciseListProgress = get().exerciseListProgress;
-		localstorage.setItem(collectionId, exerciseListProgress);
+		const resolvedExerciseId = get().resolvedExerciseId;
+		localstorage.setItem(collectionId, { exerciseListProgress, resolvedExerciseId });
 	},
-	setProgressFromLocalStore: (collectionId) => {
+	getProgressFromLocalStore: (collectionId) => {
 		const existProgress = get().exerciseListProgress.length > 0;
 		if (existProgress) {
 			return;
 		}
-		const storedExerciseListProgress: ExerciseListProgressType[] =
-			localstorage.getItem(collectionId) || [];
-		set((state) => ({ ...state, exerciseListProgress: storedExerciseListProgress }));
+		const {
+			resolvedExerciseId,
+			exerciseListProgress,
+		}: {
+			exerciseListProgress: ExerciseListProgressType[];
+			resolvedExerciseId: string[];
+		} = localstorage.getItem(collectionId) || {
+			exerciseListProgress: [],
+			resolvedExerciseId: [],
+		};
+
+		set((state) => ({
+			...state,
+			exerciseListProgress,
+			resolvedExerciseId,
+		}));
+	},
+	removeProgress: (collectionId) => {
+		if (localstorage.getItem(collectionId)) {
+			localstorage.removeItem(collectionId);
+			set((state) => ({ ...state, exerciseListProgress: [] }));
+		}
 	},
 }));

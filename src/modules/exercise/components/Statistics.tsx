@@ -1,8 +1,8 @@
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Progress } from '@/ui-components/Progress';
 import { Button } from '@/ui-components/Button';
-import { removeLocalStorage } from '../services/removeLocalStorage';
 import styles from './statistics.module.css';
+import { useExerciseProgressStore } from '@/store/exercise-progress';
 
 const WRONG_CORRECT = {
 	wrong: 30,
@@ -13,13 +13,9 @@ const INPROGRESS_RESOLVED = {
 	inProgress: 40,
 };
 
-type Props = {
-	exerciseListProgress: { id: string; countCorrectAnswers: number }[];
-	collectionsId: string;
-};
+export const Statistics = ({ collectionsId }: { collectionsId: string }) => {
+	const removeProgress = useExerciseProgressStore((store) => store.removeProgress);
 
-export const Statistics = ({ exerciseListProgress, collectionsId }: Props) => {
-	console.log('STATISTICS: ', exerciseListProgress);
 	return (
 		<Wrapper>
 			<div className={styles.progress}>
@@ -28,7 +24,7 @@ export const Statistics = ({ exerciseListProgress, collectionsId }: Props) => {
 						size="small"
 						color="danger"
 						variant="filled"
-						onClick={() => removeLocalStorage(collectionsId)}
+						onClick={() => removeProgress(collectionsId)}
 					>
 						Clear Progress
 					</Button>

@@ -1,6 +1,6 @@
 .collectionsContainer {
 	display: grid;
-	width: 60%;
+	width: 45%;
 	height: 100%;
 	margin: 50px auto;
 	grid-template-columns: 300px 1fr;
