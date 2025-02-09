@@ -1,14 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
-import { ExerciseType, useExerciseProgressStore } from '@/store/exercise-progress';
-import { Typography } from '@/ui-components/Typography';
+import { ExerciseType } from '@/store/exercise-progress';
 import { classes } from '@/shared/utils/classes';
 
-import styles from './exerciseUI.module.css';
-import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
+import styles from './selectingUI.module.css';
 
-export const ExerciseUI = ({
+export const SelectingUI = ({
 	task,
 	setTask,
 	updateProgress,
@@ -20,19 +18,15 @@ export const ExerciseUI = ({
 	updateProgress: (id: string, isCorrectWord: boolean) => void;
 }) => {
 	const {
-		variants,
 		exercise,
 		isComplete,
-		explanation,
 		currentWord,
-		exerciseAnswer,
+		explanationAnswer,
 		selectedAnswer,
 		isCorrectAnswer,
+		explanation,
+		explanationVariants,
 	} = task;
-
-	const isSelectingFormate =
-		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseFormate ===
-		EXERCISE_FORMATE.isSelecting;
 
 	const onSelect = (answer: string) => {
 		let word = answer;
@@ -40,16 +34,16 @@ export const ExerciseUI = ({
 			word = answer.charAt(0).toUpperCase() + answer.slice(1);
 		}
 
-		const isCorrectWord =
-			word.toLowerCase() ===
-			exerciseAnswer[currentWord].replace(/[^a-zA-Z0-9\s]/g, '').toLocaleLowerCase();
-		const isComplete = currentWord + 1 === exerciseAnswer.length;
+		const isCorrectWord = word.toLowerCase() === explanationAnswer[currentWord].toLocaleLowerCase();
+
+		const isComplete = currentWord + 1 === explanationAnswer.length;
 		if (isComplete) {
 			updateProgress(task.id, isCorrectWord);
 		}
 		if (isComplete && isCorrectAnswer && isCorrectWord) {
 			setIsAutoNavigate(true);
 		}
+
 		const utterance = new SpeechSynthesisUtterance(answer);
 		utterance.lang = 'en-US';
 		window.speechSynthesis.speak(utterance);
@@ -67,9 +61,6 @@ export const ExerciseUI = ({
 
 	return (
 		<div className={styles.testContainer}>
-			<Typography type="secondary" className={styles.topic}>
-				{explanation}
-			</Typography>
 			<div className={styles.exercise}>{exercise}</div>
 			<div className={styles.correctAnswerContainer}>
 				<div
@@ -86,23 +77,20 @@ export const ExerciseUI = ({
 								<Icon icon="check" variant="success" size="xl" />
 							</div>
 						)}
-						{!isCorrectAnswer && <p className={styles.answer}>{exerciseAnswer.join(' ')}</p>}
+						{!isCorrectAnswer && <p className={styles.answer}>{explanation}</p>}
 					</>
 				)}
 			</div>
 
-			{!isSelectingFormate && (
-				<div className={styles.words}>
-					{variants[task.exerciseAnswer[currentWord]] &&
-						variants[task.exerciseAnswer[currentWord]].map((s, i) => (
-							<div key={i} className={styles.word}>
-								<Button size="large" type="default" onClick={() => onSelect(s)}>
-									{s}
-								</Button>
-							</div>
-						))}
-				</div>
-			)}
+			<div className={styles.words}>
+				{explanationVariants.map((s, i) => (
+					<div key={i} className={styles.word}>
+						<Button size="large" type="default" onClick={() => onSelect(s)}>
+							{s}
+						</Button>
+					</div>
+				))}
+			</div>
 		</div>
 	);
 };

@@ -2,7 +2,8 @@ import type { Variants } from './services/showVariants';
 
 export const EXERCISE_CONFIG_LABELS = {
 	MODE: 'Exercise Mode',
-	CORRECT_RESPONSE: 'Exercise correct response',
+	CORRECT_RESPONSE: 'Count of total correct response',
+	FORMAT: 'Use a exercise or exercise explanation',
 } as const;
 
 export const MAX_VARIANTS = 8;

@@ -1,7 +1,10 @@
 import { ReactNode, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { List } from '@/shared/components/list/List';
-import { EXERCISE_CONFIG } from '@/store/exercise-progress/useExerciseProgressStore';
+import {
+	EXERCISE_CONFIG,
+	EXERCISE_FORMATE,
+} from '@/store/exercise-progress/useExerciseProgressStore';
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
@@ -32,6 +35,13 @@ export const ExerciseDetails = (): ReactNode => {
 			options: [5, 10, 15],
 			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE),
 			label: EXERCISE_CONFIG_LABELS.CORRECT_RESPONSE,
+			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
+		},
+		{
+			keyValue: EXERCISE_CONFIG.FORMATE,
+			options: Object.values(EXERCISE_FORMATE),
+			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.FORMATE),
+			label: EXERCISE_CONFIG_LABELS.FORMAT,
 			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
 		},
 	] as const;
