@@ -4,7 +4,7 @@
 	align-items: center;
 	justify-content: center;
 	height: 250px;
-	width: 1075px;
+	width: 100%;
 }
 
 .clearProgress {
@@ -33,4 +33,13 @@
 
 .modeTitle {
 	font-size: 20px;
+}
+
+@media (max-width: 1201px) {
+	.collectionTitle {
+		margin-top: 20px;
+	}
+	.modeTitle {
+		font-size: 18px;
+	}
 }
