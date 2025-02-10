@@ -1,23 +1,11 @@
 .navContainer {
-	top: 0;
-	z-index: 40;
-	width: 100%;
-	transition-duration: 300;
 	transition-property: box-shadow;
 	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 	background-color: #fff;
 	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-	padding: 0 0;
 	box-sizing: border-box;
-	display: flex;
-	align-items: center;
 }
-.relativeNavContainer {
-	position: relative;
-}
-.stickyNavContainer {
-	position: sticky;
-}
+
 .navResponsive {
 	position: relative;
 	display: flex;

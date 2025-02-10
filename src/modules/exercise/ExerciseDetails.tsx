@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container } from '@/shared/components/container';
+import { ContentContainer } from '@/ui-components/Content-Container';
 import { List } from '@/shared/components/list/List';
 import {
 	EXERCISE_CONFIG,
@@ -9,7 +9,6 @@ import {
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
-import styles from './exerciseDetails.module.css';
 import { Statistics } from './components/Statistics';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
@@ -55,25 +54,17 @@ export const ExerciseDetails = (): ReactNode => {
 		setCollectionsExerciseConfig(key, value);
 	};
 
-	console.log(exerciseListResponse);
-
 	return (
-		<div className={styles.collectionsContainer}>
-			<div className={styles.header}>
-				<Container.Header>
-					<Statistics collectionsId={collectionsId || ''} />
-				</Container.Header>
-			</div>
-			<div className={styles.sidebar}>
-				<Container.Nav>
-					<Sidebar title="Collection options" fieldsData={fieldsData} onChange={onChange} />
-				</Container.Nav>
-			</div>
-			<div className={styles.content}>
-				<Container.Content>
-					{exerciseListResponse && <List data={exerciseListResponse} />}
-				</Container.Content>
-			</div>
-		</div>
+		<ContentContainer>
+			<ContentContainer.Header>
+				<Statistics collectionsId={collectionsId || ''} />
+			</ContentContainer.Header>
+			<ContentContainer.Sidebar>
+				<Sidebar title="Collection options" fieldsData={fieldsData} onChange={onChange} />
+			</ContentContainer.Sidebar>
+			<ContentContainer.Content>
+				{exerciseListResponse && <List data={exerciseListResponse} />}
+			</ContentContainer.Content>
+		</ContentContainer>
 	);
 };

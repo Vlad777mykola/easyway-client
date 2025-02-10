@@ -1,22 +1,10 @@
 import { ReactNode } from 'react';
 
-import { classes } from '@/shared/utils/classes';
 import styles from './navbar.module.css';
 
-export type Props = {
-	isSticky?: boolean;
-	RightSide: ReactNode;
-	LeftSide: ReactNode;
-};
-
-export const Navbar = ({ isSticky = true, RightSide, LeftSide }: Props) => {
+export const Navbar = ({ RightSide, LeftSide }: { RightSide: ReactNode; LeftSide: ReactNode }) => {
 	return (
-		<nav
-			className={classes(styles.navContainer, {
-				[styles.relativeNavContainer]: !isSticky,
-				[styles.stickyNavContainer]: isSticky,
-			})}
-		>
+		<nav className={styles.navContainer}>
 			<div className={styles.navResponsive}>
 				{LeftSide}
 				{RightSide}

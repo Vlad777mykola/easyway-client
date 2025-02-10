@@ -22,7 +22,6 @@ export const SideMenu = ({ list, img, imgSpan }: Props) => {
 						<span className={styles.imgSpan}>{imgSpan}</span>
 					</div>
 				)}
-				{img && <div className={styles.separateLine}></div>}
 				{list.map((item) => (
 					<Link key={item.link} to={item.link} className={styles.actionListContent}>
 						{item.name}

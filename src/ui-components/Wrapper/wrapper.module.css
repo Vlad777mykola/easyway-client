@@ -12,6 +12,12 @@
 	width: auto;
 }
 
+.sticky {
+	top: 110px;
+	position: sticky;
+	z-index: 5;
+}
+
 @media (max-width: 1201px) {
 	.wrapper {
 		margin: 0;
