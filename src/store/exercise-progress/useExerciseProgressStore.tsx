@@ -128,7 +128,7 @@ export const useExerciseProgressStoreBase = create<ExerciseStoreType>()((set, ge
 	},
 	collectionsExerciseConfig: {
 		exerciseMode: EXERCISE_MODE.isRandom,
-		exerciseCorrectResponse: 5,
+		exerciseCorrectResponse: 15,
 		exerciseFormate: EXERCISE_FORMATE.isSelecting,
 	},
 

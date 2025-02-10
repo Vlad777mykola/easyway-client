@@ -45,7 +45,6 @@ const Header = () => {
 				}
 				LeftSide={<Menu side="left" Items={<SideMenu list={sideMenuItems} />} />}
 			/>
-			<div className={styles.separateLine}></div>
 			<NavHeader />
 		</div>
 	);

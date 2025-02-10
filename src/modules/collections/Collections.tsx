@@ -5,7 +5,7 @@ import { TOPIC_TENSES } from './constants/store-constants';
 import { useCollectionFilter } from '@/store/collection-filter';
 import { FilterDataKeyType } from '@/store/collection-filter/useCollectionFilterStore';
 import { FILTER_LABELS } from '@/shared/constants/data';
-import styles from './collections.module.css';
+import { ContentContainer } from '@/ui-components/Content-Container';
 
 export const Collections = (): ReactNode => {
 	const setFilterDataOnSearch = useCollectionFilter((store) => store.setFilterDataOnSearch);
@@ -57,8 +57,9 @@ export const Collections = (): ReactNode => {
 	};
 
 	return (
-		<div className={styles.collectionsContainer}>
-			<div className={styles.sidebarContainer}>
+		<ContentContainer>
+			<ContentContainer.Header>{null}</ContentContainer.Header>
+			<ContentContainer.Sidebar>
 				<Sidebar
 					title="Filter"
 					fieldsData={fieldsData}
@@ -66,10 +67,10 @@ export const Collections = (): ReactNode => {
 					onSearch={onSearch}
 					onClear={onClear}
 				/>
-			</div>
-			<div className={styles.listCollectionsContainer}>
+			</ContentContainer.Sidebar>
+			<ContentContainer.Content>
 				<ListCollections />
-			</div>
-		</div>
+			</ContentContainer.Content>
+		</ContentContainer>
 	);
 };
