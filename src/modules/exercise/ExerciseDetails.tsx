@@ -1,5 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Container } from '@/shared/components/container';
 import { List } from '@/shared/components/list/List';
 import {
 	EXERCISE_CONFIG,
@@ -58,14 +59,20 @@ export const ExerciseDetails = (): ReactNode => {
 
 	return (
 		<div className={styles.collectionsContainer}>
-			<Statistics collectionsId={collectionsId || ''} />
-			<div className={styles.contentCollection}>
-				<div className={styles.sidebarContainer}>
+			<div className={styles.header}>
+				<Container.Header>
+					<Statistics collectionsId={collectionsId || ''} />
+				</Container.Header>
+			</div>
+			<div className={styles.sidebar}>
+				<Container.Nav>
 					<Sidebar title="Collection options" fieldsData={fieldsData} onChange={onChange} />
-				</div>
-				<div className={styles.listContainer}>
+				</Container.Nav>
+			</div>
+			<div className={styles.content}>
+				<Container.Content>
 					{exerciseListResponse && <List data={exerciseListResponse} />}
-				</div>
+				</Container.Content>
 			</div>
 		</div>
 	);

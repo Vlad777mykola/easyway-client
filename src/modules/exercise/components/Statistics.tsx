@@ -29,10 +29,10 @@ export const Statistics = ({ collectionsId }: { collectionsId: string }) => {
 						Clear Progress
 					</Button>
 				</div>
-				<h1 className={styles.collectionTitle}>Collection Progress</h1>
+				<span className={styles.collectionTitle}>Collection Progress</span>
 				<div className={styles.statistics}>
 					<div className={styles.modeContainer}>
-						<h2 className={styles.modeTitle}>Random Mode</h2>
+						<span className={styles.modeTitle}>Random Mode</span>
 						<Progress
 							success={{ percent: WRONG_CORRECT.correct }}
 							type="circle"
@@ -42,7 +42,7 @@ export const Statistics = ({ collectionsId }: { collectionsId: string }) => {
 						/>
 					</div>
 					<div className={styles.modeContainer}>
-						<h2 className={styles.modeTitle}>Exam Mode</h2>
+						<span className={styles.modeTitle}>Exam Mode</span>
 						<Progress
 							type="circle"
 							success={{ percent: INPROGRESS_RESOLVED.resolved }}

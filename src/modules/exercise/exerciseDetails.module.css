@@ -1,45 +1,48 @@
 .collectionsContainer {
 	display: grid;
-	width: 100%;
+	width: 45%;
 	height: 100%;
+	margin: 50px auto;
+	grid-template-columns: 300px 1fr;
+	grid-template-rows: 400px 1fr;
 	grid-template-areas:
-		'progress'
-		'contentCollection';
-	grid-template-rows: 300px 1fr;
-	grid-template-columns: 1fr;
-	padding: 50px 0px;
-	box-sizing: border-box;
+		'header header'
+		'sidebar content';
 }
 
-.contentCollection {
-	grid-area: contentCollection;
-	display: flex;
-	min-width: 1080px;
-	margin: 0 auto;
+.header {
+	grid-area: header;
+	width: 100%;
 }
 
-.sidebarContainer {
-	width: 30%;
+.sidebar {
+	grid-area: sidebar;
 }
 
-.listContainer {
-	width: 70%;
+.content {
+	grid-area: content;
+	margin-left: 30px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1201px) {
 	.collectionsContainer {
-		padding: 0px 0px;
-		grid-template-rows: 300px 1fr;
+		width: 100%;
+		margin: 0;
+		grid-template-areas:
+		'header header'
+		'content content';
 	}
-	.contentCollection {
-		min-width: 100%;
-		padding: 30px 10px;
-		box-sizing: border-box;
+	.content {
+		padding: 10px;
+		margin: 0;
 	}
-	.sidebarContainer {
-		width: 10%;
-	}
-	.listContainer {
-		width: 90%;
+	.sidebar {
+		position: fixed;
+		width: 100%;
+		top: 0;
+		left: 0;
+		padding-top: 100px;
+		padding-left: 25px;
+		z-index: 111;
 	}
 }
