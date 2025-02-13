@@ -104,12 +104,11 @@ export const ExerciseCard = () => {
 				{!isDoneExercise && exerciseListId && (
 					<Pagination
 						ids={exerciseListId}
-						exerciseMode={getExerciseMode()}
+						exerciseMode="examMode"
 						currentId={`${taskId}`}
 						isAutoNavigate={isAutoNavigate}
 						navigateTo={(id: string) => onNavigate(id)}
-						totalCount={totalExerciseCorrectResponse}
-						filedCount={getExerciseProgressById(taskId)?.countCorrectAnswers || 0}
+						mode={1}
 					/>
 				)}
 			</div>

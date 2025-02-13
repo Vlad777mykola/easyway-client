@@ -7,99 +7,130 @@ import { Progress } from '@/shared/components/progress';
 import { useDebounce } from '@/shared/hooks/use-debounce';
 
 import styles from './pagination.module.css';
+import { Random } from './Random/Random';
+import { Infinitive } from './Infinitive/Infinitive';
+import { Exam } from './Exam/Exam';
 
-const STEP = {
-	PREV: 'prev',
-	NEXT: 'next',
+export type BaseFieldsDataType = {
+	ids: string[];
+	currentId: string;
+	navigateTo: (id: string) => void;
+	isAutoNavigate: boolean;
 };
 
-export const Pagination = memo(
-	({
-		ids,
-		exerciseMode,
-		currentId,
-		navigateTo,
-		totalCount,
-		filedCount,
-		isAutoNavigate,
-	}: {
-		currentId: string;
-		exerciseMode: { [key: string]: boolean };
-		ids: string[];
-		navigateTo: (id: string) => void;
-		totalCount: number;
-		filedCount: number;
-		isAutoNavigate?: boolean;
-	}) => {
-		const debouncedAutoNavigate = useDebounce(isAutoNavigate, 1000);
-		const { isRandom, isExam } = exerciseMode;
-		const currentIndex: number = ids.findIndex((id) => id === currentId);
+export type RandomModeType = BaseFieldsDataType & {
+	totalCount: number;
+	filledCount: number;
+	exerciseMode: 'randomMode';
+};
 
-		useEffect(() => {
-			if (debouncedAutoNavigate) {
-				swapQuestion(STEP.NEXT);
-			}
-		}, [debouncedAutoNavigate]);
+export type ExamModeType = BaseFieldsDataType & {
+	mode: number;
+	exerciseMode: 'examMode';
+};
 
-		const swapQuestion = (move: string) => {
-			if (isRandom) {
-				const moveIndex = getRandomInteger(currentIndex, ids.length - 1);
-				navigateTo(ids[moveIndex]);
-				return;
-			}
+export const Pagination = (props: ExamModeType | RandomModeType) => {
+	// const debouncedAutoNavigate = useDebounce(isAutoNavigate, 1000);
+	// const { isRandom, isExam } = exerciseMode;
+	// const currentIndex: number = ids.findIndex((id) => id === currentId);
 
-			const lastIndex = currentIndex === ids.length - 1;
-			const firstIndex = currentIndex === 0;
+	// console.log('EXERCISE MODE: ', exerciseMode);
 
-			if (isExam && firstIndex) {
-				return;
-			}
+	// useEffect(() => {
+	// 	if (debouncedAutoNavigate) {
+	// 		swapQuestion(STEP.NEXT);
+	// 	}
+	// }, [debouncedAutoNavigate]);
 
-			if (isExam && lastIndex) {
-				navigateTo('done');
-				return;
-			}
+	// const swapQuestion = (move: string) => {
+	// 	if (isRandom) {
+	// 		const moveIndex = getRandomInteger(currentIndex, ids.length - 1);
+	// 		navigateTo(ids[moveIndex]);
+	// 		return;
+	// 	}
 
-			if (move === STEP.NEXT) {
-				const moveIndex = lastIndex ? 0 : currentIndex + 1;
-				navigateTo(ids[moveIndex]);
-				return;
-			}
+	// 	const lastIndex = currentIndex === ids.length - 1;
+	// 	const firstIndex = currentIndex === 0;
 
-			if (move === STEP.PREV) {
-				const moveIndex = firstIndex ? ids.length - 1 : currentIndex - 1;
-				navigateTo(ids[moveIndex]);
-			}
-		};
+	// 	if (isExam && firstIndex) {
+	// 		return;
+	// 	}
 
-		return (
-			<>
-				<div className={styles.prevQuestion}>
-					<CircleButton type="default" size="large" onClick={() => swapQuestion(STEP.PREV)}>
-						<Icon icon="left" variant="dark" />
-					</CircleButton>
-				</div>
-				<div className={styles.nextQuestion}>
-					<CircleButton type="default" size="large" onClick={() => swapQuestion(STEP.NEXT)}>
-						<Icon icon="right" variant="dark" />
-					</CircleButton>
-				</div>
-				{!isRandom && (
-					<div className={styles.pagination}>
-						{ids.map((id, index) => (
-							<Button
-								key={id}
-								size="small"
-								type={currentIndex === index ? 'primary' : 'default'}
-								onClick={() => navigateTo(id)}
-							>
-								{index + 1}
-							</Button>
-						))}
-					</div>
-				)}
-				{isRandom && <Progress filledSteps={filedCount} totalSteps={totalCount} />}
-			</>
-		);
-	},
-);
+	// 	if (isExam && lastIndex) {
+	// 		navigateTo('done');
+	// 		return;
+	// 	}
+
+	// 	if (move === STEP.NEXT) {
+	// 		const moveIndex = lastIndex ? 0 : currentIndex + 1;
+	// 		navigateTo(ids[moveIndex]);
+	// 		return;
+	// 	}
+
+	// 	if (move === STEP.PREV) {
+	// 		const moveIndex = firstIndex ? ids.length - 1 : currentIndex - 1;
+	// 		navigateTo(ids[moveIndex]);
+	// 	}
+	// };
+
+	// const getPaginationKey = () => {
+	// 	let paginationKey = '';
+	// 	for (const key in exerciseMode) {
+	// 		if (exerciseMode[key]) {
+	// 			paginationKey = key;
+	// 		}
+	// 	}
+
+	// 	return paginationKey;
+	// };
+
+	switch (props.exerciseMode) {
+		case 'randomMode':
+			return <Random {...props} />;
+		case 'examMode':
+			return <Exam {...props} />;
+		default:
+			return null;
+	}
+
+	// return (
+	// 	<>
+	// 		<div className={styles.prevQuestion}>
+	// 			<CircleButton type="default" size="large" onClick={() => swapQuestion(STEP.PREV)}>
+	// 				<Icon icon="left" variant="dark" />
+	// 			</CircleButton>
+	// 		</div>
+	// 		<div className={styles.nextQuestion}>
+	// 			<CircleButton type="default" size="large" onClick={() => swapQuestion(STEP.NEXT)}>
+	// 				<Icon icon="right" variant="dark" />
+	// 			</CircleButton>
+	// 		</div>
+	// 		{!isRandom && (
+	// 			<div className={styles.pagination}>
+	// 				{ids.map((id, index) => (
+	// 					<Button
+	// 						key={id}
+	// 						size="small"
+	// 						type={currentIndex === index ? 'primary' : 'default'}
+	// 						onClick={() => navigateTo(id)}
+	// 					>
+	// 						{index + 1}
+	// 					</Button>
+	// 				))}
+	// 			</div>
+	// 		)}
+	// 		{isRandom && <Progress filledSteps={filedCount} totalSteps={totalCount} />}
+	// 	</>
+	// );
+};
+
+// {
+// 	ids,
+// 	exerciseMode,
+// 	currentId,
+// 	navigateTo,
+// 	totalCount,
+// 	filedCount,
+// 	isAutoNavigate,
+// 	paginationType,
+// }
