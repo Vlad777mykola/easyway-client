@@ -13,49 +13,29 @@ export const NavHeader = () => {
 	const [depthRoute, setDepthRoute] = useState<LinkType[]>([]);
 	const location = useLocation();
 
-	const makeDepthRouterLocation = (url: string) => {
-		const urlArrayWithoutSlash = ['/'];
-		const urlArray = url.split('/');
-		for (let i = 0; i < urlArray.length; i++) {
-			if (urlArray[i] !== '') {
-				urlArrayWithoutSlash.push(urlArray[i]);
-			}
-		}
-		let res: LinkType[] = [];
-		let link = '';
-		for (let i = 0; i < urlArrayWithoutSlash.length; i++) {
-			if (urlArrayWithoutSlash[i] === '/') {
-				link += '/';
-				res = [
-					...res,
-					{
-						href: '/',
-						title: 'Home',
-					},
-				];
-			} else if (!isNaN(Number(urlArrayWithoutSlash[i]))) {
-				link += urlArrayWithoutSlash[i] + '/';
-				res = [
-					...res,
-					{
-						href: link,
-						title: urlArrayWithoutSlash[i],
-					},
-				];
-			} else if (urlArrayWithoutSlash[i] === 'task') {
-				link += urlArrayWithoutSlash[i] + '/';
+	const makeDepthRouterLocation = (url: string): LinkType[] => {
+		const urlArray = url.split('/').filter(Boolean);
+		const res: LinkType[] = [{ href: '/', title: 'Home' }];
+		let link = '/';
+
+		urlArray.forEach((item, index) => {
+			if (item === 'task') {
+				link += item + '/';
 			} else {
-				link += urlArrayWithoutSlash[i] + '/';
-				res = [
-					...res,
-					{
-						href: link,
-						title: urlArrayWithoutSlash[i],
-					},
-				];
+				link += item + '/';
+				res.push({
+					href: link,
+					title:
+						urlArray[index - 1] === 'collections'
+							? 'collection'
+							: urlArray[index - 1] === 'task'
+								? 'task'
+								: item,
+				});
 			}
-		}
-		return res;
+		});
+
+		return res.slice(0, -1);
 	};
 
 	useEffect(() => {
