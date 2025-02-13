@@ -14,6 +14,7 @@ import styles from './exerciseCard.module.css';
 import { useExerciseProgressStore, DEFAULT_DATA_TEST } from '@/store/exercise-progress';
 import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
+import { useCommonStore } from '@/store/common';
 
 export const ExerciseCard = () => {
 	const navigate = useNavigate();
@@ -21,6 +22,7 @@ export const ExerciseCard = () => {
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
 
+	const fullExerciseScreen = useCommonStore.use.fullExerciseScreen();
 	const exerciseListId = useExerciseProgressStore.use.exerciseListIds();
 	const totalExerciseCorrectResponse =
 		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseCorrectResponse;
@@ -29,6 +31,7 @@ export const ExerciseCard = () => {
 		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
 
+	const setFullScreen = useCommonStore.use.setFullScreen();
 	const getExerciseMode = useExerciseProgressStore.use.getExerciseMode();
 	const getExerciseById = useExerciseProgressStore.use.getExerciseById();
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
@@ -61,11 +64,12 @@ export const ExerciseCard = () => {
 
 		return () => {
 			saveProgressToLocalStore(collectionsId);
+			setFullScreen(false);
 		};
 	}, [taskId]);
 
 	return (
-		<WrapperCard>
+		<WrapperCard fullScreen={fullExerciseScreen} setFullScreen={setFullScreen}>
 			<div className={styles.taskContainer}>
 				{isDoneExercise && (
 					<Result

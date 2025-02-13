@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
 import { ExerciseType } from '@/store/exercise-progress';
@@ -28,14 +28,34 @@ export const SelectingUI = ({
 		explanationVariants,
 	} = task;
 
+	const [error, setError] = useState<string>('');
+	const [selectVariants, setSelectVariants] = useState<string[]>([]);
+
+	useEffect(() => {
+		setSelectVariants(explanationVariants);
+
+		return () => {
+			setError('');
+		};
+	}, [explanationVariants]);
+
 	const onSelect = (answer: string) => {
 		let word = answer;
-		if (currentWord === 0) {
-			word = answer.charAt(0).toUpperCase() + answer.slice(1);
-		}
 
 		const isCorrectWord = word.toLowerCase() === explanationAnswer[currentWord].toLocaleLowerCase();
 
+		if (!isCorrectWord) {
+			setError(word);
+			return;
+		} else {
+			setError('');
+		}
+
+		const filtered = selectVariants.filter((v) => v !== word);
+
+		if (currentWord === 0) {
+			word = answer.charAt(0).toUpperCase() + answer.slice(1);
+		}
 		const isComplete = currentWord + 1 === explanationAnswer.length;
 		if (isComplete) {
 			updateProgress(task.id, isCorrectWord);
@@ -57,6 +77,8 @@ export const SelectingUI = ({
 				isComplete,
 			};
 		});
+
+		setSelectVariants(filtered);
 	};
 
 	return (
@@ -83,9 +105,14 @@ export const SelectingUI = ({
 			</div>
 
 			<div className={styles.words}>
-				{explanationVariants.map((s, i) => (
-					<div key={i} className={styles.word}>
-						<Button size="large" type="default" onClick={() => onSelect(s)}>
+				{selectVariants.map((s, i) => (
+					<div key={`${i}${s}`} className={styles.word}>
+						<Button
+							size="large"
+							color={error === s ? 'danger' : 'default'}
+							variant="outlined"
+							onClick={() => onSelect(s)}
+						>
 							{s}
 						</Button>
 					</div>

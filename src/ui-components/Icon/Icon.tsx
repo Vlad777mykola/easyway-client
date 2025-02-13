@@ -18,6 +18,8 @@ import {
 	ClearOutlined,
 	FilterOutlined,
 	CheckOutlined,
+	FullscreenOutlined,
+	FullscreenExitOutlined,
 } from '@ant-design/icons';
 
 import styles from './icon.module.css';
@@ -37,6 +39,8 @@ const IconVariants = {
 	clear: ClearOutlined,
 	filter: FilterOutlined,
 	check: CheckOutlined,
+	fullScreen: FullscreenOutlined,
+	exitFullScreen: FullscreenExitOutlined,
 };
 
 export type IconVariantsType = keyof typeof IconVariants;
