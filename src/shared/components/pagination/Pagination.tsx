@@ -29,7 +29,11 @@ export type ExamModeType = BaseFieldsDataType & {
 	exerciseMode: 'examMode';
 };
 
-export const Pagination = (props: ExamModeType | RandomModeType) => {
+export type InfinitiveModeType = BaseFieldsDataType & {
+	exerciseMode: 'infinitiveMode';
+};
+
+export const Pagination = (props: ExamModeType | RandomModeType | InfinitiveModeType) => {
 	// const debouncedAutoNavigate = useDebounce(isAutoNavigate, 1000);
 	// const { isRandom, isExam } = exerciseMode;
 	// const currentIndex: number = ids.findIndex((id) => id === currentId);
@@ -89,39 +93,11 @@ export const Pagination = (props: ExamModeType | RandomModeType) => {
 			return <Random {...props} />;
 		case 'examMode':
 			return <Exam {...props} />;
+		case 'infinitiveMode':
+			return <Infinitive {...props} />;
 		default:
 			return null;
 	}
-
-	// return (
-	// 	<>
-	// 		<div className={styles.prevQuestion}>
-	// 			<CircleButton type="default" size="large" onClick={() => swapQuestion(STEP.PREV)}>
-	// 				<Icon icon="left" variant="dark" />
-	// 			</CircleButton>
-	// 		</div>
-	// 		<div className={styles.nextQuestion}>
-	// 			<CircleButton type="default" size="large" onClick={() => swapQuestion(STEP.NEXT)}>
-	// 				<Icon icon="right" variant="dark" />
-	// 			</CircleButton>
-	// 		</div>
-	// 		{!isRandom && (
-	// 			<div className={styles.pagination}>
-	// 				{ids.map((id, index) => (
-	// 					<Button
-	// 						key={id}
-	// 						size="small"
-	// 						type={currentIndex === index ? 'primary' : 'default'}
-	// 						onClick={() => navigateTo(id)}
-	// 					>
-	// 						{index + 1}
-	// 					</Button>
-	// 				))}
-	// 			</div>
-	// 		)}
-	// 		{isRandom && <Progress filledSteps={filedCount} totalSteps={totalCount} />}
-	// 	</>
-	// );
 };
 
 // {

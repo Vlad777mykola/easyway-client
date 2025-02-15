@@ -1,0 +1,6 @@
+.nextQuestion {
+	display: block;
+	position: absolute;
+	top: 40%;
+	right: -30px;
+}
