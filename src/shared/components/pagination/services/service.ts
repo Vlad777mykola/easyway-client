@@ -4,8 +4,8 @@ import { STEP } from '../constants/constants';
 export const swapQuestion = (
 	move: string,
 	exerciseMode: string,
-	currentIndex,
-	ids,
+	currentIndex: number,
+	ids: string[],
 	navigateTo: (id: string) => void,
 ) => {
 	if (exerciseMode === 'randomMode') {
@@ -16,10 +16,6 @@ export const swapQuestion = (
 
 	const lastIndex = currentIndex === ids.length - 1;
 	const firstIndex = currentIndex === 0;
-
-	if (exerciseMode === 'examMode' && firstIndex) {
-		return;
-	}
 
 	if (exerciseMode === 'examMode' && lastIndex) {
 		navigateTo('done');

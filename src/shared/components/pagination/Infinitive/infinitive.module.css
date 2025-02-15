@@ -17,3 +17,9 @@
 	gap: 5px;
 	margin: 20px 0px 0px;
 }
+
+.dots {
+	display: flex;
+	align-self: end;
+	font-weight: bold;
+}
