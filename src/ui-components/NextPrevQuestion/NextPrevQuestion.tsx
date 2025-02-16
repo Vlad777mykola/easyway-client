@@ -12,26 +12,14 @@ export const NextPrevQuestion = ({
 	<>
 		{swapLeft && (
 			<div className={styles.prevQuestion}>
-				<CircleButton
-					type="default"
-					size="large"
-					onClick={() => {
-						swapLeft();
-					}}
-				>
+				<CircleButton type="default" size="large" onClick={() => swapLeft()}>
 					<Icon icon="left" variant="dark" />
 				</CircleButton>
 			</div>
 		)}
 		{swapRight && (
 			<div className={styles.nextQuestion}>
-				<CircleButton
-					type="default"
-					size="large"
-					onClick={() => {
-						swapRight();
-					}}
-				>
+				<CircleButton type="default" size="large" onClick={() => swapRight()}>
 					<Icon icon="right" variant="dark" />
 				</CircleButton>
 			</div>

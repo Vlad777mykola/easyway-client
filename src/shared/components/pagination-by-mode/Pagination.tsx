@@ -17,15 +17,15 @@ export type BaseFieldsDataType = {
 export type RandomModeType = BaseFieldsDataType & {
 	totalCount: number;
 	filledCount: number;
-	exerciseMode: 'randomMode';
+	exerciseMode: typeof EXERCISE_MODE.isRandom;
 };
 
 export type ExamModeType = BaseFieldsDataType & {
-	exerciseMode: 'examMode';
+	exerciseMode: typeof EXERCISE_MODE.isExam;
 };
 
 export type InfinitiveModeType = BaseFieldsDataType & {
-	exerciseMode: 'infinitiveMode';
+	exerciseMode: typeof EXERCISE_MODE.isInfinitive;
 };
 
 export const Pagination = (props: ExamModeType | RandomModeType | InfinitiveModeType) => {

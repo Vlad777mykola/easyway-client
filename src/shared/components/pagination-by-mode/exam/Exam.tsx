@@ -1,8 +1,8 @@
 import { ExamModeType } from '../Pagination';
 import { swapQuestion } from '../utils/swapQuestion';
 import { STEP } from '../constants/constants';
-import { NextPrevQuestion } from '../../../../ui-components/NextPrevQuestion/NextPrevQuestion';
-import { PaginationControls } from '../../../../ui-components/PaginationControls/PaginationControls';
+import { NextPrevQuestion } from '@/ui-components/NextPrevQuestion/NextPrevQuestion';
+import { PaginationControls } from '@/ui-components/PaginationControls/PaginationControls';
 
 export const Exam = (props: ExamModeType) => {
 	const { ids, currentId, navigateTo } = props;
@@ -19,11 +19,7 @@ export const Exam = (props: ExamModeType) => {
 
 	return (
 		<>
-			<NextPrevQuestion
-				swapRight={() => {
-					swapNextQuestion();
-				}}
-			/>
+			<NextPrevQuestion swapRight={() => swapNextQuestion()} />
 			<PaginationControls exerciseMode={props.exerciseMode} ids={ids} currentIndex={currentIndex} />
 		</>
 	);

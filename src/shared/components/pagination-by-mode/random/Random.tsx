@@ -1,10 +1,9 @@
 import { RandomModeType } from '../Pagination';
 import { Progress } from '@/shared/components/progress';
 import { getRandomInteger } from '@/shared/utils/get-random-integer';
-import { NextPrevQuestion } from '../../../../ui-components/NextPrevQuestion/NextPrevQuestion';
+import { NextPrevQuestion } from '@/ui-components/NextPrevQuestion/NextPrevQuestion';
 
-export const Random = (props: RandomModeType) => {
-	const { ids, currentId, totalCount, filledCount, navigateTo } = props;
+export const Random = ({ ids, currentId, totalCount, filledCount, navigateTo }: RandomModeType) => {
 	const currentIndex: number = ids.findIndex((id) => id === currentId);
 
 	const swapNext = () => {

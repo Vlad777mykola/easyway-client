@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { SmileOutlined } from '@ant-design/icons';
-import { Button, Result } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Icon } from '@/ui-components/Icon';
+import { Button } from '@/ui-components/Button';
+import { Result } from '@/ui-components/Result';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
-import { Pagination } from '@/shared/components/pagination-ui-mode/Pagination';
+import { Pagination } from '@/shared/components/pagination-by-mode/Pagination';
 import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
 import { ExerciseUI } from './components/ExerciseUI';
 import { useExerciseListData } from './hooks/useExerciseListData';
@@ -57,10 +58,7 @@ export const ExerciseCard = () => {
 		getProgressFromLocalStore(collectionsId);
 		setIsAutoNavigate(false);
 
-		return () => {
-			saveProgressToLocalStore(collectionsId);
-			setFullScreen(false);
-		};
+		return () => saveProgressToLocalStore(collectionsId);
 	}, [taskId]);
 
 	return (
@@ -68,7 +66,7 @@ export const ExerciseCard = () => {
 			<div className={styles.taskContainer}>
 				{isDoneExercise && (
 					<Result
-						icon={<SmileOutlined />}
+						icon={<Icon icon="smile" size="xl" />}
 						title="Great, you have done all the exercise!"
 						extra={
 							<Button onClick={() => navigate(`/collections/${collectionsId}`)} type="primary">
