@@ -1,8 +1,12 @@
 import { Button } from '@/ui-components/Button';
-import { DOTS, PAGE_SIZE, SIBLING_COUNT } from '../constants/constants';
+import {
+	DOTS,
+	PAGE_SIZE,
+	SIBLING_COUNT,
+} from '../../shared/components/pagination-ui-mode/constants/constants';
 import styles from './pagination-controls.module.css';
 import { useMemo } from 'react';
-import { getRangePagination } from '../utils/getRangePagination';
+import { getRangePagination } from '../../shared/components/pagination-ui-mode/utils/getRangePagination';
 
 export const PaginationControls = ({
 	exerciseMode,

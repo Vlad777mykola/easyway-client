@@ -3,7 +3,7 @@ import { SmileOutlined } from '@ant-design/icons';
 import { Button, Result } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
-import { Pagination } from '@/shared/components/pagination/Pagination';
+import { Pagination } from '@/shared/components/pagination-ui-mode/Pagination';
 import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
 import { ExerciseUI } from './components/ExerciseUI';
 import { useExerciseListData } from './hooks/useExerciseListData';

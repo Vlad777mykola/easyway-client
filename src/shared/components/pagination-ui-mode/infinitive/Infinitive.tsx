@@ -1,8 +1,8 @@
 import { InfinitiveModeType } from '../Pagination';
 import { STEP } from '../constants/constants';
 import { swapQuestion } from '../utils/swapQuestion';
-import { NextPrevQuestion } from '../next-prev-question/NextPrevQuestion';
-import { PaginationControls } from '../pagination-controls/PaginationControls';
+import { NextPrevQuestion } from '../../../../ui-components/NextPrevQuestion/NextPrevQuestion';
+import { PaginationControls } from '../../../../ui-components/PaginationControls/PaginationControls';
 import styles from './infinitive.module.css';
 
 export const Infinitive = (props: InfinitiveModeType) => {

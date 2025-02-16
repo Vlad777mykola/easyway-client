@@ -1,7 +1,7 @@
 import { RandomModeType } from '../Pagination';
 import { Progress } from '@/shared/components/progress';
 import { getRandomInteger } from '@/shared/utils/get-random-integer';
-import { NextPrevQuestion } from '../next-prev-question/NextPrevQuestion';
+import { NextPrevQuestion } from '../../../../ui-components/NextPrevQuestion/NextPrevQuestion';
 import { STEP } from '../constants/constants';
 import styles from './random.module.css';
 

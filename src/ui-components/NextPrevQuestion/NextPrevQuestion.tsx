@@ -1,5 +1,5 @@
 import { CircleButton } from '@/ui-components/CircleButton';
-import { STEP, StepType } from '../constants/constants';
+import { STEP, StepType } from '../../shared/components/pagination-ui-mode/constants/constants';
 import { Icon } from '@/ui-components/Icon';
 
 export const NextPrevQuestion = ({

@@ -1,8 +1,8 @@
 import { ExamModeType } from '../Pagination';
 import { swapQuestion } from '../utils/swapQuestion';
 import { STEP } from '../constants/constants';
-import { NextPrevQuestion } from '../next-prev-question/NextPrevQuestion';
-import { PaginationControls } from '../pagination-controls/PaginationControls';
+import { NextPrevQuestion } from '../../../../ui-components/NextPrevQuestion/NextPrevQuestion';
+import { PaginationControls } from '../../../../ui-components/PaginationControls/PaginationControls';
 import styles from './exam.module.css';
 
 export const Exam = (props: ExamModeType) => {

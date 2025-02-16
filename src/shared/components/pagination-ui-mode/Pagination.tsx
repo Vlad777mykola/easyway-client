@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useDebounce } from '@/shared/hooks/use-debounce';
-import { Random } from './Random/Random';
-import { Infinitive } from './Infinitive/Infinitive';
-import { Exam } from './Exam/Exam';
+import { Random } from './random/Random';
+import { Infinitive } from './infinitive/Infinitive';
+import { Exam } from './exam/Exam';
 import { STEP } from './constants/constants';
 import { swapQuestion } from './utils/swapQuestion';
 
