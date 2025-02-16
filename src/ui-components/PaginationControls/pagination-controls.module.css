@@ -12,7 +12,8 @@
 
 .noHoverEffect:hover,
 .noHoverEffect:focus {
-	background: transparent !important;
+	background: transparent;
 	border-color: #d9d9d9 !important;
 	color: inherit !important;
+	cursor: not-allowed;
 }

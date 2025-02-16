@@ -3,7 +3,6 @@ import { STEP } from '../constants/constants';
 import { swapQuestion } from '../utils/swapQuestion';
 import { NextPrevQuestion } from '../../../../ui-components/NextPrevQuestion/NextPrevQuestion';
 import { PaginationControls } from '../../../../ui-components/PaginationControls/PaginationControls';
-import styles from './infinitive.module.css';
 
 export const Infinitive = (props: InfinitiveModeType) => {
 	const { currentId, ids, navigateTo, exerciseMode } = props;
@@ -11,18 +10,10 @@ export const Infinitive = (props: InfinitiveModeType) => {
 
 	return (
 		<>
-			<div className={styles.prevQuestion}>
-				<NextPrevQuestion
-					direction={STEP.PREV}
-					swapQuestion={() => swapQuestion(STEP.PREV, currentIndex, ids, navigateTo)}
-				/>
-			</div>
-			<div className={styles.nextQuestion}>
-				<NextPrevQuestion
-					direction={STEP.NEXT}
-					swapQuestion={() => swapQuestion(STEP.NEXT, currentIndex, ids, navigateTo)}
-				/>
-			</div>
+			<NextPrevQuestion
+				swapLeft={() => swapQuestion(STEP.PREV, currentIndex, ids, navigateTo)}
+				swapRight={() => swapQuestion(STEP.NEXT, currentIndex, ids, navigateTo)}
+			/>
 			<PaginationControls
 				exerciseMode={exerciseMode}
 				ids={ids}

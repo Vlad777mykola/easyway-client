@@ -57,7 +57,7 @@ export type ExerciseType = {
 	variants: { [key: string]: string[] };
 };
 
-type ExerciseModeType = (typeof EXERCISE_MODE)[keyof typeof EXERCISE_MODE];
+export type ExerciseModeType = (typeof EXERCISE_MODE)[keyof typeof EXERCISE_MODE];
 type ExerciseFormateType = (typeof EXERCISE_FORMATE)[keyof typeof EXERCISE_FORMATE];
 type AllExerciseModesType = {
 	[key in keyof typeof EXERCISE_MODE]: boolean;

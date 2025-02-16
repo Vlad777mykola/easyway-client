@@ -7,6 +7,7 @@ import {
 import styles from './pagination-controls.module.css';
 import { useMemo } from 'react';
 import { getRangePagination } from '../../shared/components/pagination-ui-mode/utils/getRangePagination';
+import { ExerciseModeType } from '@/store/exercise-progress/useExerciseProgressStore';
 
 export const PaginationControls = ({
 	exerciseMode,
@@ -14,7 +15,7 @@ export const PaginationControls = ({
 	currentIndex,
 	navigateTo = () => {},
 }: {
-	exerciseMode: 'randomMode' | 'infinitiveMode' | 'examMode';
+	exerciseMode: ExerciseModeType;
 	ids: string[];
 	currentIndex: number;
 	navigateTo?: (id: string) => void;

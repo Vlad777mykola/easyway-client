@@ -2,23 +2,20 @@ import { RandomModeType } from '../Pagination';
 import { Progress } from '@/shared/components/progress';
 import { getRandomInteger } from '@/shared/utils/get-random-integer';
 import { NextPrevQuestion } from '../../../../ui-components/NextPrevQuestion/NextPrevQuestion';
-import { STEP } from '../constants/constants';
-import styles from './random.module.css';
 
 export const Random = (props: RandomModeType) => {
-	const currentIndex: number = props.ids.findIndex((id) => id === props.currentId);
+	const { ids, currentId, totalCount, filledCount, navigateTo } = props;
+	const currentIndex: number = ids.findIndex((id) => id === currentId);
+
+	const swapNext = () => {
+		const moveIndex = getRandomInteger(currentIndex, ids.length - 1);
+		navigateTo(ids[moveIndex]);
+	};
+
 	return (
 		<>
-			<div className={styles.nextQuestion}>
-				<NextPrevQuestion
-					direction={STEP.NEXT}
-					swapQuestion={() => {
-						const moveIndex = getRandomInteger(currentIndex, props.ids.length - 1);
-						props.navigateTo(props.ids[moveIndex]);
-					}}
-				/>
-			</div>
-			<Progress filledSteps={props.filledCount} totalSteps={props.totalCount} />
+			<NextPrevQuestion swapRight={() => swapNext()} />
+			<Progress filledSteps={filledCount} totalSteps={totalCount} />
 		</>
 	);
 };

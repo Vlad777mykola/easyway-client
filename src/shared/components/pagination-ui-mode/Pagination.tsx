@@ -5,6 +5,7 @@ import { Infinitive } from './infinitive/Infinitive';
 import { Exam } from './exam/Exam';
 import { STEP } from './constants/constants';
 import { swapQuestion } from './utils/swapQuestion';
+import { EXERCISE_MODE } from '@/store/exercise-progress';
 
 export type BaseFieldsDataType = {
 	ids: string[];
@@ -38,11 +39,11 @@ export const Pagination = (props: ExamModeType | RandomModeType | InfinitiveMode
 	}, [debouncedAutoNavigate]);
 
 	switch (props.exerciseMode) {
-		case 'randomMode':
+		case EXERCISE_MODE.isRandom:
 			return <Random {...props} />;
-		case 'examMode':
+		case EXERCISE_MODE.isExam:
 			return <Exam {...props} />;
-		case 'infinitiveMode':
+		case EXERCISE_MODE.isInfinitive:
 			return <Infinitive {...props} />;
 		default:
 			return null;
