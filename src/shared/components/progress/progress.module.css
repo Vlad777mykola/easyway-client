@@ -6,13 +6,13 @@
 .progressItem {
 	width: 10px;
 	height: 10px;
-	background: rgb(187,197,203);
-	background: radial-gradient(circle, rgba(187,197,203,1) 33%, rgba(100,105,111,1) 100%);
+	background: rgb(187, 197, 203);
+	background: radial-gradient(circle, rgba(187, 197, 203, 1) 33%, rgba(100, 105, 111, 1) 100%);
 	border-radius: 4px;
 }
 
 .filledPass {
 	background: var(--color-primary);
-	background: rgb(88,192,255);
-	background: radial-gradient(circle, rgba(88,192,255,1) 33%, rgba(56,138,235,1) 100%);
+	background: rgb(88, 192, 255);
+	background: radial-gradient(circle, rgba(88, 192, 255, 1) 33%, rgba(56, 138, 235, 1) 100%);
 }

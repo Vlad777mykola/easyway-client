@@ -1,20 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
+import { SmileOutlined } from '@ant-design/icons';
+import { Button, Result } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { Pagination } from '@/shared/components/pagination/Pagination';
 import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
 import { ExerciseUI } from './components/ExerciseUI';
 import { useExerciseListData } from './hooks/useExerciseListData';
-import type { ExerciseType } from '@/store/exercise-progress';
-
-import { SmileOutlined } from '@ant-design/icons';
-import { Button, Result } from 'antd';
-
-import styles from './exerciseCard.module.css';
+import { useCommonStore } from '@/store/common';
 import { useExerciseProgressStore, DEFAULT_DATA_TEST } from '@/store/exercise-progress';
 import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
-import { useCommonStore } from '@/store/common';
+import type { ExerciseType } from '@/store/exercise-progress';
+import styles from './exerciseCard.module.css';
 
 export const ExerciseCard = () => {
 	const navigate = useNavigate();
@@ -24,18 +22,15 @@ export const ExerciseCard = () => {
 
 	const fullExerciseScreen = useCommonStore.use.fullExerciseScreen();
 	const exerciseListId = useExerciseProgressStore.use.exerciseListIds();
-	const totalExerciseCorrectResponse =
-		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseCorrectResponse;
 	const isDoneExercise = taskId === 'done' || exerciseListId.length === 0;
 	const isSelectingFormate =
 		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
 
 	const setFullScreen = useCommonStore.use.setFullScreen();
-	const getExerciseMode = useExerciseProgressStore.use.getExerciseMode();
 	const getExerciseById = useExerciseProgressStore.use.getExerciseById();
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
-	const getExerciseProgressById = useExerciseProgressStore.use.getExerciseProgressById();
+	// const getExerciseProgressById = useExerciseProgressStore.use.getExerciseProgressById();
 	const setExerciseListProgress = useExerciseProgressStore.use.setExerciseListProgress();
 	const saveProgressToLocalStore = useExerciseProgressStore.use.saveProgressToLocalStore();
 	const getProgressFromLocalStore = useExerciseProgressStore.use.getProgressFromLocalStore();
@@ -104,7 +99,7 @@ export const ExerciseCard = () => {
 				{!isDoneExercise && exerciseListId && (
 					<Pagination
 						ids={exerciseListId}
-						exerciseMode="examMode"
+						exerciseMode="infinitiveMode"
 						currentId={`${taskId}`}
 						isAutoNavigate={isAutoNavigate}
 						navigateTo={(id: string) => onNavigate(id)}

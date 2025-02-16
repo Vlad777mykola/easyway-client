@@ -11,8 +11,8 @@
 }
 
 .noHoverEffect:hover,
-.noHoverEffect:focus{
-  background: transparent !important;
-  border-color: #d9d9d9 !important;
-  color: inherit !important;
+.noHoverEffect:focus {
+	background: transparent !important;
+	border-color: #d9d9d9 !important;
+	color: inherit !important;
 }
