@@ -4,22 +4,3 @@
 	top: 40%;
 	right: -30px;
 }
-
-.pagination {
-	display: flex;
-	gap: 5px;
-	margin: 20px 0px 0px;
-}
-
-.dots {
-	display: flex;
-	align-self: end;
-	font-weight: bold;
-}
-
-.noHoverEffect:hover,
-.noHoverEffect:focus{
-  background: transparent !important;
-  border-color: #d9d9d9 !important;
-  color: inherit !important;
-}

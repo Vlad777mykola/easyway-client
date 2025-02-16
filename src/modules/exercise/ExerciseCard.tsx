@@ -104,7 +104,7 @@ export const ExerciseCard = () => {
 				{!isDoneExercise && exerciseListId && (
 					<Pagination
 						ids={exerciseListId}
-						exerciseMode="infinitiveMode"
+						exerciseMode="examMode"
 						currentId={`${taskId}`}
 						isAutoNavigate={isAutoNavigate}
 						navigateTo={(id: string) => onNavigate(id)}

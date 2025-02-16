@@ -1,26 +1,13 @@
-import { getRandomInteger } from '@/shared/utils/get-random-integer';
-import { STEP } from '../constants/constants';
+import { STEP, StepType } from '../constants/constants';
 
 export const swapQuestion = (
-	move: string,
-	exerciseMode: string,
+	move: StepType,
 	currentIndex: number,
 	ids: string[],
 	navigateTo: (id: string) => void,
 ) => {
-	if (exerciseMode === 'randomMode') {
-		const moveIndex = getRandomInteger(currentIndex, ids.length - 1);
-		navigateTo(ids[moveIndex]);
-		return;
-	}
-
 	const lastIndex = currentIndex === ids.length - 1;
 	const firstIndex = currentIndex === 0;
-
-	if (exerciseMode === 'examMode' && lastIndex) {
-		navigateTo('done');
-		return;
-	}
 
 	if (move === STEP.NEXT) {
 		const moveIndex = lastIndex ? 0 : currentIndex + 1;

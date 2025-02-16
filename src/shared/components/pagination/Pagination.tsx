@@ -4,8 +4,7 @@ import { Random } from './Random/Random';
 import { Infinitive } from './Infinitive/Infinitive';
 import { Exam } from './Exam/Exam';
 import { STEP } from './constants/constants';
-import { swapQuestion } from './services/service';
-import styles from './pagination.module.css';
+import { swapQuestion } from './utils/swapQuestion';
 
 export type BaseFieldsDataType = {
 	ids: string[];
@@ -34,7 +33,7 @@ export const Pagination = (props: ExamModeType | RandomModeType | InfinitiveMode
 
 	useEffect(() => {
 		if (debouncedAutoNavigate) {
-			swapQuestion(STEP.NEXT, props.exerciseMode, currentIndex, props.ids, props.navigateTo);
+			swapQuestion(STEP.NEXT, currentIndex, props.ids, props.navigateTo);
 		}
 	}, [debouncedAutoNavigate]);
 
@@ -49,14 +48,3 @@ export const Pagination = (props: ExamModeType | RandomModeType | InfinitiveMode
 			return null;
 	}
 };
-
-// {
-// 	ids,
-// 	exerciseMode,
-// 	currentId,
-// 	navigateTo,
-// 	totalCount,
-// 	filedCount,
-// 	isAutoNavigate,
-// 	paginationType,
-// }
