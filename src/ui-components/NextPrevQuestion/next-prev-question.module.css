@@ -11,9 +11,3 @@
 	top: 40%;
 	right: -30px;
 }
-
-.pagination {
-	display: flex;
-	gap: 5px;
-	margin: 20px 0px 0px;
-}
