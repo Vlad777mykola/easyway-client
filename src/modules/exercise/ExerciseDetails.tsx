@@ -60,7 +60,7 @@ export const ExerciseDetails = (): ReactNode => {
 				<Statistics collectionsId={collectionsId || ''} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
-				<Sidebar title="Collection options" fieldsData={fieldsData} onChange={onChange} />
+				<Sidebar title="Exercise Stings" fieldsData={fieldsData} onChange={onChange} />
 			</ContentContainer.Sidebar>
 			<ContentContainer.Content>
 				{exerciseListResponse && <List data={exerciseListResponse} />}

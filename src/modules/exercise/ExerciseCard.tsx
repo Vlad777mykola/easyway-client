@@ -64,7 +64,6 @@ export const ExerciseCard = () => {
 
 		return () => {
 			saveProgressToLocalStore(collectionsId);
-			setFullScreen(false);
 		};
 	}, [taskId]);
 

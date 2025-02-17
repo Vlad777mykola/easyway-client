@@ -5,16 +5,16 @@ type CollectionFilterStoreState = {
 };
 
 type CollectionFilterStoreActions = {
-	setFullScreen: (value?: boolean) => void;
+	setFullScreen: () => void;
 };
 
 export type CollectionFilterStoreType = CollectionFilterStoreState & CollectionFilterStoreActions;
 
 export const useCommonStoreBase = create<CollectionFilterStoreType>()((set, get) => ({
 	fullExerciseScreen: false,
-	setFullScreen: (value) => {
+	setFullScreen: () => {
 		set((state) => {
-			return { ...state, fullExerciseScreen: value || !get().fullExerciseScreen };
+			return { ...state, fullExerciseScreen: !get().fullExerciseScreen };
 		});
 	},
 }));

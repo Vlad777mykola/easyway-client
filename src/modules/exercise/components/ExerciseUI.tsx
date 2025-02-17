@@ -36,9 +36,9 @@ export const ExerciseUI = ({
 
 	const onSelect = (answer: string) => {
 		let word = answer;
-		if (currentWord === 0) {
-			word = answer.charAt(0).toUpperCase() + answer.slice(1);
-		}
+		// if (currentWord === 0) {
+		// 	word = answer.charAt(0).toUpperCase() + answer.slice(1);
+		// }
 
 		const isCorrectWord =
 			word.toLowerCase() ===
