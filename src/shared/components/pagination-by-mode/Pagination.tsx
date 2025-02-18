@@ -28,7 +28,7 @@ export type InfinitiveModeType = BaseFieldsDataType & {
 	exerciseMode: typeof EXERCISE_MODE.isInfinitive;
 };
 
-export const Pagination = (props: ExamModeType | RandomModeType | InfinitiveModeType) => {
+export const Pagination = (props: InfinitiveModeType | RandomModeType | ExamModeType) => {
 	const debouncedAutoNavigate = useDebounce(props.isAutoNavigate, 1000);
 	const currentIndex: number = props.ids.findIndex((id) => id === props.currentId);
 

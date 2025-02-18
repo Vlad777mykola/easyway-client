@@ -9,7 +9,7 @@ import {
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
-import { Statistics } from './components/Statistics';
+import { Statistics } from './components/statistics/Statistics';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
 export const ExerciseDetails = (): ReactNode => {

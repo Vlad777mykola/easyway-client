@@ -107,7 +107,7 @@ type ExerciseStoreActions = {
 	getExerciseFormate: () => AllExerciseFormateType;
 
 	setExerciseListProgress: (id: string, isResolved: boolean) => void;
-	getExerciseProgressById: (id: string) => ExerciseListProgressType | null;
+	getExerciseProgressById: (id: string) => number;
 
 	saveProgressToLocalStore: (collectionId: string) => void;
 	getProgressFromLocalStore: (collectionId: string) => void;
@@ -129,7 +129,7 @@ export const useExerciseProgressStoreBase = create<ExerciseStoreType>()((set, ge
 	collectionsExerciseConfig: {
 		exerciseMode: EXERCISE_MODE.isRandom,
 		exerciseCorrectResponse: 15,
-		exerciseFormate: EXERCISE_FORMATE.isSelecting,
+		exerciseFormate: EXERCISE_FORMATE.isClassic,
 	},
 
 	setExerciseListResponse: (exerciseList, collectionId) => {
@@ -220,7 +220,7 @@ export const useExerciseProgressStoreBase = create<ExerciseStoreType>()((set, ge
 
 	getExerciseProgressById: (id) => {
 		const state = get().exerciseListProgress;
-		return state.find((item) => item.id === id) || null;
+		return state.find((item) => item.id === id)?.countCorrectAnswers || 0;
 	},
 	setExerciseListProgress: (id, isResolved) => {
 		set((state) => {

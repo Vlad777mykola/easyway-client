@@ -5,7 +5,7 @@ import { ExerciseType, useExerciseProgressStore } from '@/store/exercise-progres
 import { Typography } from '@/ui-components/Typography';
 import { classes } from '@/shared/utils/classes';
 
-import styles from './exerciseUI.module.css';
+import styles from './exerciseContent.module.css';
 import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 
 export const ExerciseUI = ({

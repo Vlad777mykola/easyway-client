@@ -4,9 +4,8 @@ import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
 import { Result } from '@/ui-components/Result';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
-import { Pagination } from '@/shared/components/pagination-by-mode/Pagination';
 import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
-import { ExerciseUI } from './components/ExerciseUI';
+import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { useExerciseListData } from './hooks/useExerciseListData';
 import { useCommonStore } from '@/store/common';
 import { useExerciseProgressStore, DEFAULT_DATA_TEST } from '@/store/exercise-progress';
@@ -14,6 +13,7 @@ import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressS
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import type { ExerciseType } from '@/store/exercise-progress';
 import styles from './exerciseCard.module.css';
+import { PaginationExercise } from './components/pagination/Pagination';
 
 export const ExerciseCard = () => {
 	const navigate = useNavigate();
@@ -31,7 +31,6 @@ export const ExerciseCard = () => {
 	const setFullScreen = useCommonStore.use.setFullScreen();
 	const getExerciseById = useExerciseProgressStore.use.getExerciseById();
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
-	// const getExerciseProgressById = useExerciseProgressStore.use.getExerciseProgressById();
 	const setExerciseListProgress = useExerciseProgressStore.use.setExerciseListProgress();
 	const saveProgressToLocalStore = useExerciseProgressStore.use.saveProgressToLocalStore();
 	const getProgressFromLocalStore = useExerciseProgressStore.use.getProgressFromLocalStore();
@@ -94,13 +93,12 @@ export const ExerciseCard = () => {
 						updateProgress={setExerciseListProgress}
 					/>
 				)}
+
 				{!isDoneExercise && exerciseListId && (
-					<Pagination
-						ids={exerciseListId}
-						exerciseMode="infinitiveMode"
-						currentId={`${taskId}`}
+					<PaginationExercise
+						taskId={taskId}
 						isAutoNavigate={isAutoNavigate}
-						navigateTo={(id: string) => onNavigate(id)}
+						onNavigate={(id: string) => onNavigate(id)}
 					/>
 				)}
 			</div>
