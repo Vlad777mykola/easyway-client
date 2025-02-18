@@ -5,7 +5,7 @@ import { ExerciseType, useExerciseProgressStore } from '@/store/exercise-progres
 import { Typography } from '@/ui-components/Typography';
 import { classes } from '@/shared/utils/classes';
 
-import styles from './exerciseUI.module.css';
+import styles from './exerciseContent.module.css';
 import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 
 export const ExerciseUI = ({
@@ -36,9 +36,9 @@ export const ExerciseUI = ({
 
 	const onSelect = (answer: string) => {
 		let word = answer;
-		if (currentWord === 0) {
-			word = answer.charAt(0).toUpperCase() + answer.slice(1);
-		}
+		// if (currentWord === 0) {
+		// 	word = answer.charAt(0).toUpperCase() + answer.slice(1);
+		// }
 
 		const isCorrectWord =
 			word.toLowerCase() ===

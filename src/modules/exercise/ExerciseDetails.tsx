@@ -9,7 +9,7 @@ import {
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
-import { Statistics } from './components/Statistics';
+import { Statistics } from './components/statistics/Statistics';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
 export const ExerciseDetails = (): ReactNode => {
@@ -60,7 +60,7 @@ export const ExerciseDetails = (): ReactNode => {
 				<Statistics collectionsId={collectionsId || ''} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
-				<Sidebar title="Collection options" fieldsData={fieldsData} onChange={onChange} />
+				<Sidebar title="Exercise Stings" fieldsData={fieldsData} onChange={onChange} />
 			</ContentContainer.Sidebar>
 			<ContentContainer.Content>
 				{exerciseListResponse && <List data={exerciseListResponse} />}

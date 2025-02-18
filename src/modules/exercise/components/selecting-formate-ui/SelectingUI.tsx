@@ -53,9 +53,9 @@ export const SelectingUI = ({
 
 		const filtered = selectVariants.filter((v) => v !== word);
 
-		if (currentWord === 0) {
-			word = answer.charAt(0).toUpperCase() + answer.slice(1);
-		}
+		// if (currentWord === 0) {
+		// 	word = answer.charAt(0).toUpperCase() + answer.slice(1);
+		// }
 		const isComplete = currentWord + 1 === explanationAnswer.length;
 		if (isComplete) {
 			updateProgress(task.id, isCorrectWord);
