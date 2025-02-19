@@ -40,6 +40,186 @@ export const FILTER_LABELS = {
 	category: 'category',
 };
 
+export const DEFAULT_COLLECTIONS_VOCABULARY = [
+	{
+		id: '1',
+		topic: 'Family',
+		categories: ['Other'],
+		level: ['A1', 'B2'],
+		words: [
+			{
+				english: 'Father',
+				ukrainian: 'Батько',
+				transcription: '[ˈfɑːðər]',
+				partOfSpeech: 'noun',
+				explanation: 'A male parent of a child.',
+				examples: ['My father is a doctor.', 'He became a father at the age of 30.'],
+			},
+			{
+				english: 'Mother',
+				ukrainian: 'Мати',
+				transcription: '[ˈmʌðər]',
+				partOfSpeech: 'noun',
+				explanation: 'A female parent of a child.',
+				examples: ['My mother makes the best apple pie.', 'She is a wonderful mother.'],
+			},
+			{
+				english: 'Brother',
+				ukrainian: 'Брат',
+				transcription: '[ˈbrʌðər]',
+				partOfSpeech: 'noun',
+				explanation: 'A male sibling.',
+				examples: ['My brother is two years younger than me.', 'He is my older brother.'],
+			},
+			{
+				english: 'Sister',
+				ukrainian: 'Сестра',
+				transcription: '[ˈsɪstər]',
+				partOfSpeech: 'noun',
+				explanation: 'A female sibling.',
+				examples: ['My sister loves to paint.', 'I have a twin sister.'],
+			},
+		],
+	},
+	{
+		id: '2',
+		topic: 'Parts of the body',
+		categories: ['Other', 'Adjectives'],
+		level: ['A1', 'B2', 'C1'],
+		words: [
+			{
+				english: 'Head',
+				ukrainian: 'Голова',
+				transcription: '[hɛd]',
+				partOfSpeech: 'noun',
+				explanation:
+					'The upper part of the human body that contains the brain, eyes, ears, nose, and mouth.',
+				examples: ['She shook her head in disagreement.', 'I have a headache.'],
+			},
+			{
+				english: 'Face',
+				ukrainian: 'Обличчя',
+				transcription: '[feɪs]',
+				partOfSpeech: 'noun',
+				explanation: "The front part of a person's head including the eyes, nose, and mouth.",
+				examples: ['She has a beautiful face.', 'His face turned red from embarrassment.'],
+			},
+			{
+				english: 'Eye',
+				ukrainian: 'Око',
+				transcription: '[aɪ]',
+				partOfSpeech: 'noun',
+				explanation: 'The organ of sight in humans and animals.',
+				examples: ['She has blue eyes.', 'An eyelash got into my eye.'],
+			},
+			{
+				english: 'Nose',
+				ukrainian: 'Ніс',
+				transcription: '[noʊz]',
+				partOfSpeech: 'noun',
+				explanation: 'The part of the face used for smelling and breathing.',
+				examples: ['He has a small nose.', 'She wrinkled her nose at the bad smell.'],
+			},
+		],
+	},
+	{
+		id: '3',
+		topic: 'Clothes',
+		categories: ['Other', 'Adjectives', 'Verbs'],
+		level: ['A1', 'B2', 'C1', 'C2'],
+		words: [
+			{
+				english: 'Shirt',
+				ukrainian: 'Сорочка',
+				transcription: '[ʃɜːrt]',
+				partOfSpeech: 'noun',
+				explanation:
+					'A piece of clothing worn on the upper body, usually with buttons and a collar.',
+				examples: ['He wore a white shirt to the meeting.', 'I bought a new blue shirt yesterday.'],
+			},
+			{
+				english: 'T-shirt',
+				ukrainian: 'Футболка',
+				transcription: '[ˈtiːʃɜːrt]',
+				partOfSpeech: 'noun',
+				explanation: 'A casual short-sleeved top, usually made of cotton.',
+				examples: [
+					'He prefers wearing a T-shirt and jeans.',
+					'I have a black T-shirt with a funny print.',
+				],
+			},
+			{
+				english: 'Jeans',
+				ukrainian: 'Джинси',
+				transcription: '[dʒiːnz]',
+				partOfSpeech: 'noun',
+				explanation: 'Trousers made of denim fabric, often blue in color.',
+				examples: ['She bought a new pair of jeans.', 'Jeans are comfortable for everyday wear.'],
+			},
+			{
+				english: 'Jacket',
+				ukrainian: 'Куртка',
+				transcription: '[ˈdʒækɪt]',
+				partOfSpeech: 'noun',
+				explanation: 'A short coat worn over other clothes for warmth or style.',
+				examples: [
+					'He wore a leather jacket to the concert.',
+					'I need a warm jacket for the winter.',
+				],
+			},
+		],
+	},
+	{
+		id: '4',
+		topic: 'Describing people',
+		categories: ['Adjectives', 'Verbs'],
+		level: ['B1', 'B2'],
+		words: [
+			{
+				english: 'Tall',
+				ukrainian: 'Високий',
+				transcription: '[tɔːl]',
+				partOfSpeech: 'adjective',
+				explanation: 'Having a greater than average height.',
+				examples: [
+					'He is very tall for his age.',
+					'The tall man helped me get something from the top shelf.',
+				],
+			},
+			{
+				english: 'Short',
+				ukrainian: 'Низький',
+				transcription: '[ʃɔːrt]',
+				partOfSpeech: 'adjective',
+				explanation: 'Having a small height.',
+				examples: [
+					'She is quite short compared to her brother.',
+					'I need a shorter ladder to reach the top.',
+				],
+			},
+			{
+				english: 'Slim',
+				ukrainian: 'Стрункий',
+				transcription: '[slɪm]',
+				partOfSpeech: 'adjective',
+				explanation: 'Thin in an attractive way.',
+				examples: ['She has a slim figure.', 'He stays slim by exercising regularly.'],
+			},
+			{
+				english: 'Overweight',
+				ukrainian: 'Зайва вага',
+				transcription: '[ˌoʊvərˈweɪt]',
+				partOfSpeech: 'adjective',
+				explanation: 'Weighing more than is considered healthy.',
+				examples: [
+					'Being overweight can lead to health problems.',
+					'He started exercising to lose some weight.',
+				],
+			},
+		],
+	},
+];
+
 export const DEFAULT_COLLECTIONS = [
 	{
 		id: '1',

@@ -13,6 +13,10 @@ const sideMenuItems = [
 		name: 'Collections',
 		link: '/',
 	},
+	{
+		name: 'Vocabulary',
+		link: '/vocabulary',
+	},
 ];
 
 const profileMenuItems = [

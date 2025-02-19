@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@/layouts/main/Layouts';
+import { Vocabulary } from '@/pages/Vocabulary';
 // import { Auth } from '@/pages/Auth';
 // import Home from '@/pages/Home';
 
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
 			{ path: '', element: <CollectionsPage /> },
 			{ path: 'collections', element: <CollectionsPage /> },
 			{ path: 'complete-test', element: <CompleteTest /> },
+			{ path: 'vocabulary', element: <Vocabulary /> },
 			{ path: 'collections/:collectionsId', element: <ExerciseDetails /> },
 			{ path: 'collections/:collectionsId/task/:taskId', element: <CompleteTest /> },
 		],

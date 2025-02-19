@@ -6,6 +6,12 @@ export const EXERCISE_CONFIG_LABELS = {
 	FORMAT: 'Use a exercise or exercise explanation',
 } as const;
 
+export const VOCABULARY_CONFIG_LABELS = {
+	topic: 'Topic',
+	categories: 'Categories',
+	level: 'Level',
+};
+
 export const MAX_VARIANTS = 8;
 
 export const PRONOUN_CATEGORIES: Variants = {
