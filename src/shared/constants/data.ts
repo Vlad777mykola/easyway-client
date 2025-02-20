@@ -43,8 +43,9 @@ export const FILTER_LABELS = {
 export const DEFAULT_COLLECTIONS_VOCABULARY = [
 	{
 		id: '1',
+		title: 'Family',
 		topic: 'Family',
-		categories: ['Other'],
+		category: ['Other'],
 		level: ['A1', 'B2'],
 		words: [
 			{
@@ -83,8 +84,9 @@ export const DEFAULT_COLLECTIONS_VOCABULARY = [
 	},
 	{
 		id: '2',
+		title: 'Parts of the body',
 		topic: 'Parts of the body',
-		categories: ['Other', 'Adjectives'],
+		category: ['Other', 'Adjectives'],
 		level: ['A1', 'B2', 'C1'],
 		words: [
 			{
@@ -124,8 +126,9 @@ export const DEFAULT_COLLECTIONS_VOCABULARY = [
 	},
 	{
 		id: '3',
+		title: 'Clothes',
 		topic: 'Clothes',
-		categories: ['Other', 'Adjectives', 'Verbs'],
+		category: ['Other', 'Adjectives', 'Verbs'],
 		level: ['A1', 'B2', 'C1', 'C2'],
 		words: [
 			{
@@ -171,8 +174,9 @@ export const DEFAULT_COLLECTIONS_VOCABULARY = [
 	},
 	{
 		id: '4',
+		title: 'Describing people',
 		topic: 'Describing people',
-		categories: ['Adjectives', 'Verbs'],
+		category: ['Adjectives', 'Verbs'],
 		level: ['B1', 'B2'],
 		words: [
 			{

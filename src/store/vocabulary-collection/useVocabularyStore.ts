@@ -1,6 +1,8 @@
 import { create } from 'zustand';
+import { filterVocabularyCollections } from './service';
 
 const DEFAULT_VOCABULARY_CONFIG = {
+	title: '',
 	vocabularyTopic: [],
 	vocabularyCategories: [],
 	levelBased: [],
@@ -32,6 +34,7 @@ export const LEVEL_BASED = {
 };
 
 export const VOCABULARY_CONFIG = {
+	title: 'title',
 	topic: 'vocabularyTopic',
 	categories: 'vocabularyCategories',
 	level: 'levelBased',
@@ -41,15 +44,16 @@ type Word = {
 	english: string;
 	ukrainian: string;
 	transcription: string;
-	partOfSpeech: VocabularyCategoriesType;
+	partOfSpeech: string;
 	explanation: string;
 	examples: string[];
 };
 
-type VocabularyListType = {
+export type VocabularyListType = {
 	id: string;
+	title: string;
 	topic: VocabularyTopicType;
-	categories: VocabularyCategoriesType[];
+	category: string[];
 	level: LevelBasedType[];
 	words: Word[];
 };
@@ -58,7 +62,8 @@ type VocabularyTopicType = (typeof VOCABULARY_TOPICS)[keyof typeof VOCABULARY_TO
 type VocabularyCategoriesType = (typeof VOCABULARY_CATEGORIES)[keyof typeof VOCABULARY_CATEGORIES];
 type LevelBasedType = (typeof LEVEL_BASED)[keyof typeof LEVEL_BASED];
 
-type VocabularyConfigType = {
+export type VocabularyConfigType = {
+	title: string;
 	vocabularyTopic: VocabularyTopicType[];
 	vocabularyCategories: VocabularyCategoriesType[];
 	levelBased: LevelBasedType[];
@@ -66,32 +71,33 @@ type VocabularyConfigType = {
 type VocabularyConfigKeyType = keyof VocabularyConfigType;
 
 type VocabularyStoreState = {
-	vocabularyList: VocabularyListType[];
+	vocabularyCollections: VocabularyListType[];
 	collectionsVocabularyConfig: VocabularyConfigType;
+	filteredCollectionsVocabulary: VocabularyListType[];
 };
 
 type VocabularyStoreActions = {
 	getVocabularyConfig: (
 		key: VocabularyConfigKeyType,
-	) => VocabularyTopicType[] | VocabularyCategoriesType[] | LevelBasedType[];
+	) => VocabularyTopicType[] | VocabularyCategoriesType[] | LevelBasedType[] | string;
 	setCollectionsVocabularyConfig: (
 		key: string,
 		value: number[] | string | boolean | string[] | number,
 	) => void;
 	setClean: () => void;
+	setFilterVocabularyOnSearch: () => void;
+	setVocabularyCollections: (vocabularyCollections: VocabularyListType[]) => void;
 };
 
 export type VocabularyStoreType = VocabularyStoreState & VocabularyStoreActions;
 
 export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) => ({
-	vocabularyList: [],
-	collectionsVocabularyConfig: {
-		vocabularyTopic: [VOCABULARY_TOPICS.CLOTHES],
-		vocabularyCategories: [VOCABULARY_CATEGORIES.ADJECTIVES],
-		levelBased: [LEVEL_BASED.A1],
-	},
+	vocabularyCollections: [],
+	collectionsVocabularyConfig: DEFAULT_VOCABULARY_CONFIG,
+	filteredCollectionsVocabulary: [],
 	setCollectionsVocabularyConfig: (key, value) => {
 		set((state) => ({
+			...state,
 			collectionsVocabularyConfig: {
 				...state.collectionsVocabularyConfig,
 				[key]: value,
@@ -103,6 +109,25 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 			...state,
 			collectionsVocabularyConfig: DEFAULT_VOCABULARY_CONFIG,
 		}));
+	},
+	setFilterVocabularyOnSearch: () => {
+		const collectionsVocabularyConfig = get().collectionsVocabularyConfig;
+		const vocabularyCollections = get().vocabularyCollections;
+		const filteredVocabulary = filterVocabularyCollections(
+			vocabularyCollections,
+			collectionsVocabularyConfig,
+		);
+
+		console.log('FILTERED VOCABULARY: ', filteredVocabulary);
+
+		set((state) => {
+			return { ...state, filteredCollectionsVocabulary: filteredVocabulary };
+		});
+	},
+	setVocabularyCollections: (vocabularyCollections) => {
+		set((state) => {
+			return { ...state, vocabularyCollections: vocabularyCollections };
+		});
 	},
 	getVocabularyConfig: (key) => {
 		return get().collectionsVocabularyConfig[key];

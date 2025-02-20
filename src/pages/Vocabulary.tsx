@@ -9,13 +9,22 @@ import {
 	VOCABULARY_TOPICS,
 } from '@/store/vocabulary-collection/useVocabularyStore';
 import { ContentContainer } from '@/ui-components/Content-Container';
+import { useEffect } from 'react';
 
 export const Vocabulary = () => {
 	const vocabulary = useVocabularyStore((state) => state);
 	const getVocabularyConfig = useVocabularyStore.use.getVocabularyConfig();
 	const setCollectionsVocabularyConfig = useVocabularyStore.use.setCollectionsVocabularyConfig();
+	const setFilterVocabularyOnSearch = useVocabularyStore.use.setFilterVocabularyOnSearch();
 	const setClean = useVocabularyStore.use.setClean();
 	const fieldsData: FieldsDataType[] = [
+		{
+			keyValue: VOCABULARY_CONFIG.title,
+			getDefaultValue: () => getVocabularyConfig(VOCABULARY_CONFIG.title) as string,
+			label: VOCABULARY_CONFIG_LABELS.topic,
+			componentType: SIDE_BAR_COMPONENT_TYPE.INPUT,
+			placeholder: VOCABULARY_CONFIG.title,
+		},
 		{
 			keyValue: VOCABULARY_CONFIG.topic,
 			options: Object.values(VOCABULARY_TOPICS),
@@ -44,12 +53,16 @@ export const Vocabulary = () => {
 	};
 
 	const onSearch = () => {
-		//setFilterDataOnSearch();
+		setFilterVocabularyOnSearch();
 	};
 
 	const onClear = () => {
 		setClean();
 	};
+
+	useEffect(() => {
+		setFilterVocabularyOnSearch();
+	}, []);
 
 	console.log('VOCABULARY: ', vocabulary);
 

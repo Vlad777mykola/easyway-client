@@ -5,6 +5,8 @@ export {
 	VOCABULARY_CONFIG,
 } from './useVocabularyStore';
 
+export type { VocabularyListType, VocabularyConfigType } from './useVocabularyStore';
+
 import { createSelectors } from '../createSelectors';
 import { useVocabularyStoreBase } from './useVocabularyStore';
 
