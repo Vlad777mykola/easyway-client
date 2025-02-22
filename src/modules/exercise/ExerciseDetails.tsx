@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { List } from '@/shared/components/list/List';
 import {
@@ -14,6 +14,7 @@ import { useExerciseListData } from './hooks/useExerciseListData';
 
 export const ExerciseDetails = (): ReactNode => {
 	const { collectionsId = '' } = useParams();
+	const navigate = useNavigate();
 	const exerciseListResponse = useExerciseProgressStore.use.exerciseListResponse();
 	const getExerciseConfig = useExerciseProgressStore.use.getExerciseConfig();
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
@@ -54,6 +55,10 @@ export const ExerciseDetails = (): ReactNode => {
 		setCollectionsExerciseConfig(key, value);
 	};
 
+	const onClick = (id: string) => {
+		navigate(`/collections/${collectionsId}/task/${id}`);
+	};
+
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
@@ -63,7 +68,7 @@ export const ExerciseDetails = (): ReactNode => {
 				<Sidebar title="Exercise Stings" fieldsData={fieldsData} onChange={onChange} />
 			</ContentContainer.Sidebar>
 			<ContentContainer.Content>
-				{exerciseListResponse && <List data={exerciseListResponse} />}
+				{exerciseListResponse && <List data={exerciseListResponse} onClick={onClick} />}
 			</ContentContainer.Content>
 		</ContentContainer>
 	);

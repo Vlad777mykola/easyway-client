@@ -7,12 +7,6 @@ export const filterVocabularyCollections = (
 	const { title, vocabularyTopic, vocabularyCategories, levelBased } = filterData;
 
 	return data.filter((item) => {
-		console.log(
-			'TITLE: ',
-			title,
-			'some: ',
-			title ? item.title.toLowerCase().includes(title.toLowerCase()) : true,
-		);
 		return (
 			(title ? item.title.toLowerCase().includes(title.toLowerCase()) : true) &&
 			(vocabularyCategories.length > 0

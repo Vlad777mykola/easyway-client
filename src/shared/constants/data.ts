@@ -1,4 +1,5 @@
 import { id1, id2, id3 } from './suportData';
+import { vocabularyId1, vocabularyId2, vocabularyId3, vocabularyId4 } from './vocabularyData';
 import { common1000 } from './words/1000words';
 
 export type ExerciseResponseType = {
@@ -40,6 +41,12 @@ export const FILTER_LABELS = {
 	category: 'category',
 };
 
+export const ALL_VOCABULARIES_BY_ID = new Map([
+	['1', vocabularyId1],
+	['2', vocabularyId2],
+	['3', vocabularyId3],
+	['4', vocabularyId4],
+]);
 export const DEFAULT_COLLECTIONS_VOCABULARY = [
 	{
 		id: '1',
@@ -47,40 +54,6 @@ export const DEFAULT_COLLECTIONS_VOCABULARY = [
 		topic: 'Family',
 		category: ['Other'],
 		level: ['A1', 'B2'],
-		words: [
-			{
-				english: 'Father',
-				ukrainian: 'Батько',
-				transcription: '[ˈfɑːðər]',
-				partOfSpeech: 'noun',
-				explanation: 'A male parent of a child.',
-				examples: ['My father is a doctor.', 'He became a father at the age of 30.'],
-			},
-			{
-				english: 'Mother',
-				ukrainian: 'Мати',
-				transcription: '[ˈmʌðər]',
-				partOfSpeech: 'noun',
-				explanation: 'A female parent of a child.',
-				examples: ['My mother makes the best apple pie.', 'She is a wonderful mother.'],
-			},
-			{
-				english: 'Brother',
-				ukrainian: 'Брат',
-				transcription: '[ˈbrʌðər]',
-				partOfSpeech: 'noun',
-				explanation: 'A male sibling.',
-				examples: ['My brother is two years younger than me.', 'He is my older brother.'],
-			},
-			{
-				english: 'Sister',
-				ukrainian: 'Сестра',
-				transcription: '[ˈsɪstər]',
-				partOfSpeech: 'noun',
-				explanation: 'A female sibling.',
-				examples: ['My sister loves to paint.', 'I have a twin sister.'],
-			},
-		],
 	},
 	{
 		id: '2',
@@ -88,41 +61,6 @@ export const DEFAULT_COLLECTIONS_VOCABULARY = [
 		topic: 'Parts of the body',
 		category: ['Other', 'Adjectives'],
 		level: ['A1', 'B2', 'C1'],
-		words: [
-			{
-				english: 'Head',
-				ukrainian: 'Голова',
-				transcription: '[hɛd]',
-				partOfSpeech: 'noun',
-				explanation:
-					'The upper part of the human body that contains the brain, eyes, ears, nose, and mouth.',
-				examples: ['She shook her head in disagreement.', 'I have a headache.'],
-			},
-			{
-				english: 'Face',
-				ukrainian: 'Обличчя',
-				transcription: '[feɪs]',
-				partOfSpeech: 'noun',
-				explanation: "The front part of a person's head including the eyes, nose, and mouth.",
-				examples: ['She has a beautiful face.', 'His face turned red from embarrassment.'],
-			},
-			{
-				english: 'Eye',
-				ukrainian: 'Око',
-				transcription: '[aɪ]',
-				partOfSpeech: 'noun',
-				explanation: 'The organ of sight in humans and animals.',
-				examples: ['She has blue eyes.', 'An eyelash got into my eye.'],
-			},
-			{
-				english: 'Nose',
-				ukrainian: 'Ніс',
-				transcription: '[noʊz]',
-				partOfSpeech: 'noun',
-				explanation: 'The part of the face used for smelling and breathing.',
-				examples: ['He has a small nose.', 'She wrinkled her nose at the bad smell.'],
-			},
-		],
 	},
 	{
 		id: '3',
@@ -178,49 +116,6 @@ export const DEFAULT_COLLECTIONS_VOCABULARY = [
 		topic: 'Describing people',
 		category: ['Adjectives', 'Verbs'],
 		level: ['B1', 'B2'],
-		words: [
-			{
-				english: 'Tall',
-				ukrainian: 'Високий',
-				transcription: '[tɔːl]',
-				partOfSpeech: 'adjective',
-				explanation: 'Having a greater than average height.',
-				examples: [
-					'He is very tall for his age.',
-					'The tall man helped me get something from the top shelf.',
-				],
-			},
-			{
-				english: 'Short',
-				ukrainian: 'Низький',
-				transcription: '[ʃɔːrt]',
-				partOfSpeech: 'adjective',
-				explanation: 'Having a small height.',
-				examples: [
-					'She is quite short compared to her brother.',
-					'I need a shorter ladder to reach the top.',
-				],
-			},
-			{
-				english: 'Slim',
-				ukrainian: 'Стрункий',
-				transcription: '[slɪm]',
-				partOfSpeech: 'adjective',
-				explanation: 'Thin in an attractive way.',
-				examples: ['She has a slim figure.', 'He stays slim by exercising regularly.'],
-			},
-			{
-				english: 'Overweight',
-				ukrainian: 'Зайва вага',
-				transcription: '[ˌoʊvərˈweɪt]',
-				partOfSpeech: 'adjective',
-				explanation: 'Weighing more than is considered healthy.',
-				examples: [
-					'Being overweight can lead to health problems.',
-					'He started exercising to lose some weight.',
-				],
-			},
-		],
 	},
 ];
 

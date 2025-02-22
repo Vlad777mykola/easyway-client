@@ -1,5 +1,5 @@
-import { VocabularyCollections } from '@/modules/collections/components/vocabulary-collections/VocabularyCollections';
-import { VOCABULARY_CONFIG_LABELS } from '@/modules/exercise/constants';
+import { VocabularyCollections } from '@/modules/vocabularies/components/vocabulary-collections/VocabularyCollections';
+import { VOCABULARY_CONFIG_LABELS } from '@/modules/vocabularies/constants';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
 import { useVocabularyStore } from '@/store/vocabulary-collection';
 import {
@@ -11,7 +11,7 @@ import {
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { useEffect } from 'react';
 
-export const Vocabulary = () => {
+export const VocabularyDetails = () => {
 	const vocabulary = useVocabularyStore((state) => state);
 	const getVocabularyConfig = useVocabularyStore.use.getVocabularyConfig();
 	const setCollectionsVocabularyConfig = useVocabularyStore.use.setCollectionsVocabularyConfig();

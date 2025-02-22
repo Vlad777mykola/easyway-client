@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 import styles from './item.module.css';
-import { useNavigate } from 'react-router-dom';
 
 export const Item = <
 	T extends {
@@ -11,17 +10,11 @@ export const Item = <
 	},
 >({
 	data,
+	onClick,
 }: {
 	data: T;
+	onClick: (id: string) => void;
 }): ReactNode => {
-	const navigate = useNavigate();
-
-	const onClick = (id: string) => {
-		navigate(`/collections/${id}`);
-	};
-
-	console.log('ITEM DATA: ', data);
-
 	return (
 		<section onClick={() => onClick(data.id)} className={styles.itemContainer}>
 			<h1 className={styles.title}>{data.title}</h1>
