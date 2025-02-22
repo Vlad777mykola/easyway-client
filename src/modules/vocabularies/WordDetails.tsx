@@ -9,14 +9,18 @@ import { EXERCISE_CONFIG_LABELS } from './constants';
 import { EXERCISE_CONFIG } from '../exercise/constants';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 
+import styles from './wordDetails.module.css';
+
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
 	const store = useVocabularyStore((state) => state);
-	const words = useVocabularyStore((state) => state.words);
+	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
 	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
 	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
 	const setWordConfig = useVocabularyStore((store) => store.setWordConfig);
 	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
+	const setCleanWordConfig = useVocabularyStore.use.setCleanWordConfig();
+	const setFilterWordOnSearch = useVocabularyStore.use.setFilterWordOnSearch();
 	const getExerciseConfig = useVocabularyStore.use.getExerciseConfig();
 	const navigate = useNavigate();
 
@@ -66,9 +70,13 @@ export const WordDetails = () => {
 		setCollectionsExerciseConfig(key, value);
 	};
 
-	const onSearch = () => {};
+	const onSearch = () => {
+		setFilterWordOnSearch();
+	};
 
-	const onClear = () => {};
+	const onClear = () => {
+		setCleanWordConfig();
+	};
 
 	const onClick = (id: string) => {
 		navigate(`/vocabularies/${vocabulariesId}/word/${id}`);
@@ -80,17 +88,23 @@ export const WordDetails = () => {
 				<Statistics collectionsId={vocabulariesId || ''} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
-				<Sidebar
-					title="Find Word / Знайди слово"
-					fieldsData={fieldsDataWord}
-					onChange={onChangeWord}
-					onSearch={onSearch}
-					onClear={onClear}
-				/>
-				<Sidebar title="Exercise Stings" fieldsData={fieldsDataMode} onChange={onChangeMode} />
+				<div className={styles.sidebarContainer}>
+					<div>
+						<Sidebar
+							title="Find Word / Знайди слово"
+							fieldsData={fieldsDataWord}
+							onChange={onChangeWord}
+							onSearch={onSearch}
+							onClear={onClear}
+						/>
+					</div>
+					<div>
+						<Sidebar title="Exercise Stings" fieldsData={fieldsDataMode} onChange={onChangeMode} />
+					</div>
+				</div>
 			</ContentContainer.Sidebar>
 			<ContentContainer.Content>
-				{words && <List data={words} onClick={onClick} />}
+				{filteredWordsVocabulary && <List data={filteredWordsVocabulary} onClick={onClick} />}
 			</ContentContainer.Content>
 		</ContentContainer>
 	);

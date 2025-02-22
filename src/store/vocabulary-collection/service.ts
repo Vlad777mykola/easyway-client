@@ -1,4 +1,4 @@
-import { VocabularyListType, VocabularyConfigType } from './useVocabularyStore';
+import { VocabularyListType, VocabularyConfigType, Word } from './useVocabularyStore';
 
 export const filterVocabularyCollections = (
 	data: VocabularyListType[],
@@ -17,5 +17,11 @@ export const filterVocabularyCollections = (
 				: true) &&
 			(levelBased.length > 0 ? levelBased.some((level) => item.level.includes(level)) : true)
 		);
+	});
+};
+
+export const filterWordCollection = (data: Word[], wordConfig: string) => {
+	return data.filter((item) => {
+		return item ? item.exerciseAnswer.toLowerCase().includes(wordConfig.toLocaleLowerCase()) : true;
 	});
 };

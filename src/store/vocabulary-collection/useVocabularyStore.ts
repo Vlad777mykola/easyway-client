@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { filterVocabularyCollections } from './service';
+import { filterVocabularyCollections, filterWordCollection } from './service';
 import { ExerciseResponseType } from '@/shared/constants/data';
 import { getReadyQuestion } from '@/modules/vocabularies/services/fetchDefinition';
 import { localstorage } from '@/shared/utils/local-storage/localstorage';
@@ -149,7 +149,8 @@ type VocabularyStoreState = {
 	vocabularyCollections: VocabularyListType[];
 	collectionsVocabularyConfig: VocabularyConfigType;
 	filteredCollectionsVocabulary: VocabularyListType[];
-	wordConfig: number[] | string | boolean | string[] | number;
+	filteredWordsVocabulary: Word[];
+	wordConfig: string;
 	words: Word[];
 	exerciseListIds: string[];
 	collectionsExerciseConfig: ExerciseConfigType;
@@ -183,6 +184,7 @@ type VocabularyStoreActions = {
 	setClean: () => void;
 	setCleanWordConfig: () => void;
 	setFilterVocabularyOnSearch: () => void;
+	setFilterWordOnSearch: () => void;
 	setVocabularyCollections: (vocabularyCollections: VocabularyListType[]) => void;
 	setWordsListResponse: (vocabularyList: Word[]) => void;
 	setExerciseListResponse: (exerciseList: ExerciseResponseType[], collectionId: string) => void;
@@ -196,6 +198,7 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 	vocabularyCollections: [],
 	collectionsVocabularyConfig: DEFAULT_VOCABULARY_CONFIG,
 	filteredCollectionsVocabulary: [],
+	filteredWordsVocabulary: [],
 	wordConfig: DEFAULT_WORD_CONFIG,
 	words: [],
 	exerciseListIds: [],
@@ -233,7 +236,21 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 			collectionsVocabularyConfig: DEFAULT_VOCABULARY_CONFIG,
 		}));
 	},
-	setCleanWordConfig: () => {},
+	setCleanWordConfig: () => {
+		set((state) => ({
+			...state,
+			wordConfig: DEFAULT_WORD_CONFIG,
+		}));
+	},
+	setFilterWordOnSearch: () => {
+		const wordConfig = get().wordConfig;
+		const wordsCollection = get().words;
+		const filteredWords = filterWordCollection(wordsCollection, wordConfig);
+
+		set((state) => {
+			return { ...state, filteredWordsVocabulary: filteredWords };
+		});
+	},
 	setFilterVocabularyOnSearch: () => {
 		const collectionsVocabularyConfig = get().collectionsVocabularyConfig;
 		const vocabularyCollections = get().vocabularyCollections;
@@ -241,8 +258,6 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 			vocabularyCollections,
 			collectionsVocabularyConfig,
 		);
-
-		console.log('FILTERED VOCABULARY: ', filteredVocabulary);
 
 		set((state) => {
 			return { ...state, filteredCollectionsVocabulary: filteredVocabulary };
@@ -255,7 +270,7 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 	},
 	setWordsListResponse: (vocabularyList) => {
 		set((state) => {
-			return { ...state, words: vocabularyList };
+			return { ...state, words: vocabularyList, filteredWordsVocabulary: vocabularyList };
 		});
 	},
 	setExerciseListResponse: (exerciseList, collectionId) => {
