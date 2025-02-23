@@ -19,7 +19,7 @@ export const NavHeader = () => {
 		let link = '/';
 
 		urlArray.forEach((item, index) => {
-			if (item === 'task') {
+			if (item === 'task' || item === 'word') {
 				link += item + '/';
 			} else {
 				link += item + '/';

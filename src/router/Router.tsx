@@ -11,7 +11,10 @@ const CompleteTest = lazy(() => import('@/pages/CompleteTest'));
 const DictionaryPage = lazy(() => import('@/pages/DictionaryPage'));
 
 const CollectionsPage = lazy(() => import('@/pages/CollectionsPage'));
+const VocabulariesPage = lazy(() => import('@/pages/VocabulariesPage'));
 const ExerciseDetails = lazy(() => import('@/pages/ExerciseDetailsPage'));
+const WordDetailsPage = lazy(() => import('@/pages/WordDetailsPage'));
+const CompleteWordTest = lazy(() => import('@/pages/CompleteWordTest'));
 
 export const router = createBrowserRouter([
 	{
@@ -31,10 +34,12 @@ export const router = createBrowserRouter([
 				path: 'dictionaries/:dictionaryId/word/:wordId',
 				element: <DictionaryExerciseCard />,
 			},
-
+			{ path: 'vocabularies', element: <VocabulariesPage /> },
 			{ path: 'collections', element: <CollectionsPage /> },
 			{ path: 'collections/:collectionsId', element: <ExerciseDetails /> },
 			{ path: 'collections/:collectionsId/task/:taskId', element: <CompleteTest /> },
+			{ path: 'vocabularies/:vocabulariesId', element: <WordDetailsPage /> },
+			{ path: 'vocabularies/:vocabulariesId/word/:wordId', element: <CompleteWordTest /> },
 		],
 	},
 ]);

@@ -1,15 +1,15 @@
+export const VOCABULARY_CONFIG_LABELS = {
+	topic: 'Topic',
+	categories: 'Categories',
+	level: 'Level',
+};
+
 import type { Variants } from './services/showVariants';
 
 export const EXERCISE_CONFIG_LABELS = {
 	MODE: 'Exercise Mode',
 	CORRECT_RESPONSE: 'Count of total correct response',
 	FORMAT: 'Use a exercise or exercise explanation',
-} as const;
-
-export const EXERCISE_CONFIG = {
-	MODE: 'exerciseMode',
-	TOTAL_CORRECT_RESPONSE: 'exerciseCorrectResponse',
-	FORMATE: 'exerciseFormate',
 } as const;
 
 export const MAX_VARIANTS = 8;
@@ -111,7 +111,7 @@ export const PREPOSITION_CATEGORIES: Variants = {
 	reasons: ['because of', 'due to', 'for', 'to', 'in order to'],
 };
 
-export const CONJUNCTIONS_CATEGORIES: Variants = {
+export const CONJUCTIONS_CATEGORIES: Variants = {
 	coordinating: ['for', 'and', 'nor', 'but', 'or', 'yet', 'so'],
 	time: [
 		'after',
