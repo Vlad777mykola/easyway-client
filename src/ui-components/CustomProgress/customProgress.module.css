@@ -1,0 +1,68 @@
+.progress {
+  background-color: #d8d8d8;
+	border-radius: 20px;
+	position: relative;
+	margin: 15px 0;
+}
+
+.progressDone {
+	border-radius: 20px;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 0;
+	opacity: 0;
+	transition: 1s ease 0.3s;
+}
+
+.primary {
+  background: linear-gradient(to left, var(--color-primary-hover), var(--color-primary));
+  box-shadow: 0 3px 3px -5px var(--color-primary-hover), 0 2px 5px var(--color-primary);
+}
+
+.secondary {
+  background: linear-gradient(to left, var(--color-secondary-hover), var(--color-secondary));
+  box-shadow: 0 3px 3px -5px var(--color-secondary-hover), 0 2px 5px var(--color-secondary);
+}
+
+.success {
+  background: linear-gradient(to left, var(--color-success-hover), var(--color-success));
+  box-shadow: 0 3px 3px -5px var(--color-success-hover), 0 2px 5px var(--color-success);
+}
+
+.error {
+  background: linear-gradient(to left, var(--color-error-hover), var(--color-error));
+  box-shadow: 0 3px 3px -5px var(--color-error-hover), 0 2px 5px var(--color-error);
+}
+
+.xs {
+  width: 20%;
+  height: var(--custom-xs-height-size);
+  font-size: var(--font-size-xs);
+}
+
+.s {
+  width: 25%;
+  height: 30px;
+  font-size: var(--font-size-s);
+}
+
+.m {
+  width: 30%;
+  height: var(--custom-m-height-size);
+  font-size: var(--font-size-m);
+}
+
+.l {
+  width: 35%;
+  height: var(--custom-l-height-size);
+  font-size: var(--font-size-l);
+}
+
+.xl {
+  width: 40%;
+  height: var(--custom-xl-height-size);
+  font-size: var(--font-size-xl);
+}

@@ -10,6 +10,7 @@ import { EXERCISE_CONFIG } from '../exercise/constants';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 
 import styles from './wordDetails.module.css';
+import { CustomProgress } from '@/ui-components/CustomProgress/CustomProgress';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
@@ -82,7 +83,8 @@ export const WordDetails = () => {
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<Statistics collectionsId={vocabulariesId || ''} />
+				{/* <Statistics collectionsId={vocabulariesId || ''} /> */}
+				<CustomProgress done={50} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<div className={styles.sidebarContainer}>
