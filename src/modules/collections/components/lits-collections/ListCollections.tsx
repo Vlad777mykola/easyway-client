@@ -1,9 +1,9 @@
 import { ReactNode, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Item } from '../item/Item';
-import styles from './listCollections.module.css';
 import { getAllCollections } from '../../services/getAllCollections';
 import { useCollectionFilter } from '@/store/collection-filter';
-import { useNavigate } from 'react-router-dom';
+import styles from './listCollections.module.css';
 
 export const ListCollections = (): ReactNode => {
 	const filteredCollectionsData = useCollectionFilter((store) => store.filteredCollectionsData);

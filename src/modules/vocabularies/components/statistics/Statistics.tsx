@@ -1,8 +1,8 @@
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Progress } from '@/ui-components/Progress';
 import { Button } from '@/ui-components/Button';
-import styles from './statistics.module.css';
 import { useExerciseProgressStore } from '@/store/exercise-progress';
+import styles from './statistics.module.css';
 
 const WRONG_CORRECT = {
 	wrong: 30,

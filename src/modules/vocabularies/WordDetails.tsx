@@ -1,10 +1,10 @@
+import { useNavigate, useParams } from 'react-router-dom';
 import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
 import { SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
 import { EXERCISE_MODE, useVocabularyStore, WORD_CONFIG } from '@/store/vocabulary-collection';
 import { ContentContainer } from '@/ui-components/Content-Container';
-import { useNavigate, useParams } from 'react-router-dom';
 import { EXERCISE_CONFIG_LABELS } from './constants';
 import { EXERCISE_CONFIG } from '../exercise/constants';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
@@ -13,7 +13,6 @@ import styles from './wordDetails.module.css';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
-	const store = useVocabularyStore((state) => state);
 	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
 	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
 	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
@@ -57,8 +56,6 @@ export const WordDetails = () => {
 			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
 		},
 	];
-
-	console.log('STORE SHOW WORD: ', store);
 
 	useVocabularyListData(setWordsListResponse, vocabulariesId);
 

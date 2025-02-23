@@ -1,6 +1,6 @@
+import { useEffect } from 'react';
 import { getWordsByVocabulary } from '@/services/getWordsByVocabulary';
 import { Word } from '@/store/vocabulary-collection';
-import { useEffect } from 'react';
 
 export const useVocabularyListData = (
 	func: (wordsList: Word[], vocabulariesId: string) => void,

@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
-import { ExerciseType, useExerciseProgressStore } from '@/store/exercise-progress';
 import { Typography } from '@/ui-components/Typography';
+import { ExerciseType, useExerciseProgressStore } from '@/store/exercise-progress';
+import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 import { classes } from '@/shared/utils/classes';
 
 import styles from './exerciseContent.module.css';
-import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 
 export const ExerciseUI = ({
 	task,

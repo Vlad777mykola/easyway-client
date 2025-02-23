@@ -1,28 +1,25 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useCommonStore } from '@/store/common';
 import { ExerciseType, useVocabularyStore } from '@/store/vocabulary-collection';
 import {
 	DEFAULT_DATA_TEST,
 	EXERCISE_FORMATE,
 } from '@/store/vocabulary-collection/useVocabularyStore';
-import { WrapperCard } from '@/ui-components/Wrapper-card';
-import { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { useVocabularyListData } from './hooks/useVocabularyListData';
-import { ExerciseUI } from './components/exercise-content/ExerciseContent';
-import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
-import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
-import { Result } from '@/ui-components/Result';
+import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
+import { Result } from '@/ui-components/Result';
+import { ExerciseUI } from './components/exercise-content/ExerciseContent';
+import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import { PaginationExercise } from './components/pagination/Pagination';
+import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
 import styles from './vocabularyCard.module.css';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
 	const { vocabulariesId = '', wordId = '' } = useParams();
-
-	console.log('VOCABULARIES ID: ', vocabulariesId);
-	console.log('WORD ID: ', wordId);
 
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
@@ -41,9 +38,6 @@ export const VocabularyCard = () => {
 	const saveProgressToLocalStore = useVocabularyStore.use.saveProgressToLocalStore();
 	const getProgressFromLocalStore = useVocabularyStore.use.getProgressFromLocalStore();
 
-	console.log('vocabulariesId: ', vocabulariesId);
-	console.log('wordId: ', wordId);
-
 	useVocabularyListData(setExerciseListResponse, vocabulariesId);
 	useBeforeunload(() => saveProgressToLocalStore(vocabulariesId));
 	const onNavigate = useCallback(
@@ -59,7 +53,6 @@ export const VocabularyCard = () => {
 		if (wordId) {
 			(async () => {
 				const exercise = await getExerciseById(wordId);
-				console.log('EXERCISE: ', exercise);
 				if (exercise) setTask(exercise);
 			})();
 		}

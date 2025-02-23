@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { VocabularyCollections } from '@/modules/vocabularies/components/vocabulary-collections/VocabularyCollections';
 import { VOCABULARY_CONFIG_LABELS } from '@/modules/vocabularies/constants';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
@@ -9,7 +10,6 @@ import {
 	VOCABULARY_TOPICS,
 } from '@/store/vocabulary-collection/useVocabularyStore';
 import { ContentContainer } from '@/ui-components/Content-Container';
-import { useEffect } from 'react';
 
 export const VocabularyDetails = () => {
 	const vocabulary = useVocabularyStore((state) => state);
