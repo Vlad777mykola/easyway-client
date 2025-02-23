@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAllVocabularies } from '../../services/getAllVocabularies';
 import { useVocabularyStore, VocabularyListType } from '@/store/vocabulary-collection';
-import styles from './vocabularyCollections.module.css';
 import { Item } from '../../../collections/components/item/Item';
-import { useNavigate } from 'react-router-dom';
+import styles from './vocabularyCollections.module.css';
 
 export const VocabularyCollections = () => {
 	const store = useVocabularyStore((store) => store);
