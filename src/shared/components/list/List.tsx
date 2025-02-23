@@ -2,7 +2,13 @@ import { ReactNode } from 'react';
 import { Item } from './item/Item';
 import styles from './list.module.css';
 
-export const List = <T extends { explanation: string; exerciseAnswer: string; id: string }>({
+export const List = <
+	T extends {
+		explanation: string;
+		exerciseAnswer: string;
+		id: string;
+	},
+>({
 	data,
 	onClick,
 }: {
