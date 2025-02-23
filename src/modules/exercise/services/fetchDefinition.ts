@@ -1,8 +1,8 @@
 import { detectPartOfSpeech } from './detectPartOfSpeech';
-import { getGroup, showNounsOrAdverbs, showVariants, showVerbs } from './showVariants';
+import { getNounsOrAdverbs, showVariants, getVerbs } from './showVariants';
 import {
 	ARTICLES,
-	CONJUCTIONS_CATEGORIES,
+	CONJUNCTIONS_CATEGORIES,
 	MAX_VARIANTS,
 	NEGATIONS,
 	PREPOSITION_CATEGORIES,
@@ -11,11 +11,28 @@ import {
 
 export type VariantsType = { [key: string]: string[] };
 
+export const randomizeAddWord = (array: string[], word: string) => {
+	const newArr = [...array];
+	const isMoreThanMaxCountOfVariants = newArr.length > MAX_VARIANTS;
+	const isWordAlreadyIncluded = array.includes(word);
+
+	if (isMoreThanMaxCountOfVariants) {
+		newArr.slice(0, MAX_VARIANTS);
+	}
+
+	if (!isWordAlreadyIncluded) {
+		const randomNumber = Math.floor(Math.random() * (array.length - 0 + 1));
+		newArr.splice(randomNumber, 0, word);
+	}
+
+	return newArr;
+};
+
 export const fetchDefinition = async (word: string) => {
 	const {
 		isAdjective,
 		isArticle,
-		isConjuction,
+		isConjunction,
 		isNoun,
 		isPreposition,
 		isVerb,
@@ -26,22 +43,33 @@ export const fetchDefinition = async (word: string) => {
 	let answers: string[] = [];
 
 	if (isVerb) {
-		answers = showVerbs(word);
-	} else if ((isNoun && !isPronoun) || isAdjective) {
-		answers = await showNounsOrAdverbs(word, MAX_VARIANTS);
-	} else if (isPronoun) {
+		answers = getVerbs(word);
+	}
+	if ((isNoun && !isPronoun) || isAdjective) {
+		answers = await getNounsOrAdverbs(word);
+	}
+	if (isPronoun) {
 		answers = showVariants(PRONOUN_CATEGORIES, word);
-	} else if (isPreposition) {
+	}
+	if (isPreposition) {
 		answers = showVariants(PREPOSITION_CATEGORIES, word);
-	} else if (isArticle) {
-		answers = getGroup(ARTICLES, word.toLocaleLowerCase());
-	} else if (isConjuction) {
-		answers = showVariants(CONJUCTIONS_CATEGORIES, word);
-	} else if (isNegation) {
-		answers = getGroup(NEGATIONS, word.toLocaleLowerCase());
+	}
+	if (isArticle) {
+		answers = ARTICLES;
+	}
+	if (isConjunction) {
+		answers = showVariants(CONJUNCTIONS_CATEGORIES, word);
+	}
+	if (isNegation) {
+		answers = NEGATIONS;
 	}
 
-	return answers.length != 0 ? answers : await showNounsOrAdverbs(word, MAX_VARIANTS);
+	if (answers.length <= 1) {
+		const additionalAnswers = await getNounsOrAdverbs(word);
+		answers = [...answers, ...additionalAnswers];
+	}
+
+	return randomizeAddWord(answers, word);
 };
 
 export const getReadyQuestion = async (correctAnswers: string[]) => {

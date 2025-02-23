@@ -105,7 +105,7 @@ export const PREPOSITION_CATEGORIES: Variants = {
 	reasons: ['because of', 'due to', 'for', 'to', 'in order to'],
 };
 
-export const CONJUCTIONS_CATEGORIES: Variants = {
+export const CONJUNCTIONS_CATEGORIES: Variants = {
 	coordinating: ['for', 'and', 'nor', 'but', 'or', 'yet', 'so'],
 	time: [
 		'after',
