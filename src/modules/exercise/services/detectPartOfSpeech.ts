@@ -8,7 +8,7 @@ const detectPartOfSpeech = (word: string) => {
 	const isPreposition = doc.prepositions().out('array').length > 0;
 	const isArticle = ARTICLES.includes(word.toLocaleLowerCase());
 	const isAdjective = doc.adjectives().out('array').length > 0;
-	const isConjuction = doc.conjunctions().out('array').length > 0;
+	const isConjunction = doc.conjunctions().out('array').length > 0;
 	const isNegation = doc.match('#Negative').out('array');
 	let isPronoun = false;
 
@@ -22,7 +22,7 @@ const detectPartOfSpeech = (word: string) => {
 	return {
 		isAdjective,
 		isArticle,
-		isConjuction,
+		isConjunction,
 		isNoun,
 		isPreposition,
 		isVerb,
