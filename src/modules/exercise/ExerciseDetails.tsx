@@ -15,7 +15,6 @@ import { useExerciseListData } from './hooks/useExerciseListData';
 export const ExerciseDetails = (): ReactNode => {
 	const navigate = useNavigate();
 	const { collectionsId = '' } = useParams();
-	const navigate = useNavigate();
 	const exerciseListResponse = useExerciseProgressStore.use.exerciseListResponse();
 	const getExerciseConfig = useExerciseProgressStore.use.getExerciseConfig();
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
