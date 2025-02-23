@@ -2,26 +2,27 @@ import { ReactNode, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { List } from '@/shared/components/list/List';
-import {
-	EXERCISE_CONFIG,
-	EXERCISE_FORMATE,
-} from '@/store/exercise-progress/useExerciseProgressStore';
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
 import { Statistics } from './components/statistics/Statistics';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
-export const ExerciseDetails = (): ReactNode => {
+import {
+	EXERCISE_CONFIG,
+	EXERCISE_FORMATE,
+} from '@/store/exercise-progress/useExerciseProgressStore';
+
+export const DictionaryExerciseDetails = (): ReactNode => {
 	const navigate = useNavigate();
-	const { collectionsId = '' } = useParams();
+	const { dictionaryId = '' } = useParams();
 	const exerciseListResponse = useExerciseProgressStore.use.exerciseListResponse();
 	const getExerciseConfig = useExerciseProgressStore.use.getExerciseConfig();
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
 	const getProgressFromLocalStore = useExerciseProgressStore.use.getProgressFromLocalStore();
 	const setCollectionsExerciseConfig = useExerciseProgressStore.use.setCollectionsExerciseConfig();
 
-	useExerciseListData(setExerciseListResponse, collectionsId);
+	useExerciseListData(setExerciseListResponse, dictionaryId);
 
 	const fieldsData: FieldsDataType[] = [
 		{
@@ -48,7 +49,7 @@ export const ExerciseDetails = (): ReactNode => {
 	] as const;
 
 	useEffect(() => {
-		getProgressFromLocalStore(collectionsId || '');
+		getProgressFromLocalStore(dictionaryId || '');
 	}, []);
 
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
@@ -56,13 +57,13 @@ export const ExerciseDetails = (): ReactNode => {
 	};
 
 	const onClick = (id: string) => {
-		navigate(`/collections/${collectionsId}/task/${id}`);
+		navigate(`/dictionaries/${dictionaryId}/word/${id}`);
 	};
 
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<Statistics collectionsId={collectionsId || ''} />
+				<Statistics collectionsId={dictionaryId || ''} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<Sidebar title="Exercise Stings" fieldsData={fieldsData} onChange={onChange} />

@@ -63,6 +63,9 @@ export const DEFAULT_COLLECTIONS = [
 		learnByInterest: 'Books',
 		learnBySkill: 'Reading',
 	},
+];
+
+export const DICTIONARY_COLLECTIONS = [
 	{
 		id: '3',
 		title: '1000 Most Common English Words',
@@ -73,16 +76,5 @@ export const DEFAULT_COLLECTIONS = [
 		learningStyle: 'Selecting/Matching',
 		learnByInterest: 'Books',
 		learnBySkill: 'Reading',
-	},
-	{
-		id: '4',
-		title: 'Modals',
-		subtitle: 'Practice the sentence',
-		level: 'Intermediate',
-		category: ['Modals'],
-		topic: ['Programming'],
-		learningStyle: 'Selecting/Matching',
-		learnByInterest: 'News/Blogs',
-		learnBySkill: 'Writing',
 	},
 ];
