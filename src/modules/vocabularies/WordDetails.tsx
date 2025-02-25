@@ -10,10 +10,13 @@ import { EXERCISE_CONFIG } from '../exercise/constants';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 
 import styles from './wordDetails.module.css';
-import { CustomProgress } from '@/ui-components/CustomProgress/CustomProgress';
+import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
+import { useEffect } from 'react';
+import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
+	const store = useVocabularyStore((state) => state);
 	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
 	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
 	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
@@ -23,6 +26,23 @@ export const WordDetails = () => {
 	const setFilterWordOnSearch = useVocabularyStore.use.setFilterWordOnSearch();
 	const getExerciseConfig = useVocabularyStore.use.getExerciseConfig();
 	const navigate = useNavigate();
+
+	const exerciseListIds = useVocabularyStore((state) => state.exerciseListIds);
+	const exerciseList = useVocabularyStore((state) => state.exerciseList);
+	const exerciseListResponse = useVocabularyStore((state) => state.exerciseListResponse);
+	const commonProgressData = useVocabularyStore((state) => state.commonProgressData);
+	const resolvedExerciseId = useVocabularyStore((state) => state.resolvedExerciseId);
+	const exerciseListProgress = useVocabularyStore((state) => state.exerciseListProgress);
+	const words = useVocabularyStore((state) => state.words);
+	const getProgressFromLocalStore = useVocabularyStore((state) => state.getProgressFromLocalStore);
+
+	console.log('STORE: ', store);
+	console.log('EXERCISE LIST IDS: ', exerciseListIds);
+	console.log('exerciseList: ', exerciseList);
+	console.log('exerciseListResponse: ', exerciseListResponse);
+	console.log('commonProgressData: ', commonProgressData);
+	console.log('resolvedExerciseId: ', resolvedExerciseId);
+	console.log('exerciseListProgress: ', exerciseListProgress);
 
 	const fieldsDataWord = [
 		{
@@ -58,7 +78,19 @@ export const WordDetails = () => {
 		},
 	];
 
+	useEffect(() => {
+		getProgressFromLocalStore(vocabulariesId);
+	}, []);
+
 	useVocabularyListData(setWordsListResponse, vocabulariesId);
+
+	const calculateCompletionPercentage = (completedTasks: number, totalTasks: number) => {
+		if (totalTasks === 0) return 0;
+		return (completedTasks / totalTasks) * 100;
+	};
+
+	const percentage = calculateCompletionPercentage(resolvedExerciseId.length, words.length);
+	console.log('PERCENTAGE: ', percentage);
 
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setWordConfig(key, value);
@@ -84,7 +116,8 @@ export const WordDetails = () => {
 		<ContentContainer>
 			<ContentContainer.Header>
 				{/* <Statistics collectionsId={vocabulariesId || ''} /> */}
-				<CustomProgress done={50} />
+				<StandardProgressBar done={percentage} />
+				<CircleProgressBar progress={20} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<div className={styles.sidebarContainer}>

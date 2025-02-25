@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Size, Variant } from '../parameters/parameters';
 import type { SizeType, VariantType } from '../parameters/parameters';
 import { classes } from '@/shared/utils/classes';
-import styles from './customProgress.module.css';
+import styles from './standartProgressBar.module.css';
 
-export const CustomProgress = ({
+export const StandardProgressBar = ({
 	done,
 	size = 'm',
 	variant = 'primary',

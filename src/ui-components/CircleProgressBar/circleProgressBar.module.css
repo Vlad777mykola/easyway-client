@@ -1,0 +1,67 @@
+.svgPiWrapper {
+  position: relative;
+}
+
+.svgPi {
+  transform: rotate(-90deg); /* Fix the orientation */
+}
+
+/* Animated spinner version */
+.svgPiIndicatorSpinner {
+  animation: spinner .75s linear infinite;
+  transform-origin: center;
+}
+
+.svgPiLabel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #333;
+}
+
+.svg-pi-label__loading {
+  opacity: .5;
+  font-size: 0.75em;
+}
+
+.svgPiLabelProgress{
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.svg-pi-label__loading,
+.svg-pi-label__progress {
+  display: block;
+}
+
+/* Spinner animation */
+@keyframes spinner {
+  0% {
+    transform: rotate(0)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
+.primary {
+
+}
+
+.secondary {}
+
+.success {}
+
+.error {}
+
+.xs {}
+
+.s {}
+
+.m {}
+
+.l {}
+
+.xl {}
