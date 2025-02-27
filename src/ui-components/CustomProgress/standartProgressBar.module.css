@@ -45,7 +45,7 @@
 
 .s {
   width: 25%;
-  height: 30px;
+  height: var(--custom-s-height-size);
   font-size: var(--font-size-s);
 }
 

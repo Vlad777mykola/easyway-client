@@ -1,8 +1,10 @@
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Progress } from '@/ui-components/Progress';
 import { Button } from '@/ui-components/Button';
+import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
 import { useExerciseProgressStore } from '@/store/exercise-progress';
 import styles from './statistics.module.css';
+import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 
 const WRONG_CORRECT = {
 	wrong: 30,
@@ -13,7 +15,15 @@ const INPROGRESS_RESOLVED = {
 	inProgress: 40,
 };
 
-export const Statistics = ({ collectionsId }: { collectionsId: string }) => {
+export const Statistics = ({
+	collectionsId,
+	collectionName,
+	totalProgress,
+}: {
+	collectionsId: string;
+	collectionName: string;
+	totalProgress: number;
+}) => {
 	const removeProgress = useExerciseProgressStore((store) => store.removeProgress);
 
 	return (
@@ -30,25 +40,26 @@ export const Statistics = ({ collectionsId }: { collectionsId: string }) => {
 					</Button>
 				</div>
 				<span className={styles.collectionTitle}>Collection Progress</span>
+				<div className={styles.totalProgress}>
+					<span className={styles.total}>Total {collectionName}:</span>
+					<StandardProgressBar progress={totalProgress} size="l" />
+				</div>
 				<div className={styles.statistics}>
 					<div className={styles.modeContainer}>
-						<span className={styles.modeTitle}>Random Mode</span>
-						<Progress
-							success={{ percent: WRONG_CORRECT.correct }}
-							type="circle"
-							percent={WRONG_CORRECT.correct + WRONG_CORRECT.wrong}
-							strokeColor={'rgb(211, 47, 47)'}
-							format={() => `${WRONG_CORRECT.correct}%`}
-						/>
+						<span className={styles.modeTitle}>Father</span>
+						<CircleProgressBar progress={30} />
 					</div>
 					<div className={styles.modeContainer}>
-						<span className={styles.modeTitle}>Exam Mode</span>
-						<Progress
-							type="circle"
-							success={{ percent: INPROGRESS_RESOLVED.resolved }}
-							percent={INPROGRESS_RESOLVED.resolved + INPROGRESS_RESOLVED.inProgress}
-							format={() => `${INPROGRESS_RESOLVED.resolved}%`}
-						/>
+						<span className={styles.modeTitle}>Mother</span>
+						<CircleProgressBar progress={40} />
+					</div>
+					<div className={styles.modeContainer}>
+						<span className={styles.modeTitle}>Sister</span>
+						<CircleProgressBar progress={70} />
+					</div>
+					<div className={styles.modeContainer}>
+						<span className={styles.modeTitle}>Brother</span>
+						<CircleProgressBar progress={80} />
 					</div>
 				</div>
 			</div>

@@ -1,5 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
+import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
+import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
 import { SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
@@ -10,9 +13,6 @@ import { EXERCISE_CONFIG } from '../exercise/constants';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 
 import styles from './wordDetails.module.css';
-import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
-import { useEffect } from 'react';
-import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
@@ -90,7 +90,6 @@ export const WordDetails = () => {
 	};
 
 	const percentage = calculateCompletionPercentage(resolvedExerciseId.length, words.length);
-	console.log('PERCENTAGE: ', percentage);
 
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setWordConfig(key, value);
@@ -115,9 +114,13 @@ export const WordDetails = () => {
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				{/* <Statistics collectionsId={vocabulariesId || ''} /> */}
-				<StandardProgressBar done={percentage} />
-				<CircleProgressBar progress={20} />
+				<Statistics
+					collectionName="Family"
+					totalProgress={percentage}
+					collectionsId={vocabulariesId || ''}
+				/>
+				<StandardProgressBar progress={percentage} />
+				<CircleProgressBar progress={percentage} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<div className={styles.sidebarContainer}>

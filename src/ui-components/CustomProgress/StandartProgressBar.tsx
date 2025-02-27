@@ -1,28 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { CountUp } from '../CountUp';
 import { Size, Variant } from '../parameters/parameters';
 import type { SizeType, VariantType } from '../parameters/parameters';
 import { classes } from '@/shared/utils/classes';
 import styles from './standartProgressBar.module.css';
 
 export const StandardProgressBar = ({
-	done,
+	progress,
 	size = 'm',
 	variant = 'primary',
 }: {
-	done: number;
+	progress: number;
 	size?: SizeType;
 	variant?: VariantType;
 }) => {
 	const [style, setStyle] = useState({});
 
-	setTimeout(() => {
-		const newStyle = {
-			opacity: 1,
-			width: `${done}%`,
-		};
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			const newStyle = {
+				opacity: 1,
+				width: `${progress}%`,
+			};
 
-		setStyle(newStyle);
-	}, 200);
+			setStyle(newStyle);
+		}, 200);
+
+		return () => clearTimeout(timeout);
+	}, [progress]);
+
 	return (
 		<div
 			className={classes(styles.progress, {
@@ -35,7 +41,7 @@ export const StandardProgressBar = ({
 				})}
 				style={style}
 			>
-				{done}%
+				<CountUp end={progress} duration={1500} />%
 			</div>
 		</div>
 	);
