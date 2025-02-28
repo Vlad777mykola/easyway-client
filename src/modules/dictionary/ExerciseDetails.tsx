@@ -2,25 +2,25 @@ import { ReactNode, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { List } from '@/shared/components/list/List';
-import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
 import { Statistics } from './components/statistics/Statistics';
 import { useExerciseListData } from './hooks/useExerciseListData';
-
 import {
+	useDictionaryStore,
+	EXERCISE_MODE,
 	EXERCISE_CONFIG,
 	EXERCISE_FORMATE,
-} from '@/store/exercise-progress/useExerciseProgressStore';
+} from '@/store/dictionary';
 
 export const DictionaryExerciseDetails = (): ReactNode => {
 	const navigate = useNavigate();
 	const { dictionaryId = '' } = useParams();
-	const exerciseListResponse = useExerciseProgressStore.use.exerciseListResponse();
-	const getExerciseConfig = useExerciseProgressStore.use.getExerciseConfig();
-	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
-	const getProgressFromLocalStore = useExerciseProgressStore.use.getProgressFromLocalStore();
-	const setCollectionsExerciseConfig = useExerciseProgressStore.use.setCollectionsExerciseConfig();
+	const exerciseListResponse = useDictionaryStore.use.exerciseListResponse();
+	const getExerciseConfig = useDictionaryStore.use.getExerciseConfig();
+	const setExerciseListResponse = useDictionaryStore.use.setExerciseListResponse();
+	const getProgressFromLocalStore = useDictionaryStore.use.getProgressFromLocalStore();
+	const setCollectionsExerciseConfig = useDictionaryStore.use.setCollectionsExerciseConfig();
 
 	useExerciseListData(setExerciseListResponse, dictionaryId);
 

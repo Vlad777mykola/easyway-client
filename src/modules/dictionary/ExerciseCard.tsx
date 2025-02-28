@@ -8,12 +8,12 @@ import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
 import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { useExerciseListData } from './hooks/useExerciseListData';
 import { useCommonStore } from '@/store/common';
-import { useExerciseProgressStore, DEFAULT_DATA_TEST } from '@/store/exercise-progress';
-import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
+import { useDictionaryStore, DEFAULT_DATA_TEST, EXERCISE_FORMATE } from '@/store/dictionary';
+import type { ExerciseType } from '@/store/dictionary';
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
-import type { ExerciseType } from '@/store/exercise-progress';
-import styles from './exerciseCard.module.css';
 import { PaginationExercise } from './components/pagination/Pagination';
+
+import styles from './exerciseCard.module.css';
 
 export const DictionaryExerciseCard = () => {
 	const navigate = useNavigate();
@@ -22,18 +22,18 @@ export const DictionaryExerciseCard = () => {
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
 
 	const fullExerciseScreen = useCommonStore.use.fullExerciseScreen();
-	const exerciseListId = useExerciseProgressStore.use.exerciseListIds();
+	const exerciseListId = useDictionaryStore.use.exerciseListIds();
 	const isDoneExercise = wordId === 'done' || exerciseListId.length === 0;
 	const isSelectingFormate =
-		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseFormate ===
+		useDictionaryStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
 
 	const setFullScreen = useCommonStore.use.setFullScreen();
-	const getExerciseById = useExerciseProgressStore.use.getExerciseById();
-	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
-	const setExerciseListProgress = useExerciseProgressStore.use.setExerciseListProgress();
-	const saveProgressToLocalStore = useExerciseProgressStore.use.saveProgressToLocalStore();
-	const getProgressFromLocalStore = useExerciseProgressStore.use.getProgressFromLocalStore();
+	const getExerciseById = useDictionaryStore.use.getExerciseById();
+	const setExerciseListResponse = useDictionaryStore.use.setExerciseListResponse();
+	const setExerciseListProgress = useDictionaryStore.use.setExerciseListProgress();
+	const saveProgressToLocalStore = useDictionaryStore.use.saveProgressToLocalStore();
+	const getProgressFromLocalStore = useDictionaryStore.use.getProgressFromLocalStore();
 
 	useExerciseListData(setExerciseListResponse, dictionaryId);
 	useBeforeunload(() => saveProgressToLocalStore(dictionaryId));

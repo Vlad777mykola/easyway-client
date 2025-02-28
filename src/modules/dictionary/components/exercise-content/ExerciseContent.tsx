@@ -1,12 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
-import { ExerciseType, useExerciseProgressStore } from '@/store/exercise-progress';
+import { ExerciseType, useDictionaryStore, EXERCISE_FORMATE } from '@/store/dictionary';
 import { Typography } from '@/ui-components/Typography';
 import { classes } from '@/shared/utils/classes';
 
 import styles from './exerciseContent.module.css';
-import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 
 export const ExerciseUI = ({
 	task,
@@ -31,7 +30,7 @@ export const ExerciseUI = ({
 	} = task;
 
 	const isSelectingFormate =
-		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseFormate ===
+		useDictionaryStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
 
 	const onSelect = (answer: string) => {
