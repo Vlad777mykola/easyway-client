@@ -46,6 +46,7 @@ export const FieldComponent = ({
 					}
 					onChange={(value) => change(item.keyValue, value)}
 					options={item.options.map((option) => ({ value: option, label: option }))}
+					disabled={item.disabled}
 				/>
 			</div>
 		);

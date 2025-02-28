@@ -31,12 +31,26 @@ export const VocabularyCard = () => {
 		useVocabularyStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
 
+	const examModeProgress = useVocabularyStore((state) => state.examModeProgress);
+
 	const setFullScreen = useCommonStore.use.setFullScreen();
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();
 	const saveProgressToLocalStore = useVocabularyStore.use.saveProgressToLocalStore();
 	const getProgressFromLocalStore = useVocabularyStore.use.getProgressFromLocalStore();
+
+	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
+
+	const store = useVocabularyStore((store) => store);
+
+	console.log('STORE: ', store);
+
+	console.log('WORD ID: ', wordId);
+
+	const setExamProgress = useVocabularyStore.use.setExamProgress();
+
+	console.log('//vocabulariesId VOCABULARY CARD: ', vocabulariesId);
 
 	useVocabularyListData(setExerciseListResponse, vocabulariesId);
 	useBeforeunload(() => saveProgressToLocalStore(vocabulariesId));
@@ -48,6 +62,7 @@ export const VocabularyCard = () => {
 	);
 
 	console.log('TASK: ', task);
+	console.log('EXAM MODE PROGRESS: ', examModeProgress);
 
 	useEffect(() => {
 		if (wordId) {
@@ -59,11 +74,19 @@ export const VocabularyCard = () => {
 	}, [wordId]);
 
 	useEffect(() => {
-		getProgressFromLocalStore(wordId);
+		getProgressFromLocalStore(vocabulariesId);
 		setIsAutoNavigate(false);
 
-		return () => saveProgressToLocalStore(wordId);
+		return () => saveProgressToLocalStore(vocabulariesId);
 	}, [wordId]);
+
+	const setModesProgress = (id: string, isResolved: boolean) => {
+		if (collectionsExerciseConfig.exerciseMode === 'examMode') {
+			console.log('EXAM');
+			setExamProgress(id, isResolved);
+		}
+		setExerciseListProgress(id, isResolved);
+	};
 
 	return (
 		<WrapperCard fullScreen={fullExerciseScreen} setFullScreen={setFullScreen}>
@@ -85,7 +108,7 @@ export const VocabularyCard = () => {
 						task={task}
 						setIsAutoNavigate={setIsAutoNavigate}
 						setTask={setTask}
-						updateProgress={setExerciseListProgress}
+						updateProgress={setModesProgress}
 					/>
 				)}
 				{!isDoneExercise && task && isSelectingFormate && (
@@ -94,7 +117,7 @@ export const VocabularyCard = () => {
 						task={task}
 						setIsAutoNavigate={setIsAutoNavigate}
 						setTask={setTask}
-						updateProgress={setExerciseListProgress}
+						updateProgress={setModesProgress}
 					/>
 				)}
 				{!isDoneExercise && exerciseListId && (

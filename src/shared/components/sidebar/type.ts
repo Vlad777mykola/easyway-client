@@ -14,6 +14,7 @@ export type SelectOrMultipleFieldsType = BaseFieldsDataType & {
 	componentType: 'select' | 'multiple';
 	getDefaultValue: () => string | number | string[];
 	readonly options: string[] | number[];
+	disabled?: boolean;
 };
 
 export type InputFieldsType = BaseFieldsDataType & {

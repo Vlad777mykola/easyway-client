@@ -1,8 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
-import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
-import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
 import { SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
@@ -31,18 +29,34 @@ export const WordDetails = () => {
 	const exerciseList = useVocabularyStore((state) => state.exerciseList);
 	const exerciseListResponse = useVocabularyStore((state) => state.exerciseListResponse);
 	const commonProgressData = useVocabularyStore((state) => state.commonProgressData);
-	const resolvedExerciseId = useVocabularyStore((state) => state.resolvedExerciseId);
+	const examModeProgress = useVocabularyStore((state) => state.examModeProgress);
 	const exerciseListProgress = useVocabularyStore((state) => state.exerciseListProgress);
 	const words = useVocabularyStore((state) => state.words);
 	const getProgressFromLocalStore = useVocabularyStore((state) => state.getProgressFromLocalStore);
+
+	const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
+
+	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
+
+	const getExamProgressFromLocalStore = useVocabularyStore(
+		(state) => state.getExamProgressFromLocalStore,
+	);
+
+	const uncorrectAnswers = useVocabularyStore((store) => store.examModeProgress.errorProgress);
+
+	console.log('UNCORRECT ANSWERS: ', uncorrectAnswers);
+
+	console.log('EXERCISE CONFIG: ', exerciseConfig);
 
 	console.log('STORE: ', store);
 	console.log('EXERCISE LIST IDS: ', exerciseListIds);
 	console.log('exerciseList: ', exerciseList);
 	console.log('exerciseListResponse: ', exerciseListResponse);
 	console.log('commonProgressData: ', commonProgressData);
-	console.log('resolvedExerciseId: ', resolvedExerciseId);
+	console.log('resolvedExerciseId: ', examModeProgress);
 	console.log('exerciseListProgress: ', exerciseListProgress);
+
+	console.log('COLLECTIONS EXERCISE CONFIG: ', collectionsExerciseConfig);
 
 	const fieldsDataWord = [
 		{
@@ -68,6 +82,7 @@ export const WordDetails = () => {
 			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE),
 			label: EXERCISE_CONFIG_LABELS.CORRECT_RESPONSE,
 			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
+			disabled: exerciseConfig === EXERCISE_MODE.isExam,
 		},
 		{
 			keyValue: EXERCISE_CONFIG.FORMATE,
@@ -80,6 +95,7 @@ export const WordDetails = () => {
 
 	useEffect(() => {
 		getProgressFromLocalStore(vocabulariesId);
+		getExamProgressFromLocalStore(vocabulariesId);
 	}, []);
 
 	useVocabularyListData(setWordsListResponse, vocabulariesId);
@@ -89,13 +105,21 @@ export const WordDetails = () => {
 		return (completedTasks / totalTasks) * 100;
 	};
 
-	const percentage = calculateCompletionPercentage(resolvedExerciseId.length, words.length);
+	const percentage = calculateCompletionPercentage(
+		examModeProgress.successProgress.length,
+		words.length,
+	);
 
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setWordConfig(key, value);
 	};
 
 	const onChangeMode = (key: string, value: number[] | string | boolean | string[] | number) => {
+		console.log('KEY CHANGE WORD: ', key);
+		console.log('VALUE CHANGE WORD: ', value);
+		if (value === EXERCISE_MODE.isExam) {
+			setCollectionsExerciseConfig('exerciseCorrectResponse', 1);
+		}
 		setCollectionsExerciseConfig(key, value);
 	};
 
@@ -117,10 +141,10 @@ export const WordDetails = () => {
 				<Statistics
 					collectionName="Family"
 					totalProgress={percentage}
+					examProgress={percentage}
 					collectionsId={vocabulariesId || ''}
+					uncorrectAnswers={uncorrectAnswers}
 				/>
-				<StandardProgressBar progress={percentage} />
-				<CircleProgressBar progress={percentage} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<div className={styles.sidebarContainer}>
