@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
@@ -11,6 +11,7 @@ import { EXERCISE_CONFIG } from '../exercise/constants';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 
 import styles from './wordDetails.module.css';
+import { useProgressStore } from '@/store/progress';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
@@ -29,7 +30,9 @@ export const WordDetails = () => {
 	const exerciseList = useVocabularyStore((state) => state.exerciseList);
 	const exerciseListResponse = useVocabularyStore((state) => state.exerciseListResponse);
 	const commonProgressData = useVocabularyStore((state) => state.commonProgressData);
-	const examModeProgress = useVocabularyStore((state) => state.examModeProgress);
+
+	const examModeProgress = useProgressStore((state) => state.examModeProgress);
+
 	const exerciseListProgress = useVocabularyStore((state) => state.exerciseListProgress);
 	const words = useVocabularyStore((state) => state.words);
 	const getProgressFromLocalStore = useVocabularyStore((state) => state.getProgressFromLocalStore);
@@ -38,25 +41,18 @@ export const WordDetails = () => {
 
 	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
 
-	const getExamProgressFromLocalStore = useVocabularyStore(
+	const progressStore = useProgressStore((store) => store.randomModeProgress);
+	console.log('///PROGRESS STORE: ', progressStore);
+
+	const getExamProgressFromLocalStore = useProgressStore(
 		(state) => state.getExamProgressFromLocalStore,
 	);
 
-	const uncorrectAnswers = useVocabularyStore((store) => store.examModeProgress.errorProgress);
+	const uncorrectAnswers = useProgressStore((store) => store.examModeProgress.errorProgress);
 
-	console.log('UNCORRECT ANSWERS: ', uncorrectAnswers);
+	const [totalRandom, setTotalRandom] = useState(0);
 
-	console.log('EXERCISE CONFIG: ', exerciseConfig);
-
-	console.log('STORE: ', store);
-	console.log('EXERCISE LIST IDS: ', exerciseListIds);
-	console.log('exerciseList: ', exerciseList);
-	console.log('exerciseListResponse: ', exerciseListResponse);
-	console.log('commonProgressData: ', commonProgressData);
-	console.log('resolvedExerciseId: ', examModeProgress);
-	console.log('exerciseListProgress: ', exerciseListProgress);
-
-	console.log('COLLECTIONS EXERCISE CONFIG: ', collectionsExerciseConfig);
+	console.log('///WORDS: ', words);
 
 	const fieldsDataWord = [
 		{
@@ -98,15 +94,42 @@ export const WordDetails = () => {
 		getExamProgressFromLocalStore(vocabulariesId);
 	}, []);
 
+	useEffect(() => {
+		const countRandom = countRandomMode(words.length, progressStore);
+		setTotalRandom(countRandom);
+	}, [words, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
+
 	useVocabularyListData(setWordsListResponse, vocabulariesId);
 
 	const calculateCompletionPercentage = (completedTasks: number, totalTasks: number) => {
 		if (totalTasks === 0) return 0;
-		return (completedTasks / totalTasks) * 100;
+		return Math.round((completedTasks / totalTasks) * 100);
+	};
+
+	// --------------------
+	const countRandomMode = (countWords: number, progressStore) => {
+		const countMake = collectionsExerciseConfig.exerciseCorrectResponse * countWords;
+		let totalCount = 0;
+
+		progressStore.forEach((item) => {
+			totalCount += item.correctCount;
+		});
+
+		console.log('////COUNT MAKE: ', countMake);
+		console.log('///progressStore: ', progressStore);
+		console.log('///countWords: ', countWords);
+		console.log('///TOTAL COUNT: ', totalCount);
+
+		return calculateCompletionPercentage(totalCount, countMake);
 	};
 
 	const percentage = calculateCompletionPercentage(
 		examModeProgress.successProgress.length,
+		words.length,
+	);
+
+	const uncorrectAnswersPercentage = calculateCompletionPercentage(
+		examModeProgress.errorProgress.length,
 		words.length,
 	);
 
@@ -119,6 +142,9 @@ export const WordDetails = () => {
 		console.log('VALUE CHANGE WORD: ', value);
 		if (value === EXERCISE_MODE.isExam) {
 			setCollectionsExerciseConfig('exerciseCorrectResponse', 1);
+		}
+		if (value === EXERCISE_MODE.isRandom || value === EXERCISE_MODE.isInfinitive) {
+			setCollectionsExerciseConfig('exerciseCorrectResponse', 15);
 		}
 		setCollectionsExerciseConfig(key, value);
 	};
@@ -141,7 +167,9 @@ export const WordDetails = () => {
 				<Statistics
 					collectionName="Family"
 					totalProgress={percentage}
-					examProgress={percentage}
+					examProgressResolved={percentage}
+					examProgressUnresolved={uncorrectAnswersPercentage}
+					randomProgress={totalRandom}
 					collectionsId={vocabulariesId || ''}
 					uncorrectAnswers={uncorrectAnswers}
 				/>

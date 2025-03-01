@@ -1,29 +1,37 @@
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Button } from '@/ui-components/Button';
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
-import { useExerciseProgressStore } from '@/store/exercise-progress';
+import { EXERCISE_MODE, useExerciseProgressStore } from '@/store/exercise-progress';
 import styles from './statistics.module.css';
 import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 import { useNavigate } from 'react-router-dom';
 import { CircleButton } from '@/ui-components/CircleButton';
+import { useVocabularyStore } from '@/store/vocabulary-collection';
+import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
 
 export const Statistics = ({
 	collectionsId,
 	collectionName,
 	totalProgress,
-	examProgress,
+	examProgressResolved,
+	examProgressUnresolved,
+	randomProgress,
 	uncorrectAnswers = [],
 }: {
 	collectionsId: string;
 	collectionName: string;
 	totalProgress: number;
-	examProgress: number;
+	examProgressResolved: number;
+	examProgressUnresolved: number;
+	randomProgress: number;
 	uncorrectAnswers?: string[];
 }) => {
 	const removeProgress = useExerciseProgressStore((store) => store.removeProgress);
+	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
 	const navigate = useNavigate();
 
 	const onClick = (id: string) => {
+		setCollectionsExerciseConfig(EXERCISE_CONFIG.MODE, EXERCISE_MODE.isExam);
 		navigate(`/vocabularies/${collectionsId}/word/${id}`);
 	};
 
@@ -51,18 +59,24 @@ export const Statistics = ({
 							<span className={styles.modeTitle}>Exam uncorrect answers</span>
 							<div className={styles.uncorrectAnswers}>
 								{uncorrectAnswers.map((id) => (
-									<CircleButton onClick={() => onClick(id)}>{id}</CircleButton>
+									<CircleButton key={id} onClick={() => onClick(id)}>
+										{id}
+									</CircleButton>
 								))}
 							</div>
 						</div>
 					)}
 					<div className={styles.modeContainer}>
-						<span className={styles.modeTitle}>Exam</span>
-						<CircleProgressBar progress={examProgress} />
+						<span className={styles.modeTitle}>Exam correct</span>
+						<CircleProgressBar progress={examProgressResolved} />
+					</div>
+					<div className={styles.modeContainer}>
+						<span className={styles.modeTitle}>Exam uncorrect</span>
+						<CircleProgressBar progress={examProgressUnresolved} />
 					</div>
 					<div className={styles.modeContainer}>
 						<span className={styles.modeTitle}>Random</span>
-						<CircleProgressBar progress={40} />
+						<CircleProgressBar progress={randomProgress} />
 					</div>
 					<div className={styles.modeContainer}>
 						<span className={styles.modeTitle}>Infinity</span>

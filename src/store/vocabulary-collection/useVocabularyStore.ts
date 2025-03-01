@@ -124,11 +124,6 @@ type CommonProgressDataType = {
 	resolvedExerciseIds: string[];
 };
 
-type ExamModeProgressType = {
-	successProgress: string[];
-	errorProgress: string[];
-};
-
 type VocabularyTopicType = (typeof VOCABULARY_TOPICS)[keyof typeof VOCABULARY_TOPICS];
 type VocabularyCategoriesType = (typeof VOCABULARY_CATEGORIES)[keyof typeof VOCABULARY_CATEGORIES];
 type LevelBasedType = (typeof LEVEL_BASED)[keyof typeof LEVEL_BASED];
@@ -159,7 +154,6 @@ type VocabularyStoreState = {
 	words: Word[];
 	exerciseListIds: string[];
 	collectionsExerciseConfig: ExerciseConfigType;
-	examModeProgress: ExamModeProgressType;
 	exerciseList: ExerciseType[];
 	exerciseListResponse: ExerciseResponseType[];
 	commonProgressData: CommonProgressDataType;
@@ -194,9 +188,7 @@ type VocabularyStoreActions = {
 	setVocabularyCollections: (vocabularyCollections: VocabularyListType[]) => void;
 	setWordsListResponse: (vocabularyList: Word[]) => void;
 	setExerciseListResponse: (exerciseList: ExerciseResponseType[], collectionId: string) => void;
-	setExamProgress: (id: string, isResolved: boolean) => void;
 	setExerciseListProgress: (id: string, isResolved: boolean) => void;
-	getExamProgressFromLocalStore: (collectionId: string) => void;
 	saveProgressToLocalStore: (collectionId: string) => void;
 };
 
@@ -214,10 +206,6 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 		exerciseMode: EXERCISE_MODE.isRandom,
 		exerciseCorrectResponse: 15,
 		exerciseFormate: EXERCISE_FORMATE.isClassic,
-	},
-	examModeProgress: {
-		successProgress: [],
-		errorProgress: [],
 	},
 	exerciseList: [],
 	exerciseListResponse: [],
@@ -309,36 +297,6 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 			commonProgressData: { ...state.commonProgressData, collectionId },
 		}));
 	},
-	setExamProgress: (id, isResolved) => {
-		set((state) => {
-			const successProgress = get().examModeProgress.successProgress;
-			const errorProgress = get().examModeProgress.errorProgress;
-			if (isResolved && !successProgress.includes(id)) {
-				return {
-					...state,
-					examModeProgress: {
-						...state.examModeProgress,
-						successProgress: !successProgress.includes(id)
-							? [...successProgress, id]
-							: [...successProgress],
-						errorProgress: errorProgress.includes(id)
-							? [...errorProgress.filter((item) => item !== id)]
-							: [...errorProgress],
-					},
-				};
-			} else {
-				return {
-					...state,
-					examModeProgress: {
-						...state.examModeProgress,
-						errorProgress: !errorProgress.includes(id)
-							? [...errorProgress, id]
-							: [...errorProgress],
-					},
-				};
-			}
-		});
-	},
 	setExerciseListProgress: (id, isResolved) => {
 		console.log('ID ', id);
 		console.log('IS RESOLVED: ', isResolved);
@@ -420,34 +378,6 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 
 		return exercise;
 	},
-	getExamProgressFromLocalStore: (collectionId: string) => {
-		console.log('COLLECTION ID: ', collectionId);
-		const examProgressSuccess = get().examModeProgress.successProgress.length > 0;
-		const examProgressError = get().examModeProgress.errorProgress.length > 0;
-
-		if (examProgressSuccess || examProgressError) {
-			return;
-		}
-
-		const {
-			successProgress,
-			errorProgress,
-		}: {
-			successProgress: string[];
-			errorProgress: string[];
-		} = localstorage.getItem(`${collectionId}_examModeProgress`) || {
-			successProgress: [],
-			errorProgress: [],
-		};
-
-		set((state) => ({
-			...state,
-			examModeProgress: {
-				successProgress,
-				errorProgress,
-			},
-		}));
-	},
 	getProgressFromLocalStore: (collectionId) => {
 		const existProgress = get().exerciseListProgress.length > 0;
 		if (existProgress) {
@@ -475,13 +405,9 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 		return state.find((item) => item.id === id)?.countCorrectAnswers || 0;
 	},
 	saveProgressToLocalStore: (collectionId) => {
-		console.log('//SAVE LOCAL STORE ID: ', collectionId);
 		localstorage.removeItem(collectionId);
-		localstorage.removeItem(`${collectionId}_examModeProgress`);
 		const exerciseListProgress = get().exerciseListProgress;
 		const resolvedExerciseId = get().resolvedExerciseId;
-		const examModeProgress = get().examModeProgress;
 		localstorage.setItem(collectionId, { exerciseListProgress, resolvedExerciseId });
-		localstorage.setItem(`${collectionId}_examModeProgress`, examModeProgress);
 	},
 }));
