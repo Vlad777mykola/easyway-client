@@ -1,3 +1,13 @@
 .card1 {
-	border: 1px solid red;
+	margin: 0 332px;
+	padding: 4px 20px;
+	padding-top: 1em;
+	box-shadow: (0, 0, 0, 0.1) 0px 3px;
+	background-color: #87cefa;
+	border-radius: 35px;
+	text-align: justify;
+	max-width: 350px;
+}
+.card1 h2 {
+	text-align: center;
 }
