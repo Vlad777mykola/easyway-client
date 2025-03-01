@@ -12,7 +12,6 @@ export const Item = <T extends { explanation: string; exerciseAnswer: string; id
 		<section onClick={() => onClick(data.id)} className={styles.itemContainer}>
 			<p className={styles.dataItem}>{data.exerciseAnswer}</p>
 			<p className={styles.dataItem}>{data.explanation}</p>
-			
 		</section>
 	);
 };
