@@ -1,13 +1,41 @@
 .card1 {
 	margin: 0 332px;
+	margin-bottom: 12px;
 	padding: 4px 20px;
 	padding-top: 1em;
-	box-shadow: (0, 0, 0, 0.1) 0px 3px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	background-color: #87cefa;
 	border-radius: 35px;
 	text-align: justify;
 	max-width: 350px;
 }
 .card1 h2 {
+	text-align: center;
+}
+.card2 {
+	margin: 0 332px;
+	margin-bottom: 12px;
+	padding: 4px 20px;
+	padding-top: 1em;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	background-color: #87cefa;
+	border-radius: 35px;
+	text-align: justify;
+	max-width: 350px;
+}
+.card2 h2 {
+	text-align: center;
+}
+.card3 {
+	margin: 0 332px;
+	padding: 4px 20px;
+	padding-top: 1em;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	background-color: #87cefa;
+	border-radius: 35px;
+	text-align: justify;
+	max-width: 350px;
+}
+.card3 h2 {
 	text-align: center;
 }
