@@ -6,7 +6,7 @@ type ExamModeProgressType = {
 	errorProgress: string[];
 };
 
-export type RandomWord = {
+export type RandomTest = {
 	id: string;
 	correctCount: number;
 };
@@ -15,7 +15,7 @@ type ProgressStoreState = {
 	examModeProgress: ExamModeProgressType;
 	randomModeProgress: {
 		isDone: boolean;
-		progress: RandomWord[];
+		progress: RandomTest[];
 	};
 };
 
@@ -126,7 +126,7 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			progress,
 		}: {
 			isDone: boolean;
-			progress: RandomWord[];
+			progress: RandomTest[];
 		} = localstorage.getItem(`${collectionId}_randomModeProgress`) || {
 			isDone: false,
 			progress: [],

@@ -1,5 +1,5 @@
 .progress {
-  background-color: #d8d8d8;
+	background-color: #d8d8d8;
 	border-radius: 20px;
 	position: relative;
 	margin: 15px 0;
@@ -18,51 +18,59 @@
 }
 
 .primary {
-  background: linear-gradient(to left, var(--color-primary-hover), var(--color-primary));
-  box-shadow: 0 3px 3px -5px var(--color-primary-hover), 0 2px 5px var(--color-primary);
+	background: linear-gradient(to left, var(--color-primary-hover), var(--color-primary));
+	box-shadow:
+		0 3px 3px -5px var(--color-primary-hover),
+		0 2px 5px var(--color-primary);
 }
 
 .secondary {
-  background: linear-gradient(to left, var(--color-secondary-hover), var(--color-secondary));
-  box-shadow: 0 3px 3px -5px var(--color-secondary-hover), 0 2px 5px var(--color-secondary);
+	background: linear-gradient(to left, var(--color-secondary-hover), var(--color-secondary));
+	box-shadow:
+		0 3px 3px -5px var(--color-secondary-hover),
+		0 2px 5px var(--color-secondary);
 }
 
 .success {
-  background: linear-gradient(to left, var(--color-success-hover), var(--color-success));
-  box-shadow: 0 3px 3px -5px var(--color-success-hover), 0 2px 5px var(--color-success);
+	background: linear-gradient(to left, var(--color-success-hover), var(--color-success));
+	box-shadow:
+		0 3px 3px -5px var(--color-success-hover),
+		0 2px 5px var(--color-success);
 }
 
 .error {
-  background: linear-gradient(to left, var(--color-error-hover), var(--color-error));
-  box-shadow: 0 3px 3px -5px var(--color-error-hover), 0 2px 5px var(--color-error);
+	background: linear-gradient(to left, var(--color-error-hover), var(--color-error));
+	box-shadow:
+		0 3px 3px -5px var(--color-error-hover),
+		0 2px 5px var(--color-error);
 }
 
 .xs {
-  width: 20%;
-  height: var(--custom-xs-height-size);
-  font-size: var(--font-size-xs);
+	width: 20%;
+	height: var(--custom-xs-height-size);
+	font-size: var(--font-size-xs);
 }
 
 .s {
-  width: 25%;
-  height: var(--custom-s-height-size);
-  font-size: var(--font-size-s);
+	width: 25%;
+	height: var(--custom-s-height-size);
+	font-size: var(--font-size-s);
 }
 
 .m {
-  width: 30%;
-  height: var(--custom-m-height-size);
-  font-size: var(--font-size-m);
+	width: 30%;
+	height: var(--custom-m-height-size);
+	font-size: var(--font-size-m);
 }
 
 .l {
-  width: 35%;
-  height: var(--custom-l-height-size);
-  font-size: var(--font-size-l);
+	width: 35%;
+	height: var(--custom-l-height-size);
+	font-size: var(--font-size-l);
 }
 
 .xl {
-  width: 40%;
-  height: var(--custom-xl-height-size);
-  font-size: var(--font-size-xl);
+	width: 40%;
+	height: var(--custom-xl-height-size);
+	font-size: var(--font-size-xl);
 }

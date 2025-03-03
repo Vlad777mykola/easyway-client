@@ -1,93 +1,101 @@
 .svgPiWrapper {
-  position: relative;
+	position: relative;
 }
 
 .svgPi {
-  transform: rotate(-90deg);
+	transform: rotate(-90deg);
 }
 
 .svgPiIndicator {
-  opacity: 0;
+	opacity: 0;
 	transition: 1s ease 0.3s;
-  stroke-dasharray: 314;
-  stroke-dashoffset: 314;
+	stroke-dasharray: 314;
+	stroke-dashoffset: 314;
 }
 
 .svgPiTrack {
-  stroke: #d8d8d8;
+	stroke: #d8d8d8;
 }
 
 .svgPiIndicatorSpinner {
-  animation: spinner .75s linear infinite;
-  transform-origin: center;
+	animation: spinner 0.75s linear infinite;
+	transform-origin: center;
 }
 
 .svgPiLabel {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: #333;
-  font-size: 15px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	color: #333;
+	font-size: 15px;
 }
 
-.svgPiLabelProgress{
-  font-size: 1.5em;
-  font-weight: bold;
+.svgPiLabelProgress {
+	font-size: 1.5em;
+	font-weight: bold;
 }
 
 /* Spinner animation */
 @keyframes spinner {
-  0% {
-    transform: rotate(0)
-  }
-  100% {
-    transform: rotate(360deg)
-  }
+	0% {
+		transform: rotate(0);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }
 
 .primary {
-  stroke: var(--color-primary);
-  box-shadow: 0 3px 3px -5px var(--color-primary-hover), 0 2px 5px var(--color-primary);
+	stroke: var(--color-primary);
+	box-shadow:
+		0 3px 3px -5px var(--color-primary-hover),
+		0 2px 5px var(--color-primary);
 }
 
 .secondary {
-  stroke: var(--color-secondary);
-  box-shadow: 0 3px 3px -5px var(--color-secondary-hover), 0 2px 5px var(--color-secondary);
+	stroke: var(--color-secondary);
+	box-shadow:
+		0 3px 3px -5px var(--color-secondary-hover),
+		0 2px 5px var(--color-secondary);
 }
 
 .success {
-  stroke: var(--color-success);
-  box-shadow: 0 3px 3px -5px var(--color-success-hover), 0 2px 5px var(--color-success);
+	stroke: var(--color-success);
+	box-shadow:
+		0 3px 3px -5px var(--color-success-hover),
+		0 2px 5px var(--color-success);
 }
 
 .error {
-  stroke: var(--color-error);
-  box-shadow: 0 3px 3px -5px var(--color-error-hover), 0 2px 5px var(--color-error);
+	stroke: var(--color-error);
+	box-shadow:
+		0 3px 3px -5px var(--color-error-hover),
+		0 2px 5px var(--color-error);
 }
 
 .xs {
-  width: 50px;
-  height: 50px;
+	width: 50px;
+	height: 50px;
 }
 
 .s {
-  width: 80px;
-  height: 80px;
+	width: 80px;
+	height: 80px;
 }
 
 .m {
-  width: 120px;
-  height: 120px;
+	width: 120px;
+	height: 120px;
 }
 
 .l {
-  width: 140px;
-  height: 140px;
+	width: 140px;
+	height: 140px;
 }
 
 .xl {
-  width: 170px;
-  height: 170px;
+	width: 170px;
+	height: 170px;
 }

@@ -11,7 +11,7 @@ import { EXERCISE_CONFIG } from '../exercise/constants';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 
 import styles from './wordDetails.module.css';
-import { RandomWord, useProgressStore } from '@/store/progress';
+import { RandomTest, useProgressStore } from '@/store/progress';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
@@ -101,7 +101,7 @@ export const WordDetails = () => {
 		return totalProgress;
 	};
 
-	const countRandomMode = (countWords: number, progressStore: RandomWord[], isDone: boolean) => {
+	const countRandomMode = (countWords: number, progressStore: RandomTest[], isDone: boolean) => {
 		const countMake = collectionsExerciseConfig.exerciseCorrectResponse * countWords;
 		let totalCount = 0;
 
