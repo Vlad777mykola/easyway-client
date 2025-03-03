@@ -8,6 +8,7 @@ import {
 	EXERCISE_MODE,
 } from '@/store/vocabulary-collection/useVocabularyStore';
 import { useVocabularyListData } from './hooks/useVocabularyListData';
+import { useProgressStore } from '@/store/progress';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
@@ -17,7 +18,6 @@ import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import { PaginationExercise } from './components/pagination/Pagination';
 import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
 import styles from './vocabularyCard.module.css';
-import { useProgressStore } from '@/store/progress';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
@@ -33,8 +33,6 @@ export const VocabularyCard = () => {
 		useVocabularyStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
 
-	const examModeProgress = useProgressStore((state) => state.examModeProgress);
-
 	const setFullScreen = useCommonStore.use.setFullScreen();
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
@@ -45,19 +43,10 @@ export const VocabularyCard = () => {
 
 	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
 
-	const store = useVocabularyStore((store) => store);
-
-	const randomModeProgress = useProgressStore((store) => store.randomModeProgress);
-	console.log('///RANDOM PROGRESS MODE VOCABULARY CARD: ', randomModeProgress);
-
-	console.log('STORE: ', store);
-
-	console.log('WORD ID: ', wordId);
-
 	const setExamProgress = useProgressStore((store) => store.setExamProgress);
 	const setRandomProgress = useProgressStore((store) => store.setRandomProgress);
 
-	console.log('//vocabulariesId VOCABULARY CARD: ', vocabulariesId);
+	const setIsDoneRandomProgress = useProgressStore((store) => store.setIsDoneRandomProgress);
 
 	useVocabularyListData(setExerciseListResponse, vocabulariesId);
 	useBeforeunload(() => {
@@ -70,9 +59,6 @@ export const VocabularyCard = () => {
 		},
 		[navigate, vocabulariesId],
 	);
-
-	console.log('TASK: ', task);
-	console.log('EXAM MODE PROGRESS: ', examModeProgress);
 
 	useEffect(() => {
 		if (wordId) {
@@ -112,7 +98,15 @@ export const VocabularyCard = () => {
 						icon={<Icon icon="smile" size="xl" />}
 						title="Great, you have done all the exercise!"
 						extra={
-							<Button onClick={() => navigate(`/vocabularies/${vocabulariesId}`)} type="primary">
+							<Button
+								onClick={() => {
+									if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
+										setIsDoneRandomProgress(true);
+									}
+									navigate(`/vocabularies/${vocabulariesId}`);
+								}}
+								type="primary"
+							>
 								Next
 							</Button>
 						}

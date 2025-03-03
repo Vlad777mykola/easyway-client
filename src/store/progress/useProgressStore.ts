@@ -6,20 +6,23 @@ type ExamModeProgressType = {
 	errorProgress: string[];
 };
 
-type RandomWord = {
+export type RandomWord = {
 	id: string;
 	correctCount: number;
-	uncorrectCount: number;
 };
 
 type ProgressStoreState = {
 	examModeProgress: ExamModeProgressType;
-	randomModeProgress: RandomWord[];
+	randomModeProgress: {
+		isDone: boolean;
+		progress: RandomWord[];
+	};
 };
 
 type ProgressStoreActions = {
 	setExamProgress: (id: string, isResolved: boolean) => void;
 	setRandomProgress: (id: string, isResolved: boolean) => void;
+	setIsDoneRandomProgress: (isDone: boolean) => void;
 	getExamProgressFromLocalStore: (collectionId: string) => void;
 	saveProgressToLocalStore: (collectionId: string) => void;
 };
@@ -31,7 +34,10 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 		successProgress: [],
 		errorProgress: [],
 	},
-	randomModeProgress: [],
+	randomModeProgress: {
+		isDone: false,
+		progress: [],
+	},
 	setExamProgress: (id, isResolved) => {
 		set((state) => {
 			const successProgress = get().examModeProgress.successProgress;
@@ -63,47 +69,40 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 		});
 	},
 	setRandomProgress: (id, isResolved) => {
-		console.log('//ID: ', id);
-		console.log('//IS RESOLVED: ', isResolved);
-		let randomModeProgress = get().randomModeProgress;
-
-		console.log('// RANDOM PROGRESS STORE: ', randomModeProgress);
+		let randomModeProgress = get().randomModeProgress.progress;
 
 		const isConsistThatId = randomModeProgress.some((item) => item.id === id);
-		console.log('//IS CONSIST THAT ID: ', isConsistThatId);
 
 		if (!isConsistThatId && isResolved) {
-			randomModeProgress.push({ id, correctCount: 1, uncorrectCount: 0 });
-		}
-
-		if (!isConsistThatId && !isResolved) {
-			randomModeProgress.push({ id, correctCount: 0, uncorrectCount: 1 });
+			randomModeProgress.push({ id, correctCount: 1 });
 		}
 
 		if (isResolved && isConsistThatId) {
 			set((state) => {
 				return {
 					...state,
-					randomModeProgress: randomModeProgress.map((item) =>
-						item.id === id ? { ...item, correctCount: item.correctCount + 1 } : item,
-					),
-				};
-			});
-		}
-
-		if (!isResolved && isConsistThatId) {
-			set((state) => {
-				return {
-					...state,
-					randomModeProgress: randomModeProgress.map((item) =>
-						item.id === id ? { ...item, uncorrectCount: item.uncorrectCount + 1 } : item,
-					),
+					randomModeProgress: {
+						...state.randomModeProgress,
+						progress: randomModeProgress.map((item) =>
+							item.id === id ? { ...item, correctCount: item.correctCount + 1 } : item,
+						),
+					},
 				};
 			});
 		}
 	},
+	setIsDoneRandomProgress: (isDone: boolean) => {
+		set((state) => {
+			return {
+				...state,
+				randomModeProgress: {
+					...state.randomModeProgress,
+					isDone,
+				},
+			};
+		});
+	},
 	getExamProgressFromLocalStore: (collectionId: string) => {
-		console.log('COLLECTION ID: ', collectionId);
 		const examProgressSuccess = get().examModeProgress.successProgress.length > 0;
 		const examProgressError = get().examModeProgress.errorProgress.length > 0;
 
@@ -122,17 +121,35 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			errorProgress: [],
 		};
 
+		const {
+			isDone,
+			progress,
+		}: {
+			isDone: boolean;
+			progress: RandomWord[];
+		} = localstorage.getItem(`${collectionId}_randomModeProgress`) || {
+			isDone: false,
+			progress: [],
+		};
+
 		set((state) => ({
 			...state,
 			examModeProgress: {
 				successProgress,
 				errorProgress,
 			},
+			randomModeProgress: {
+				isDone,
+				progress,
+			},
 		}));
 	},
 	saveProgressToLocalStore: (collectionId) => {
 		localstorage.removeItem(`${collectionId}_examModeProgress`);
+		localstorage.removeItem(`${collectionId}_randomModeProgress`);
 		const examModeProgress = get().examModeProgress;
+		const randomModeProgress = get().randomModeProgress;
 		localstorage.setItem(`${collectionId}_examModeProgress`, examModeProgress);
+		localstorage.setItem(`${collectionId}_randomModeProgress`, randomModeProgress);
 	},
 }));

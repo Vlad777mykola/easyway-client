@@ -11,11 +11,10 @@ import { EXERCISE_CONFIG } from '../exercise/constants';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 
 import styles from './wordDetails.module.css';
-import { useProgressStore } from '@/store/progress';
+import { RandomWord, useProgressStore } from '@/store/progress';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
-	const store = useVocabularyStore((state) => state);
 	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
 	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
 	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
@@ -24,16 +23,10 @@ export const WordDetails = () => {
 	const setCleanWordConfig = useVocabularyStore.use.setCleanWordConfig();
 	const setFilterWordOnSearch = useVocabularyStore.use.setFilterWordOnSearch();
 	const getExerciseConfig = useVocabularyStore.use.getExerciseConfig();
+
 	const navigate = useNavigate();
-
-	const exerciseListIds = useVocabularyStore((state) => state.exerciseListIds);
-	const exerciseList = useVocabularyStore((state) => state.exerciseList);
-	const exerciseListResponse = useVocabularyStore((state) => state.exerciseListResponse);
-	const commonProgressData = useVocabularyStore((state) => state.commonProgressData);
-
 	const examModeProgress = useProgressStore((state) => state.examModeProgress);
 
-	const exerciseListProgress = useVocabularyStore((state) => state.exerciseListProgress);
 	const words = useVocabularyStore((state) => state.words);
 	const getProgressFromLocalStore = useVocabularyStore((state) => state.getProgressFromLocalStore);
 
@@ -42,7 +35,6 @@ export const WordDetails = () => {
 	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
 
 	const progressStore = useProgressStore((store) => store.randomModeProgress);
-	console.log('///PROGRESS STORE: ', progressStore);
 
 	const getExamProgressFromLocalStore = useProgressStore(
 		(state) => state.getExamProgressFromLocalStore,
@@ -51,8 +43,6 @@ export const WordDetails = () => {
 	const uncorrectAnswers = useProgressStore((store) => store.examModeProgress.errorProgress);
 
 	const [totalRandom, setTotalRandom] = useState(0);
-
-	console.log('///WORDS: ', words);
 
 	const fieldsDataWord = [
 		{
@@ -95,7 +85,7 @@ export const WordDetails = () => {
 	}, []);
 
 	useEffect(() => {
-		const countRandom = countRandomMode(words.length, progressStore);
+		const countRandom = countRandomMode(words.length, progressStore.progress, progressStore.isDone);
 		setTotalRandom(countRandom);
 	}, [words, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
 
@@ -106,19 +96,22 @@ export const WordDetails = () => {
 		return Math.round((completedTasks / totalTasks) * 100);
 	};
 
-	// --------------------
-	const countRandomMode = (countWords: number, progressStore) => {
+	const calculateTotalProgress = (examProgress: number, randomProgress: number) => {
+		const totalProgress = (examProgress + randomProgress) / 2;
+		return totalProgress;
+	};
+
+	const countRandomMode = (countWords: number, progressStore: RandomWord[], isDone: boolean) => {
 		const countMake = collectionsExerciseConfig.exerciseCorrectResponse * countWords;
 		let totalCount = 0;
+
+		if (isDone) {
+			return calculateCompletionPercentage(countMake, countMake);
+		}
 
 		progressStore.forEach((item) => {
 			totalCount += item.correctCount;
 		});
-
-		console.log('////COUNT MAKE: ', countMake);
-		console.log('///progressStore: ', progressStore);
-		console.log('///countWords: ', countWords);
-		console.log('///TOTAL COUNT: ', totalCount);
 
 		return calculateCompletionPercentage(totalCount, countMake);
 	};
@@ -133,13 +126,13 @@ export const WordDetails = () => {
 		words.length,
 	);
 
+	const totalProgress = calculateTotalProgress(percentage, totalRandom);
+
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setWordConfig(key, value);
 	};
 
 	const onChangeMode = (key: string, value: number[] | string | boolean | string[] | number) => {
-		console.log('KEY CHANGE WORD: ', key);
-		console.log('VALUE CHANGE WORD: ', value);
 		if (value === EXERCISE_MODE.isExam) {
 			setCollectionsExerciseConfig('exerciseCorrectResponse', 1);
 		}
@@ -166,7 +159,7 @@ export const WordDetails = () => {
 			<ContentContainer.Header>
 				<Statistics
 					collectionName="Family"
-					totalProgress={percentage}
+					totalProgress={totalProgress}
 					examProgressResolved={percentage}
 					examProgressUnresolved={uncorrectAnswersPercentage}
 					randomProgress={totalRandom}

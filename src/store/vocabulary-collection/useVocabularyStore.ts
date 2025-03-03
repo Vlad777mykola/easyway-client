@@ -298,8 +298,6 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 		}));
 	},
 	setExerciseListProgress: (id, isResolved) => {
-		console.log('ID ', id);
-		console.log('IS RESOLVED: ', isResolved);
 		set((state) => {
 			const existingProgress = state.exerciseListProgress.find((e) => e.id === id);
 			let updatedProgressList = state.exerciseListProgress.filter((e) => e.id !== id);

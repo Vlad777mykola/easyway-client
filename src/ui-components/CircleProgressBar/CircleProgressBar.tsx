@@ -1,3 +1,4 @@
+/* eslint-disable css-modules/no-unused-class */
 import { useEffect, useState } from 'react';
 import { CountUp } from '../CountUp';
 import { classes } from '@/shared/utils/classes';

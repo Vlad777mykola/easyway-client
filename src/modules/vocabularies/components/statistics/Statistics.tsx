@@ -78,10 +78,6 @@ export const Statistics = ({
 						<span className={styles.modeTitle}>Random</span>
 						<CircleProgressBar progress={randomProgress} />
 					</div>
-					<div className={styles.modeContainer}>
-						<span className={styles.modeTitle}>Infinity</span>
-						<CircleProgressBar progress={70} />
-					</div>
 				</div>
 			</div>
 		</Wrapper>
