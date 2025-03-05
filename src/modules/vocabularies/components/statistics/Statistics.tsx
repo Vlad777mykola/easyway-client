@@ -1,13 +1,13 @@
+import { useNavigate } from 'react-router-dom';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Button } from '@/ui-components/Button';
+import { CircleButton } from '@/ui-components/CircleButton';
+import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
 import { EXERCISE_MODE, useExerciseProgressStore } from '@/store/exercise-progress';
-import styles from './statistics.module.css';
-import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
-import { useNavigate } from 'react-router-dom';
-import { CircleButton } from '@/ui-components/CircleButton';
 import { useVocabularyStore } from '@/store/vocabulary-collection';
 import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
+import styles from './statistics.module.css';
 
 export const Statistics = ({
 	collectionsId,

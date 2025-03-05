@@ -6,6 +6,8 @@ import type { SizeType, VariantType } from '../parameters/parameters';
 import { classes } from '@/shared/utils/classes';
 import styles from './standartProgressBar.module.css';
 
+const COUNT_UP_DURATION = 1500;
+
 export const StandardProgressBar = ({
 	progress,
 	size = 'm',
@@ -42,7 +44,7 @@ export const StandardProgressBar = ({
 				})}
 				style={style}
 			>
-				<CountUp end={progress} duration={1500} />%
+				<CountUp end={progress} duration={COUNT_UP_DURATION} />%
 			</div>
 		</div>
 	);

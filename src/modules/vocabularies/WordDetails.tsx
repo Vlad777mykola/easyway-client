@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { RandomTest, useProgressStore } from '@/store/progress';
 import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
@@ -11,36 +12,32 @@ import { EXERCISE_CONFIG } from '../exercise/constants';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 
 import styles from './wordDetails.module.css';
-import { RandomTest, useProgressStore } from '@/store/progress';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
 	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
-	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
+	const examModeProgress = useProgressStore((state) => state.examModeProgress);
+	const words = useVocabularyStore((state) => state.words);
+	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
+	const progressStore = useProgressStore((store) => store.randomModeProgress);
+	const uncorrectAnswers = useProgressStore((store) => store.examModeProgress.errorProgress);
+	const getProgressFromLocalStore = useVocabularyStore((state) => state.getProgressFromLocalStore);
 	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
+	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
 	const setWordConfig = useVocabularyStore((store) => store.setWordConfig);
 	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
 	const setCleanWordConfig = useVocabularyStore.use.setCleanWordConfig();
 	const setFilterWordOnSearch = useVocabularyStore.use.setFilterWordOnSearch();
 	const getExerciseConfig = useVocabularyStore.use.getExerciseConfig();
-
-	const navigate = useNavigate();
-	const examModeProgress = useProgressStore((state) => state.examModeProgress);
-
-	const words = useVocabularyStore((state) => state.words);
-	const getProgressFromLocalStore = useVocabularyStore((state) => state.getProgressFromLocalStore);
-
 	const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
 
-	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
+	console.log('EXAM PROGRESS: ', examModeProgress);
 
-	const progressStore = useProgressStore((store) => store.randomModeProgress);
+	const navigate = useNavigate();
 
 	const getExamProgressFromLocalStore = useProgressStore(
 		(state) => state.getExamProgressFromLocalStore,
 	);
-
-	const uncorrectAnswers = useProgressStore((store) => store.examModeProgress.errorProgress);
 
 	const [totalRandom, setTotalRandom] = useState(0);
 
@@ -79,6 +76,8 @@ export const WordDetails = () => {
 		},
 	];
 
+	useVocabularyListData(setWordsListResponse, vocabulariesId);
+
 	useEffect(() => {
 		getProgressFromLocalStore(vocabulariesId);
 		getExamProgressFromLocalStore(vocabulariesId);
@@ -89,8 +88,6 @@ export const WordDetails = () => {
 		setTotalRandom(countRandom);
 	}, [words, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
 
-	useVocabularyListData(setWordsListResponse, vocabulariesId);
-
 	const calculateCompletionPercentage = (completedTasks: number, totalTasks: number) => {
 		if (totalTasks === 0) return 0;
 		return Math.round((completedTasks / totalTasks) * 100);
@@ -98,15 +95,16 @@ export const WordDetails = () => {
 
 	const calculateTotalProgress = (examProgress: number, randomProgress: number) => {
 		const totalProgress = (examProgress + randomProgress) / 2;
-		return totalProgress;
+		return Math.ceil(totalProgress);
 	};
 
 	const countRandomMode = (countWords: number, progressStore: RandomTest[], isDone: boolean) => {
 		const countMake = collectionsExerciseConfig.exerciseCorrectResponse * countWords;
 		let totalCount = 0;
+		const HUNDRED_PROCENT = 100;
 
 		if (isDone) {
-			return calculateCompletionPercentage(countMake, countMake);
+			return HUNDRED_PROCENT;
 		}
 
 		progressStore.forEach((item) => {
@@ -134,10 +132,10 @@ export const WordDetails = () => {
 
 	const onChangeMode = (key: string, value: number[] | string | boolean | string[] | number) => {
 		if (value === EXERCISE_MODE.isExam) {
-			setCollectionsExerciseConfig('exerciseCorrectResponse', 1);
+			setCollectionsExerciseConfig(EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE, 1);
 		}
 		if (value === EXERCISE_MODE.isRandom || value === EXERCISE_MODE.isInfinitive) {
-			setCollectionsExerciseConfig('exerciseCorrectResponse', 15);
+			setCollectionsExerciseConfig(EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE, 15);
 		}
 		setCollectionsExerciseConfig(key, value);
 	};

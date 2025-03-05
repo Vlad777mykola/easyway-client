@@ -32,7 +32,7 @@ export const VocabularyCard = () => {
 	const isSelectingFormate =
 		useVocabularyStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
-
+	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
 	const setFullScreen = useCommonStore.use.setFullScreen();
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
@@ -40,12 +40,8 @@ export const VocabularyCard = () => {
 	const saveProgressToLocalStore = useVocabularyStore.use.saveProgressToLocalStore();
 	const saveMyProgressToLocalStore = useProgressStore.use.saveProgressToLocalStore();
 	const getProgressFromLocalStore = useVocabularyStore.use.getProgressFromLocalStore();
-
-	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
-
 	const setExamProgress = useProgressStore((store) => store.setExamProgress);
 	const setRandomProgress = useProgressStore((store) => store.setRandomProgress);
-
 	const setIsDoneRandomProgress = useProgressStore((store) => store.setIsDoneRandomProgress);
 
 	useVocabularyListData(setExerciseListResponse, vocabulariesId);
@@ -67,9 +63,7 @@ export const VocabularyCard = () => {
 				if (exercise) setTask(exercise);
 			})();
 		}
-	}, [wordId]);
 
-	useEffect(() => {
 		getProgressFromLocalStore(vocabulariesId);
 		setIsAutoNavigate(false);
 
@@ -81,13 +75,19 @@ export const VocabularyCard = () => {
 
 	const setModesProgress = (id: string, isResolved: boolean) => {
 		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isExam) {
-			console.log('EXAM');
 			setExamProgress(id, isResolved);
 		}
 		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
 			setRandomProgress(id, isResolved);
 		}
 		setExerciseListProgress(id, isResolved);
+	};
+
+	const navigateTestPage = () => {
+		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
+			setIsDoneRandomProgress(true);
+		}
+		navigate(`/vocabularies/${vocabulariesId}`);
 	};
 
 	return (
@@ -98,15 +98,7 @@ export const VocabularyCard = () => {
 						icon={<Icon icon="smile" size="xl" />}
 						title="Great, you have done all the exercise!"
 						extra={
-							<Button
-								onClick={() => {
-									if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
-										setIsDoneRandomProgress(true);
-									}
-									navigate(`/vocabularies/${vocabulariesId}`);
-								}}
-								type="primary"
-							>
+							<Button onClick={navigateTestPage} type="primary">
 								Next
 							</Button>
 						}

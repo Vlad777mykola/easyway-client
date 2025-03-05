@@ -40,56 +40,50 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 	},
 	setExamProgress: (id, isResolved) => {
 		set((state) => {
-			const successProgress = get().examModeProgress.successProgress;
-			const errorProgress = get().examModeProgress.errorProgress;
-			if (isResolved && !successProgress.includes(id)) {
+			const { successProgress, errorProgress } = state.examModeProgress;
+
+			if (isResolved) {
 				return {
 					...state,
 					examModeProgress: {
-						...state.examModeProgress,
-						successProgress: !successProgress.includes(id)
-							? [...successProgress, id]
-							: [...successProgress],
-						errorProgress: errorProgress.includes(id)
-							? [...errorProgress.filter((item) => item !== id)]
-							: [...errorProgress],
-					},
-				};
-			} else {
-				return {
-					...state,
-					examModeProgress: {
-						...state.examModeProgress,
-						errorProgress: !errorProgress.includes(id)
-							? [...errorProgress, id]
-							: [...errorProgress],
+						successProgress: successProgress.includes(id)
+							? successProgress
+							: successProgress.concat(id),
+						errorProgress: errorProgress.filter((item) => item !== id),
 					},
 				};
 			}
+
+			return {
+				...state,
+				examModeProgress: {
+					successProgress,
+					errorProgress: errorProgress.includes(id) ? errorProgress : errorProgress.concat(id),
+				},
+			};
 		});
 	},
 	setRandomProgress: (id, isResolved) => {
-		let randomModeProgress = get().randomModeProgress.progress;
+		set((state) => {
+			const { progress } = state.randomModeProgress;
+			const existingItem = progress.find((item) => item.id === id);
 
-		const isConsistThatId = randomModeProgress.some((item) => item.id === id);
-
-		if (!isConsistThatId && isResolved) {
-			randomModeProgress.push({ id, correctCount: 1 });
-		}
-
-		if (isResolved && isConsistThatId) {
-			set((state) => {
-				return {
-					...state,
-					randomModeProgress: {
-						...state.randomModeProgress,
-						progress: randomModeProgress.map((item) =>
-							item.id === id ? { ...item, correctCount: item.correctCount + 1 } : item,
-						),
-					},
-				};
-			});
-		}
+			return {
+				...state,
+				randomModeProgress: {
+					...state.randomModeProgress,
+					progress: existingItem
+						? progress.map((item) =>
+								item.id === id
+									? { ...item, correctCount: item.correctCount + (isResolved ? 1 : 0) }
+									: item,
+							)
+						: isResolved
+							? [...progress, { id, correctCount: 1 }]
+							: progress,
+				},
+			};
+		});
 	},
 	setIsDoneRandomProgress: (isDone: boolean) => {
 		set((state) => {

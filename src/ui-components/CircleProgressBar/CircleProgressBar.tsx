@@ -12,9 +12,11 @@ const SIZE_TYPES = {
 	l: 140,
 	xl: 170,
 };
-
 const TRACK_WIDTH = 10;
 const INDICATOR_WIDTH = 8;
+const HUNDRED_PERCENT = 100;
+const SPEED = 1000;
+const COUNT_UP_DURATION = 1500;
 
 export const CircleProgressBar = ({
 	progress,
@@ -38,7 +40,8 @@ export const CircleProgressBar = ({
 		dashArray = 2 * Math.PI * radius,
 		dashOffset = dashArray * ((100 - progress) / 100);
 
-	let hideLabel = size === 'xs' || size === 's' || !label.length || spinnerMode ? true : false;
+	let hideLabel =
+		size === Size.xs || size === Size.s || !label.length || spinnerMode ? true : false;
 
 	const [style, setStyle] = useState({});
 
@@ -81,7 +84,7 @@ export const CircleProgressBar = ({
 							[styles.svgPiIndicatorSpinner]: spinnerMode,
 							[styles[Variant[variant]]]: !!variant,
 						})}
-						style={{ ...style, animationDuration: `${spinnerSpeed * 1000}` }}
+						style={{ ...style, animationDuration: `${spinnerSpeed * SPEED}` }}
 						cx={center}
 						cy={center}
 						fill="transparent"
@@ -95,7 +98,11 @@ export const CircleProgressBar = ({
 					<div className={styles.svgPiLabel}>
 						{!spinnerMode && (
 							<span className={styles.svgPiLabelProgress}>
-								<CountUp end={progress > 100 ? 100 : progress} duration={1500} />%
+								<CountUp
+									end={progress > HUNDRED_PERCENT ? HUNDRED_PERCENT : progress}
+									duration={COUNT_UP_DURATION}
+								/>
+								%
 							</span>
 						)}
 					</div>
