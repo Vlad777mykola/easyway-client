@@ -38,7 +38,7 @@ export const VocabularyCard = () => {
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();
 	const saveProgressToLocalStore = useVocabularyStore.use.saveProgressToLocalStore();
-	const saveMyProgressToLocalStore = useProgressStore.use.saveProgressToLocalStore();
+	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
 	const getProgressFromLocalStore = useVocabularyStore.use.getProgressFromLocalStore();
 	const setExamProgress = useProgressStore((store) => store.setExamProgress);
 	const setRandomProgress = useProgressStore((store) => store.setRandomProgress);
@@ -47,7 +47,7 @@ export const VocabularyCard = () => {
 	useVocabularyListData(setExerciseListResponse, vocabulariesId);
 	useBeforeunload(() => {
 		saveProgressToLocalStore(vocabulariesId);
-		saveMyProgressToLocalStore(vocabulariesId);
+		saveProgressToIndexedDB(vocabulariesId);
 	});
 	const onNavigate = useCallback(
 		(id: string) => {
@@ -69,7 +69,7 @@ export const VocabularyCard = () => {
 
 		return () => {
 			saveProgressToLocalStore(vocabulariesId);
-			saveMyProgressToLocalStore(vocabulariesId);
+			saveProgressToIndexedDB(vocabulariesId);
 		};
 	}, [wordId]);
 

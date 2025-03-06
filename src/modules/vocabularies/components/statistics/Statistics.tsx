@@ -1,50 +1,89 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Button } from '@/ui-components/Button';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
-import { EXERCISE_MODE, useExerciseProgressStore } from '@/store/exercise-progress';
+import { EXERCISE_MODE } from '@/store/exercise-progress';
 import { useVocabularyStore } from '@/store/vocabulary-collection';
 import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
 import styles from './statistics.module.css';
+import { useProgressStore, RandomTest } from '@/store/progress';
+
+// GET PROGRESS FROM DB SET PROGRESS TO DB USE CUSTOM HOOKS FOR (TO BE ABLE TO USE EVERYWHERE)
 
 export const Statistics = ({
 	collectionsId,
 	collectionName,
-	totalProgress,
-	examProgressResolved,
-	examProgressUnresolved,
-	randomProgress,
 	uncorrectAnswers = [],
 }: {
 	collectionsId: string;
 	collectionName: string;
-	totalProgress: number;
-	examProgressResolved: number;
-	examProgressUnresolved: number;
-	randomProgress: number;
 	uncorrectAnswers?: string[];
 }) => {
-	const removeProgress = useExerciseProgressStore((store) => store.removeProgress);
 	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
+	const clearAll = useProgressStore((store) => store.clearAll);
 	const navigate = useNavigate();
+	const [totalRandom, setTotalRandom] = useState(0);
+	const words = useVocabularyStore((store) => store.words);
+	const progressStore = useProgressStore((store) => store.randomModeProgress);
+	const examModeProgress = useProgressStore((state) => state.examModeProgress);
+	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
+
+	useEffect(() => {
+		const countRandom = countRandomMode(words.length, progressStore.progress, progressStore.isDone);
+		setTotalRandom(countRandom);
+	}, [words, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
 
 	const onClick = (id: string) => {
 		setCollectionsExerciseConfig(EXERCISE_CONFIG.MODE, EXERCISE_MODE.isExam);
 		navigate(`/vocabularies/${collectionsId}/word/${id}`);
 	};
 
+	const calculateCompletionPercentage = (completedTasks: number, totalTasks: number) => {
+		if (totalTasks === 0) return 0;
+		return Math.round((completedTasks / totalTasks) * 100);
+	};
+
+	const calculateTotalProgress = (examProgress: number, randomProgress: number) => {
+		const totalProgress = (examProgress + randomProgress) / 2;
+		return Math.ceil(totalProgress);
+	};
+
+	const percentage = calculateCompletionPercentage(
+		examModeProgress.successProgress.length,
+		words.length,
+	);
+
+	const uncorrectAnswersPercentage = calculateCompletionPercentage(
+		examModeProgress.errorProgress.length,
+		words.length,
+	);
+
+	const totalProgress = calculateTotalProgress(percentage, totalRandom);
+
+	const countRandomMode = (countWords: number, progressStore: RandomTest[], isDone: boolean) => {
+		const countMake = collectionsExerciseConfig.exerciseCorrectResponse * countWords; // rename where is words
+		let totalCount = 0;
+		const HUNDRED_PROCENT = 100;
+
+		if (isDone) {
+			return HUNDRED_PROCENT;
+		}
+
+		progressStore.forEach((item) => {
+			totalCount += item.correctCount;
+		});
+
+		return calculateCompletionPercentage(totalCount, countMake);
+	};
+
 	return (
 		<Wrapper>
 			<div className={styles.progress}>
 				<div className={styles.clearProgress}>
-					<Button
-						size="small"
-						color="danger"
-						variant="filled"
-						onClick={() => removeProgress(collectionsId)}
-					>
+					<Button size="small" color="danger" variant="filled" onClick={clearAll}>
 						Clear Progress
 					</Button>
 				</div>
@@ -68,15 +107,15 @@ export const Statistics = ({
 					)}
 					<div className={styles.modeContainer}>
 						<span className={styles.modeTitle}>Exam correct</span>
-						<CircleProgressBar progress={examProgressResolved} />
+						<CircleProgressBar progress={percentage} />
 					</div>
 					<div className={styles.modeContainer}>
 						<span className={styles.modeTitle}>Exam uncorrect</span>
-						<CircleProgressBar progress={examProgressUnresolved} />
+						<CircleProgressBar progress={uncorrectAnswersPercentage} />
 					</div>
 					<div className={styles.modeContainer}>
 						<span className={styles.modeTitle}>Random</span>
-						<CircleProgressBar progress={randomProgress} />
+						<CircleProgressBar progress={totalRandom} />
 					</div>
 				</div>
 			</div>

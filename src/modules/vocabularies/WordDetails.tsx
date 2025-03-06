@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { RandomTest, useProgressStore } from '@/store/progress';
+import { useEffect } from 'react';
+import { useProgressStore } from '@/store/progress';
 import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
@@ -17,9 +17,6 @@ export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
 	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
 	const examModeProgress = useProgressStore((state) => state.examModeProgress);
-	const words = useVocabularyStore((state) => state.words);
-	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
-	const progressStore = useProgressStore((store) => store.randomModeProgress);
 	const uncorrectAnswers = useProgressStore((store) => store.examModeProgress.errorProgress);
 	const getProgressFromLocalStore = useVocabularyStore((state) => state.getProgressFromLocalStore);
 	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
@@ -34,12 +31,7 @@ export const WordDetails = () => {
 	console.log('EXAM PROGRESS: ', examModeProgress);
 
 	const navigate = useNavigate();
-
-	const getExamProgressFromLocalStore = useProgressStore(
-		(state) => state.getExamProgressFromLocalStore,
-	);
-
-	const [totalRandom, setTotalRandom] = useState(0);
+	const getProgressFromIndexedDB = useProgressStore((state) => state.getProgressFromIndexedDB);
 
 	const fieldsDataWord = [
 		{
@@ -80,51 +72,8 @@ export const WordDetails = () => {
 
 	useEffect(() => {
 		getProgressFromLocalStore(vocabulariesId);
-		getExamProgressFromLocalStore(vocabulariesId);
+		getProgressFromIndexedDB(vocabulariesId);
 	}, []);
-
-	useEffect(() => {
-		const countRandom = countRandomMode(words.length, progressStore.progress, progressStore.isDone);
-		setTotalRandom(countRandom);
-	}, [words, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
-
-	const calculateCompletionPercentage = (completedTasks: number, totalTasks: number) => {
-		if (totalTasks === 0) return 0;
-		return Math.round((completedTasks / totalTasks) * 100);
-	};
-
-	const calculateTotalProgress = (examProgress: number, randomProgress: number) => {
-		const totalProgress = (examProgress + randomProgress) / 2;
-		return Math.ceil(totalProgress);
-	};
-
-	const countRandomMode = (countWords: number, progressStore: RandomTest[], isDone: boolean) => {
-		const countMake = collectionsExerciseConfig.exerciseCorrectResponse * countWords;
-		let totalCount = 0;
-		const HUNDRED_PROCENT = 100;
-
-		if (isDone) {
-			return HUNDRED_PROCENT;
-		}
-
-		progressStore.forEach((item) => {
-			totalCount += item.correctCount;
-		});
-
-		return calculateCompletionPercentage(totalCount, countMake);
-	};
-
-	const percentage = calculateCompletionPercentage(
-		examModeProgress.successProgress.length,
-		words.length,
-	);
-
-	const uncorrectAnswersPercentage = calculateCompletionPercentage(
-		examModeProgress.errorProgress.length,
-		words.length,
-	);
-
-	const totalProgress = calculateTotalProgress(percentage, totalRandom);
 
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setWordConfig(key, value);
@@ -157,10 +106,6 @@ export const WordDetails = () => {
 			<ContentContainer.Header>
 				<Statistics
 					collectionName="Family"
-					totalProgress={totalProgress}
-					examProgressResolved={percentage}
-					examProgressUnresolved={uncorrectAnswersPercentage}
-					randomProgress={totalRandom}
 					collectionsId={vocabulariesId || ''}
 					uncorrectAnswers={uncorrectAnswers}
 				/>
