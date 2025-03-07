@@ -1,43 +1,77 @@
+.cardsContainer {
+	display: flex;
+	gap: 14px;
+	width: 532px;
+}
 .card1 {
-	margin: 0 332px;
-	margin-bottom: 12px;
+	background-color: rgb(247, 234, 234);
+	width: 300px;
+	height: 400px;
+	margin: 0;
 	padding: 4px 20px;
-	padding-top: 1em;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	background-color: #87cefa;
-	border-radius: 35px;
 	text-align: justify;
+	border-radius: 35px;
+	display: grid;
+	place-items: center;
+	gap: 0;
 	max-width: 350px;
 }
-.card1 h2 {
-	text-align: center;
+.card1 img {
 }
-.card2 {
-	margin: 0 332px;
-	margin-bottom: 12px;
-	padding: 4px 20px;
-	padding-top: 1em;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	background-color: #87cefa;
-	border-radius: 35px;
-	text-align: justify;
-	max-width: 350px;
-}
-.card2 h2 {
-	text-align: center;
-}
-.card3 {
-	margin: 0 332px;
-	padding: 4px 20px;
-	padding-top: 1em;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	background-color: #87cefa;
-	border-radius: 35px;
-	text-align: justify;
-	max-width: 350px;
-}
+
+.card1 h2,
+.card2 h2,
 .card3 h2 {
 	text-align: center;
+	font-weight: 600;
+}
+
+.card2 {
+	width: 300px;
+	height: 370px;
+	margin-top: 65px;
+	padding: 4px 20px;
+	background-color: #d9edf9;
+	display: grid;
+	border-radius: 35px;
+	text-align: justify;
+	max-width: 350px;
+}
+.card2 img {
+	width: 130px;
+	height: auto;
+	border-radius: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transform: translateY(-30%);
+	margin-bottom: 0;
+}
+.containerTop {
+	padding: 0;
+}
+.containerBottom {
+	padding-top: 0;
+}
+.card2 p,
+.card1 p {
+	margin-bottom: 16px;
+}
+.card3 {
+	height: 835px;
+	width: 500px;
+	margin: 0;
+	padding: 4px 20px;
+	background-color: rgb(230, 244, 244);
+	display: grid;
+	border-radius: 35px;
+	text-align: justify;
+	max-width: 350px;
+}
+.card3 img {
+	width: 300px;
+	height: 540px;
+}
+.card3 h2 {
+	/* padding-top: 175%; */
 }
 @media (max-width: 480px) {
 	.card1 {
