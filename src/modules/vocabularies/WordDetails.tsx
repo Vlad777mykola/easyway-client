@@ -12,6 +12,7 @@ import { EXERCISE_CONFIG } from '../exercise/constants';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 
 import styles from './wordDetails.module.css';
+import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
@@ -70,10 +71,21 @@ export const WordDetails = () => {
 
 	useVocabularyListData(setWordsListResponse, vocabulariesId);
 
+	console.log('//VOCABULARIES ID IN WORD DETAILS:', vocabulariesId);
+
 	useEffect(() => {
 		getProgressFromLocalStore(vocabulariesId);
-		getProgressFromIndexedDB(vocabulariesId);
 	}, []);
+
+	useIndexedDB(
+		(exam, random?) => getProgressFromIndexedDB(exam, random),
+		'load',
+		vocabulariesId,
+		'id',
+		'',
+		false,
+		undefined,
+	);
 
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setWordConfig(key, value);

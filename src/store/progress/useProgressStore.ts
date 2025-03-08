@@ -1,7 +1,6 @@
 import { create } from 'zustand';
-import { saveState, loadState, deleteState, clearAllState } from '@/utils/indexedDB';
 
-type ExamModeProgressType = {
+export type ExamModeProgressType = {
 	successProgress: string[];
 	errorProgress: string[];
 };
@@ -23,8 +22,14 @@ type ProgressStoreActions = {
 	setExamProgress: (id: string, isResolved: boolean) => void;
 	setRandomProgress: (id: string, isResolved: boolean) => void;
 	setIsDoneRandomProgress: (isDone: boolean) => void;
-	getProgressFromIndexedDB: (collectionId: string) => void;
-	saveProgressToIndexedDB: (collectionId: string) => void;
+	getProgressFromIndexedDB: (
+		examModeProgress: ExamModeProgressType | unknown,
+		randomModeProgress: { isDone: boolean; progress: RandomTest[] } | unknown,
+	) => void;
+	saveProgressToIndexedDB: () => {
+		examModeProgress: ExamModeProgressType;
+		randomModeProgress: { isDone: boolean; progress: RandomTest[] };
+	};
 	resetItemProgress: (collectionId: string, nameProgress: string) => void;
 	clearAll: () => void;
 };
@@ -90,32 +95,21 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 		});
 	},
 	// indexDB
-	getProgressFromIndexedDB: async (collectionId) => {
-		const examModeProgress = await loadState<ExamModeProgressType>(
-			`${collectionId}_examModeProgress`,
-		);
-		const randomModeProgress = await loadState<{ isDone: boolean; progress: RandomTest[] }>(
-			`${collectionId}_randomModeProgress`,
-		);
-
-		console.log('examModeProgress INDEXED DB: ', examModeProgress);
-		console.log('randomModeProgress INDEXED DB: ', randomModeProgress);
-
+	getProgressFromIndexedDB: (examModeProgress: unknown, randomModeProgress: unknown) => {
+		const examProgress = examModeProgress as ExamModeProgressType;
+		const randomProgress = randomModeProgress as { isDone: boolean; progress: RandomTest[] };
 		set((state) => ({
 			...state,
-			examModeProgress: examModeProgress || { successProgress: [], errorProgress: [] },
-			randomModeProgress: randomModeProgress || { isDone: false, progress: [] },
+			examModeProgress: examProgress || { successProgress: [], errorProgress: [] },
+			randomModeProgress: randomProgress || { isDone: false, progress: [] },
 		}));
 	},
-	// indexDB
-	saveProgressToIndexedDB: async (collectionId) => {
+	saveProgressToIndexedDB: () => {
 		const examModeProgress = get().examModeProgress;
 		const randomModeProgress = get().randomModeProgress;
-		saveState(`${collectionId}_examModeProgress`, examModeProgress);
-		saveState(`${collectionId}_randomModeProgress`, randomModeProgress);
+		return { examModeProgress, randomModeProgress };
 	},
-	resetItemProgress: async (collectionId, nameProgress) => {
-		await deleteState(`${collectionId}_${nameProgress}`);
+	resetItemProgress: (nameProgress) => {
 		set((state) => ({
 			...state,
 			examModeProgress:
@@ -134,8 +128,7 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 					: state.randomModeProgress,
 		}));
 	},
-	clearAll: async () => {
-		await clearAllState();
+	clearAll: () => {
 		set((state) => ({
 			...state,
 			examModeProgress: {

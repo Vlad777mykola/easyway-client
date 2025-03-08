@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Button } from '@/ui-components/Button';
 import { CircleButton } from '@/ui-components/CircleButton';
@@ -10,6 +10,7 @@ import { useVocabularyStore } from '@/store/vocabulary-collection';
 import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
 import styles from './statistics.module.css';
 import { useProgressStore, RandomTest } from '@/store/progress';
+import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
 
 // GET PROGRESS FROM DB SET PROGRESS TO DB USE CUSTOM HOOKS FOR (TO BE ABLE TO USE EVERYWHERE)
 
@@ -27,9 +28,16 @@ export const Statistics = ({
 	const navigate = useNavigate();
 	const [totalRandom, setTotalRandom] = useState(0);
 	const words = useVocabularyStore((store) => store.words);
+	const progress = useProgressStore((store) => store);
 	const progressStore = useProgressStore((store) => store.randomModeProgress);
 	const examModeProgress = useProgressStore((state) => state.examModeProgress);
 	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
+	const [clear, setClear] = useState(false);
+	const { vocabulariesId = '' } = useParams();
+
+	useIndexedDB(clearAll, 'clearAll', vocabulariesId, '', '', clear, setClear);
+
+	console.log('//PROGRESS: ', progress);
 
 	useEffect(() => {
 		const countRandom = countRandomMode(words.length, progressStore.progress, progressStore.isDone);
@@ -83,7 +91,7 @@ export const Statistics = ({
 		<Wrapper>
 			<div className={styles.progress}>
 				<div className={styles.clearProgress}>
-					<Button size="small" color="danger" variant="filled" onClick={clearAll}>
+					<Button size="small" color="danger" variant="filled" onClick={() => setClear(true)}>
 						Clear Progress
 					</Button>
 				</div>

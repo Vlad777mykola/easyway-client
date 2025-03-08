@@ -18,6 +18,7 @@ import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import { PaginationExercise } from './components/pagination/Pagination';
 import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
 import styles from './vocabularyCard.module.css';
+import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
@@ -44,10 +45,42 @@ export const VocabularyCard = () => {
 	const setRandomProgress = useProgressStore((store) => store.setRandomProgress);
 	const setIsDoneRandomProgress = useProgressStore((store) => store.setIsDoneRandomProgress);
 
+	const exerciseMode = useVocabularyStore((store) => store.collectionsExerciseConfig.exerciseMode);
+
+	const correctResponse = useVocabularyStore(
+		(store) => store.collectionsExerciseConfig.exerciseCorrectResponse,
+	);
+
+	const progress = useProgressStore((store) => store);
+	const examProgress = useProgressStore((store) => store.examModeProgress);
+	const randomProgress = useProgressStore((store) => store.randomModeProgress);
+	const words = useVocabularyStore((store) => store.words);
+
+	console.log('//PROGRESS: ', progress);
+	console.log('////WORD ID: ', wordId);
+
+	const resultRandomWordID = randomProgress.progress.every(
+		(item) => item.correctCount === correctResponse,
+	);
+
+	const resultExamWordID =
+		examProgress.successProgress.length + examProgress.errorProgress.length === words.length;
+
+	let resultWordId;
+
+	if (exerciseMode === EXERCISE_MODE.isExam) {
+		resultWordId = resultExamWordID ? 'done' : wordId;
+	}
+
+	if (exerciseMode === EXERCISE_MODE.isRandom) {
+		resultWordId = resultRandomWordID ? 'done' : wordId;
+	}
+
+	useIndexedDB(saveProgressToIndexedDB, 'save', vocabulariesId, resultWordId);
 	useVocabularyListData(setExerciseListResponse, vocabulariesId);
+
 	useBeforeunload(() => {
 		saveProgressToLocalStore(vocabulariesId);
-		saveProgressToIndexedDB(vocabulariesId);
 	});
 	const onNavigate = useCallback(
 		(id: string) => {
@@ -69,7 +102,6 @@ export const VocabularyCard = () => {
 
 		return () => {
 			saveProgressToLocalStore(vocabulariesId);
-			saveProgressToIndexedDB(vocabulariesId);
 		};
 	}, [wordId]);
 
