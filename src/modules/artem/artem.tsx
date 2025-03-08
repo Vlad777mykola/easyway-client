@@ -41,7 +41,7 @@ export const ArtemCards = () => {
 
 			<div className={styles.containerBottom}>
 				<div className={styles.card3}>
-					<img src={data3.image} alt="стійкі вирази" className={styles.cardImage} />
+					<img src={data3.image} alt="Cтійкі вирази" className={styles.cardImage} />
 					<h2>{data3.title}</h2>
 					<p>{data3.subtitle}</p>
 				</div>

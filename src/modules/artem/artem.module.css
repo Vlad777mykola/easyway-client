@@ -81,4 +81,31 @@
 	.card3 {
 		margin: 12px 70px;
 	}
+	.card2 {
+		margin-top: 48px;
+		height: 380px;
+	}
+	.card2 img {
+		transform: translateY(-20%);
+	}
+	.card3 {
+		height: 557px;
+		width: 300px;
+		display: inline-block;
+		margin-top: 0;
+		margin-bottom: 60px;
+	}
+	.card3 img {
+		height: 200px;
+		width: 200px;
+		margin: 12px 30px 20px 30px;
+	}
+	.cardsContainer {
+		max-width: 400px;
+		display: block;
+		overflow-x: hidden;
+	}
+	main {
+		max-width: 480px;
+	}
 }
