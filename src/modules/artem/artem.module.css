@@ -16,8 +16,6 @@
 	gap: 0;
 	max-width: 350px;
 }
-.card1 img {
-}
 
 .card1 h2,
 .card2 h2,
@@ -70,9 +68,7 @@
 	width: 300px;
 	height: 540px;
 }
-.card3 h2 {
-	/* padding-top: 175%; */
-}
+
 @media (max-width: 480px) {
 	.card1 {
 		margin: 60px 70px 12px 70px;
