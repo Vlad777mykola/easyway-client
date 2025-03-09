@@ -1,6 +1,12 @@
 import React, { useEffect } from 'react';
-import { clearAllState, deleteState, loadState, saveState } from '@/utils/indexedDB';
-import { type ExamModeProgressType, type RandomTest } from '@/store/progress';
+import {
+	clearAllState,
+	deleteState,
+	loadState,
+	saveState,
+	updateLastTest,
+} from '@/utils/indexedDB';
+import { type ExamModeProgressType, type RandomTest, type LatestTest } from '@/store/progress';
 
 type Action = 'save' | 'load' | 'delete' | 'clearAll';
 
@@ -8,6 +14,7 @@ export const useIndexedDB = (
 	func: (
 		firstArgument?: unknown,
 		secondArgument?: unknown,
+		latestTets?: LatestTest[],
 	) => {
 		examModeProgress: ExamModeProgressType;
 		randomModeProgress: { isDone: boolean; progress: RandomTest[] };
@@ -24,22 +31,27 @@ export const useIndexedDB = (
 			try {
 				if (action === 'save') {
 					console.log('SAVE TO INDEXED DB WORKS');
-					const { examModeProgress, randomModeProgress } = func() as {
+					const { examModeProgress, randomModeProgress, latestTests } = func() as {
 						examModeProgress: ExamModeProgressType;
 						randomModeProgress: { isDone: boolean; progress: RandomTest[] };
+						latestTests: string[];
 					};
-					await saveState(`${collectionId}_examModeProgress`, examModeProgress);
-					await saveState(`${collectionId}_randomModeProgress`, randomModeProgress);
+
+					await saveState('data', {
+						[`${collectionId}_examModeProgress`]: examModeProgress,
+						[`${collectionId}_randomModeProgress`]: randomModeProgress,
+						[`${collectionId}_latestTests`]: latestTests,
+					});
 				}
 
 				if (action === 'load') {
-					console.log('USE INDEXED DB WORKS');
-					const examM = await loadState<ExamModeProgressType>(`${collectionId}_examModeProgress`);
-					const randomM = await loadState<{
-						isDone: boolean;
-						progress: RandomTest[];
-					}>(`${collectionId}_randomModeProgress`);
-					await func(examM, randomM);
+					const loadedData = await loadState('data');
+					await updateLastTest('data', `${collectionId}_latestTests`, []);
+					await func(
+						loadedData?.[`${collectionId}_examModeProgress`],
+						loadedData?.[`${collectionId}_randomModeProgress`],
+						loadedData?.[`${collectionId}_latestTests`],
+					);
 				}
 
 				if (action === 'delete') {

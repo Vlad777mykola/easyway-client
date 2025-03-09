@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useProgressStore } from '@/store/progress';
+import { LatestTest, useProgressStore } from '@/store/progress';
 import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
@@ -17,8 +17,8 @@ import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
 	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
-	const examModeProgress = useProgressStore((state) => state.examModeProgress);
 	const uncorrectAnswers = useProgressStore((store) => store.examModeProgress.errorProgress);
+	const latestTests = useProgressStore((state) => state.latestTests) || [];
 	const getProgressFromLocalStore = useVocabularyStore((state) => state.getProgressFromLocalStore);
 	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
 	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
@@ -29,7 +29,8 @@ export const WordDetails = () => {
 	const getExerciseConfig = useVocabularyStore.use.getExerciseConfig();
 	const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
 
-	console.log('EXAM PROGRESS: ', examModeProgress);
+	const progress = useProgressStore((store) => store);
+	console.log('/////PROGRESS: ', progress);
 
 	const navigate = useNavigate();
 	const getProgressFromIndexedDB = useProgressStore((state) => state.getProgressFromIndexedDB);
@@ -71,14 +72,13 @@ export const WordDetails = () => {
 
 	useVocabularyListData(setWordsListResponse, vocabulariesId);
 
-	console.log('//VOCABULARIES ID IN WORD DETAILS:', vocabulariesId);
-
 	useEffect(() => {
 		getProgressFromLocalStore(vocabulariesId);
 	}, []);
 
 	useIndexedDB(
-		(exam, random?) => getProgressFromIndexedDB(exam, random),
+		(exam, random, latestTests) =>
+			getProgressFromIndexedDB(exam, random, latestTests as LatestTest[]),
 		'load',
 		vocabulariesId,
 		'id',
@@ -120,6 +120,7 @@ export const WordDetails = () => {
 					collectionName="Family"
 					collectionsId={vocabulariesId || ''}
 					uncorrectAnswers={uncorrectAnswers}
+					latestTests={latestTests}
 				/>
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>

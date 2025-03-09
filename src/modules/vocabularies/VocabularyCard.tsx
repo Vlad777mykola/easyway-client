@@ -45,19 +45,20 @@ export const VocabularyCard = () => {
 	const setRandomProgress = useProgressStore((store) => store.setRandomProgress);
 	const setIsDoneRandomProgress = useProgressStore((store) => store.setIsDoneRandomProgress);
 
+	const setLatestTests = useProgressStore((store) => store.setLatestTests);
+	const latestTests = useProgressStore((store) => store.latestTests);
+
 	const exerciseMode = useVocabularyStore((store) => store.collectionsExerciseConfig.exerciseMode);
 
 	const correctResponse = useVocabularyStore(
 		(store) => store.collectionsExerciseConfig.exerciseCorrectResponse,
 	);
 
-	const progress = useProgressStore((store) => store);
 	const examProgress = useProgressStore((store) => store.examModeProgress);
 	const randomProgress = useProgressStore((store) => store.randomModeProgress);
 	const words = useVocabularyStore((store) => store.words);
 
-	console.log('//PROGRESS: ', progress);
-	console.log('////WORD ID: ', wordId);
+	console.log('/////LATEST TESTS: ', latestTests);
 
 	const resultRandomWordID = randomProgress.progress.every(
 		(item) => item.correctCount === correctResponse,
@@ -113,6 +114,7 @@ export const VocabularyCard = () => {
 			setRandomProgress(id, isResolved);
 		}
 		setExerciseListProgress(id, isResolved);
+		setLatestTests(id);
 	};
 
 	const navigateTestPage = () => {

@@ -11,6 +11,7 @@ import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
 import styles from './statistics.module.css';
 import { useProgressStore, RandomTest } from '@/store/progress';
 import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
+import type { LatestTest } from '@/store/progress/useProgressStore';
 
 // GET PROGRESS FROM DB SET PROGRESS TO DB USE CUSTOM HOOKS FOR (TO BE ABLE TO USE EVERYWHERE)
 
@@ -18,10 +19,12 @@ export const Statistics = ({
 	collectionsId,
 	collectionName,
 	uncorrectAnswers = [],
+	latestTests = [],
 }: {
 	collectionsId: string;
 	collectionName: string;
 	uncorrectAnswers?: string[];
+	latestTests?: LatestTest[];
 }) => {
 	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
 	const clearAll = useProgressStore((store) => store.clearAll);
@@ -38,6 +41,7 @@ export const Statistics = ({
 	useIndexedDB(clearAll, 'clearAll', vocabulariesId, '', '', clear, setClear);
 
 	console.log('//PROGRESS: ', progress);
+	console.log('////// latestTests', latestTests);
 
 	useEffect(() => {
 		const countRandom = countRandomMode(words.length, progressStore.progress, progressStore.isDone);
@@ -125,6 +129,18 @@ export const Statistics = ({
 						<span className={styles.modeTitle}>Random</span>
 						<CircleProgressBar progress={totalRandom} />
 					</div>
+					{latestTests.length > 0 && (
+						<div className={styles.uncorrectAnswersContainer}>
+							<span className={styles.modeTitle}>Last answered Question</span>
+							<div className={styles.uncorrectAnswers}>
+								{latestTests.map((test) => (
+									<CircleButton key={test.id} onClick={() => onClick(test.id)}>
+										{test.id}
+									</CircleButton>
+								))}
+							</div>
+						</div>
+					)}
 				</div>
 			</div>
 		</Wrapper>
