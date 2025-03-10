@@ -34,9 +34,6 @@ export const WordDetails = () => {
 
 	const [mode, setMode] = useState<ExerciseModeType>(EXERCISE_MODE.isRandom);
 
-	console.log('MODE: ', mode);
-	console.log('exarciseMode: ', exerciseMode);
-
 	const fieldsDataWord = [
 		{
 			keyValue: WORD_CONFIG.wordConfig,
