@@ -6,9 +6,16 @@ import {
 	saveState,
 	updateLastTest,
 } from '@/utils/indexedDB';
-import { type ExamModeProgressType, type RandomTest, type LatestTest } from '@/store/progress';
+import {
+	type ExamModeProgressType,
+	type RandomTest,
+	type ResolvedRandomTest,
+	type LatestTest,
+} from '@/store/progress';
 
 type Action = 'save' | 'load' | 'delete' | 'clearAll';
+
+const DATA_FIELD = 'data';
 
 export const useIndexedDB = (
 	func: (
@@ -17,7 +24,7 @@ export const useIndexedDB = (
 		latestTets?: LatestTest[],
 	) => {
 		examModeProgress: ExamModeProgressType;
-		randomModeProgress: { isDone: boolean; progress: RandomTest[] };
+		randomModeProgress: { progress: RandomTest[]; resolved: ResolvedRandomTest[] };
 	} | void,
 	action: Action,
 	collectionId?: string,
@@ -30,14 +37,16 @@ export const useIndexedDB = (
 		(async () => {
 			try {
 				if (action === 'save') {
-					console.log('SAVE TO INDEXED DB WORKS');
 					const { examModeProgress, randomModeProgress, latestTests } = func() as {
 						examModeProgress: ExamModeProgressType;
-						randomModeProgress: { isDone: boolean; progress: RandomTest[] };
+						randomModeProgress: {
+							progress: RandomTest[];
+							resolved: ResolvedRandomTest[];
+						};
 						latestTests: string[];
 					};
 
-					await saveState('data', {
+					await saveState(DATA_FIELD, {
 						[`${collectionId}_examModeProgress`]: examModeProgress,
 						[`${collectionId}_randomModeProgress`]: randomModeProgress,
 						[`${collectionId}_latestTests`]: latestTests,
@@ -46,7 +55,7 @@ export const useIndexedDB = (
 
 				if (action === 'load') {
 					const loadedData = await loadState('data');
-					await updateLastTest('data', `${collectionId}_latestTests`, []);
+					await updateLastTest(DATA_FIELD, `${collectionId}_latestTests`, []);
 					await func(
 						loadedData?.[`${collectionId}_examModeProgress`],
 						loadedData?.[`${collectionId}_randomModeProgress`],

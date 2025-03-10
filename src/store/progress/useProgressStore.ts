@@ -10,6 +10,11 @@ export type RandomTest = {
 	correctCount: number;
 };
 
+export type ResolvedRandomTest = {
+	id: string;
+	isDone: boolean;
+};
+
 export type LatestTest = {
 	id: string;
 	timestamp: number;
@@ -18,25 +23,24 @@ export type LatestTest = {
 export type ProgressStoreState = {
 	examModeProgress: ExamModeProgressType;
 	randomModeProgress: {
-		isDone: boolean;
 		progress: RandomTest[];
+		resolved: ResolvedRandomTest[];
 	};
 	latestTests: LatestTest[];
 };
 
 type ProgressStoreActions = {
 	setExamProgress: (id: string, isResolved: boolean) => void;
-	setRandomProgress: (id: string, isResolved: boolean) => void;
-	setIsDoneRandomProgress: (isDone: boolean) => void;
+	setRandomProgress: (id: string, isResolved: boolean, totalCorrectResponse: number) => void;
 	setLatestTests: (id: string) => void;
 	getProgressFromIndexedDB: (
 		examModeProgress: ExamModeProgressType | unknown,
-		randomModeProgress: { isDone: boolean; progress: RandomTest[] } | unknown,
+		randomModeProgress: { progress: RandomTest[] } | unknown,
 		latestTests: LatestTest[],
 	) => void;
 	saveProgressToIndexedDB: () => {
 		examModeProgress: ExamModeProgressType;
-		randomModeProgress: { isDone: boolean; progress: RandomTest[] };
+		randomModeProgress: { progress: RandomTest[]; resolved: ResolvedRandomTest[] };
 		latestTests: LatestTest[];
 	};
 	resetItemProgress: (collectionId: string, nameProgress: string) => void;
@@ -45,15 +49,12 @@ type ProgressStoreActions = {
 
 export type ProgressStoreType = ProgressStoreState & ProgressStoreActions;
 
-// total count during the day
-
 export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 	examModeProgress: {
 		successProgress: [],
 		errorProgress: [],
 	},
 	randomModeProgress: {
-		isDone: false, // need to be removed
 		progress: [],
 		resolved: [],
 	},
@@ -71,10 +72,11 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			};
 		});
 	},
-	setRandomProgress: (id, isResolved) => {
+	setRandomProgress: (id, isResolved, totalCorrectResponse) => {
 		set((state) => {
-			const { progress } = state.randomModeProgress;
+			const { progress, resolved } = state.randomModeProgress;
 			const existingItem = progress.find((item) => item.id === id);
+			const existingResolved = resolved.find((item) => item.id === id);
 
 			return {
 				...state,
@@ -82,24 +84,29 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 					...state.randomModeProgress,
 					progress: existingItem
 						? progress.map((item) =>
-								item.id === id
+								item.id === id && item.correctCount < totalCorrectResponse
 									? { ...item, correctCount: item.correctCount + (isResolved ? 1 : 0) }
 									: item,
 							)
 						: isResolved
 							? [...progress, { id, correctCount: 1 }]
 							: progress,
-				},
-			};
-		});
-	},
-	setIsDoneRandomProgress: (isDone: boolean) => {
-		set((state) => {
-			return {
-				...state,
-				randomModeProgress: {
-					...state.randomModeProgress,
-					isDone,
+					resolved: existingResolved
+						? resolved.map((resolvedItem) => {
+								const progressItem = progress.find(
+									(progressItem) => progressItem.id === resolvedItem.id,
+								);
+								if (
+									resolvedItem.id === id &&
+									progressItem?.correctCount === totalCorrectResponse - 1 &&
+									isResolved
+								) {
+									return { ...resolvedItem, isDone: true };
+								} else {
+									return resolvedItem;
+								}
+							})
+						: [...resolved, { id: id, isDone: false }],
 				},
 			};
 		});
@@ -124,18 +131,20 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			});
 		}
 	},
-	// indexDB
 	getProgressFromIndexedDB: (
 		examModeProgress: unknown,
 		randomModeProgress: unknown,
 		latestTests: LatestTest[],
 	) => {
 		const examProgress = examModeProgress as ExamModeProgressType;
-		const randomProgress = randomModeProgress as { isDone: boolean; progress: RandomTest[] };
+		const randomProgress = randomModeProgress as {
+			progress: RandomTest[];
+			resolved: ResolvedRandomTest[];
+		};
 		set((state) => ({
 			...state,
 			examModeProgress: examProgress || { successProgress: [], errorProgress: [] },
-			randomModeProgress: randomProgress || { isDone: false, progress: [] },
+			randomModeProgress: randomProgress || { progress: [], resolved: [] },
 			latestTests: latestTests || [],
 		}));
 	},
@@ -160,6 +169,7 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 					? {
 							isDone: false,
 							progress: [],
+							resolved: [],
 						}
 					: state.randomModeProgress,
 		}));
@@ -174,6 +184,7 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			randomModeProgress: {
 				isDone: false,
 				progress: [],
+				resolved: [],
 			},
 			latestTests: [],
 		}));

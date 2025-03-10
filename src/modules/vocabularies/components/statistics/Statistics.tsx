@@ -7,13 +7,19 @@ import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgr
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
 import { EXERCISE_MODE } from '@/store/exercise-progress';
 import { useVocabularyStore } from '@/store/vocabulary-collection';
-import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
-import styles from './statistics.module.css';
 import { useProgressStore, RandomTest } from '@/store/progress';
+import type { LatestTest, ResolvedRandomTest } from '@/store/progress/useProgressStore';
+import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
 import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
-import type { LatestTest } from '@/store/progress/useProgressStore';
+import styles from './statistics.module.css';
 
-// GET PROGRESS FROM DB SET PROGRESS TO DB USE CUSTOM HOOKS FOR (TO BE ABLE TO USE EVERYWHERE)
+type TotalRandomType = {
+	resolved: number;
+	progress: number;
+	unTouch: number;
+};
+
+const COMPLETED_TEST = 100;
 
 export const Statistics = ({
 	collectionsId,
@@ -29,9 +35,12 @@ export const Statistics = ({
 	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
 	const clearAll = useProgressStore((store) => store.clearAll);
 	const navigate = useNavigate();
-	const [totalRandom, setTotalRandom] = useState(0);
+	const [totalRandom, setTotalRandom] = useState<TotalRandomType>({
+		resolved: 0,
+		progress: 0,
+		unTouch: 0,
+	});
 	const words = useVocabularyStore((store) => store.words);
-	const progress = useProgressStore((store) => store);
 	const progressStore = useProgressStore((store) => store.randomModeProgress);
 	const examModeProgress = useProgressStore((state) => state.examModeProgress);
 	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
@@ -40,11 +49,8 @@ export const Statistics = ({
 
 	useIndexedDB(clearAll, 'clearAll', vocabulariesId, '', '', clear, setClear);
 
-	console.log('//PROGRESS: ', progress);
-	console.log('////// latestTests', latestTests);
-
 	useEffect(() => {
-		const countRandom = countRandomMode(words.length, progressStore.progress, progressStore.isDone);
+		const countRandom = countRandomMode(words.length, progressStore);
 		setTotalRandom(countRandom);
 	}, [words, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
 
@@ -55,11 +61,11 @@ export const Statistics = ({
 
 	const calculateCompletionPercentage = (completedTasks: number, totalTasks: number) => {
 		if (totalTasks === 0) return 0;
-		return Math.round((completedTasks / totalTasks) * 100);
+		return Math.round((completedTasks / totalTasks) * COMPLETED_TEST);
 	};
 
-	const calculateTotalProgress = (examProgress: number, randomProgress: number) => {
-		const totalProgress = (examProgress + randomProgress) / 2;
+	const calculateTotalProgress = (examProgress: number, randomProgress: TotalRandomType) => {
+		const totalProgress = (examProgress + randomProgress.resolved) / 2;
 		return Math.ceil(totalProgress);
 	};
 
@@ -75,20 +81,29 @@ export const Statistics = ({
 
 	const totalProgress = calculateTotalProgress(percentage, totalRandom);
 
-	const countRandomMode = (countWords: number, progressStore: RandomTest[], isDone: boolean) => {
-		const countMake = collectionsExerciseConfig.exerciseCorrectResponse * countWords; // rename where is words
-		let totalCount = 0;
-		const HUNDRED_PROCENT = 100;
+	const countRandomMode = (
+		countWords: number,
+		progressStore: {
+			progress: RandomTest[];
+			resolved: ResolvedRandomTest[];
+		},
+	) => {
+		let resolvedCount = 0;
 
-		if (isDone) {
-			return HUNDRED_PROCENT;
-		}
-
-		progressStore.forEach((item) => {
-			totalCount += item.correctCount;
+		progressStore.resolved.forEach((resolvedItem) => {
+			if (resolvedItem.isDone) {
+				resolvedCount += 1;
+			}
 		});
 
-		return calculateCompletionPercentage(totalCount, countMake);
+		const resolved = calculateCompletionPercentage(resolvedCount, countWords);
+		const progress = calculateCompletionPercentage(
+			progressStore.progress.length - resolvedCount,
+			countWords,
+		);
+		const unTouch = COMPLETED_TEST - progress - resolved;
+
+		return { resolved, progress, unTouch };
 	};
 
 	return (
@@ -126,8 +141,16 @@ export const Statistics = ({
 						<CircleProgressBar progress={uncorrectAnswersPercentage} />
 					</div>
 					<div className={styles.modeContainer}>
-						<span className={styles.modeTitle}>Random</span>
-						<CircleProgressBar progress={totalRandom} />
+						<span className={styles.modeTitle}>Random Resolved</span>
+						<CircleProgressBar progress={totalRandom.resolved} />
+					</div>
+					<div className={styles.modeContainer}>
+						<span className={styles.modeTitle}>Random Progress</span>
+						<CircleProgressBar progress={totalRandom.progress} />
+					</div>
+					<div className={styles.modeContainer}>
+						<span className={styles.modeTitle}>Random Untouch</span>
+						<CircleProgressBar progress={totalRandom.unTouch} />
 					</div>
 					{latestTests.length > 0 && (
 						<div className={styles.uncorrectAnswersContainer}>

@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { LatestTest, useProgressStore } from '@/store/progress';
 import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
@@ -10,15 +10,16 @@ import { ContentContainer } from '@/ui-components/Content-Container';
 import { EXERCISE_CONFIG_LABELS } from './constants';
 import { EXERCISE_CONFIG } from '../exercise/constants';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
-
-import styles from './wordDetails.module.css';
 import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
+import styles from './wordDetails.module.css';
+import { ExerciseModeType } from '@/store/exercise-progress/useExerciseProgressStore';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
 	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
 	const uncorrectAnswers = useProgressStore((store) => store.examModeProgress.errorProgress);
 	const latestTests = useProgressStore((state) => state.latestTests) || [];
+	const exerciseMode = useVocabularyStore((state) => state.collectionsExerciseConfig.exerciseMode);
 	const getProgressFromLocalStore = useVocabularyStore((state) => state.getProgressFromLocalStore);
 	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
 	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
@@ -27,13 +28,14 @@ export const WordDetails = () => {
 	const setCleanWordConfig = useVocabularyStore.use.setCleanWordConfig();
 	const setFilterWordOnSearch = useVocabularyStore.use.setFilterWordOnSearch();
 	const getExerciseConfig = useVocabularyStore.use.getExerciseConfig();
-	const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
-
-	const progress = useProgressStore((store) => store);
-	console.log('/////PROGRESS: ', progress);
 
 	const navigate = useNavigate();
 	const getProgressFromIndexedDB = useProgressStore((state) => state.getProgressFromIndexedDB);
+
+	const [mode, setMode] = useState<ExerciseModeType>(EXERCISE_MODE.isRandom);
+
+	console.log('MODE: ', mode);
+	console.log('exarciseMode: ', exerciseMode);
 
 	const fieldsDataWord = [
 		{
@@ -59,7 +61,7 @@ export const WordDetails = () => {
 			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE),
 			label: EXERCISE_CONFIG_LABELS.CORRECT_RESPONSE,
 			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
-			disabled: exerciseConfig === EXERCISE_MODE.isExam,
+			disabled: mode === EXERCISE_MODE.isExam,
 		},
 		{
 			keyValue: EXERCISE_CONFIG.FORMATE,
@@ -75,6 +77,11 @@ export const WordDetails = () => {
 	useEffect(() => {
 		getProgressFromLocalStore(vocabulariesId);
 	}, []);
+
+	useEffect(() => {
+		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
+		setMode(exerciseConfig as ExerciseModeType);
+	}, [exerciseMode]);
 
 	useIndexedDB(
 		(exam, random, latestTests) =>

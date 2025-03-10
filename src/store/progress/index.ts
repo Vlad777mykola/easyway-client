@@ -3,6 +3,7 @@ import { useProgressStoreBase } from './useProgressStore';
 
 export type {
 	RandomTest,
+	ResolvedRandomTest,
 	ProgressStoreState,
 	ExamModeProgressType,
 	LatestTest,

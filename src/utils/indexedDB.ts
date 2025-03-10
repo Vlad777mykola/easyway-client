@@ -16,7 +16,7 @@ type DBStructure = {
 };
 
 async function getDB(): Promise<IDBPDatabase<DBStructure>> {
-	return openDB<DBStructure>(DB_NAME, 19, {
+	return openDB<DBStructure>(DB_NAME, 20, {
 		upgrade(db) {
 			if (!db.objectStoreNames.contains(PROGRESS_STORE)) {
 				db.createObjectStore(PROGRESS_STORE);
@@ -27,9 +27,6 @@ async function getDB(): Promise<IDBPDatabase<DBStructure>> {
 
 export async function saveState<T>(key: string, value: T): Promise<void> {
 	const db = await getDB();
-	const existingEntry = await db.get(PROGRESS_STORE, key);
-
-	console.log('///// Existing entry:', existingEntry);
 
 	const timestamp = Date.now();
 
@@ -42,7 +39,6 @@ export async function saveState<T>(key: string, value: T): Promise<void> {
 
 	// Ensure only one object is saved with the given key
 	await db.put(PROGRESS_STORE, updatedEntry, key);
-	console.log('///// Saved entry:', updatedEntry);
 }
 
 export async function updateFieldIfNeeded<T>(key: string, field: string, value: T): Promise<void> {
@@ -87,14 +83,8 @@ export async function updateLastTest(
 
 export async function loadState(key: string): Promise<void> {
 	const db = await getDB();
-
 	// Retrieve the entry using the key
 	const entry = await db.get(PROGRESS_STORE, key);
-
-	console.log('///// Loaded entry:', entry);
-
-	// If the entry exists, return the data field inside progressStore, otherwise return undefined
-	console.log('///// RETURN: ', entry?.progressStore?.data);
 	return entry?.progressStore?.data;
 }
 
