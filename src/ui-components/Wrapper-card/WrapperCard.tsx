@@ -11,7 +11,7 @@ export const WrapperCard = ({
 	goBack,
 }: {
 	children: ReactNode;
-	id: string;
+	id?: string;
 	goBack?: () => void;
 }) => {
 	const { isMobile } = useContext(ScreenSizeContext);

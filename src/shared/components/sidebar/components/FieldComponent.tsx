@@ -45,10 +45,15 @@ export const FieldComponent = ({
 							: undefined
 					}
 					onChange={(value) => change(item.keyValue, value)}
-					options={item.options.map((option) => ({
-						value: option.value,
-						label: option?.label || option.value,
-					}))}
+					options={item.options.map((option) => {
+						if (typeof option === 'object' && option?.value) {
+							return { value: option.value, label: option?.label || option.value };
+						}
+						if (option === 'string' || option === 'number') {
+							return { value: option, label: option };
+						}
+						return { value: 'value', label: 'label' };
+					})}
 				/>
 			</div>
 		);
