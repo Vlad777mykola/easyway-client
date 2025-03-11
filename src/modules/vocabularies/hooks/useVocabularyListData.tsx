@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getWordsByVocabulary } from '@/services/getWordsByVocabulary';
+import { getWordsByVocabulary } from '@/shared/services/getWordsByVocabulary';
 import { Word } from '@/store/vocabulary-collection';
 
 export const useVocabularyListData = (

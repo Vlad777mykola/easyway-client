@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { ExerciseResponseType } from '@/shared/constants/data';
-import { getExerciseByCollection } from '@/services/getExerciseByCollection';
+import { getExerciseByCollection } from '@/shared/services/getExerciseByCollection';
 
 export const useExerciseListData = (
 	func: (exerciseList: ExerciseResponseType[], collectionsId: string) => void,

@@ -1,5 +1,5 @@
 import nlp from 'compromise';
-import { ARTICLES, PRONOUN_CATEGORIES } from '../constants';
+import { ARTICLES, PRONOUN_CATEGORIES } from '../../../modules/exercise/constants';
 
 const detectPartOfSpeech = (word: string) => {
 	const doc = nlp(word.toLocaleLowerCase());
@@ -9,7 +9,7 @@ const detectPartOfSpeech = (word: string) => {
 	const isArticle = ARTICLES.includes(word.toLocaleLowerCase());
 	const isAdjective = doc.adjectives().out('array').length > 0;
 	const isConjunction = doc.conjunctions().out('array').length > 0;
-	const isNegation = doc.match('#Negative').out('array');
+	const isNegation = doc.match('#Negative').out('array').length > 0;
 	let isPronoun = false;
 
 	for (let key in PRONOUN_CATEGORIES) {

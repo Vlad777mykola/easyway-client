@@ -7,7 +7,6 @@ import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
 import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { useExerciseListData } from './hooks/useExerciseListData';
-import { useCommonStore } from '@/store/common';
 import { useExerciseProgressStore, DEFAULT_DATA_TEST } from '@/store/exercise-progress';
 import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
@@ -21,14 +20,12 @@ export const ExerciseCard = () => {
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
 
-	const fullExerciseScreen = useCommonStore.use.fullExerciseScreen();
 	const exerciseListId = useExerciseProgressStore.use.exerciseListIds();
 	const isDoneExercise = taskId === 'done' || exerciseListId.length === 0;
 	const isSelectingFormate =
 		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
 
-	const setFullScreen = useCommonStore.use.setFullScreen();
 	const getExerciseById = useExerciseProgressStore.use.getExerciseById();
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useExerciseProgressStore.use.setExerciseListProgress();
@@ -61,7 +58,7 @@ export const ExerciseCard = () => {
 	}, [taskId]);
 
 	return (
-		<WrapperCard fullScreen={fullExerciseScreen} setFullScreen={setFullScreen}>
+		<WrapperCard id={taskId} goBack={() => navigate(`/collections/${collectionsId}`)}>
 			<div className={styles.taskContainer}>
 				{isDoneExercise && (
 					<Result

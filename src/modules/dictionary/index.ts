@@ -1,2 +1,2 @@
 export { DictionaryExerciseCard } from './ExerciseCard';
-export { DictionaryExerciseDetails } from './ExerciseDetails';
+export { DictionaryExerciseDetails } from './components/exercise-details/ExerciseDetails';

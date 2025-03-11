@@ -2,7 +2,7 @@ import { Wrapper } from '@/ui-components/Wrapper';
 import { Progress } from '@/ui-components/Progress';
 import { Button } from '@/ui-components/Button';
 import styles from './statistics.module.css';
-import { useExerciseProgressStore } from '@/store/exercise-progress';
+import { useDictionaryStore } from '@/store/dictionary';
 
 const WRONG_CORRECT = {
 	wrong: 30,
@@ -14,7 +14,7 @@ const INPROGRESS_RESOLVED = {
 };
 
 export const Statistics = ({ collectionsId }: { collectionsId: string }) => {
-	const removeProgress = useExerciseProgressStore((store) => store.removeProgress);
+	const removeProgress = useDictionaryStore((store) => store.removeProgress);
 
 	return (
 		<Wrapper>

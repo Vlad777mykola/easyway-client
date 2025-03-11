@@ -1,4 +1,4 @@
-import { detectPartOfSpeech } from './detectPartOfSpeech';
+import { detectPartOfSpeech } from '@/shared/services/get-variants/detectPartOfSpeech';
 import { getNounsOrAdverbs, showVariants, getVerbs } from './showVariants';
 import {
 	ARTICLES,
@@ -7,46 +7,33 @@ import {
 	NEGATIONS,
 	PREPOSITION_CATEGORIES,
 	PRONOUN_CATEGORIES,
-} from '../constants';
+} from './constants';
 
 export type VariantsType = { [key: string]: string[] };
 
 export const randomizeAddWord = (array: string[], word: string) => {
-	const newArr = [...array];
+	let newArr = [...array];
 	const isMoreThanMaxCountOfVariants = newArr.length > MAX_VARIANTS;
-	const isWordAlreadyIncluded = array.includes(word);
 
 	if (isMoreThanMaxCountOfVariants) {
-		newArr.slice(0, MAX_VARIANTS);
+		newArr = newArr.slice(0, MAX_VARIANTS);
 	}
-
+	const isWordAlreadyIncluded = newArr.includes(word);
 	if (!isWordAlreadyIncluded) {
-		const randomNumber = Math.floor(Math.random() * (array.length - 0 + 1));
+		const randomNumber = Math.floor(Math.random() * (newArr.length - 0 + 1));
 		newArr.splice(randomNumber, 0, word);
 	}
-
 	return newArr;
 };
 
 export const fetchDefinition = async (word: string) => {
-	const {
-		isAdjective,
-		isArticle,
-		isConjunction,
-		isNoun,
-		isPreposition,
-		isVerb,
-		isPronoun,
-		isNegation,
-	} = detectPartOfSpeech(word);
+	const { isArticle, isConjunction, isPreposition, isVerb, isPronoun, isNegation } =
+		detectPartOfSpeech(word);
 
 	let answers: string[] = [];
 
 	if (isVerb) {
 		answers = getVerbs(word);
-	}
-	if ((isNoun && !isPronoun) || isAdjective) {
-		answers = await getNounsOrAdverbs(word);
 	}
 	if (isPronoun) {
 		answers = showVariants(PRONOUN_CATEGORIES, word);

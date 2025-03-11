@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useCommonStore } from '@/store/common';
 import { ExerciseType, useVocabularyStore } from '@/store/vocabulary-collection';
 import {
 	DEFAULT_DATA_TEST,
@@ -24,14 +23,12 @@ export const VocabularyCard = () => {
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
 
-	const fullExerciseScreen = useCommonStore.use.fullExerciseScreen();
 	const exerciseListId = useVocabularyStore.use.exerciseListIds();
 	const isDoneExercise = wordId === 'done' || exerciseListId.length === 0;
 	const isSelectingFormate =
 		useVocabularyStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
 
-	const setFullScreen = useCommonStore.use.setFullScreen();
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();
@@ -66,7 +63,7 @@ export const VocabularyCard = () => {
 	}, [wordId]);
 
 	return (
-		<WrapperCard fullScreen={fullExerciseScreen} setFullScreen={setFullScreen}>
+		<WrapperCard id={wordId} goBack={() => navigate(`/collections/${vocabulariesId}`)}>
 			<div className={styles.taskContainer}>
 				{isDoneExercise && (
 					<Result
