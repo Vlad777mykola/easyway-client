@@ -1,16 +1,8 @@
 import { localstorage } from '@/shared/utils/local-storage/localstorage';
 import { create } from 'zustand';
 import { ExerciseResponseType } from '@/shared/constants/data';
-import { getReadyQuestion } from '@/modules/exercise/services/fetchDefinition';
-
-function shuffleArray(array: string[]) {
-	const newArr = [...array];
-	for (let i = newArr.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-	}
-	return newArr;
-}
+import { getReadyQuestion } from '@/shared/services/get-variants';
+import { shuffleArray } from '@/shared/utils/shuffle-array';
 
 export const EXERCISE_MODE = {
 	isExam: 'examMode',

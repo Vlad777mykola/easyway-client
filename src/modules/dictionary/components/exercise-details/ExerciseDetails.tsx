@@ -1,11 +1,11 @@
 import { ReactNode, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ContentContainer } from '@/ui-components/Content-Container';
-import { List } from '@/shared/components/list/List';
-import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
-import { EXERCISE_CONFIG_LABELS } from './constants';
-import { Statistics } from './components/statistics/Statistics';
-import { useExerciseListData } from './hooks/useExerciseListData';
+import { List } from '@/shared/components/list';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
+import { EXERCISE_CONFIG_LABELS } from '../../constants';
+import { Statistics } from '../statistics/Statistics';
+import { useExerciseListData } from '../../hooks/useExerciseListData';
 import {
 	useDictionaryStore,
 	EXERCISE_MODE,
@@ -27,24 +27,34 @@ export const DictionaryExerciseDetails = (): ReactNode => {
 	const fieldsData: FieldsDataType[] = [
 		{
 			keyValue: EXERCISE_CONFIG.MODE,
-			options: Object.values(EXERCISE_MODE),
+			options: Object.entries(EXERCISE_MODE).map((v) => {
+				return { value: v[1], label: v[0] };
+			}),
 			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.MODE),
 			label: EXERCISE_CONFIG_LABELS.MODE,
 			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
 		},
 		{
 			keyValue: EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE,
-			options: [5, 10, 15],
+			options: [{ value: 5 }, { value: 10 }, { value: 15 }],
 			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE),
 			label: EXERCISE_CONFIG_LABELS.CORRECT_RESPONSE,
 			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
 		},
 		{
 			keyValue: EXERCISE_CONFIG.FORMATE,
-			options: Object.values(EXERCISE_FORMATE),
+			options: Object.entries(EXERCISE_FORMATE).map((v) => {
+				return { value: v[1], label: v[0] };
+			}),
 			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.FORMATE),
 			label: EXERCISE_CONFIG_LABELS.FORMAT,
 			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
+		},
+		{
+			keyValue: EXERCISE_CONFIG.AUTO_PLAY,
+			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.AUTO_PLAY),
+			label: EXERCISE_CONFIG_LABELS.AUTO_PLAY,
+			componentType: SIDE_BAR_COMPONENT_TYPE.CHECKBOX,
 		},
 	] as const;
 

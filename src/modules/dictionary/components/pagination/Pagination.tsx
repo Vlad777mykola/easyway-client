@@ -18,7 +18,7 @@ export const PaginationExercise = ({
 
 	return (
 		<>
-			{exerciseMode === EXERCISE_MODE.isExam && (
+			{exerciseMode === EXERCISE_MODE.Exam && (
 				<Pagination
 					ids={exerciseListId}
 					exerciseMode={exerciseMode}
@@ -27,7 +27,7 @@ export const PaginationExercise = ({
 					navigateTo={(id: string) => onNavigate(id)}
 				/>
 			)}
-			{exerciseMode === EXERCISE_MODE.isInfinitive && (
+			{exerciseMode === EXERCISE_MODE.Infinitive && (
 				<Pagination
 					ids={exerciseListId}
 					exerciseMode={exerciseMode}
@@ -36,7 +36,7 @@ export const PaginationExercise = ({
 					navigateTo={(id: string) => onNavigate(id)}
 				/>
 			)}
-			{exerciseMode === EXERCISE_MODE.isRandom && (
+			{exerciseMode === EXERCISE_MODE.Random && (
 				<Pagination
 					ids={exerciseListId}
 					exerciseMode={exerciseMode}

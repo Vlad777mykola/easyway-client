@@ -42,4 +42,7 @@
 	.modeTitle {
 		font-size: 18px;
 	}
+	.statistics {
+		gap: 10px;
+	}
 }

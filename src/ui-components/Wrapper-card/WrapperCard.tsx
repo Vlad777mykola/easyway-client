@@ -1,19 +1,28 @@
-import { ReactNode, useContext } from 'react';
+import { ReactNode, useContext, useLayoutEffect } from 'react';
 import styles from './wrapperCard.module.css';
 import { Icon } from '@/ui-components/Icon';
 import { classes } from '@/shared/utils/classes';
 import { ScreenSizeContext } from '@/context/ScreenSizeContext';
+import { useCommonStore } from '@/store/common';
 
 export const WrapperCard = ({
 	children,
-	fullScreen,
-	setFullScreen,
+	id = '',
+	goBack,
 }: {
 	children: ReactNode;
-	fullScreen?: boolean;
-	setFullScreen?: () => void;
+	id: string;
+	goBack?: () => void;
 }) => {
 	const { isMobile } = useContext(ScreenSizeContext);
+	const fullScreen = useCommonStore.use.fullExerciseScreen();
+	const setFullScreen = useCommonStore.use.setFullScreen();
+
+	useLayoutEffect(() => {
+		if (isMobile && id && !fullScreen) {
+			setFullScreen?.(true);
+		}
+	}, [id]);
 
 	return (
 		<div
@@ -21,9 +30,9 @@ export const WrapperCard = ({
 				[styles.fullScreen]: fullScreen,
 			})}
 		>
-			{isMobile && setFullScreen && (
-				<div className={styles.icon} onClick={() => setFullScreen?.()}>
-					<Icon icon={fullScreen ? 'exitFullScreen' : 'fullScreen'} variant="primary" size="l" />
+			{isMobile && goBack && (
+				<div className={styles.icon} onClick={() => goBack?.()}>
+					<Icon icon={'close'} variant="primary" size="l" />
 				</div>
 			)}
 			{children}

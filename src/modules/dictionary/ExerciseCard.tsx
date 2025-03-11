@@ -1,17 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Icon } from '@/ui-components/Icon';
-import { Button } from '@/ui-components/Button';
-import { Result } from '@/ui-components/Result';
+import type { ExerciseType } from '@/store/dictionary';
+import { DoneCard } from '@/shared/components/done-card';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
-import { ExerciseUI } from './components/exercise-content/ExerciseContent';
-import { useExerciseListData } from './hooks/useExerciseListData';
-import { useCommonStore } from '@/store/common';
 import { useDictionaryStore, DEFAULT_DATA_TEST, EXERCISE_FORMATE } from '@/store/dictionary';
-import type { ExerciseType } from '@/store/dictionary';
-import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
+
 import { PaginationExercise } from './components/pagination/Pagination';
+import { SelectFormate } from './components/select-formate/SelectFormate';
+import { useExerciseListData } from './hooks/useExerciseListData';
 
 import styles from './exerciseCard.module.css';
 
@@ -21,14 +18,12 @@ export const DictionaryExerciseCard = () => {
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
 
-	const fullExerciseScreen = useCommonStore.use.fullExerciseScreen();
 	const exerciseListId = useDictionaryStore.use.exerciseListIds();
 	const isDoneExercise = wordId === 'done' || exerciseListId.length === 0;
 	const isSelectingFormate =
 		useDictionaryStore.use.collectionsExerciseConfig().exerciseFormate ===
-		EXERCISE_FORMATE.isSelecting;
+		EXERCISE_FORMATE.Selecting;
 
-	const setFullScreen = useCommonStore.use.setFullScreen();
 	const getExerciseById = useDictionaryStore.use.getExerciseById();
 	const setExerciseListResponse = useDictionaryStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useDictionaryStore.use.setExerciseListProgress();
@@ -41,6 +36,10 @@ export const DictionaryExerciseCard = () => {
 		(id: string) => {
 			navigate(`/dictionaries/${dictionaryId}/word/${id}`);
 		},
+		[navigate, dictionaryId],
+	);
+	const navigateToDictionary = useCallback(
+		() => navigate(`/dictionaries/${dictionaryId}`),
 		[navigate, dictionaryId],
 	);
 
@@ -61,35 +60,17 @@ export const DictionaryExerciseCard = () => {
 	}, [wordId]);
 
 	return (
-		<WrapperCard fullScreen={fullExerciseScreen} setFullScreen={setFullScreen}>
+		<WrapperCard id={wordId} goBack={() => navigateToDictionary()}>
 			<div className={styles.taskContainer}>
-				{isDoneExercise && (
-					<Result
-						icon={<Icon icon="smile" size="xl" />}
-						title="Great, you have done all the exercise!"
-						extra={
-							<Button onClick={() => navigate(`/collections/${dictionaryId}`)} type="primary">
-								Next
-							</Button>
-						}
-					/>
-				)}
+				{isDoneExercise && <DoneCard onClick={() => navigateToDictionary()} />}
 
-				{!isDoneExercise && task && !isSelectingFormate && (
-					<ExerciseUI
+				{!isDoneExercise && task && (
+					<SelectFormate
+						isSelectingFormate={isSelectingFormate}
 						key={wordId}
 						task={task}
-						setIsAutoNavigate={setIsAutoNavigate}
 						setTask={setTask}
-						updateProgress={setExerciseListProgress}
-					/>
-				)}
-				{!isDoneExercise && task && isSelectingFormate && (
-					<SelectingUI
-						key={wordId}
-						task={task}
 						setIsAutoNavigate={setIsAutoNavigate}
-						setTask={setTask}
 						updateProgress={setExerciseListProgress}
 					/>
 				)}

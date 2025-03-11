@@ -1,15 +1,10 @@
-import type { Variants } from '../../shared/services/get-variants/showVariants';
+import type { Variants } from './showVariants';
 
 export const EXERCISE_CONFIG_LABELS = {
 	MODE: 'Exercise Mode',
-	CORRECT_RESPONSE: 'Count of total correct response',
-	FORMAT: 'Use a exercise or exercise explanation',
-} as const;
-
-export const EXERCISE_CONFIG = {
-	MODE: 'exerciseMode',
-	TOTAL_CORRECT_RESPONSE: 'exerciseCorrectResponse',
-	FORMATE: 'exerciseFormate',
+	CORRECT_RESPONSE: 'Total correct response',
+	FORMAT: 'Exercise formate',
+	AUTO_PLAY: 'Auto play',
 } as const;
 
 export const MAX_VARIANTS = 8;

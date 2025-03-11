@@ -1,86 +1,15 @@
-import { localstorage } from '@/shared/utils/local-storage/localstorage';
 import { create } from 'zustand';
+import { localstorage } from '@/shared/utils/local-storage/localstorage';
 import { ExerciseResponseType } from '@/shared/constants/data';
-import { getReadyQuestion } from '@/modules/exercise/services/fetchDefinition';
-
-function shuffleArray(array: string[]) {
-	const newArr = [...array];
-	for (let i = newArr.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-	}
-	return newArr;
-}
-
-export const EXERCISE_MODE = {
-	isExam: 'examMode',
-	isRandom: 'randomMode',
-	isInfinitive: 'infinitiveMode',
-} as const;
-
-export const EXERCISE_FORMATE = {
-	isSelecting: 'selectingFormate',
-	isClassic: 'classicFormate',
-} as const;
-
-export const EXERCISE_CONFIG = {
-	MODE: 'exerciseMode',
-	TOTAL_CORRECT_RESPONSE: 'exerciseCorrectResponse',
-	FORMATE: 'exerciseFormate',
-} as const;
-
-export const DEFAULT_DATA_TEST = {
-	id: '',
-	exercise: '',
-	explanation: '',
-	exerciseAnswer: [],
-	selectedAnswer: '',
-	currentWord: 0,
-	isComplete: false,
-	isCorrectAnswer: true,
-	explanationAnswer: [],
-	explanationVariants: [],
-	variants: {},
-};
-
-export type ExerciseType = {
-	id: string;
-	exercise: string;
-	explanation: string;
-	exerciseAnswer: string[];
-	selectedAnswer: string;
-	currentWord: number;
-	isComplete: boolean;
-	isCorrectAnswer: boolean;
-	explanationAnswer: string[];
-	explanationVariants: string[];
-	variants: { [key: string]: string[] };
-};
-
-export type ExerciseModeType = (typeof EXERCISE_MODE)[keyof typeof EXERCISE_MODE];
-type ExerciseFormateType = (typeof EXERCISE_FORMATE)[keyof typeof EXERCISE_FORMATE];
-type AllExerciseModesType = {
-	[key in keyof typeof EXERCISE_MODE]: boolean;
-};
-type AllExerciseFormateType = {
-	[key in keyof typeof EXERCISE_FORMATE]: boolean;
-};
-type ExerciseListProgressType = {
-	id: string;
-	countCorrectAnswers: number;
-};
-
-type CommonProgressDataType = {
-	collectionId: string;
-	resolvedExerciseIds: string[];
-};
-
-type ExerciseConfigType = {
-	exerciseMode: ExerciseModeType;
-	exerciseCorrectResponse: number;
-	exerciseFormate: ExerciseFormateType;
-};
-type ExerciseConfigKeyType = keyof ExerciseConfigType;
+import { getReadyQuestion } from '@/shared/services/get-variants';
+import { shuffleArray } from '@/shared/utils/shuffle-array';
+import {
+	ExerciseListProgressType,
+	CommonProgressDataType,
+	ExerciseConfigType,
+	ExerciseType,
+} from './type';
+import { DEFAULT_DATA_TEST, EXERCISE_FORMATE, EXERCISE_MODE } from './constants';
 
 type ExerciseStoreState = {
 	exerciseListResponse: ExerciseResponseType[];
@@ -94,20 +23,17 @@ type ExerciseStoreState = {
 };
 
 type ExerciseStoreActions = {
-	setExerciseListResponse: (exerciseList: ExerciseResponseType[], collectionId: string) => void;
-	getExerciseConfig: (
-		key: ExerciseConfigKeyType,
-	) => ExerciseModeType | number | ExerciseFormateType;
+	getExerciseConfig: <T extends keyof ExerciseConfigType>(key: T) => ExerciseConfigType[T];
 	setCollectionsExerciseConfig: (
 		key: string,
 		value: number[] | string | boolean | string[] | number,
 	) => void;
-	getExerciseById: (id: string) => Promise<ExerciseType | null>;
-	getExerciseMode: () => AllExerciseModesType;
-	getExerciseFormate: () => AllExerciseFormateType;
 
-	setExerciseListProgress: (id: string, isResolved: boolean) => void;
+	getExerciseById: (id: string) => Promise<ExerciseType | null>;
+	setExerciseListResponse: (exerciseList: ExerciseResponseType[], collectionId: string) => void;
+
 	getExerciseProgressById: (id: string) => number;
+	setExerciseListProgress: (id: string, isResolved: boolean) => void;
 
 	saveProgressToLocalStore: (collectionId: string) => void;
 	getProgressFromLocalStore: (collectionId: string) => void;
@@ -127,36 +53,15 @@ export const useDictionaryProgressStoreBase = create<ExerciseStoreType>()((set, 
 		resolvedExerciseIds: [],
 	},
 	collectionsExerciseConfig: {
-		exerciseMode: EXERCISE_MODE.isRandom,
+		exerciseMode: EXERCISE_MODE.Random,
 		exerciseCorrectResponse: 15,
-		exerciseFormate: EXERCISE_FORMATE.isClassic,
+		exerciseFormate: EXERCISE_FORMATE.Classic,
+		autoPlay: false,
 	},
 
-	setExerciseListResponse: (exerciseList, collectionId) => {
-		const exerciseListResponse = get().exerciseListResponse;
-		const id = get().commonProgressData.collectionId;
-
-		if (exerciseListResponse?.length > 0 && collectionId === id) {
-			return;
-		}
-		const isUntracedMode =
-			get().collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isInfinitive;
-
-		let ids = exerciseList.map((item) => item.id);
-
-		if (!isUntracedMode) {
-			const resolvedExerciseId = get().resolvedExerciseId;
-			ids = ids.filter((i) => !resolvedExerciseId.includes(i));
-		}
-
-		set((state) => ({
-			...state,
-			exerciseListIds: ids,
-			exerciseListResponse: exerciseList,
-			commonProgressData: { ...state.commonProgressData, collectionId },
-		}));
+	getExerciseConfig: (key) => {
+		return get().collectionsExerciseConfig[key];
 	},
-
 	setCollectionsExerciseConfig: (key, value) => {
 		set((state) => ({
 			collectionsExerciseConfig: {
@@ -164,27 +69,6 @@ export const useDictionaryProgressStoreBase = create<ExerciseStoreType>()((set, 
 				[key]: value,
 			},
 		}));
-	},
-
-	getExerciseConfig: (key) => {
-		return get().collectionsExerciseConfig[key];
-	},
-
-	getExerciseMode: () => {
-		const mode = get().collectionsExerciseConfig.exerciseMode;
-		return {
-			isExam: mode === EXERCISE_MODE.isExam,
-			isRandom: mode === EXERCISE_MODE.isRandom,
-			isInfinitive: mode === EXERCISE_MODE.isInfinitive,
-		};
-	},
-
-	getExerciseFormate: () => {
-		const formate = get().collectionsExerciseConfig.exerciseFormate;
-		return {
-			isClassic: formate === EXERCISE_FORMATE.isClassic,
-			isSelecting: formate === EXERCISE_FORMATE.isSelecting,
-		};
 	},
 
 	getExerciseById: async (id) => {
@@ -217,6 +101,30 @@ export const useDictionaryProgressStoreBase = create<ExerciseStoreType>()((set, 
 
 		return exercise;
 	},
+	setExerciseListResponse: (exerciseList, collectionId) => {
+		const exerciseListResponse = get().exerciseListResponse;
+		const id = get().commonProgressData.collectionId;
+
+		if (exerciseListResponse?.length > 0 && collectionId === id) {
+			return;
+		}
+		const isUntracedMode =
+			get().collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.Infinitive;
+
+		let ids = exerciseList.map((item) => item.id);
+
+		if (!isUntracedMode) {
+			const resolvedExerciseId = get().resolvedExerciseId;
+			ids = ids.filter((i) => !resolvedExerciseId.includes(i));
+		}
+
+		set((state) => ({
+			...state,
+			exerciseListIds: ids,
+			exerciseListResponse: exerciseList,
+			commonProgressData: { ...state.commonProgressData, collectionId },
+		}));
+	},
 
 	getExerciseProgressById: (id) => {
 		const state = get().exerciseListProgress;
@@ -229,7 +137,7 @@ export const useDictionaryProgressStoreBase = create<ExerciseStoreType>()((set, 
 
 			if (isResolved) {
 				const isUntracedMode =
-					get().collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isInfinitive;
+					get().collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.Infinitive;
 				const exerciseCorrectResponse = get().collectionsExerciseConfig.exerciseCorrectResponse;
 				const countCorrectAnswers = (existingProgress?.countCorrectAnswers || 0) + 1;
 
@@ -290,3 +198,30 @@ export const useDictionaryProgressStoreBase = create<ExerciseStoreType>()((set, 
 		}
 	},
 }));
+
+// type MapAdIsType<T extends { [key: string]: string }> = {
+// 	[K in keyof T as `is${Capitalize<string & K>}`]: boolean;
+// };
+// type AllExerciseModesType = MapAdIsType<typeof EXERCISE_MODE>;
+// type AllExerciseFormateType = MapAdIsType<typeof EXERCISE_FORMATE>;
+
+// getExerciseMode: () => AllExerciseModesType;
+// getExerciseFormate: () => AllExerciseFormateType;
+
+// getExerciseMode: () => {
+// 	const mode = get().collectionsExerciseConfig.exerciseMode;
+// 	return {
+// 		isExam: mode === EXERCISE_MODE.Exam,
+// 		isRandom: mode === EXERCISE_MODE.Random,
+// 		isInfinitive: mode === EXERCISE_MODE.Infinitive,
+// 	};
+// },
+
+// getExerciseFormate: () => {
+// 	const formate = get().collectionsExerciseConfig.exerciseFormate;
+// 	return {
+// 		isUsed: formate === EXERCISE_FORMATE.Used,
+// 		isClassic: formate === EXERCISE_FORMATE.Classic,
+// 		isSelecting: formate === EXERCISE_FORMATE.Selecting,
+// 	};
+// },
