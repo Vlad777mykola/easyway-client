@@ -1,12 +1,13 @@
-import styles from './artem.module.css';
+import styles from '../styles/artem.module.css';
 import cardPht1 from './img/cardPht1.svg';
 import cardPht2 from './img/cardPht2.jpg';
 import cardPht3 from './img/cardPht3.svg';
+import { Card1, Card2, Card3 } from '@/modules/artem/components/index.ts'; // додаємо index.ts
 
 export const ArtemCards = () => {
 	const data1 = {
 		image: cardPht1,
-		title: ' Англійські ідіоми',
+		title: 'Англійські ідіоми',
 		subtitle:
 			'Тут ви знайдете добірку англійських ідіом, класифікованих за темами слів для зручнішого доступу та кращого розуміння для вас.',
 	};
@@ -25,27 +26,11 @@ export const ArtemCards = () => {
 
 	return (
 		<div className={styles.cardsContainer}>
-			<div className={styles.containerTop}>
-				<div className={styles.card1}>
-					<img src={data1.image} alt="Ідіоми" className={styles.cardImage} />
-					<h2>{data1.title}</h2>
-					<p>{data1.subtitle}</p>
-				</div>
-
-				<div className={styles.card2}>
-					<img src={data2.image} alt="Фразові дієслова" className={styles.cardImage} />
-					<h2>{data2.title}</h2>
-					<p>{data2.subtitle}</p>
-				</div>
-			</div>
-
-			<div className={styles.containerBottom}>
-				<div className={styles.card3}>
-					<img src={data3.image} alt="Cтійкі вирази" className={styles.cardImage} />
-					<h2>{data3.title}</h2>
-					<p>{data3.subtitle}</p>
-				</div>
-			</div>
+			<Card1 image={data1.image} title={data1.title} subtitle={data1.subtitle} />
+			<Card2 image={data2.image} title={data2.title} subtitle={data2.subtitle} />
+			<Card3 image={data3.image} title={data3.title} subtitle={data3.subtitle} />
 		</div>
 	);
 };
+
+export default ArtemCards;

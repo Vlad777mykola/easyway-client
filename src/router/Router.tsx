@@ -2,7 +2,7 @@ import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@/layouts/main/Layouts';
 import { DictionaryExerciseCard, DictionaryExerciseDetails } from '@/modules/dictionary';
-import Artem from '@/pages/ARTEM';
+import Artem from '@/modules/artem/components/ARTEM';
 // import { Auth } from '@/pages/Auth';
 // import Home from '@/pages/Home';
 
