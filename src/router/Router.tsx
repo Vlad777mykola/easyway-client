@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@/layouts/main/Layouts';
 import { DictionaryExerciseCard, DictionaryExerciseDetails } from '@/modules/dictionary';
+import Artem from '@/modules/artem/components/ARTEM';
 // import { Auth } from '@/pages/Auth';
 // import Home from '@/pages/Home';
 
@@ -40,6 +41,9 @@ export const router = createBrowserRouter([
 			{ path: 'collections/:collectionsId/task/:taskId', element: <CompleteTest /> },
 			{ path: 'vocabularies/:vocabulariesId', element: <WordDetailsPage /> },
 			{ path: 'vocabularies/:vocabulariesId/word/:wordId', element: <CompleteWordTest /> },
+
+			// test
+			{ path: 'artem', element: <Artem /> },
 		],
 	},
 ]);

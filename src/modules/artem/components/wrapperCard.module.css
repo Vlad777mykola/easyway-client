@@ -1,18 +1,18 @@
 .wrapperCard {
 	position: relative;
-	display: flex;
-	align-items: center;
 	flex-direction: column;
 	margin-left: auto;
 	margin-right: auto;
-	background: #fff;
+	margin-bottom: 60px;
+	background: #fef9f9;
 	border-radius: 5px;
+	align-items: center;
 	box-sizing: border-box;
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 8px;
 	padding: 40px;
 	margin-top: 5%;
 	height: fit-content;
-	width: fit-content;
+	width: 745px;
 }
 
 .icon {
@@ -32,6 +32,13 @@
 		margin: 0;
 		width: 100%;
 		height: 100%;
+	}
+}
+@media (max-width: 480px) {
+	.wrapperCard {
+		overflow-x: hidden;
+		padding: 0;
+		margin-bottom: 0;
 	}
 }
 
