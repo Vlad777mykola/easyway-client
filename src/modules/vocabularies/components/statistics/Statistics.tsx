@@ -25,12 +25,12 @@ export const Statistics = ({
 	collectionsId,
 	collectionName,
 	uncorrectAnswers = [],
-	latestTests = [],
+	latestTests = { count: 0, timestamp: 0 },
 }: {
 	collectionsId: string;
 	collectionName: string;
 	uncorrectAnswers?: string[];
-	latestTests?: LatestTest[];
+	latestTests?: LatestTest;
 }) => {
 	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
 	const clearAll = useProgressStore((store) => store.clearAll);
@@ -71,11 +71,6 @@ export const Statistics = ({
 
 	const percentage = calculateCompletionPercentage(
 		examModeProgress.successProgress.length,
-		words.length,
-	);
-
-	const uncorrectAnswersPercentage = calculateCompletionPercentage(
-		examModeProgress.errorProgress.length,
 		words.length,
 	);
 
@@ -137,30 +132,18 @@ export const Statistics = ({
 						<CircleProgressBar progress={percentage} />
 					</div>
 					<div className={styles.modeContainer}>
-						<span className={styles.modeTitle}>Exam uncorrect</span>
-						<CircleProgressBar progress={uncorrectAnswersPercentage} />
-					</div>
-					<div className={styles.modeContainer}>
 						<span className={styles.modeTitle}>Random Resolved</span>
-						<CircleProgressBar progress={totalRandom.resolved} />
+						<CircleProgressBar
+							progress={totalRandom.progress}
+							resolved={totalRandom.resolved}
+							untouched={totalRandom.unTouch}
+						/>
 					</div>
-					<div className={styles.modeContainer}>
-						<span className={styles.modeTitle}>Random Progress</span>
-						<CircleProgressBar progress={totalRandom.progress} />
-					</div>
-					<div className={styles.modeContainer}>
-						<span className={styles.modeTitle}>Random Untouch</span>
-						<CircleProgressBar progress={totalRandom.unTouch} />
-					</div>
-					{latestTests.length > 0 && (
+					{latestTests?.count > 0 && (
 						<div className={styles.uncorrectAnswersContainer}>
 							<span className={styles.modeTitle}>Last answered Question</span>
 							<div className={styles.uncorrectAnswers}>
-								{latestTests.map((test) => (
-									<CircleButton key={test.id} onClick={() => onClick(test.id)}>
-										{test.id}
-									</CircleButton>
-								))}
+								<span>{latestTests?.count}</span>
 							</div>
 						</div>
 					)}

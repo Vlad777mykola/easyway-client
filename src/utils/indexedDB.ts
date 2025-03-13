@@ -72,13 +72,10 @@ export async function updateFieldIfNeeded<T>(key: string, field: string, value: 
 	}
 }
 
-export async function updateLastTest(
-	key: string,
-	field: string,
-	value: LatestTest[],
-): Promise<void> {
-	const updatedLastTest = value.filter((item) => Date.now() - item.timestamp <= TIME_LIMIT);
-	await updateFieldIfNeeded(key, field, updatedLastTest);
+export async function updateLastTest(key: string, field: string, value: LatestTest): Promise<void> {
+	if (Date.now() - value.timestamp > TIME_LIMIT) {
+		await updateFieldIfNeeded(key, field, 0);
+	}
 }
 
 export async function loadState(key: string): Promise<void> {

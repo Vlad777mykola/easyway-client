@@ -16,7 +16,7 @@ export type ResolvedRandomTest = {
 };
 
 export type LatestTest = {
-	id: string;
+	count: number;
 	timestamp: number;
 };
 
@@ -26,22 +26,22 @@ export type ProgressStoreState = {
 		progress: RandomTest[];
 		resolved: ResolvedRandomTest[];
 	};
-	latestTests: LatestTest[];
+	latestTests: LatestTest;
 };
 
 type ProgressStoreActions = {
 	setExamProgress: (id: string, isResolved: boolean) => void;
 	setRandomProgress: (id: string, isResolved: boolean, totalCorrectResponse: number) => void;
-	setLatestTests: (id: string) => void;
+	setLatestTests: () => void;
 	getProgressFromIndexedDB: (
 		examModeProgress: ExamModeProgressType | unknown,
 		randomModeProgress: { progress: RandomTest[] } | unknown,
-		latestTests: LatestTest[],
+		latestTests: LatestTest,
 	) => void;
 	saveProgressToIndexedDB: () => {
 		examModeProgress: ExamModeProgressType;
 		randomModeProgress: { progress: RandomTest[]; resolved: ResolvedRandomTest[] };
-		latestTests: LatestTest[];
+		latestTests: LatestTest;
 	};
 	resetItemProgress: (collectionId: string, nameProgress: string) => void;
 	clearAll: () => void;
@@ -58,7 +58,7 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 		progress: [],
 		resolved: [],
 	},
-	latestTests: [],
+	latestTests: { count: 0, timestamp: 0 },
 	setExamProgress: (id, isResolved) => {
 		set((state) => {
 			const { successProgress, errorProgress } = state.examModeProgress;
@@ -111,30 +111,25 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			};
 		});
 	},
-	setLatestTests: (id: string) => {
+	// rename to explain of function is do !!!!!
+	// how much tests he completed it must just number counter -> get counter from indexed db set to state. Add plus one every time.
+	setLatestTests: () => {
+		const count = get().latestTests;
+		console.log('COUNT: ', count);
 		const time = Date.now();
-		const latestTests = get().latestTests;
-		if (latestTests.some((item) => item.id === id)) {
-			const filterArray = latestTests.filter((item) => item.id !== id);
-			set((state) => {
-				return {
-					...state,
-					latestTests: [{ id, timestamp: time }, ...filterArray],
-				};
-			});
-		} else {
-			set((state) => {
-				return {
-					...state,
-					latestTests: [{ id, timestamp: time }, ...latestTests],
-				};
-			});
-		}
+		set((state) => ({
+			...state,
+			latestTests: {
+				...state.latestTests,
+				count: count.count + 1,
+				timestamp: time,
+			},
+		}));
 	},
 	getProgressFromIndexedDB: (
 		examModeProgress: unknown,
 		randomModeProgress: unknown,
-		latestTests: LatestTest[],
+		latestTests: LatestTest,
 	) => {
 		const examProgress = examModeProgress as ExamModeProgressType;
 		const randomProgress = randomModeProgress as {
@@ -145,7 +140,7 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			...state,
 			examModeProgress: examProgress || { successProgress: [], errorProgress: [] },
 			randomModeProgress: randomProgress || { progress: [], resolved: [] },
-			latestTests: latestTests || [],
+			latestTests: latestTests || { count: 0, timestamp: 0 },
 		}));
 	},
 	saveProgressToIndexedDB: () => {
@@ -186,7 +181,10 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 				progress: [],
 				resolved: [],
 			},
-			latestTests: [],
+			latestTests: {
+				count: 0,
+				timestamp: 0,
+			},
 		}));
 	},
 }));

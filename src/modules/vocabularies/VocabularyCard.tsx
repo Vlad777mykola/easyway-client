@@ -67,6 +67,14 @@ export const VocabularyCard = () => {
 	const resultExamWordID =
 		examProgress.successProgress.length + examProgress.errorProgress.length === words.length;
 
+	const store = useProgressStore((store) => store);
+
+	console.log('STORE: ', store);
+
+	const latestTests = useProgressStore((store) => store.latestTests);
+
+	console.log('LATEST TEST: ', latestTests);
+
 	let resultWordId;
 
 	if (exerciseMode === EXERCISE_MODE.isExam) {
@@ -78,8 +86,10 @@ export const VocabularyCard = () => {
 	}
 
 	useIndexedDB(saveProgressToIndexedDB, 'save', vocabulariesId, resultWordId);
+	// save progress on close browser
 	useVocabularyListData(setExerciseListResponse, vocabulariesId);
 
+	// clean all local store, only indexed db
 	useBeforeunload(() => {
 		saveProgressToLocalStore(vocabulariesId);
 	});
@@ -114,7 +124,7 @@ export const VocabularyCard = () => {
 			setRandomProgress(id, isResolved, exerciseCorrectResponse);
 		}
 		setExerciseListProgress(id, isResolved);
-		setLatestTests(id);
+		setLatestTests();
 	};
 
 	const navigateTestPage = () => {

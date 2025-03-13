@@ -43,7 +43,7 @@ export const useIndexedDB = (
 							progress: RandomTest[];
 							resolved: ResolvedRandomTest[];
 						};
-						latestTests: string[];
+						latestTests: { count: number; timestamp: number };
 					};
 
 					await saveState(DATA_FIELD, {
@@ -55,7 +55,10 @@ export const useIndexedDB = (
 
 				if (action === 'load') {
 					const loadedData = await loadState('data');
-					await updateLastTest(DATA_FIELD, `${collectionId}_latestTests`, []);
+					await updateLastTest(DATA_FIELD, `${collectionId}_latestTests`, {
+						count: 0,
+						timestamp: 0,
+					});
 					await func(
 						loadedData?.[`${collectionId}_examModeProgress`],
 						loadedData?.[`${collectionId}_randomModeProgress`],
@@ -67,7 +70,7 @@ export const useIndexedDB = (
 					await deleteState(`${collectionId}_${nameProgress}`);
 					func(nameProgress);
 				}
-
+				// never delete all database !!!!!
 				if (action === 'clearAll') {
 					if (clear) {
 						await clearAllState();

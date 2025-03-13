@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { CountUp } from '@ui-components/CountUp';
 import { classes } from '@/shared/utils/classes';
-import { Size, SizeType, Variant, VariantType } from '../parameters/parameters';
+import { Size, SizeType, VariantType } from '../parameters/parameters';
 import styles from './circleProgressBar.module.css';
 
 const SIZE_TYPES = {
@@ -20,14 +20,17 @@ const COUNT_UP_DURATION = 1500;
 
 export const CircleProgressBar = ({
 	progress,
+	resolved = 0,
+	untouched = 0,
 	size = 'm',
-	variant = 'primary',
 	indicatorCap = `round`,
 	label = `Loading...`,
 	spinnerMode = false,
 	spinnerSpeed = 1,
 }: {
 	progress: number;
+	resolved?: number;
+	untouched?: number;
 	size?: SizeType;
 	variant?: VariantType;
 	indicatorCap?: 'round' | 'inherit' | 'butt' | 'square';
@@ -38,12 +41,16 @@ export const CircleProgressBar = ({
 	const center = SIZE_TYPES[size] / 2,
 		radius = center - (TRACK_WIDTH > INDICATOR_WIDTH ? TRACK_WIDTH : INDICATOR_WIDTH),
 		dashArray = 2 * Math.PI * radius,
+		dashOffsetResolved = dashArray * ((100 - resolved) / 100),
+		dashOffsetUntouched = dashArray * ((100 - untouched) / 100),
 		dashOffset = dashArray * ((100 - progress) / 100);
 
 	let hideLabel =
 		size === Size.xs || size === Size.s || !label.length || spinnerMode ? true : false;
 
 	const [style, setStyle] = useState({});
+	const [resolvedStyle, setResolvedStyle] = useState({});
+	const [untouchedStyle, setUntouchedStyle] = useState({});
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
@@ -53,11 +60,25 @@ export const CircleProgressBar = ({
 				strokeDashoffset: dashOffset,
 			};
 
+			const newResolvedStyle = {
+				opacity: 1,
+				strokeDasharray: dashArray,
+				strokeDashoffset: dashOffsetResolved,
+			};
+
+			const newUntouchedStyle = {
+				opacity: 1,
+				strokeDasharray: dashArray,
+				strokeDashoffset: dashOffsetUntouched,
+			};
+
 			setStyle(newStyle);
+			setResolvedStyle(newResolvedStyle);
+			setUntouchedStyle(newUntouchedStyle);
 		}, 200);
 
 		return () => clearTimeout(timeout);
-	}, [progress]);
+	}, [progress, resolved, untouched]);
 
 	return (
 		<>
@@ -80,11 +101,43 @@ export const CircleProgressBar = ({
 						strokeWidth={TRACK_WIDTH}
 					/>
 					<circle
-						className={classes(styles.svgPiIndicator, {
+						className={classes(styles.svgPiIndicator, styles.secondary, {
 							[styles.svgPiIndicatorSpinner]: spinnerMode,
-							[styles[Variant[variant]]]: !!variant,
 						})}
-						style={{ ...style, animationDuration: `${spinnerSpeed * SPEED}` }}
+						style={{
+							...untouchedStyle,
+							animationDuration: `${spinnerSpeed * SPEED}`,
+						}}
+						cx={center}
+						cy={center}
+						fill="transparent"
+						r={radius}
+						strokeWidth={INDICATOR_WIDTH}
+						strokeLinecap={indicatorCap}
+					/>
+					<circle
+						className={classes(styles.svgPiIndicator, styles.primary, {
+							[styles.svgPiIndicatorSpinner]: spinnerMode,
+						})}
+						style={{
+							...style,
+							animationDuration: `${spinnerSpeed * SPEED}`,
+						}}
+						cx={center}
+						cy={center}
+						fill="transparent"
+						r={radius}
+						strokeWidth={INDICATOR_WIDTH}
+						strokeLinecap={indicatorCap}
+					/>
+					<circle
+						className={classes(styles.svgPiIndicator, styles.success, {
+							[styles.svgPiIndicatorSpinner]: spinnerMode,
+						})}
+						style={{
+							...resolvedStyle,
+							animationDuration: `${spinnerSpeed * SPEED}`,
+						}}
 						cx={center}
 						cy={center}
 						fill="transparent"

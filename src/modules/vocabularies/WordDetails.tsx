@@ -32,6 +32,10 @@ export const WordDetails = () => {
 	const navigate = useNavigate();
 	const getProgressFromIndexedDB = useProgressStore((state) => state.getProgressFromIndexedDB);
 
+	const store = useProgressStore((state) => state);
+
+	console.log('STORE: ', store);
+
 	const [mode, setMode] = useState<ExerciseModeType>(EXERCISE_MODE.isRandom);
 
 	const fieldsDataWord = [
@@ -82,7 +86,7 @@ export const WordDetails = () => {
 
 	useIndexedDB(
 		(exam, random, latestTests) =>
-			getProgressFromIndexedDB(exam, random, latestTests as LatestTest[]),
+			getProgressFromIndexedDB(exam, random, latestTests as LatestTest),
 		'load',
 		vocabulariesId,
 		'id',
