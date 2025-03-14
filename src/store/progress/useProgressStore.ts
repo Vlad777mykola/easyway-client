@@ -34,8 +34,11 @@ type ProgressStoreActions = {
 	setRandomProgress: (id: string, isResolved: boolean, totalCorrectResponse: number) => void;
 	setLatestTests: () => void;
 	getProgressFromIndexedDB: (
-		examModeProgress: ExamModeProgressType | unknown,
-		randomModeProgress: { progress: RandomTest[] } | unknown,
+		examModeProgress: ExamModeProgressType,
+		randomModeProgress: {
+			progress: RandomTest[];
+			resolved: ResolvedRandomTest[];
+		},
 		latestTests: LatestTest,
 	) => void;
 	saveProgressToIndexedDB: () => {
@@ -126,20 +129,11 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			},
 		}));
 	},
-	getProgressFromIndexedDB: (
-		examModeProgress: unknown,
-		randomModeProgress: unknown,
-		latestTests: LatestTest,
-	) => {
-		const examProgress = examModeProgress as ExamModeProgressType;
-		const randomProgress = randomModeProgress as {
-			progress: RandomTest[];
-			resolved: ResolvedRandomTest[];
-		};
+	getProgressFromIndexedDB: (examModeProgress, randomModeProgress, latestTests) => {
 		set((state) => ({
 			...state,
-			examModeProgress: examProgress || { successProgress: [], errorProgress: [] },
-			randomModeProgress: randomProgress || { progress: [], resolved: [] },
+			examModeProgress: examModeProgress || { successProgress: [], errorProgress: [] },
+			randomModeProgress: randomModeProgress || { progress: [], resolved: [] },
 			latestTests: latestTests || { count: 0, timestamp: 0 },
 		}));
 	},

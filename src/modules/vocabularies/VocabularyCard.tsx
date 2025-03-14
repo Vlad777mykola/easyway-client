@@ -8,8 +8,6 @@ import {
 	EXERCISE_MODE,
 } from '@/store/vocabulary-collection/useVocabularyStore';
 import { useVocabularyListData } from './hooks/useVocabularyListData';
-import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
-import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
 import { useProgressStore } from '@/store/progress';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { Icon } from '@/ui-components/Icon';
@@ -19,6 +17,7 @@ import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import { PaginationExercise } from './components/pagination/Pagination';
 import styles from './vocabularyCard.module.css';
+import { saveVocabularyProgress } from './utils/saveVocabularyProgress';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
@@ -29,7 +28,6 @@ export const VocabularyCard = () => {
 
 	const fullExerciseScreen = useCommonStore.use.fullExerciseScreen();
 	const exerciseListId = useVocabularyStore.use.exerciseListIds();
-	const isDoneExercise = wordId === 'done' || exerciseListId.length === 0;
 	const isSelectingFormate =
 		useVocabularyStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
@@ -38,61 +36,48 @@ export const VocabularyCard = () => {
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();
-	const saveProgressToLocalStore = useVocabularyStore.use.saveProgressToLocalStore();
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
-	const getProgressFromLocalStore = useVocabularyStore.use.getProgressFromLocalStore();
 	const setExamProgress = useProgressStore((store) => store.setExamProgress);
 	const setRandomProgress = useProgressStore((store) => store.setRandomProgress);
 
 	const setLatestTests = useProgressStore((store) => store.setLatestTests);
 
-	const exerciseMode = useVocabularyStore((store) => store.collectionsExerciseConfig.exerciseMode);
-
-	const correctResponse = useVocabularyStore(
-		(store) => store.collectionsExerciseConfig.exerciseCorrectResponse,
-	);
-
-	const examProgress = useProgressStore((store) => store.examModeProgress);
-	const randomProgress = useProgressStore((store) => store.randomModeProgress);
-	const words = useVocabularyStore((store) => store.words);
-
 	const exerciseCorrectResponse = useVocabularyStore(
 		(store) => store.collectionsExerciseConfig.exerciseCorrectResponse,
 	);
 
-	const resultRandomWordID = randomProgress.progress.every(
-		(item) => item.correctCount === correctResponse,
-	);
-
-	const resultExamWordID =
-		examProgress.successProgress.length + examProgress.errorProgress.length === words.length;
-
 	const store = useProgressStore((store) => store);
+	const vocabularyStore = useVocabularyStore((store) => store);
 
-	console.log('STORE: ', store);
+	console.log('//STORE: ', store);
+	console.log('//VOCABULARY STORE: ', vocabularyStore);
 
-	const latestTests = useProgressStore((store) => store.latestTests);
+	const [testIsDone, setTestIsDone] = useState<boolean>();
 
-	console.log('LATEST TEST: ', latestTests);
+	console.log('//STORE: ', store);
+	console.log('//VOCABULARY STORE: ', vocabularyStore);
 
-	let resultWordId;
+	const examIsDone = store.examModeProgress.successProgress.length === vocabularyStore.words.length;
+	const randomIsDone =
+		store.randomModeProgress.resolved.every((item) => item.isDone === true) &&
+		store.randomModeProgress.resolved.length === vocabularyStore.words.length;
 
-	if (exerciseMode === EXERCISE_MODE.isExam) {
-		resultWordId = resultExamWordID ? 'done' : wordId;
-	}
+	console.log('//examIsDone: ', examIsDone);
+	console.log('//randomIsDone: ', randomIsDone);
+	console.log('//testIsDone: ', testIsDone);
 
-	if (exerciseMode === EXERCISE_MODE.isRandom) {
-		resultWordId = resultRandomWordID ? 'done' : wordId;
-	}
+	useEffect(() => {
+		if (vocabularyStore.collectionsExerciseConfig.exerciseMode === 'randomMode') {
+			setTestIsDone(randomIsDone);
+		}
 
-	useIndexedDB(saveProgressToIndexedDB, 'save', vocabulariesId, resultWordId);
-	// save progress on close browser
+		if (vocabularyStore.collectionsExerciseConfig.exerciseMode === 'examMode') {
+			setTestIsDone(examIsDone);
+		}
+	}, []);
+
 	useVocabularyListData(setExerciseListResponse, vocabulariesId);
 
-	// clean all local store, only indexed db
-	useBeforeunload(() => {
-		saveProgressToLocalStore(vocabulariesId);
-	});
 	const onNavigate = useCallback(
 		(id: string) => {
 			navigate(`/vocabularies/${vocabulariesId}/word/${id}`);
@@ -108,21 +93,21 @@ export const VocabularyCard = () => {
 			})();
 		}
 
-		getProgressFromLocalStore(vocabulariesId);
 		setIsAutoNavigate(false);
 
 		return () => {
-			saveProgressToLocalStore(vocabulariesId);
+			saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId);
 		};
 	}, [wordId]);
 
-	const setModesProgress = (id: string, isResolved: boolean) => {
+	const setModesProgress = async (id: string, isResolved: boolean) => {
 		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isExam) {
 			setExamProgress(id, isResolved);
 		}
 		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
 			setRandomProgress(id, isResolved, exerciseCorrectResponse);
 		}
+		await saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId);
 		setExerciseListProgress(id, isResolved);
 		setLatestTests();
 	};
@@ -134,7 +119,7 @@ export const VocabularyCard = () => {
 	return (
 		<WrapperCard fullScreen={fullExerciseScreen} setFullScreen={setFullScreen}>
 			<div className={styles.taskContainer}>
-				{isDoneExercise && (
+				{testIsDone && (
 					<Result
 						icon={<Icon icon="smile" size="xl" />}
 						title="Great, you have done all the exercise!"
@@ -145,7 +130,7 @@ export const VocabularyCard = () => {
 						}
 					/>
 				)}
-				{!isDoneExercise && task && !isSelectingFormate && (
+				{!testIsDone && task && !isSelectingFormate && (
 					<ExerciseUI
 						key={vocabulariesId}
 						task={task}
@@ -154,7 +139,7 @@ export const VocabularyCard = () => {
 						updateProgress={setModesProgress}
 					/>
 				)}
-				{!isDoneExercise && task && isSelectingFormate && (
+				{!testIsDone && task && isSelectingFormate && (
 					<SelectingUI
 						key={vocabulariesId}
 						task={task}
@@ -163,7 +148,7 @@ export const VocabularyCard = () => {
 						updateProgress={setModesProgress}
 					/>
 				)}
-				{!isDoneExercise && exerciseListId && (
+				{!testIsDone && exerciseListId && (
 					<PaginationExercise
 						taskId={wordId}
 						isAutoNavigate={isAutoNavigate}

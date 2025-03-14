@@ -152,7 +152,7 @@ export const CircleProgressBar = ({
 						{!spinnerMode && (
 							<span className={styles.svgPiLabelProgress}>
 								<CountUp
-									end={progress > HUNDRED_PERCENT ? HUNDRED_PERCENT : progress}
+									end={progress > HUNDRED_PERCENT ? HUNDRED_PERCENT : resolved || progress}
 									duration={COUNT_UP_DURATION}
 								/>
 								%

@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { LatestTest, useProgressStore } from '@/store/progress';
+import { useProgressStore } from '@/store/progress';
 import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
@@ -20,7 +20,6 @@ export const WordDetails = () => {
 	const uncorrectAnswers = useProgressStore((store) => store.examModeProgress.errorProgress);
 	const latestTests = useProgressStore((state) => state.latestTests) || [];
 	const exerciseMode = useVocabularyStore((state) => state.collectionsExerciseConfig.exerciseMode);
-	const getProgressFromLocalStore = useVocabularyStore((state) => state.getProgressFromLocalStore);
 	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
 	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
 	const setWordConfig = useVocabularyStore((store) => store.setWordConfig);
@@ -76,23 +75,13 @@ export const WordDetails = () => {
 	useVocabularyListData(setWordsListResponse, vocabulariesId);
 
 	useEffect(() => {
-		getProgressFromLocalStore(vocabulariesId);
-	}, []);
-
-	useEffect(() => {
 		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
 		setMode(exerciseConfig as ExerciseModeType);
 	}, [exerciseMode]);
 
 	useIndexedDB(
-		(exam, random, latestTests) =>
-			getProgressFromIndexedDB(exam, random, latestTests as LatestTest),
-		'load',
+		(exam, random, latestTests) => getProgressFromIndexedDB(exam, random, latestTests),
 		vocabulariesId,
-		'id',
-		'',
-		false,
-		undefined,
 	);
 
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
@@ -125,7 +114,6 @@ export const WordDetails = () => {
 		<ContentContainer>
 			<ContentContainer.Header>
 				<Statistics
-					collectionName="Family"
 					collectionsId={vocabulariesId || ''}
 					uncorrectAnswers={uncorrectAnswers}
 					latestTests={latestTests}

@@ -12,10 +12,12 @@ export const StandardProgressBar = ({
 	progress,
 	size = 'm',
 	variant = 'primary',
+	fullwidth = false,
 }: {
 	progress: number;
 	size?: SizeType;
 	variant?: VariantType;
+	fullwidth?: boolean;
 }) => {
 	const [style, setStyle] = useState({});
 
@@ -36,6 +38,7 @@ export const StandardProgressBar = ({
 		<div
 			className={classes(styles.progress, {
 				[styles[Size[size]]]: !!size,
+				[styles.fullwidth]: fullwidth,
 			})}
 		>
 			<div
