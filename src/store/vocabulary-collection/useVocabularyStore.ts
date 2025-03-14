@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { filterVocabularyCollections, filterWordCollection } from './service';
-import { ExerciseResponseType } from '@/shared/constants/data';
+import { ExerciseResponseType } from '@/shared/constants/collections/data';
 import { getReadyQuestion } from '@/modules/vocabularies/services/fetchDefinition';
 import { localstorage } from '@/shared/utils/local-storage/localstorage';
 

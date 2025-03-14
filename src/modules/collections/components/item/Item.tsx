@@ -16,7 +16,7 @@ export const Item = <
 	onClick: (id: string) => void;
 }): ReactNode => {
 	return (
-		<section onClick={() => onClick(data.id)} className={styles.itemContainer}>
+		<section key={data.id} onClick={() => onClick(data.id)} className={styles.itemContainer}>
 			<h1 className={styles.title}>{data.title}</h1>
 			<div className={styles.infoCard}>
 				<div className={styles.topicContainer}>

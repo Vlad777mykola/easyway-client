@@ -4,7 +4,7 @@ import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
 import { Result } from '@/ui-components/Result';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
-import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
+import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
 import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { useExerciseListData } from './hooks/useExerciseListData';
 import { useExerciseProgressStore, DEFAULT_DATA_TEST } from '@/store/exercise-progress';
@@ -34,6 +34,7 @@ export const ExerciseCard = () => {
 
 	useExerciseListData(setExerciseListResponse, collectionsId);
 	useBeforeunload(() => saveProgressToLocalStore(collectionsId));
+
 	const onNavigate = useCallback(
 		(id: string) => {
 			navigate(`/collections/${collectionsId}/task/${id}`);

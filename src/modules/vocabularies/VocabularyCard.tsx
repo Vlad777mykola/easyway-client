@@ -13,7 +13,7 @@ import { Result } from '@/ui-components/Result';
 import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import { PaginationExercise } from './components/pagination/Pagination';
-import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
+import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
 import styles from './vocabularyCard.module.css';
 
 export const VocabularyCard = () => {

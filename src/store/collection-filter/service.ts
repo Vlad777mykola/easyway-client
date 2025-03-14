@@ -1,4 +1,4 @@
-import type { CollectionType, FilterDataType } from './useCollectionFilterStore';
+import type { CollectionType, FilterDataType } from './useCollectionFilterBase';
 
 export const filterCollections = (data: CollectionType[], filterData: FilterDataType) => {
 	const { title, topic, category } = filterData;

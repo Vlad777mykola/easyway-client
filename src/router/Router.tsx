@@ -5,7 +5,6 @@ import { DictionaryExerciseCard, DictionaryExerciseDetails } from '@/modules/dic
 // import { Auth } from '@/pages/Auth';
 // import Home from '@/pages/Home';
 
-const CreateTest = lazy(() => import('@/pages/CreateTest'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const CompleteTest = lazy(() => import('@/pages/CompleteTest'));
 const DictionaryPage = lazy(() => import('@/pages/DictionaryPage'));
@@ -25,8 +24,15 @@ export const router = createBrowserRouter([
 			{ path: 'profile', element: <ProfilePage /> },
 			// { path: 'login', element: <Auth /> },
 			// { path: 'signup', element: <Auth /> },
-			{ path: 'test', element: <CreateTest /> },
 			{ path: '', element: <CollectionsPage /> },
+
+			{ path: 'collections', element: <CollectionsPage /> },
+			{ path: 'collections/:collectionsId', element: <ExerciseDetails /> },
+			{ path: 'collections/:collectionsId/task/:taskId', element: <CompleteTest /> },
+
+			{ path: 'vocabularies', element: <VocabulariesPage /> },
+			{ path: 'vocabularies/:vocabulariesId', element: <WordDetailsPage /> },
+			{ path: 'vocabularies/:vocabulariesId/word/:wordId', element: <CompleteWordTest /> },
 
 			{ path: 'dictionaries', element: <DictionaryPage /> },
 			{ path: 'dictionaries/:dictionaryId', element: <DictionaryExerciseDetails /> },
@@ -34,12 +40,6 @@ export const router = createBrowserRouter([
 				path: 'dictionaries/:dictionaryId/word/:wordId',
 				element: <DictionaryExerciseCard />,
 			},
-			{ path: 'vocabularies', element: <VocabulariesPage /> },
-			{ path: 'collections', element: <CollectionsPage /> },
-			{ path: 'collections/:collectionsId', element: <ExerciseDetails /> },
-			{ path: 'collections/:collectionsId/task/:taskId', element: <CompleteTest /> },
-			{ path: 'vocabularies/:vocabulariesId', element: <WordDetailsPage /> },
-			{ path: 'vocabularies/:vocabulariesId/word/:wordId', element: <CompleteWordTest /> },
 		],
 	},
 ]);

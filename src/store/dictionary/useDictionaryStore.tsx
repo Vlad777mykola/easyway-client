@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { localstorage } from '@/shared/utils/local-storage/localstorage';
-import { ExerciseResponseType } from '@/shared/constants/data';
+import { ExerciseResponseType } from '@/shared/constants/collections/data';
 import { getReadyQuestion } from '@/shared/services/get-variants';
 import { shuffleArray } from '@/shared/utils/shuffle-array';
 import {

@@ -49,9 +49,10 @@ export const FieldComponent = ({
 						if (typeof option === 'object' && option?.value) {
 							return { value: option.value, label: option?.label || option.value };
 						}
-						if (option === 'string' || option === 'number') {
+						if (typeof option === 'string' || typeof option === 'number') {
 							return { value: option, label: option };
 						}
+						console.log(option);
 						return { value: 'value', label: 'label' };
 					})}
 				/>

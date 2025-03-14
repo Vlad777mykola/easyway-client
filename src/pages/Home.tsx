@@ -1,11 +1,5 @@
-import { TaskList } from '@/modules/task-list';
-
 export const Home = () => {
-	return (
-		<div>
-			<TaskList />
-		</div>
-	);
+	return <div>Home page</div>;
 };
 
 export default Home;

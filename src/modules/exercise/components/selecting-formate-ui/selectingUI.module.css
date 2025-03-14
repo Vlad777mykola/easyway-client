@@ -8,10 +8,10 @@
 	gap: 20px;
 }
 
-.exercise {
+/* .exercise {
 	font-size: 50px;
 	margin: 0px 0px 0px 0px;
-}
+} */
 
 .correctAnswerContainer {
 	height: 155px;
@@ -54,9 +54,9 @@
 }
 
 @media (min-width: 320px) {
-	.exercise {
+	/* .exercise {
 		font-size: 24px;
-	}
+	} */
 	.words {
 		margin-top: 0px;
 		height: 100%;
@@ -77,9 +77,9 @@
 }
 
 @media (min-width: 1920px) {
-	.exercise {
+	/* .exercise {
 		font-size: 35px;
-	}
+	} */
 	.words {
 		margin-top: 0px;
 		height: 60%;
