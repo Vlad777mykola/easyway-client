@@ -1,6 +1,6 @@
 import { localstorage } from '@/shared/utils/local-storage/localstorage';
 import { create } from 'zustand';
-import { ExerciseResponseType } from '@/shared/constants/data';
+import { ExerciseResponseType } from '@/shared/constants/collections/data';
 import { getReadyQuestion } from '@/shared/services/get-variants';
 import { shuffleArray } from '@/shared/utils/shuffle-array';
 
@@ -195,7 +195,14 @@ export const useExerciseProgressStoreBase = create<ExerciseStoreType>()((set, ge
 			const exerciseAnswer = exercise.exerciseAnswer.split(' ');
 			const explanationAnswer = exercise.explanation.split(' ');
 			const explanationVariants = shuffleArray(explanationAnswer);
-			const variants = await getReadyQuestion(exerciseAnswer);
+			let variants = { [exerciseAnswer[0]]: ['1'] };
+			if (exercise?.variants) {
+				variants = { [exerciseAnswer[0]]: exercise.variants };
+			}
+			if (!exercise?.variants) {
+				variants = await getReadyQuestion(exerciseAnswer);
+			}
+			console.log(variants, exerciseListResponse);
 			exercise = {
 				...DEFAULT_DATA_TEST,
 				...exercise,

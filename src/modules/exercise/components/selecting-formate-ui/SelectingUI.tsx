@@ -18,7 +18,7 @@ export const SelectingUI = ({
 	updateProgress: (id: string, isCorrectWord: boolean) => void;
 }) => {
 	const {
-		exercise,
+		// exercise,
 		isComplete,
 		currentWord,
 		explanationAnswer,
@@ -83,7 +83,7 @@ export const SelectingUI = ({
 
 	return (
 		<div className={styles.testContainer}>
-			<div className={styles.exercise}>{exercise}</div>
+			{/* <div className={styles.exercise}>{exercise}</div> */}
 			<div className={styles.correctAnswerContainer}>
 				<div
 					className={classes(styles.answer, {

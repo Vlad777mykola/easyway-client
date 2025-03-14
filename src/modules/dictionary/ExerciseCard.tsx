@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import type { ExerciseType } from '@/store/dictionary';
 import { DoneCard } from '@/shared/components/done-card';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
-import { useBeforeunload } from '@/shared/hooks/useBeforeunload';
+import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
 import { useDictionaryStore, DEFAULT_DATA_TEST, EXERCISE_FORMATE } from '@/store/dictionary';
 
 import { PaginationExercise } from './components/pagination/Pagination';

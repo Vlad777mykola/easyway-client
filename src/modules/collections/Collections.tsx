@@ -1,23 +1,23 @@
-import { ReactNode, useEffect } from 'react';
-import { ListCollections } from './components/lits-collections/ListCollections';
-import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
-import { TOPIC_TENSES } from './constants/store-constants';
+import { ReactNode } from 'react';
 import { useCollectionFilter } from '@/store/collection-filter';
-import { FilterDataKeyType } from '@/store/collection-filter/useCollectionFilterStore';
-import { FILTER_LABELS } from '@/shared/constants/data';
+import { FILTER_LABELS } from '@/shared/constants/collections/data';
 import { ContentContainer } from '@/ui-components/Content-Container';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
 
-export const Collections = (): ReactNode => {
-	const setFilterDataOnSearch = useCollectionFilter((store) => store.setFilterDataOnSearch);
-	const setFilter = useCollectionFilter((store) => store.setFilter);
-	const setClean = useCollectionFilter((store) => store.setClean);
-	const getFilterCollectionData = useCollectionFilter((store) => store.getFilterCollectionData);
+import { TOPIC_TENSES } from './constants/store-constants';
+import { ListCollections } from './components/lits-collections/ListCollections';
+import { CollectionsType } from '@/shared/constants';
+
+export const Collections = ({ collectionId }: { collectionId: CollectionsType }): ReactNode => {
+	const setClean = useCollectionFilter.use.setClean();
+	const setFilter = useCollectionFilter.use.setFilter();
+	const getFiltersData = useCollectionFilter.use.getFiltersData();
+	const setFilterDataOnSearch = useCollectionFilter.use.setFilterDataOnSearch();
 
 	const fieldsData: FieldsDataType[] = [
 		{
 			keyValue: FILTER_LABELS.title,
-			getDefaultValue: () =>
-				getFilterCollectionData(FILTER_LABELS.title as FilterDataKeyType) as string,
+			getDefaultValue: () => getFiltersData(FILTER_LABELS.title),
 			label: FILTER_LABELS.title,
 			componentType: SIDE_BAR_COMPONENT_TYPE.INPUT,
 			placeholder: FILTER_LABELS.title,
@@ -25,16 +25,14 @@ export const Collections = (): ReactNode => {
 		{
 			keyValue: FILTER_LABELS.category,
 			options: Object.values(TOPIC_TENSES),
-			getDefaultValue: () =>
-				getFilterCollectionData(FILTER_LABELS.category as FilterDataKeyType) as string[],
+			getDefaultValue: () => getFiltersData(FILTER_LABELS.category),
 			label: FILTER_LABELS.category,
 			componentType: SIDE_BAR_COMPONENT_TYPE.MULTIPLE,
 		},
 		{
 			keyValue: FILTER_LABELS.topic,
 			options: Object.values(TOPIC_TENSES),
-			getDefaultValue: () =>
-				getFilterCollectionData(FILTER_LABELS.topic as FilterDataKeyType) as string[],
+			getDefaultValue: () => getFiltersData(FILTER_LABELS.topic),
 			label: FILTER_LABELS.topic,
 			componentType: SIDE_BAR_COMPONENT_TYPE.MULTIPLE,
 		},
@@ -44,32 +42,19 @@ export const Collections = (): ReactNode => {
 		setFilter(key, value);
 	};
 
-	useEffect(() => {
-		setFilterDataOnSearch();
-	}, []);
-
-	const onSearch = () => {
-		setFilterDataOnSearch();
-	};
-
-	const onClear = () => {
-		setClean();
-	};
-
 	return (
 		<ContentContainer>
-			<ContentContainer.Header>{null}</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<Sidebar
 					title="Filter"
 					fieldsData={fieldsData}
 					onChange={onChange}
-					onSearch={onSearch}
-					onClear={onClear}
+					onClear={() => setClean()}
+					onSearch={() => setFilterDataOnSearch()}
 				/>
 			</ContentContainer.Sidebar>
 			<ContentContainer.Content>
-				<ListCollections />
+				<ListCollections collectionId={collectionId} />
 			</ContentContainer.Content>
 		</ContentContainer>
 	);
