@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './artem.module.css'; // або відповідний стиль для кожної картки
+import styles from './Card1.module.css';
 
 interface CardProps {
 	image: string;
