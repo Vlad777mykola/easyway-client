@@ -22,11 +22,9 @@ export const ListCollections = ({ collectionId }: { collectionId: CollectionsTyp
 
 	return (
 		<div className={styles.listContainer}>
-			{data.map(
-				(i: { title: string; id: string; category: string[]; topic: string[] | string }) => (
-					<Item data={i} onClick={() => onClick(i.id)} />
-				),
-			)}
+			{data.map((i: { title: string; id: string; category: string[]; topic: string[] }) => (
+				<Item data={i} onClick={() => onClick(i.id)} />
+			))}
 		</div>
 	);
 };

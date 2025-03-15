@@ -7,7 +7,7 @@ export { DEFAULT_COLLECTIONS } from './collections/data';
 
 export const ALL_COLLECTIONS = {
 	collections: DEFAULT_COLLECTIONS,
-	dictionary: DICTIONARY_COLLECTIONS,
+	dictionaries: DICTIONARY_COLLECTIONS,
 };
 
 export type CollectionsType = keyof typeof ALL_COLLECTIONS;

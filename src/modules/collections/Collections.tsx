@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
+import { CollectionsType } from '@/shared/constants';
 import { useCollectionFilter } from '@/store/collection-filter';
 import { FILTER_LABELS } from '@/shared/constants/collections/data';
+import { TOPIC_TENSES } from '@/store/collection-filter/constants';
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
 
-import { TOPIC_TENSES } from './constants/store-constants';
 import { ListCollections } from './components/lits-collections/ListCollections';
-import { CollectionsType } from '@/shared/constants';
 
 export const Collections = ({ collectionId }: { collectionId: CollectionsType }): ReactNode => {
 	const setClean = useCollectionFilter.use.setClean();

@@ -6,7 +6,7 @@ export const Item = <
 		title: string;
 		id: string;
 		category: string[];
-		topic: string[] | string;
+		topic: string[];
 	},
 >({
 	data,
@@ -20,26 +20,12 @@ export const Item = <
 			<h1 className={styles.title}>{data.title}</h1>
 			<div className={styles.infoCard}>
 				<div className={styles.topicContainer}>
-					<p className={styles.nameOfTopic}>Topic:</p>
-					{typeof data.topic === 'object' ? (
-						data.topic.map((item, index) => (
-							<p key={item} className={styles.dataInfo}>
-								{item}
-								{index < data.topic.length - 1 ? ',' : '.'}
-							</p>
-						))
-					) : (
-						<p className={styles.dataInfo}>{data.topic}.</p>
-					)}
+					<p className={styles.nameOfTopic}>Topic: </p>
+					{data.topic.join(', ')}
 				</div>
 				<div className={styles.topicContainer}>
 					<p className={styles.nameOfTopic}>Category: </p>
-					{data.category.map((item, index) => (
-						<p key={item} className={styles.dataInfo}>
-							{item}
-							{index < data.category.length - 1 ? ',' : '.'}
-						</p>
-					))}
+					{data.category.join(', ')}
 				</div>
 			</div>
 		</section>

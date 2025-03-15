@@ -1,12 +1,6 @@
-import {
-	TOPIC_TENSES,
-	/* 	LEVEL,
-	LEARNING_STYLE,
-	LEARN_BY_INTEREST,
-	LEARN_BY_SKILL, */
-} from '@/modules/collections/constants/store-constants';
 import { create } from 'zustand';
 import { filterCollections } from './service';
+import { TOPIC_TENSES } from './constants';
 
 export const FILTER_LABELS = {
 	title: 'title',
