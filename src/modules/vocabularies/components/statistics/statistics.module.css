@@ -39,7 +39,7 @@
 }
 
 .totalProgress {
-	width: 70%;
+	width: 25%;
 	display: flex;
 	justify-content: center;
 	gap: 0px 15px;
@@ -48,6 +48,7 @@
 
 .moreInfoContainer {
 	width: 100%;
+	margin-top: 20px;
 }
 
 .uncorrectAnswersContainer {
@@ -55,7 +56,7 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 10px;
-	margin-top: 10px;
+	margin-top: 20px;
 }
 
 .countLatestTest {

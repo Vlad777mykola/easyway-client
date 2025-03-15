@@ -271,6 +271,7 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 		});
 	},
 	setExerciseListResponse: (exerciseList, collectionId) => {
+		console.log('setExerciseListResponse WORK');
 		const exerciseListResponse = get().exerciseListResponse;
 		const id = get().commonProgressData.collectionId;
 
@@ -285,6 +286,7 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 		if (!isUntracedMode) {
 			const resolvedExerciseId = get().resolvedExerciseId;
 			ids = ids.filter((i) => !resolvedExerciseId.includes(i));
+			console.log('IS UNTRANCED MODE: ', isUntracedMode);
 		}
 
 		set((state) => ({
@@ -293,6 +295,9 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 			exerciseListResponse: exerciseList,
 			commonProgressData: { ...state.commonProgressData, collectionId },
 		}));
+		console.log(
+			`setExerciseListResponse: ids -> ${ids}, exerciseList -> ${exerciseList}, commonProgressData collectionId -> ${collectionId}`,
+		);
 	},
 	setExerciseListProgress: (id, isResolved) => {
 		set((state) => {
@@ -323,6 +328,10 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 				updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers: 0 }];
 			}
 
+			console.log('setExerciseListProgress: ', {
+				...state,
+				exerciseListProgress: updatedProgressList,
+			});
 			return { ...state, exerciseListProgress: updatedProgressList };
 		});
 	},

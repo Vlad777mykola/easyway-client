@@ -16,8 +16,8 @@ import { Result } from '@/ui-components/Result';
 import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import { PaginationExercise } from './components/pagination/Pagination';
-import styles from './vocabularyCard.module.css';
 import { saveVocabularyProgress } from './utils/saveVocabularyProgress';
+import styles from './vocabularyCard.module.css';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
@@ -42,6 +42,12 @@ export const VocabularyCard = () => {
 
 	const setLatestTests = useProgressStore((store) => store.setLatestTests);
 
+	const vocabulary = useVocabularyStore((store) => store);
+
+	console.log('VOCABULARY: ', vocabulary);
+
+	console.log('EXERCISE LIST ID: ', exerciseListId);
+
 	const exerciseCorrectResponse = useVocabularyStore(
 		(store) => store.collectionsExerciseConfig.exerciseCorrectResponse,
 	);
@@ -49,22 +55,12 @@ export const VocabularyCard = () => {
 	const store = useProgressStore((store) => store);
 	const vocabularyStore = useVocabularyStore((store) => store);
 
-	console.log('//STORE: ', store);
-	console.log('//VOCABULARY STORE: ', vocabularyStore);
-
 	const [testIsDone, setTestIsDone] = useState<boolean>();
-
-	console.log('//STORE: ', store);
-	console.log('//VOCABULARY STORE: ', vocabularyStore);
 
 	const examIsDone = store.examModeProgress.successProgress.length === vocabularyStore.words.length;
 	const randomIsDone =
 		store.randomModeProgress.resolved.every((item) => item.isDone === true) &&
 		store.randomModeProgress.resolved.length === vocabularyStore.words.length;
-
-	console.log('//examIsDone: ', examIsDone);
-	console.log('//randomIsDone: ', randomIsDone);
-	console.log('//testIsDone: ', testIsDone);
 
 	useEffect(() => {
 		if (vocabularyStore.collectionsExerciseConfig.exerciseMode === 'randomMode') {

@@ -19,7 +19,7 @@ const SPEED = 1000;
 const COUNT_UP_DURATION = 1500;
 
 export const CircleProgressBar = ({
-	progress,
+	progress = 0,
 	resolved = 0,
 	untouched = 0,
 	size = 'm',
@@ -28,7 +28,7 @@ export const CircleProgressBar = ({
 	spinnerMode = false,
 	spinnerSpeed = 1,
 }: {
-	progress: number;
+	progress?: number;
 	resolved?: number;
 	untouched?: number;
 	size?: SizeType;
@@ -101,7 +101,7 @@ export const CircleProgressBar = ({
 						strokeWidth={TRACK_WIDTH}
 					/>
 					<circle
-						className={classes(styles.svgPiIndicator, styles.secondary, {
+						className={classes(styles.svgPiIndicator, styles.error, {
 							[styles.svgPiIndicatorSpinner]: spinnerMode,
 						})}
 						style={{
@@ -152,7 +152,7 @@ export const CircleProgressBar = ({
 						{!spinnerMode && (
 							<span className={styles.svgPiLabelProgress}>
 								<CountUp
-									end={progress > HUNDRED_PERCENT ? HUNDRED_PERCENT : resolved || progress}
+									end={progress > HUNDRED_PERCENT ? HUNDRED_PERCENT : resolved}
 									duration={COUNT_UP_DURATION}
 								/>
 								%

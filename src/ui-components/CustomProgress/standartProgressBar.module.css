@@ -53,13 +53,13 @@
 
 .s {
 	width: 25%;
-	height: var(--custom-s-height-size);
+	height: 25px;
 	font-size: var(--font-size-s);
 }
 
 .m {
 	width: 30%;
-	height: var(--custom-m-height-size);
+	height: 28px;
 	font-size: var(--font-size-m);
 }
 

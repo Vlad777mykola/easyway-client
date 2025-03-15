@@ -32,8 +32,10 @@ export const WordDetails = () => {
 	const getProgressFromIndexedDB = useProgressStore((state) => state.getProgressFromIndexedDB);
 
 	const store = useProgressStore((state) => state);
+	const words = useVocabularyStore((state) => state.words);
 
 	console.log('STORE: ', store);
+	console.log('WORDS: ', words);
 
 	const [mode, setMode] = useState<ExerciseModeType>(EXERCISE_MODE.isRandom);
 
@@ -73,6 +75,11 @@ export const WordDetails = () => {
 	];
 
 	useVocabularyListData(setWordsListResponse, vocabulariesId);
+
+	/* useEffect(() => {
+		const wordsIds = words.map((item) => item.id);
+		setWordConfig('exerciseListIds', wordsIds);
+	}, []); */
 
 	useEffect(() => {
 		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);

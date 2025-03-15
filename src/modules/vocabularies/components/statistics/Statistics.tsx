@@ -13,6 +13,7 @@ import type { LatestTest, ResolvedRandomTest } from '@/store/progress/useProgres
 import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
 import { ScreenSizeContext } from '@/context/ScreenSizeContext';
 import styles from './statistics.module.css';
+import { PaginationControls } from '@/ui-components/PaginationControls/PaginationControls';
 
 type TotalRandomType = {
 	resolved: number;
@@ -45,9 +46,15 @@ export const Statistics = ({
 	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
 	const { vocabulariesId = '' } = useParams();
 
+	console.log('//EXAM MODE PROGRESS: ', examModeProgress.errorProgress);
+
+	const setWordConfig = useVocabularyStore((store) => store.setWordConfig);
+
 	const { isMobile, isLaptop, isDesktop } = useContext(ScreenSizeContext);
 
 	const [showMore, setShowMore] = useState(false);
+
+	const moreInfo = showMore || isDesktop || isLaptop;
 
 	useEffect(() => {
 		const countRandom = countRandomMode(words.length, progressStore);
@@ -55,6 +62,7 @@ export const Statistics = ({
 	}, [words, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
 
 	const onClick = (id: string) => {
+		setWordConfig('resolvedExerciseIds', examModeProgress.successProgress);
 		setCollectionsExerciseConfig(EXERCISE_CONFIG.MODE, EXERCISE_MODE.isExam);
 		navigate(`/vocabularies/${collectionsId}/word/${id}`);
 	};
@@ -75,6 +83,12 @@ export const Statistics = ({
 	);
 
 	const totalProgress = calculateTotalProgress(percentage, totalRandom);
+
+	const [mistakePaginaton, setMistakePagination] = useState<string[]>([]);
+	const [currentQuestions, setCurrentQuestions] = useState<string[]>([]);
+	const [currentIndex, setCurrentIndex] = useState(0);
+
+	console.log('//MISTAKE PAGINATION: ', mistakePaginaton);
 
 	const countRandomMode = (
 		countWords: number,
@@ -105,6 +119,37 @@ export const Statistics = ({
 		setShowMore(!showMore);
 	};
 
+	const makeIdsPagination = (ids: string[]) => {
+		let firstElSlice = 0;
+		let secondElSlice = 4;
+		const countOfSlicing = Math.ceil(ids.length / 4);
+		const result = [];
+		for (let i = 0; i < countOfSlicing; i++) {
+			const firstFour = ids.slice(firstElSlice, secondElSlice);
+			result.push(JSON.stringify(firstFour));
+			firstElSlice += 4;
+			secondElSlice += 4;
+		}
+
+		return result;
+	};
+
+	const onNavigate = (id: string) => {
+		console.log('//ID NAVIGATE: ', id);
+		setCurrentQuestions(JSON.parse(id));
+		mistakePaginaton.forEach((item, index) => {
+			if (JSON.stringify(item) === JSON.stringify(id)) {
+				setCurrentIndex(index);
+			}
+		});
+	};
+
+	useEffect(() => {
+		const examMistakePagination = makeIdsPagination(examModeProgress.errorProgress);
+		setMistakePagination(examMistakePagination);
+		setCurrentQuestions((examMistakePagination[0] && JSON.parse(examMistakePagination[0])) || []);
+	}, [examModeProgress.errorProgress]);
+
 	return (
 		<Wrapper>
 			<div className={styles.progress}>
@@ -119,7 +164,7 @@ export const Statistics = ({
 					</Button>
 				</div>
 				<span className={styles.collectionTitle}>Collection Progress</span>
-				{latestTests?.count > 0 && (showMore || isDesktop || isLaptop) && (
+				{latestTests?.count > 0 && (
 					<div className={styles.uncorrectAnswersContainer}>
 						<span className={styles.modeTitle}>Last answered Question</span>
 						<div className={styles.uncorrectAnswers}>
@@ -130,43 +175,47 @@ export const Statistics = ({
 				<div className={styles.totalProgress}>
 					<StandardProgressBar progress={totalProgress} size="m" fullwidth />
 				</div>
-				{isMobile && (
-					<div className={styles.moreInfoContainer}>
-						<Button onClick={handleShowMoreInfo} type="primary" size="middle" block>
-							More Info
-						</Button>
-					</div>
-				)}
-				<div className={styles.statistics}>
-					{uncorrectAnswers.length > 0 && (showMore || isDesktop || isLaptop) && (
-						<div className={styles.uncorrectAnswersContainer}>
-							<span className={styles.modeTitle}>Exam uncorrect answers</span>
-							<div className={styles.uncorrectAnswers}>
-								{uncorrectAnswers.map((id) => (
-									<CircleButton key={id} onClick={() => onClick(id)}>
-										{id}
-									</CircleButton>
-								))}
+				{moreInfo && (
+					<div className={styles.statistics}>
+						{uncorrectAnswers.length > 0 && (
+							<div className={styles.uncorrectAnswersContainer}>
+								<span className={styles.modeTitle}>Exam Mistakes</span>
+								<div className={styles.uncorrectAnswers}>
+									{currentQuestions.map((id) => (
+										<CircleButton key={id} onClick={() => onClick(id)}>
+											{id}
+										</CircleButton>
+									))}
+								</div>
+								<PaginationControls
+									exerciseMode="infinitiveMode"
+									ids={mistakePaginaton}
+									currentIndex={currentIndex}
+									navigateTo={onNavigate}
+								/>
 							</div>
-						</div>
-					)}
-					{(showMore || isDesktop || isLaptop) && (
+						)}
 						<div className={styles.modeContainer}>
-							<span className={styles.modeTitle}>Exam correct</span>
-							<CircleProgressBar progress={percentage} />
+							<span className={styles.modeTitle}>Exam</span>
+							<CircleProgressBar resolved={percentage} />
 						</div>
-					)}
-					{(showMore || isDesktop || isLaptop) && (
 						<div className={styles.modeContainer}>
-							<span className={styles.modeTitle}>Random Resolved</span>
+							<span className={styles.modeTitle}>Random</span>
 							<CircleProgressBar
 								progress={totalRandom.progress}
 								resolved={totalRandom.resolved}
 								untouched={totalRandom.unTouch}
 							/>
 						</div>
-					)}
-				</div>
+					</div>
+				)}
+				{isMobile && (
+					<div className={styles.moreInfoContainer}>
+						<Button onClick={handleShowMoreInfo} type="default" size="middle" block>
+							{showMore ? 'Less Info' : 'More Info'}
+						</Button>
+					</div>
+				)}
 			</div>
 		</Wrapper>
 	);
