@@ -46,7 +46,7 @@ export const VocabularyCard = () => {
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
 	const setExamProgress = useProgressStore((store) => store.setExamProgress);
 	const setRandomProgress = useProgressStore((store) => store.setRandomProgress);
-	const setLatestTests = useProgressStore((store) => store.setLatestTests);
+	const setTakenTestCount = useProgressStore((store) => store.setTakenTestCount);
 
 	useEffect(() => {
 		if (vocabularyStore.collectionsExerciseConfig.exerciseMode === 'randomMode') {
@@ -91,7 +91,7 @@ export const VocabularyCard = () => {
 		}
 		await saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId);
 		setExerciseListProgress(id, isResolved);
-		setLatestTests();
+		setTakenTestCount();
 	};
 
 	const navigateTestPage = () => {

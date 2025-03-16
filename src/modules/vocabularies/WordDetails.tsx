@@ -18,7 +18,7 @@ export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
 	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
 	const uncorrectAnswers = useProgressStore((store) => store.examModeProgress.errorProgress);
-	const latestTests = useProgressStore((state) => state.latestTests) || [];
+	const takenTestCount = useProgressStore((state) => state.takenTestCount) || [];
 	const exerciseMode = useVocabularyStore((state) => state.collectionsExerciseConfig.exerciseMode);
 	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
 	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
@@ -76,7 +76,7 @@ export const WordDetails = () => {
 	}, [exerciseMode]);
 
 	useIndexedDB(
-		(exam, random, latestTests) => getProgressFromIndexedDB(exam, random, latestTests),
+		(exam, random, takenTestCount) => getProgressFromIndexedDB(exam, random, takenTestCount),
 		vocabulariesId,
 	);
 
@@ -112,7 +112,7 @@ export const WordDetails = () => {
 				<Statistics
 					collectionsId={vocabulariesId || ''}
 					uncorrectAnswers={uncorrectAnswers}
-					latestTests={latestTests}
+					takenTestCount={takenTestCount}
 				/>
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>

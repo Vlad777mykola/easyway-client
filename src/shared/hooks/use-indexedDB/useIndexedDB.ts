@@ -4,7 +4,7 @@ import {
 	type ExamModeProgressType,
 	type RandomTest,
 	type ResolvedRandomTest,
-	type LatestTest,
+	type TakenTestCount,
 } from '@/store/progress';
 
 const DATA_FIELD = 'vocabulary';
@@ -13,7 +13,7 @@ export const useIndexedDB = (
 	func: (
 		examModeProgress: ExamModeProgressType,
 		randomModeProgress: { progress: RandomTest[]; resolved: ResolvedRandomTest[] },
-		latestTets: LatestTest,
+		takenTestCount: TakenTestCount,
 	) => void,
 	collectionId: string,
 ) => {
@@ -21,7 +21,7 @@ export const useIndexedDB = (
 		(async () => {
 			try {
 				const loadedData = await loadState(`${collectionId}_vocabulary`);
-				await updateLastTest(`${collectionId}_${DATA_FIELD}`, `${collectionId}_latestTests`, {
+				await updateLastTest(`${collectionId}_${DATA_FIELD}`, `${collectionId}_takenTestCount`, {
 					count: 0,
 					timestamp: 0,
 				});
@@ -34,7 +34,7 @@ export const useIndexedDB = (
 						progress: [],
 						resolved: [],
 					},
-					loadedData?.[`${collectionId}_latestTests`] || { count: 0, timestamp: 0 },
+					loadedData?.[`${collectionId}_takenTestCount`] || { count: 0, timestamp: 0 },
 				);
 			} catch (error) {
 				console.error(error);

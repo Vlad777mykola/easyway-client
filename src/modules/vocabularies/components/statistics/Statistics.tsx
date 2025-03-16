@@ -6,11 +6,12 @@ import { CircleButton } from '@/ui-components/CircleButton';
 import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
 import { PaginationControls } from '@/ui-components/PaginationControls/PaginationControls';
+import { CountUp } from '@/ui-components/CountUp';
 import { deleteVocabularyCollectionProgress } from '../../utils/deleteVocabularyProgress';
 import { EXERCISE_MODE } from '@/store/exercise-progress';
 import { useVocabularyStore } from '@/store/vocabulary-collection';
 import { useProgressStore, RandomTest } from '@/store/progress';
-import type { LatestTest, ResolvedRandomTest } from '@/store/progress/useProgressStore';
+import type { TakenTestCount, ResolvedRandomTest } from '@/store/progress/useProgressStore';
 import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
 import { ScreenSizeContext } from '@/context/ScreenSizeContext';
 import { classes } from '@/shared/utils/classes';
@@ -23,15 +24,16 @@ type TotalRandomType = {
 };
 
 const COMPLETED_TEST = 100;
+const COUNT_UP_DURATION = 1500;
 
 export const Statistics = ({
 	collectionsId,
 	uncorrectAnswers = [],
-	latestTests = { count: 0, timestamp: 0 },
+	takenTestCount = { count: 0, timestamp: 0 },
 }: {
 	collectionsId: string;
 	uncorrectAnswers?: string[];
-	latestTests?: LatestTest;
+	takenTestCount?: TakenTestCount;
 }) => {
 	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
 	const clearAll = useProgressStore((store) => store.clearAll);
@@ -146,11 +148,13 @@ export const Statistics = ({
 					</Button>
 				</div>
 				<span className={styles.collectionTitle}>Collection Progress</span>
-				{latestTests?.count > 0 && (
+				{takenTestCount?.count > 0 && (
 					<div className={styles.uncorrectAnswersContainer}>
 						<span className={styles.modeTitle}>Last answered Question</span>
 						<div className={styles.uncorrectAnswers}>
-							<span className={styles.countLatestTest}>{latestTests?.count}</span>
+							<span className={styles.countLatestTest}>
+								<CountUp end={takenTestCount?.count} duration={COUNT_UP_DURATION} />
+							</span>
 						</div>
 					</div>
 				)}
