@@ -31,12 +31,6 @@ export const WordDetails = () => {
 	const navigate = useNavigate();
 	const getProgressFromIndexedDB = useProgressStore((state) => state.getProgressFromIndexedDB);
 
-	const store = useProgressStore((state) => state);
-	const words = useVocabularyStore((state) => state.words);
-
-	console.log('STORE: ', store);
-	console.log('WORDS: ', words);
-
 	const [mode, setMode] = useState<ExerciseModeType>(EXERCISE_MODE.isRandom);
 
 	const fieldsDataWord = [

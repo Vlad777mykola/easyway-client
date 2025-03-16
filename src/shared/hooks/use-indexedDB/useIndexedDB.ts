@@ -20,7 +20,6 @@ export const useIndexedDB = (
 	useEffect(() => {
 		(async () => {
 			try {
-				console.log('/// LOAD VOCABULARIES ID: ', collectionId);
 				const loadedData = await loadState(`${collectionId}_vocabulary`);
 				console.log('LOADED DATA: ', loadedData);
 				await updateLastTest(`${collectionId}_${DATA_FIELD}`, `${collectionId}_latestTests`, {

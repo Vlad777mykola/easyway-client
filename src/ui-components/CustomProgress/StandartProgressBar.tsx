@@ -47,7 +47,11 @@ export const StandardProgressBar = ({
 				})}
 				style={style}
 			>
-				<CountUp end={progress} duration={COUNT_UP_DURATION} />%
+				{progress > 0 && (
+					<>
+						<CountUp end={progress} duration={COUNT_UP_DURATION} />%
+					</>
+				)}
 			</div>
 		</div>
 	);

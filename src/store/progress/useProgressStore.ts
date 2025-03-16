@@ -70,7 +70,9 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 				...state,
 				examModeProgress: {
 					successProgress: isResolved ? successProgress.concat(id) : successProgress,
-					errorProgress: !isResolved ? errorProgress.concat(id) : errorProgress,
+					errorProgress: !isResolved
+						? errorProgress.concat(id)
+						: errorProgress.filter((item) => item !== id),
 				},
 			};
 		});

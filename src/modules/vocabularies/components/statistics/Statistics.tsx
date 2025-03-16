@@ -14,6 +14,7 @@ import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
 import { ScreenSizeContext } from '@/context/ScreenSizeContext';
 import styles from './statistics.module.css';
 import { PaginationControls } from '@/ui-components/PaginationControls/PaginationControls';
+import { classes } from '@/shared/utils/classes';
 
 type TotalRandomType = {
 	resolved: number;
@@ -45,8 +46,6 @@ export const Statistics = ({
 	const examModeProgress = useProgressStore((state) => state.examModeProgress);
 	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
 	const { vocabulariesId = '' } = useParams();
-
-	console.log('//EXAM MODE PROGRESS: ', examModeProgress.errorProgress);
 
 	const setWordConfig = useVocabularyStore((store) => store.setWordConfig);
 
@@ -88,8 +87,6 @@ export const Statistics = ({
 	const [currentQuestions, setCurrentQuestions] = useState<string[]>([]);
 	const [currentIndex, setCurrentIndex] = useState(0);
 
-	console.log('//MISTAKE PAGINATION: ', mistakePaginaton);
-
 	const countRandomMode = (
 		countWords: number,
 		progressStore: {
@@ -120,22 +117,13 @@ export const Statistics = ({
 	};
 
 	const makeIdsPagination = (ids: string[]) => {
-		let firstElSlice = 0;
-		let secondElSlice = 4;
-		const countOfSlicing = Math.ceil(ids.length / 4);
-		const result = [];
-		for (let i = 0; i < countOfSlicing; i++) {
-			const firstFour = ids.slice(firstElSlice, secondElSlice);
-			result.push(JSON.stringify(firstFour));
-			firstElSlice += 4;
-			secondElSlice += 4;
-		}
-
-		return result;
+		const maxPageItems = 4;
+		return Array.from({ length: Math.ceil(ids.length / maxPageItems) }, (_, i) =>
+			JSON.stringify(ids.slice(i * maxPageItems, (i + 1) * maxPageItems)),
+		);
 	};
 
 	const onNavigate = (id: string) => {
-		console.log('//ID NAVIGATE: ', id);
 		setCurrentQuestions(JSON.parse(id));
 		mistakePaginaton.forEach((item, index) => {
 			if (JSON.stringify(item) === JSON.stringify(id)) {
@@ -201,11 +189,27 @@ export const Statistics = ({
 						</div>
 						<div className={styles.modeContainer}>
 							<span className={styles.modeTitle}>Random</span>
-							<CircleProgressBar
-								progress={totalRandom.progress}
-								resolved={totalRandom.resolved}
-								untouched={totalRandom.unTouch}
-							/>
+							<div className={styles.randomProgress}>
+								<CircleProgressBar
+									progress={totalRandom.progress}
+									resolved={totalRandom.resolved}
+									untouched={totalRandom.unTouch}
+								/>
+								<div className={styles.explanation}>
+									<div className={styles.markersExplanation}>
+										<div className={classes(styles.marker, styles.success)} />
+										<span className={styles.explanation}>- success</span>
+									</div>
+									<div className={styles.markersExplanation}>
+										<div className={classes(styles.marker, styles.error)} />
+										<span className={styles.explanation}>- untouch</span>
+									</div>
+									<div className={styles.markersExplanation}>
+										<div className={classes(styles.marker, styles.primary)} />
+										<span className={styles.explanation}>- progress</span>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				)}

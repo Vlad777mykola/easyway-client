@@ -33,6 +33,40 @@
 	gap: 20px;
 }
 
+.randomProgress {
+	display: flex;
+}
+
+.explanation {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-left: 5px;
+	gap: 5px;
+}
+
+.markersExplanation {
+	display: flex;
+	align-items: center;
+}
+
+.marker {
+	width: 16px;
+	height: 16px;
+}
+
+.success {
+	background: var(--color-success);
+}
+
+.error {
+	background: var(--color-error);
+}
+
+.primary {
+	background: var(--color-primary);
+}
+
 .modeTitle {
 	font-size: 18px;
 	font-weight: bold;

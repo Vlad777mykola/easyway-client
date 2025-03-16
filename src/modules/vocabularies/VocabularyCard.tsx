@@ -43,8 +43,10 @@ export const VocabularyCard = () => {
 	const setLatestTests = useProgressStore((store) => store.setLatestTests);
 
 	const vocabulary = useVocabularyStore((store) => store);
+	const progress = useProgressStore((store) => store);
 
 	console.log('VOCABULARY: ', vocabulary);
+	console.log('//PROGRESS: ', progress);
 
 	console.log('EXERCISE LIST ID: ', exerciseListId);
 
