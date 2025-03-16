@@ -1,0 +1,1 @@
+export { useCollectionsData } from './useCollectionsData';

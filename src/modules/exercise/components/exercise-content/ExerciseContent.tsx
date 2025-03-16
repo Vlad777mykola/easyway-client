@@ -1,12 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
-import { ExerciseType, useExerciseProgressStore } from '@/store/exercise-progress';
-import { Typography } from '@/ui-components/Typography';
 import { classes } from '@/shared/utils/classes';
+import { ExerciseType, useExerciseProgressStore } from '@/store/exercise-progress';
+import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 
 import styles from './exerciseContent.module.css';
-import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 
 export const ExerciseUI = ({
 	task,
@@ -23,7 +22,7 @@ export const ExerciseUI = ({
 		variants,
 		exercise,
 		isComplete,
-		explanation,
+		// explanation,
 		currentWord,
 		exerciseAnswer,
 		selectedAnswer,
@@ -67,9 +66,9 @@ export const ExerciseUI = ({
 
 	return (
 		<div className={styles.testContainer}>
-			<Typography type="secondary" className={styles.topic}>
+			{/* <Typography type="secondary" className={styles.topic}>
 				{explanation}
-			</Typography>
+			</Typography> */}
 			<div className={styles.exercise}>{exercise}</div>
 			<div className={styles.correctAnswerContainer}>
 				<div

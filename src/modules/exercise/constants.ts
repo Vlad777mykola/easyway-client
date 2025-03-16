@@ -1,4 +1,4 @@
-import type { Variants } from './services/showVariants';
+import type { Variants } from '../../shared/services/get-variants/showVariants';
 
 export const EXERCISE_CONFIG_LABELS = {
 	MODE: 'Exercise Mode',

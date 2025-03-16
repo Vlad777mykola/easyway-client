@@ -1,5 +1,5 @@
 import { Pagination } from '@/shared/components/pagination-by-mode/Pagination';
-import { EXERCISE_MODE, useExerciseProgressStore } from '@/store/exercise-progress';
+import { EXERCISE_MODE, useDictionaryStore } from '@/store/dictionary';
 
 export const PaginationExercise = ({
 	taskId,
@@ -10,15 +10,15 @@ export const PaginationExercise = ({
 	isAutoNavigate: boolean;
 	onNavigate: (id: string) => void;
 }) => {
-	const exerciseListId = useExerciseProgressStore.use.exerciseListIds();
-	const getExerciseProgressById = useExerciseProgressStore.use.getExerciseProgressById();
-	const exerciseMode = useExerciseProgressStore.use.collectionsExerciseConfig().exerciseMode;
+	const exerciseListId = useDictionaryStore.use.exerciseListIds();
+	const getExerciseProgressById = useDictionaryStore.use.getExerciseProgressById();
+	const exerciseMode = useDictionaryStore.use.collectionsExerciseConfig().exerciseMode;
 	const exerciseCorrectResponse =
-		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseCorrectResponse;
+		useDictionaryStore.use.collectionsExerciseConfig().exerciseCorrectResponse;
 
 	return (
 		<>
-			{exerciseMode === EXERCISE_MODE.isExam && (
+			{exerciseMode === EXERCISE_MODE.Exam && (
 				<Pagination
 					ids={exerciseListId}
 					exerciseMode={exerciseMode}
@@ -27,7 +27,7 @@ export const PaginationExercise = ({
 					navigateTo={(id: string) => onNavigate(id)}
 				/>
 			)}
-			{exerciseMode === EXERCISE_MODE.isInfinitive && (
+			{exerciseMode === EXERCISE_MODE.Infinitive && (
 				<Pagination
 					ids={exerciseListId}
 					exerciseMode={exerciseMode}
@@ -36,7 +36,7 @@ export const PaginationExercise = ({
 					navigateTo={(id: string) => onNavigate(id)}
 				/>
 			)}
-			{exerciseMode === EXERCISE_MODE.isRandom && (
+			{exerciseMode === EXERCISE_MODE.Random && (
 				<Pagination
 					ids={exerciseListId}
 					exerciseMode={exerciseMode}

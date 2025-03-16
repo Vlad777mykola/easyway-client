@@ -1,30 +1,29 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Item } from '../item/Item';
-import { getAllCollections } from '../../services/getAllCollections';
 import { useCollectionFilter } from '@/store/collection-filter';
+
+import { Item } from '../item/Item';
 import styles from './listCollections.module.css';
+import { useCollectionsData } from '@/shared/services/fetch-collections';
+import { CollectionsType } from '@/shared/constants';
 
-export const ListCollections = (): ReactNode => {
-	const filteredCollectionsData = useCollectionFilter((store) => store.filteredCollectionsData);
-	const setCollections = useCollectionFilter((store) => store.setCollections);
+export const ListCollections = ({ collectionId }: { collectionId: CollectionsType }): ReactNode => {
 	const navigate = useNavigate();
+	const setCollections = useCollectionFilter.use.setCollections();
+	const collectionsData = useCollectionFilter.use.collectionsData();
+	const filteredCollectionsData = useCollectionFilter.use.filteredCollectionsData();
+	const data = filteredCollectionsData.length > 0 ? filteredCollectionsData : collectionsData;
 
-	useEffect(() => {
-		const data = getAllCollections();
-		if (data.length > 0) {
-			setCollections(data);
-		}
-	}, []);
+	useCollectionsData(setCollections, collectionId);
 
 	const onClick = (id: string) => {
-		navigate(`/collections/${id}`);
+		navigate(`/${collectionId}/${id}`);
 	};
 
 	return (
 		<div className={styles.listContainer}>
-			{filteredCollectionsData.map((i) => (
-				<Item key={i.id} data={i} onClick={() => onClick(i.id)} />
+			{data.map((i: { title: string; id: string; category: string[]; topic: string[] }) => (
+				<Item data={i} onClick={() => onClick(i.id)} />
 			))}
 		</div>
 	);

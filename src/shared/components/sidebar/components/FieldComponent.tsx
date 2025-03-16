@@ -37,7 +37,7 @@ export const FieldComponent = ({
 			<div key={item.keyValue} className={styles.fieldContainer}>
 				<Select
 					className={styles.select}
-					placeholder={item.label}
+					label={item.label}
 					value={selectValue}
 					mode={
 						item.componentType === SIDE_BAR_COMPONENT_TYPE.MULTIPLE
@@ -45,7 +45,10 @@ export const FieldComponent = ({
 							: undefined
 					}
 					onChange={(value) => change(item.keyValue, value)}
-					options={item.options.map((option) => ({ value: option, label: option }))}
+					options={item.options.map((option) => ({
+						value: option,
+						label: option,
+					}))}
 					disabled={item.disabled}
 				/>
 			</div>

@@ -1,7 +1,7 @@
-import { DictionaryCollections } from '@/modules/dictionary-collection';
+import { Collections } from '@/modules/collections';
 
 const DictionaryPage = () => {
-	return <DictionaryCollections />;
+	return <Collections collectionId="dictionaries" />;
 };
 
 export default DictionaryPage;

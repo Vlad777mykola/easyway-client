@@ -44,9 +44,9 @@
 }
 
 @media (min-width: 320px) {
-	.topic {
+	/* .topic {
 		font-size: 180%;
-	}
+	} */
 
 	.exercise {
 		font-size: 24px;
@@ -64,9 +64,9 @@
 }
 
 @media (min-width: 769px) {
-	.topic {
+	/* .topic {
 		font-size: 32px;
-	}
+	} */
 
 	.words {
 		width: 80%;
