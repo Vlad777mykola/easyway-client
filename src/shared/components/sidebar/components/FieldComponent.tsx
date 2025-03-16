@@ -45,10 +45,16 @@ export const FieldComponent = ({
 							: undefined
 					}
 					onChange={(value) => change(item.keyValue, value)}
-					options={item.options.map((option) => ({
-						value: option,
-						label: option,
-					}))}
+					options={item.options.map((option) => {
+						if (typeof option === 'object' && option?.value) {
+							return { value: option.value, label: option?.label || option.value };
+						}
+						if (typeof option === 'string' || typeof option === 'number') {
+							return { value: option, label: option };
+						}
+						console.log(option);
+						return { value: 'value', label: 'label' };
+					})}
 					disabled={item.disabled}
 				/>
 			</div>
