@@ -6,7 +6,6 @@ export const deleteVocabularyCollectionProgress = async (
 	func: () => void,
 	collectionId: string,
 ) => {
-	console.log(`CLEAR 1_VOCABULARY: ${collectionId}_${DATA_FIELD}`);
 	await deleteState(`${collectionId}_${DATA_FIELD}`);
 	func();
 };

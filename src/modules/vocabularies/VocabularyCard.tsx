@@ -24,42 +24,29 @@ export const VocabularyCard = () => {
 
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
+	const [testIsDone, setTestIsDone] = useState<boolean>();
 
 	const exerciseListId = useVocabularyStore.use.exerciseListIds();
 	const isSelectingFormate =
 		useVocabularyStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
 	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
+	const exerciseCorrectResponse = useVocabularyStore(
+		(store) => store.collectionsExerciseConfig.exerciseCorrectResponse,
+	);
+	const store = useProgressStore((store) => store);
+	const vocabularyStore = useVocabularyStore((store) => store);
+	const examIsDone = store.examModeProgress.successProgress.length === vocabularyStore.words.length;
+	const randomIsDone =
+		store.randomModeProgress.resolved.every((item) => item.isDone === true) &&
+		store.randomModeProgress.resolved.length === vocabularyStore.words.length;
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
 	const setExamProgress = useProgressStore((store) => store.setExamProgress);
 	const setRandomProgress = useProgressStore((store) => store.setRandomProgress);
-
 	const setLatestTests = useProgressStore((store) => store.setLatestTests);
-
-	const vocabulary = useVocabularyStore((store) => store);
-	const progress = useProgressStore((store) => store);
-
-	console.log('VOCABULARY: ', vocabulary);
-	console.log('//PROGRESS: ', progress);
-
-	console.log('EXERCISE LIST ID: ', exerciseListId);
-
-	const exerciseCorrectResponse = useVocabularyStore(
-		(store) => store.collectionsExerciseConfig.exerciseCorrectResponse,
-	);
-
-	const store = useProgressStore((store) => store);
-	const vocabularyStore = useVocabularyStore((store) => store);
-
-	const [testIsDone, setTestIsDone] = useState<boolean>();
-
-	const examIsDone = store.examModeProgress.successProgress.length === vocabularyStore.words.length;
-	const randomIsDone =
-		store.randomModeProgress.resolved.every((item) => item.isDone === true) &&
-		store.randomModeProgress.resolved.length === vocabularyStore.words.length;
 
 	useEffect(() => {
 		if (vocabularyStore.collectionsExerciseConfig.exerciseMode === 'randomMode') {

@@ -2,31 +2,26 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllVocabularies } from '../../services/getAllVocabularies';
 import { useVocabularyStore, VocabularyListType } from '@/store/vocabulary-collection';
-import { Item } from '../../../collections/components/item/Item';
+import { Item } from '@/modules/vocabularies/components/item/Item';
 import styles from './vocabularyCollections.module.css';
 
 export const VocabularyCollections = () => {
-	const store = useVocabularyStore((store) => store);
 	const filteredCollectionsVocabulary = useVocabularyStore(
 		(store) => store.filteredCollectionsVocabulary,
 	);
 	const setVocabularyCollections = useVocabularyStore((store) => store.setVocabularyCollections);
 	const navigate = useNavigate();
-	console.log('STORE: ', store);
 
 	useEffect(() => {
 		const data = getAllVocabularies();
 		if (data.length > 0) {
 			setVocabularyCollections(data as VocabularyListType[]);
 		}
-		console.log('DATA: ', data);
 	}, []);
 
 	const onClick = (id: string) => {
 		navigate(`/vocabularies/${id}`);
 	};
-
-	console.log('///filteredCollectionsVocabulary: ', filteredCollectionsVocabulary);
 
 	return (
 		<div className={styles.listContainer}>

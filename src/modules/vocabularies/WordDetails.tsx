@@ -1,6 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useProgressStore } from '@/store/progress';
+import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
+import { ExerciseModeType } from '@/store/exercise-progress/useExerciseProgressStore';
 import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
@@ -9,10 +11,8 @@ import { EXERCISE_MODE, useVocabularyStore, WORD_CONFIG } from '@/store/vocabula
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { EXERCISE_CONFIG_LABELS } from './constants';
 import { EXERCISE_CONFIG } from '../exercise/constants';
-import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
 import styles from './wordDetails.module.css';
-import { ExerciseModeType } from '@/store/exercise-progress/useExerciseProgressStore';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
@@ -69,11 +69,6 @@ export const WordDetails = () => {
 	];
 
 	useVocabularyListData(setWordsListResponse, vocabulariesId);
-
-	/* useEffect(() => {
-		const wordsIds = words.map((item) => item.id);
-		setWordConfig('exerciseListIds', wordsIds);
-	}, []); */
 
 	useEffect(() => {
 		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);

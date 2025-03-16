@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { CountUp } from '@ui-components/CountUp';
 import { classes } from '@/shared/utils/classes';
-import { Size, SizeType, VariantType } from '../parameters/parameters';
+import { Size, SizeType, VariantType } from '@/shared/constants/parameters';
 import styles from './circleProgressBar.module.css';
 
 const SIZE_TYPES = {

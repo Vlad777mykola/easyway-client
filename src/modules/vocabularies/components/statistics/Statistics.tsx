@@ -5,6 +5,7 @@ import { Button } from '@/ui-components/Button';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
+import { PaginationControls } from '@/ui-components/PaginationControls/PaginationControls';
 import { deleteVocabularyCollectionProgress } from '../../utils/deleteVocabularyProgress';
 import { EXERCISE_MODE } from '@/store/exercise-progress';
 import { useVocabularyStore } from '@/store/vocabulary-collection';
@@ -12,9 +13,8 @@ import { useProgressStore, RandomTest } from '@/store/progress';
 import type { LatestTest, ResolvedRandomTest } from '@/store/progress/useProgressStore';
 import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
 import { ScreenSizeContext } from '@/context/ScreenSizeContext';
-import styles from './statistics.module.css';
-import { PaginationControls } from '@/ui-components/PaginationControls/PaginationControls';
 import { classes } from '@/shared/utils/classes';
+import styles from './statistics.module.css';
 
 type TotalRandomType = {
 	resolved: number;
@@ -46,19 +46,24 @@ export const Statistics = ({
 	const examModeProgress = useProgressStore((state) => state.examModeProgress);
 	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
 	const { vocabulariesId = '' } = useParams();
-
-	const setWordConfig = useVocabularyStore((store) => store.setWordConfig);
-
 	const { isMobile, isLaptop, isDesktop } = useContext(ScreenSizeContext);
-
+	const setWordConfig = useVocabularyStore((store) => store.setWordConfig);
 	const [showMore, setShowMore] = useState(false);
-
 	const moreInfo = showMore || isDesktop || isLaptop;
+	const [mistakePaginaton, setMistakePagination] = useState<string[]>([]);
+	const [currentQuestions, setCurrentQuestions] = useState<string[]>([]);
+	const [currentIndex, setCurrentIndex] = useState(0);
 
 	useEffect(() => {
 		const countRandom = countRandomMode(words.length, progressStore);
 		setTotalRandom(countRandom);
 	}, [words, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
+
+	useEffect(() => {
+		const examMistakePagination = makeIdsPagination(examModeProgress.errorProgress);
+		setMistakePagination(examMistakePagination);
+		setCurrentQuestions((examMistakePagination[0] && JSON.parse(examMistakePagination[0])) || []);
+	}, [examModeProgress.errorProgress]);
 
 	const onClick = (id: string) => {
 		setWordConfig('resolvedExerciseIds', examModeProgress.successProgress);
@@ -80,12 +85,7 @@ export const Statistics = ({
 		examModeProgress.successProgress.length,
 		words.length,
 	);
-
 	const totalProgress = calculateTotalProgress(percentage, totalRandom);
-
-	const [mistakePaginaton, setMistakePagination] = useState<string[]>([]);
-	const [currentQuestions, setCurrentQuestions] = useState<string[]>([]);
-	const [currentIndex, setCurrentIndex] = useState(0);
 
 	const countRandomMode = (
 		countWords: number,
@@ -131,12 +131,6 @@ export const Statistics = ({
 			}
 		});
 	};
-
-	useEffect(() => {
-		const examMistakePagination = makeIdsPagination(examModeProgress.errorProgress);
-		setMistakePagination(examMistakePagination);
-		setCurrentQuestions((examMistakePagination[0] && JSON.parse(examMistakePagination[0])) || []);
-	}, [examModeProgress.errorProgress]);
 
 	return (
 		<Wrapper>

@@ -21,7 +21,6 @@ export const useIndexedDB = (
 		(async () => {
 			try {
 				const loadedData = await loadState(`${collectionId}_vocabulary`);
-				console.log('LOADED DATA: ', loadedData);
 				await updateLastTest(`${collectionId}_${DATA_FIELD}`, `${collectionId}_latestTests`, {
 					count: 0,
 					timestamp: 0,

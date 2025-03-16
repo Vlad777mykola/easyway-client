@@ -1,8 +1,8 @@
 /* eslint-disable css-modules/no-unused-class */
 import { useEffect, useState } from 'react';
 import { CountUp } from '../CountUp';
-import { Size, Variant } from '../parameters/parameters';
-import type { SizeType, VariantType } from '../parameters/parameters';
+import { Size, Variant } from '@/shared/constants/parameters';
+import type { SizeType, VariantType } from '@/shared/constants/parameters';
 import { classes } from '@/shared/utils/classes';
 import styles from './standartProgressBar.module.css';
 
