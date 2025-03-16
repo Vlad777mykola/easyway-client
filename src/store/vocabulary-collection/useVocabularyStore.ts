@@ -93,7 +93,7 @@ export type Word = {
 export type VocabularyListType = {
 	id: string;
 	title: string;
-	topic: VocabularyTopicType;
+	topic: VocabularyTopicType[];
 	category: string[];
 	level: LevelBasedType[];
 };
