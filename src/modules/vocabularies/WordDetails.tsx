@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useProgressStore } from '@/store/progress';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 import { ExerciseModeType } from '@/store/exercise-progress/useExerciseProgressStore';
 import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
@@ -11,7 +10,6 @@ import { EXERCISE_MODE, useVocabularyStore, WORD_CONFIG } from '@/store/vocabula
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { EXERCISE_CONFIG_LABELS } from './constants';
 import { EXERCISE_CONFIG } from '../exercise/constants';
-import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
 import styles from './wordDetails.module.css';
 
 export const WordDetails = () => {
@@ -28,7 +26,6 @@ export const WordDetails = () => {
 	const getExerciseConfig = useVocabularyStore.use.getExerciseConfig();
 
 	const navigate = useNavigate();
-	const getProgressFromIndexedDB = useProgressStore((state) => state.getProgressFromIndexedDB);
 
 	const [mode, setMode] = useState<ExerciseModeType>(EXERCISE_MODE.isRandom);
 
@@ -73,13 +70,6 @@ export const WordDetails = () => {
 		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
 		setMode(exerciseConfig as ExerciseModeType);
 	}, [exerciseMode]);
-
-	// exam random takenTestCount must be inside hook
-	// must be inside statistics
-	useIndexedDB(
-		(exam, random, takenTestCount) => getProgressFromIndexedDB(exam, random, takenTestCount),
-		vocabulariesId,
-	);
 
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setWordConfig(key, value);

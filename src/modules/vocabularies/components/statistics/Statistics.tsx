@@ -1,52 +1,39 @@
-import { useState, useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Button } from '@/ui-components/Button';
-import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
 import { CountUp } from '@/ui-components/CountUp';
+import { AddInfo } from './components/add-info/AddInfo';
 import { deleteVocabularyCollectionProgress } from '../../utils/deleteVocabularyProgress';
 import { useVocabularyStore } from '@/store/vocabulary-collection';
 import { useProgressStore } from '@/store/progress';
-import { ScreenSizeContext } from '@/context/ScreenSizeContext';
-import { classes } from '@/shared/utils/classes';
-import { ErrorProgressPagination } from './components/error-progress-pagination/ErrorProgressPagination';
+import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
+import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
+import { saveVocabularyProgress } from '../../utils/saveVocabularyProgress';
 import styles from './statistics.module.css';
 
 const COUNT_UP_DURATION = 1500;
 
 export const Statistics = ({ countWords }: { countWords: number }) => {
-	const [showMore, setShowMore] = useState(false);
-
 	const { vocabulariesId = '' } = useParams();
-
-	const { isMobile, isLaptop, isDesktop } = useContext(ScreenSizeContext);
-
-	const clearAll = useProgressStore((store) => store.clearAll);
 	const progressStore = useProgressStore((store) => store.randomModeProgress);
 	const takenTestCount = useProgressStore((state) => state.takenTestCount) || [];
-	const setProgressPercentage = useProgressStore((store) => store.setProgressPercentage);
-
 	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
-
-	const randomPercentage = useProgressStore((store) => store.progressPercentage.random);
-	const examPercentage = useProgressStore((store) => store.progressPercentage.exam);
 	const totalPercentage = useProgressStore((store) => store.progressPercentage.total);
+	const getProgressFromIndexedDB = useProgressStore((state) => state.getProgressFromIndexedDB);
+	const setProgressPercentage = useProgressStore((store) => store.setProgressPercentage);
+	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
+	const clearAll = useProgressStore((store) => store.clearAll);
 
-	const moreInfo = showMore || isDesktop || isLaptop;
-
-	const progress = useProgressStore((store) => store);
-	console.log('PROGRESS: ', progress);
+	useBeforeunload(() => saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId));
 
 	useEffect(() => {
 		setProgressPercentage(countWords);
 	}, [countWords, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
 
-	const handleShowMoreInfo = () => {
-		setShowMore(!showMore);
-	};
+	useIndexedDB(getProgressFromIndexedDB, vocabulariesId);
 
-	// divide ui in two components
 	return (
 		<Wrapper>
 			<div className={styles.progress}>
@@ -74,46 +61,7 @@ export const Statistics = ({ countWords }: { countWords: number }) => {
 				<div className={styles.totalProgress}>
 					<StandardProgressBar progress={totalPercentage} size="m" fullwidth />
 				</div>
-				{moreInfo && (
-					<div className={styles.statistics}>
-						<ErrorProgressPagination />
-						<div className={styles.modeContainer}>
-							<span className={styles.modeTitle}>Exam</span>
-							<CircleProgressBar resolved={examPercentage} />
-						</div>
-						<div className={styles.modeContainer}>
-							<span className={styles.modeTitle}>Random</span>
-							<div className={styles.randomProgress}>
-								<CircleProgressBar
-									progress={randomPercentage.progress}
-									resolved={randomPercentage.resolved}
-									untouched={randomPercentage.unTouch}
-								/>
-								<div className={styles.explanation}>
-									<div className={styles.markersExplanation}>
-										<div className={classes(styles.marker, styles.success)} />
-										<span className={styles.explanation}>- success</span>
-									</div>
-									<div className={styles.markersExplanation}>
-										<div className={classes(styles.marker, styles.error)} />
-										<span className={styles.explanation}>- untouch</span>
-									</div>
-									<div className={styles.markersExplanation}>
-										<div className={classes(styles.marker, styles.primary)} />
-										<span className={styles.explanation}>- progress</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				)}
-				{isMobile && (
-					<div className={styles.moreInfoContainer}>
-						<Button onClick={handleShowMoreInfo} type="default" size="middle" block>
-							{showMore ? 'Less Info' : 'More Info'}
-						</Button>
-					</div>
-				)}
+				<AddInfo />
 			</div>
 		</Wrapper>
 	);

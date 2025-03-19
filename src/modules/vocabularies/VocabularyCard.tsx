@@ -17,6 +17,7 @@ import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import { PaginationExercise } from './components/pagination/Pagination';
 import { saveVocabularyProgress } from './utils/saveVocabularyProgress';
 import styles from './vocabularyCard.module.css';
+import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
@@ -50,6 +51,8 @@ export const VocabularyCard = () => {
 	const setRandomProgress = useProgressStore((store) => store.setRandomProgress);
 	const setTakenTestCount = useProgressStore((store) => store.setTakenTestCount);
 
+	useBeforeunload(() => saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId));
+
 	useEffect(() => {
 		if (vocabularyStore.collectionsExerciseConfig.exerciseMode === 'randomMode') {
 			setTestIsDone(randomIsDone);
@@ -80,7 +83,6 @@ export const VocabularyCard = () => {
 		setIsAutoNavigate(false);
 
 		return () => {
-			// save and unmount only in statistic component and use useBeforeunload
 			saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId);
 		};
 	}, [wordId]);
@@ -92,8 +94,6 @@ export const VocabularyCard = () => {
 		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
 			setRandomProgress(id, isResolved, exerciseCorrectResponse);
 		}
-		// save only when unmount component
-		await saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId);
 		setExerciseListProgress(id, isResolved);
 		setTakenTestCount();
 	};
