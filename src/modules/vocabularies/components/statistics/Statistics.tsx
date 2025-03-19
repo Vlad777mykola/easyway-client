@@ -1,139 +1,52 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Button } from '@/ui-components/Button';
-import { CircleButton } from '@/ui-components/CircleButton';
 import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
-import { PaginationControls } from '@/ui-components/PaginationControls/PaginationControls';
 import { CountUp } from '@/ui-components/CountUp';
 import { deleteVocabularyCollectionProgress } from '../../utils/deleteVocabularyProgress';
-import { EXERCISE_MODE } from '@/store/exercise-progress';
 import { useVocabularyStore } from '@/store/vocabulary-collection';
-import { useProgressStore, RandomTest } from '@/store/progress';
-import type { TakenTestCount, ResolvedRandomTest } from '@/store/progress/useProgressStore';
-import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
+import { useProgressStore } from '@/store/progress';
 import { ScreenSizeContext } from '@/context/ScreenSizeContext';
 import { classes } from '@/shared/utils/classes';
+import { ErrorProgressPagination } from './components/error-progress-pagination/ErrorProgressPagination';
 import styles from './statistics.module.css';
 
-type TotalRandomType = {
-	resolved: number;
-	progress: number;
-	unTouch: number;
-};
-
-const COMPLETED_TEST = 100;
 const COUNT_UP_DURATION = 1500;
 
-export const Statistics = ({
-	collectionsId,
-	uncorrectAnswers = [],
-	takenTestCount = { count: 0, timestamp: 0 },
-}: {
-	collectionsId: string;
-	uncorrectAnswers?: string[];
-	takenTestCount?: TakenTestCount;
-}) => {
-	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
-	const clearAll = useProgressStore((store) => store.clearAll);
-	const navigate = useNavigate();
-	const [totalRandom, setTotalRandom] = useState<TotalRandomType>({
-		resolved: 0,
-		progress: 0,
-		unTouch: 0,
-	});
-	const words = useVocabularyStore((store) => store.words);
-	const progressStore = useProgressStore((store) => store.randomModeProgress);
-	const examModeProgress = useProgressStore((state) => state.examModeProgress);
-	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
-	const { vocabulariesId = '' } = useParams();
-	const { isMobile, isLaptop, isDesktop } = useContext(ScreenSizeContext);
-	const setWordConfig = useVocabularyStore((store) => store.setWordConfig);
+export const Statistics = ({ countWords }: { countWords: number }) => {
 	const [showMore, setShowMore] = useState(false);
+
+	const { vocabulariesId = '' } = useParams();
+
+	const { isMobile, isLaptop, isDesktop } = useContext(ScreenSizeContext);
+
+	const clearAll = useProgressStore((store) => store.clearAll);
+	const progressStore = useProgressStore((store) => store.randomModeProgress);
+	const takenTestCount = useProgressStore((state) => state.takenTestCount) || [];
+	const setProgressPercentage = useProgressStore((store) => store.setProgressPercentage);
+
+	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
+
+	const randomPercentage = useProgressStore((store) => store.progressPercentage.random);
+	const examPercentage = useProgressStore((store) => store.progressPercentage.exam);
+	const totalPercentage = useProgressStore((store) => store.progressPercentage.total);
+
 	const moreInfo = showMore || isDesktop || isLaptop;
-	const [mistakePaginaton, setMistakePagination] = useState<string[]>([]);
-	const [currentQuestions, setCurrentQuestions] = useState<string[]>([]);
-	const [currentIndex, setCurrentIndex] = useState(0);
+
+	const progress = useProgressStore((store) => store);
+	console.log('PROGRESS: ', progress);
 
 	useEffect(() => {
-		const countRandom = countRandomMode(words.length, progressStore);
-		setTotalRandom(countRandom);
-	}, [words, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
-
-	useEffect(() => {
-		const examMistakePagination = makeIdsPagination(examModeProgress.errorProgress);
-		setMistakePagination(examMistakePagination);
-		setCurrentQuestions((examMistakePagination[0] && JSON.parse(examMistakePagination[0])) || []);
-	}, [examModeProgress.errorProgress]);
-
-	const onClick = (id: string) => {
-		setWordConfig('resolvedExerciseIds', examModeProgress.successProgress);
-		setCollectionsExerciseConfig(EXERCISE_CONFIG.MODE, EXERCISE_MODE.isExam);
-		navigate(`/vocabularies/${collectionsId}/word/${id}`);
-	};
-
-	const calculateCompletionPercentage = (completedTasks: number, totalTasks: number) => {
-		if (totalTasks === 0) return 0;
-		return Math.round((completedTasks / totalTasks) * COMPLETED_TEST);
-	};
-
-	const calculateTotalProgress = (examProgress: number, randomProgress: TotalRandomType) => {
-		const totalProgress = (examProgress + randomProgress.resolved) / 2;
-		return Math.ceil(totalProgress);
-	};
-
-	const percentage = calculateCompletionPercentage(
-		examModeProgress.successProgress.length,
-		words.length,
-	);
-	const totalProgress = calculateTotalProgress(percentage, totalRandom);
-
-	const countRandomMode = (
-		countWords: number,
-		progressStore: {
-			progress: RandomTest[];
-			resolved: ResolvedRandomTest[];
-		},
-	) => {
-		let resolvedCount = 0;
-
-		progressStore.resolved.forEach((resolvedItem) => {
-			if (resolvedItem.isDone) {
-				resolvedCount += 1;
-			}
-		});
-
-		const resolved = calculateCompletionPercentage(resolvedCount, countWords);
-		const progress = calculateCompletionPercentage(
-			progressStore.progress.length - resolvedCount,
-			countWords,
-		);
-		const unTouch = COMPLETED_TEST - progress - resolved;
-
-		return { resolved, progress, unTouch };
-	};
+		setProgressPercentage(countWords);
+	}, [countWords, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
 
 	const handleShowMoreInfo = () => {
 		setShowMore(!showMore);
 	};
 
-	const makeIdsPagination = (ids: string[]) => {
-		const maxPageItems = 4;
-		return Array.from({ length: Math.ceil(ids.length / maxPageItems) }, (_, i) =>
-			JSON.stringify(ids.slice(i * maxPageItems, (i + 1) * maxPageItems)),
-		);
-	};
-
-	const onNavigate = (id: string) => {
-		setCurrentQuestions(JSON.parse(id));
-		mistakePaginaton.forEach((item, index) => {
-			if (JSON.stringify(item) === JSON.stringify(id)) {
-				setCurrentIndex(index);
-			}
-		});
-	};
-
+	// divide ui in two components
 	return (
 		<Wrapper>
 			<div className={styles.progress}>
@@ -159,39 +72,22 @@ export const Statistics = ({
 					</div>
 				)}
 				<div className={styles.totalProgress}>
-					<StandardProgressBar progress={totalProgress} size="m" fullwidth />
+					<StandardProgressBar progress={totalPercentage} size="m" fullwidth />
 				</div>
 				{moreInfo && (
 					<div className={styles.statistics}>
-						{uncorrectAnswers.length > 0 && (
-							<div className={styles.uncorrectAnswersContainer}>
-								<span className={styles.modeTitle}>Exam Mistakes</span>
-								<div className={styles.uncorrectAnswers}>
-									{currentQuestions.map((id) => (
-										<CircleButton key={id} onClick={() => onClick(id)}>
-											{id}
-										</CircleButton>
-									))}
-								</div>
-								<PaginationControls
-									exerciseMode="infinitiveMode"
-									ids={mistakePaginaton}
-									currentIndex={currentIndex}
-									navigateTo={onNavigate}
-								/>
-							</div>
-						)}
+						<ErrorProgressPagination />
 						<div className={styles.modeContainer}>
 							<span className={styles.modeTitle}>Exam</span>
-							<CircleProgressBar resolved={percentage} />
+							<CircleProgressBar resolved={examPercentage} />
 						</div>
 						<div className={styles.modeContainer}>
 							<span className={styles.modeTitle}>Random</span>
 							<div className={styles.randomProgress}>
 								<CircleProgressBar
-									progress={totalRandom.progress}
-									resolved={totalRandom.resolved}
-									untouched={totalRandom.unTouch}
+									progress={randomPercentage.progress}
+									resolved={randomPercentage.resolved}
+									untouched={randomPercentage.unTouch}
 								/>
 								<div className={styles.explanation}>
 									<div className={styles.markersExplanation}>

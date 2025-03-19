@@ -21,8 +21,8 @@ export const saveVocabularyProgress = async (
 	};
 
 	await saveState(`${collectionId}_${DATA_FIELD}`, {
-		[`${collectionId}_examModeProgress`]: examModeProgress,
-		[`${collectionId}_randomModeProgress`]: randomModeProgress,
-		[`${collectionId}_takenTestCount`]: takenTestCount,
+		[`examModeProgress`]: examModeProgress,
+		[`randomModeProgress`]: randomModeProgress,
+		[`takenTestCount`]: takenTestCount,
 	});
 };

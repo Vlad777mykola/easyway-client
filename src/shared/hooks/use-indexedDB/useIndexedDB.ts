@@ -21,20 +21,20 @@ export const useIndexedDB = (
 		(async () => {
 			try {
 				const loadedData = await loadState(`${collectionId}_vocabulary`);
-				await updateLastTest(`${collectionId}_${DATA_FIELD}`, `${collectionId}_takenTestCount`, {
+				await updateLastTest(`${collectionId}_${DATA_FIELD}`, `takenTestCount`, {
 					count: 0,
 					timestamp: 0,
 				});
 				await func(
-					loadedData?.[`${collectionId}_examModeProgress`] || {
+					loadedData?.[`examModeProgress`] || {
 						successProgress: [],
 						errorProgress: [],
 					},
-					loadedData?.[`${collectionId}_randomModeProgress`] || {
+					loadedData?.[`randomModeProgress`] || {
 						progress: [],
 						resolved: [],
 					},
-					loadedData?.[`${collectionId}_takenTestCount`] || { count: 0, timestamp: 0 },
+					loadedData?.[`takenTestCount`] || { count: 0, timestamp: 0 },
 				);
 			} catch (error) {
 				console.error(error);

@@ -17,9 +17,8 @@ import styles from './wordDetails.module.css';
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
 	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
-	const uncorrectAnswers = useProgressStore((store) => store.examModeProgress.errorProgress);
-	const takenTestCount = useProgressStore((state) => state.takenTestCount) || [];
 	const exerciseMode = useVocabularyStore((state) => state.collectionsExerciseConfig.exerciseMode);
+	const words = useVocabularyStore((store) => store.words);
 	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
 	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
 	const setWordConfig = useVocabularyStore((store) => store.setWordConfig);
@@ -75,6 +74,8 @@ export const WordDetails = () => {
 		setMode(exerciseConfig as ExerciseModeType);
 	}, [exerciseMode]);
 
+	// exam random takenTestCount must be inside hook
+	// must be inside statistics
 	useIndexedDB(
 		(exam, random, takenTestCount) => getProgressFromIndexedDB(exam, random, takenTestCount),
 		vocabulariesId,
@@ -109,11 +110,7 @@ export const WordDetails = () => {
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<Statistics
-					collectionsId={vocabulariesId || ''}
-					uncorrectAnswers={uncorrectAnswers}
-					takenTestCount={takenTestCount}
-				/>
+				<Statistics countWords={words.length} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<div className={styles.sidebarContainer}>

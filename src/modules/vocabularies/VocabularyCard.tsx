@@ -37,6 +37,7 @@ export const VocabularyCard = () => {
 	const store = useProgressStore((store) => store);
 	const vocabularyStore = useVocabularyStore((store) => store);
 	const examIsDone = store.examModeProgress.successProgress.length === vocabularyStore.words.length;
+	// refactor must be just random
 	const randomIsDone =
 		store.randomModeProgress.resolved.every((item) => item.isDone === true) &&
 		store.randomModeProgress.resolved.length === vocabularyStore.words.length;
@@ -44,7 +45,8 @@ export const VocabularyCard = () => {
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
-	const setExamProgress = useProgressStore((store) => store.setExamProgress);
+	const setExamProgress = useProgressStore.use.setExamProgress();
+	// refactor call thanks for use not like object !!! EVERYWHERE !!!
 	const setRandomProgress = useProgressStore((store) => store.setRandomProgress);
 	const setTakenTestCount = useProgressStore((store) => store.setTakenTestCount);
 
@@ -78,6 +80,7 @@ export const VocabularyCard = () => {
 		setIsAutoNavigate(false);
 
 		return () => {
+			// save and unmount only in statistic component and use useBeforeunload
 			saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId);
 		};
 	}, [wordId]);
@@ -89,6 +92,7 @@ export const VocabularyCard = () => {
 		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
 			setRandomProgress(id, isResolved, exerciseCorrectResponse);
 		}
+		// save only when unmount component
 		await saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId);
 		setExerciseListProgress(id, isResolved);
 		setTakenTestCount();

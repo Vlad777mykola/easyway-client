@@ -26,9 +26,11 @@ export const PaginationControls = ({
 			[ids.length, PAGE_SIZE, SIBLING_COUNT, currentIndex],
 		) || [];
 
-	if (paginationRange.length < 2) {
+	/* if (paginationRange.length < 2) {
 		return null;
-	}
+	} */
+
+	console.log('//IDS PAGINATION: ', ids);
 
 	return (
 		<div className={styles.pagination}>
