@@ -35,27 +35,26 @@ export const VocabularyCard = () => {
 	const exerciseCorrectResponse = useVocabularyStore(
 		(store) => store.collectionsExerciseConfig.exerciseCorrectResponse,
 	);
-	const store = useProgressStore((store) => store);
-	const vocabularyStore = useVocabularyStore((store) => store);
-	const examIsDone = store.examModeProgress.successProgress.length === vocabularyStore.words.length;
-	// refactor must be just random
-	const randomIsDone =
-		store.randomModeProgress.resolved.every((item) => item.isDone === true) &&
-		store.randomModeProgress.resolved.length === vocabularyStore.words.length;
+	const vocabularyStore = useVocabularyStore((state) => state);
+	const examModeProgress = useProgressStore((state) => state.examModeProgress);
+	const randomModeProgress = useProgressStore((state) => state.randomModeProgress);
+	const examIsDone = examModeProgress.successProgress.length === vocabularyStore.words.length;
+	const random =
+		randomModeProgress.resolved.every((item) => item.isDone === true) &&
+		randomModeProgress.resolved.length === vocabularyStore.words.length;
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
 	const setExamProgress = useProgressStore.use.setExamProgress();
-	// refactor call thanks for use not like object !!! EVERYWHERE !!!
-	const setRandomProgress = useProgressStore((store) => store.setRandomProgress);
-	const setTakenTestCount = useProgressStore((store) => store.setTakenTestCount);
+	const setRandomProgress = useProgressStore.use.setRandomProgress();
+	const setTakenTestCount = useProgressStore.use.setTakenTestCount();
 
 	useBeforeunload(() => saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId));
 
 	useEffect(() => {
 		if (vocabularyStore.collectionsExerciseConfig.exerciseMode === 'randomMode') {
-			setTestIsDone(randomIsDone);
+			setTestIsDone(random);
 		}
 
 		if (vocabularyStore.collectionsExerciseConfig.exerciseMode === 'examMode') {

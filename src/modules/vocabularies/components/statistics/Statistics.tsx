@@ -21,10 +21,10 @@ export const Statistics = ({ countWords }: { countWords: number }) => {
 	const takenTestCount = useProgressStore((state) => state.takenTestCount) || [];
 	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
 	const totalPercentage = useProgressStore((store) => store.progressPercentage.total);
-	const getProgressFromIndexedDB = useProgressStore((state) => state.getProgressFromIndexedDB);
-	const setProgressPercentage = useProgressStore((store) => store.setProgressPercentage);
+	const getProgressFromIndexedDB = useProgressStore.use.getProgressFromIndexedDB();
+	const setProgressPercentage = useProgressStore.use.setProgressPercentage();
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
-	const clearAll = useProgressStore((store) => store.clearAll);
+	const clearAll = useProgressStore.use.clearAll();
 
 	useBeforeunload(() => saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId));
 

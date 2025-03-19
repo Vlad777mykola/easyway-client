@@ -16,10 +16,10 @@ export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
 	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
 	const exerciseMode = useVocabularyStore((state) => state.collectionsExerciseConfig.exerciseMode);
-	const words = useVocabularyStore((store) => store.words);
-	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
-	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
-	const setWordConfig = useVocabularyStore((store) => store.setWordConfig);
+	const words = useVocabularyStore((state) => state.words);
+	const getWordConfig = useVocabularyStore.use.getWordConfig();
+	const setWordsListResponse = useVocabularyStore.use.setWordsListResponse();
+	const setWordConfig = useVocabularyStore.use.setWordConfig();
 	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
 	const setCleanWordConfig = useVocabularyStore.use.setCleanWordConfig();
 	const setFilterWordOnSearch = useVocabularyStore.use.setFilterWordOnSearch();

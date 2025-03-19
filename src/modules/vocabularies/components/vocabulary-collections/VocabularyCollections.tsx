@@ -9,7 +9,7 @@ export const VocabularyCollections = () => {
 	const filteredCollectionsVocabulary = useVocabularyStore(
 		(store) => store.filteredCollectionsVocabulary,
 	);
-	const setVocabularyCollections = useVocabularyStore((store) => store.setVocabularyCollections);
+	const setVocabularyCollections = useVocabularyStore.use.setVocabularyCollections();
 	const navigate = useNavigate();
 
 	useEffect(() => {
