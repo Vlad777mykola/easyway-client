@@ -10,8 +10,8 @@ import styles from './addInfo.module.css';
 export const AddInfo = () => {
 	const [showMore, setShowMore] = useState(false);
 	const { isMobile, isLaptop, isDesktop } = useContext(ScreenSizeContext);
-	const examPercentage = useProgressStore((store) => store.progressPercentage.exam);
-	const randomPercentage = useProgressStore((store) => store.progressPercentage.random);
+	const examPercentage = useProgressStore.use.progressPercentage().exam;
+	const randomPercentage = useProgressStore.use.progressPercentage().random;
 	const moreInfo = showMore || isDesktop || isLaptop;
 
 	const handleShowMoreInfo = () => {

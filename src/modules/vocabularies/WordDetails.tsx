@@ -14,9 +14,9 @@ import styles from './wordDetails.module.css';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
-	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
-	const exerciseMode = useVocabularyStore((state) => state.collectionsExerciseConfig.exerciseMode);
-	const words = useVocabularyStore((state) => state.words);
+	const filteredWordsVocabulary = useVocabularyStore.use.filteredWordsVocabulary();
+	const exerciseMode = useVocabularyStore.use.collectionsExerciseConfig().exerciseMode;
+	const words = useVocabularyStore.use.words();
 	const getWordConfig = useVocabularyStore.use.getWordConfig();
 	const setWordsListResponse = useVocabularyStore.use.setWordsListResponse();
 	const setWordConfig = useVocabularyStore.use.setWordConfig();

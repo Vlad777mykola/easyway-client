@@ -6,9 +6,7 @@ import { Item } from '@/modules/vocabularies/components/item/Item';
 import styles from './vocabularyCollections.module.css';
 
 export const VocabularyCollections = () => {
-	const filteredCollectionsVocabulary = useVocabularyStore(
-		(store) => store.filteredCollectionsVocabulary,
-	);
+	const filteredCollectionsVocabulary = useVocabularyStore.use.filteredCollectionsVocabulary();
 	const setVocabularyCollections = useVocabularyStore.use.setVocabularyCollections();
 	const navigate = useNavigate();
 
