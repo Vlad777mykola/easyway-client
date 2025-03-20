@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
 import { ExerciseModeType } from '@/store/exercise-progress/useExerciseProgressStore';
-import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
+import { Statistics } from '@/shared/components/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
 import { SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';

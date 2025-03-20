@@ -16,8 +16,8 @@ import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import { PaginationExercise } from './components/pagination/Pagination';
 import { saveVocabularyProgress } from './utils/saveVocabularyProgress';
-import styles from './vocabularyCard.module.css';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
+import styles from './vocabularyCard.module.css';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
@@ -31,17 +31,16 @@ export const VocabularyCard = () => {
 	const isSelectingFormate =
 		useVocabularyStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
-	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
-	const exerciseCorrectResponse = useVocabularyStore(
-		(store) => store.collectionsExerciseConfig.exerciseCorrectResponse,
-	);
-	const vocabularyStore = useVocabularyStore((state) => state);
-	const examModeProgress = useProgressStore((state) => state.examModeProgress);
-	const randomModeProgress = useProgressStore((state) => state.randomModeProgress);
-	const examIsDone = examModeProgress.successProgress.length === vocabularyStore.words.length;
+	const collectionsExerciseConfig = useVocabularyStore.use.collectionsExerciseConfig();
+	const exerciseCorrectResponse =
+		useVocabularyStore.use.collectionsExerciseConfig().exerciseCorrectResponse;
+	const words = useVocabularyStore.use.words();
+	const examModeProgress = useProgressStore.use.examModeProgress();
+	const randomModeProgress = useProgressStore.use.randomModeProgress();
+	const examIsDone = examModeProgress.successProgress.length === words.length;
 	const random =
 		randomModeProgress.resolved.every((item) => item.isDone === true) &&
-		randomModeProgress.resolved.length === vocabularyStore.words.length;
+		randomModeProgress.resolved.length === words.length;
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();
@@ -53,11 +52,11 @@ export const VocabularyCard = () => {
 	useBeforeunload(() => saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId));
 
 	useEffect(() => {
-		if (vocabularyStore.collectionsExerciseConfig.exerciseMode === 'randomMode') {
+		if (collectionsExerciseConfig.exerciseMode === 'randomMode') {
 			setTestIsDone(random);
 		}
 
-		if (vocabularyStore.collectionsExerciseConfig.exerciseMode === 'examMode') {
+		if (collectionsExerciseConfig.exerciseMode === 'examMode') {
 			setTestIsDone(examIsDone);
 		}
 	}, []);

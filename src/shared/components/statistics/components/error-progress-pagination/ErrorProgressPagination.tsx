@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useProgressStore } from '@/store/progress';
 import { useVocabularyStore } from '@/store/vocabulary-collection';
+import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { PaginationControls } from '@/ui-components/PaginationControls/PaginationControls';
 import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
 import { EXERCISE_MODE } from '@/store/exercise-progress';
 import { useNavigate } from 'react-router-dom';
 import styles from './errorProgressPagination.module.css';
-import { Icon } from '@/ui-components/Icon';
 
 const RIGHT = 'right';
 const LEFT = 'left';
@@ -15,7 +15,7 @@ const MIN_COUNT_FOR_PAGINATION = 7;
 
 export const ErrorProgressPagination = () => {
 	const [currentIndex, setCurrentIndex] = useState(0);
-	const uncorrectAnswers = useProgressStore((store) => store.examModeProgress.errorProgress);
+	const uncorrectAnswers = useProgressStore.use.examModeProgress().errorProgress;
 	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
 	const navigate = useNavigate();
 

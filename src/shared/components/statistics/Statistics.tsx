@@ -5,22 +5,20 @@ import { Button } from '@/ui-components/Button';
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
 import { CountUp } from '@/ui-components/CountUp';
 import { AddInfo } from './components/add-info/AddInfo';
-import { deleteVocabularyCollectionProgress } from '../../utils/deleteVocabularyProgress';
-import { useVocabularyStore } from '@/store/vocabulary-collection';
+import { deleteVocabularyCollectionProgress } from '../../../modules/vocabularies/utils/deleteVocabularyProgress';
 import { useProgressStore } from '@/store/progress';
 import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
-import { saveVocabularyProgress } from '../../utils/saveVocabularyProgress';
+import { saveVocabularyProgress } from '../../../modules/vocabularies/utils/saveVocabularyProgress';
 import styles from './statistics.module.css';
 
 const COUNT_UP_DURATION = 1500;
 
 export const Statistics = ({ countWords }: { countWords: number }) => {
 	const { vocabulariesId = '' } = useParams();
-	const progressStore = useProgressStore((store) => store.randomModeProgress);
-	const takenTestCount = useProgressStore((state) => state.takenTestCount) || [];
-	const collectionsExerciseConfig = useVocabularyStore((store) => store.collectionsExerciseConfig);
-	const totalPercentage = useProgressStore((store) => store.progressPercentage.total);
+	const progressStore = useProgressStore.use.randomModeProgress();
+	const takenTestCount = useProgressStore.use.takenTestCount();
+	const totalPercentage = useProgressStore.use.progressPercentage().total;
 	const getProgressFromIndexedDB = useProgressStore.use.getProgressFromIndexedDB();
 	const setProgressPercentage = useProgressStore.use.setProgressPercentage();
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
@@ -30,7 +28,7 @@ export const Statistics = ({ countWords }: { countWords: number }) => {
 
 	useEffect(() => {
 		setProgressPercentage(countWords);
-	}, [countWords, progressStore, collectionsExerciseConfig.exerciseCorrectResponse]);
+	}, [countWords, progressStore]);
 
 	useIndexedDB(getProgressFromIndexedDB, vocabulariesId);
 
