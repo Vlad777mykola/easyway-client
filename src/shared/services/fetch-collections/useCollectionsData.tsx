@@ -10,8 +10,6 @@ export const useCollectionsData = (
 	useEffect(() => {
 		const collections = getAllCollections(id);
 
-		console.log('COLLECTIONS: ', collections);
-
 		if (collections) {
 			func(collections as DefaultCollectionType[]);
 		}
