@@ -202,7 +202,6 @@ export const useExerciseProgressStoreBase = create<ExerciseStoreType>()((set, ge
 			if (!exercise?.variants) {
 				variants = await getReadyQuestion(exerciseAnswer);
 			}
-			console.log(variants, exerciseListResponse);
 			exercise = {
 				...DEFAULT_DATA_TEST,
 				...exercise,

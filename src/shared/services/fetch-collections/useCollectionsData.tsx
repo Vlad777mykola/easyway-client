@@ -11,7 +11,7 @@ export const useCollectionsData = (
 		const collections = getAllCollections(id);
 
 		if (collections) {
-			func(collections as DefaultCollectionType[]);
+			func(collections);
 		}
 
 		return () => {

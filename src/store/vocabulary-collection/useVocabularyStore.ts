@@ -1,140 +1,20 @@
 import { create } from 'zustand';
-import { filterWordCollection } from './service';
+import { filterWordCollection, shuffleArray } from './service';
 import { ExerciseResponseType } from '@/shared/constants/collections/data';
 import { getReadyQuestion } from '@/modules/vocabularies/services/fetchDefinition';
-
-function shuffleArray(array: string[]) {
-	const newArr = [...array];
-	for (let i = newArr.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-	}
-	return newArr;
-}
-
-export const DEFAULT_DATA_TEST = {
-	id: '',
-	exercise: '',
-	explanation: '',
-	exerciseAnswer: [],
-	selectedAnswer: '',
-	currentWord: 0,
-	isComplete: false,
-	isCorrectAnswer: true,
-	explanationAnswer: [],
-	explanationVariants: [],
-	variants: {},
-};
-
-const DEFAULT_WORD_CONFIG = '';
-
-export const VOCABULARY_TOPICS = {
-	FAMILY: 'Family',
-	PARTS_OF_THE_BODY: 'Parts of the body',
-	CLOTHES: 'Clothes',
-	DESCRIBING_PEOPLE: 'Describing people',
-	HEALTH_AND_ILLNESS: 'Health and illness',
-	FEELINGS: 'Feelings',
-} as const;
-
-export const VOCABULARY_CATEGORIES = {
-	ADVERBS: 'Adverbs',
-	VERBS: 'Verbs',
-	ADJECTIVES: 'Adjectives',
-	OTHER: 'Other',
-} as const;
-
-export const LEVEL_BASED = {
-	A1: 'A1',
-	A2: 'A2',
-	B1: 'B1',
-	B2: 'B2',
-	C1: 'C1',
-	C2: 'C2',
-};
-
-export const VOCABULARY_CONFIG = {
-	title: 'title',
-	topic: 'topic',
-	category: 'category',
-	level: 'level',
-} as const;
-
-export const WORD_CONFIG = {
-	wordConfig: 'wordConfig',
-	placeholder: 'word/слово',
-};
-
-export const EXERCISE_MODE = {
-	isExam: 'examMode',
-	isRandom: 'randomMode',
-	isInfinitive: 'infinitiveMode',
-} as const;
-
-export const EXERCISE_FORMATE = {
-	isSelecting: 'selectingFormate',
-	isClassic: 'classicFormate',
-} as const;
-
-export type Word = {
-	id: string;
-	exercise: string;
-	exerciseAnswer: string;
-	explanation: string;
-};
-
-export type VocabularyListType = {
-	id: string;
-	title: string;
-	topic: VocabularyTopicType[];
-	category: string[];
-	level: LevelBasedType[];
-};
-
-export type ExerciseType = {
-	id: string;
-	exercise: string;
-	explanation: string;
-	exerciseAnswer: string[];
-	selectedAnswer: string;
-	currentWord: number;
-	isComplete: boolean;
-	isCorrectAnswer: boolean;
-	explanationAnswer: string[];
-	explanationVariants: string[];
-	variants: { [key: string]: string[] };
-};
-
-type ExerciseConfigType = {
-	exerciseMode: ExerciseModeType;
-	exerciseCorrectResponse: number;
-	exerciseFormate: ExerciseFormateType;
-};
-
-type CommonProgressDataType = {
-	collectionId: string;
-	resolvedExerciseIds: string[];
-};
-
-type VocabularyTopicType = (typeof VOCABULARY_TOPICS)[keyof typeof VOCABULARY_TOPICS];
-type VocabularyCategoriesType = (typeof VOCABULARY_CATEGORIES)[keyof typeof VOCABULARY_CATEGORIES];
-type LevelBasedType = (typeof LEVEL_BASED)[keyof typeof LEVEL_BASED];
-type ExerciseFormateType = (typeof EXERCISE_FORMATE)[keyof typeof EXERCISE_FORMATE];
-export type ExerciseModeType = (typeof EXERCISE_MODE)[keyof typeof EXERCISE_MODE];
-
-export type VocabularyConfigType = {
-	title: string;
-	vocabularyTopic: VocabularyTopicType[];
-	vocabularyCategories: VocabularyCategoriesType[];
-	levelBased: LevelBasedType[];
-};
-
-type ExerciseListProgressType = {
-	id: string;
-	countCorrectAnswers: number;
-};
-
-type ExerciseConfigKeyType = keyof ExerciseConfigType;
+import {
+	DEFAULT_DATA_TEST,
+	DEFAULT_WORD_CONFIG,
+	EXERCISE_FORMATE,
+	EXERCISE_MODE,
+} from './constants';
+import {
+	CommonProgressDataType,
+	ExerciseConfigType,
+	ExerciseListProgressType,
+	ExerciseType,
+	Word,
+} from './type';
 
 type VocabularyStoreState = {
 	filteredWordsVocabulary: Word[];
@@ -152,9 +32,7 @@ type VocabularyStoreState = {
 type VocabularyStoreActions = {
 	getWordConfig: () => number[] | string | boolean | string[] | number;
 	getExerciseById: (id: string) => Promise<ExerciseType | null>;
-	getExerciseConfig: (
-		key: ExerciseConfigKeyType,
-	) => ExerciseModeType | number | ExerciseFormateType;
+	getExerciseConfig: <T extends keyof ExerciseConfigType>(key: T) => ExerciseConfigType[T];
 	getExerciseProgressById: (id: string) => number;
 	setCollectionsExerciseConfig: (
 		key: string,
@@ -179,6 +57,7 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 		exerciseMode: EXERCISE_MODE.isRandom,
 		exerciseCorrectResponse: 15,
 		exerciseFormate: EXERCISE_FORMATE.isClassic,
+		autoPlay: false,
 	},
 	exerciseList: [],
 	exerciseListResponse: [],
@@ -307,7 +186,6 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 			if (!exercise?.variants) {
 				variants = await getReadyQuestion(exerciseAnswer);
 			}
-			console.log(variants, exerciseListResponse);
 			exercise = {
 				...DEFAULT_DATA_TEST,
 				...exercise,

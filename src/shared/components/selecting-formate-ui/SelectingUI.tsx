@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
-import { ExerciseType } from '@/store/exercise-progress';
+import { ExerciseType } from '@/store/dictionary';
 import { classes } from '@/shared/utils/classes';
+import { speak } from '@/shared/utils/speak';
 
 import styles from './selectingUI.module.css';
 
@@ -64,9 +65,7 @@ export const SelectingUI = ({
 			setIsAutoNavigate(true);
 		}
 
-		const utterance = new SpeechSynthesisUtterance(answer);
-		utterance.lang = 'en-US';
-		window.speechSynthesis.speak(utterance);
+		speak(word);
 
 		setTask((prev: ExerciseType) => {
 			return {
