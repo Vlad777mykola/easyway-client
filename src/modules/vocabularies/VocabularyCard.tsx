@@ -11,12 +11,13 @@ import { PaginationExercise } from './components/pagination/Pagination';
 import { saveVocabularyProgress } from './utils/saveVocabularyProgress';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
 import styles from './vocabularyCard.module.css';
-import { SelectFormate } from './components/select-formate/SelectFormate';
 import {
 	DEFAULT_DATA_TEST,
 	EXERCISE_FORMATE,
 	EXERCISE_MODE,
 } from '@/store/vocabulary-collection/constants';
+import { ExerciseUI } from '@/shared/components/exercise-content/ExerciseContent';
+import { SelectingUI } from '@/shared/components/selecting-formate-ui/SelectingUI';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
@@ -114,15 +115,24 @@ export const VocabularyCard = () => {
 						}
 					/>
 				)}
-				{!testIsDone && task && (
-					<SelectFormate
-						isSelectingFormate={isSelectingFormate}
+				{!testIsDone && task && !isSelectingFormate && (
+					<ExerciseUI
 						key={vocabulariesId}
-						task={{ ...task, used: '' }}
-						isAutoPlay={isAutoPlay}
-						setTask={setTask}
+						task={task}
 						setIsAutoNavigate={setIsAutoNavigate}
+						setTask={setTask}
 						updateProgress={setModesProgress}
+						isAutoPlay={isAutoPlay}
+						isSelectingFormate={isSelectingFormate}
+					/>
+				)}
+				{!testIsDone && task && isSelectingFormate && (
+					<SelectingUI
+						key={vocabulariesId}
+						task={task}
+						setIsAutoNavigate={setIsAutoNavigate}
+						setTask={setTask}
+						updateProgress={setExerciseListProgress}
 					/>
 				)}
 				{!testIsDone && exerciseListId && (
