@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { filterVocabularyCollections, filterWordCollection } from './service';
+import { filterWordCollection } from './service';
 import { ExerciseResponseType } from '@/shared/constants/collections/data';
 import { getReadyQuestion } from '@/modules/vocabularies/services/fetchDefinition';
 
@@ -11,13 +11,6 @@ function shuffleArray(array: string[]) {
 	}
 	return newArr;
 }
-
-const DEFAULT_VOCABULARY_CONFIG = {
-	title: '',
-	vocabularyTopic: [],
-	vocabularyCategories: [],
-	levelBased: [],
-};
 
 export const DEFAULT_DATA_TEST = {
 	id: '',
@@ -62,9 +55,9 @@ export const LEVEL_BASED = {
 
 export const VOCABULARY_CONFIG = {
 	title: 'title',
-	topic: 'vocabularyTopic',
-	categories: 'vocabularyCategories',
-	level: 'levelBased',
+	topic: 'topic',
+	category: 'category',
+	level: 'level',
 } as const;
 
 export const WORD_CONFIG = {
@@ -141,13 +134,9 @@ type ExerciseListProgressType = {
 	countCorrectAnswers: number;
 };
 
-type VocabularyConfigKeyType = keyof VocabularyConfigType;
 type ExerciseConfigKeyType = keyof ExerciseConfigType;
 
 type VocabularyStoreState = {
-	vocabularyCollections: VocabularyListType[];
-	collectionsVocabularyConfig: VocabularyConfigType;
-	filteredCollectionsVocabulary: VocabularyListType[];
 	filteredWordsVocabulary: Word[];
 	wordConfig: string;
 	words: Word[];
@@ -161,9 +150,6 @@ type VocabularyStoreState = {
 };
 
 type VocabularyStoreActions = {
-	getVocabularyConfig: (
-		key: VocabularyConfigKeyType,
-	) => VocabularyTopicType[] | VocabularyCategoriesType[] | LevelBasedType[] | string;
 	getWordConfig: () => number[] | string | boolean | string[] | number;
 	getExerciseById: (id: string) => Promise<ExerciseType | null>;
 	getExerciseConfig: (
@@ -174,16 +160,9 @@ type VocabularyStoreActions = {
 		key: string,
 		value: number[] | string | boolean | string[] | number,
 	) => void;
-	setCollectionsVocabularyConfig: (
-		key: string,
-		value: number[] | string | boolean | string[] | number,
-	) => void;
 	setWordConfig: (key: string, value: number[] | string | boolean | string[] | number) => void;
-	setClean: () => void;
 	setCleanWordConfig: () => void;
-	setFilterVocabularyOnSearch: () => void;
 	setFilterWordOnSearch: () => void;
-	setVocabularyCollections: (vocabularyCollections: VocabularyListType[]) => void;
 	setWordsListResponse: (vocabularyList: Word[]) => void;
 	setExerciseListResponse: (exerciseList: ExerciseResponseType[], collectionId: string) => void;
 	setExerciseListProgress: (id: string, isResolved: boolean) => void;
@@ -192,9 +171,6 @@ type VocabularyStoreActions = {
 export type VocabularyStoreType = VocabularyStoreState & VocabularyStoreActions;
 
 export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) => ({
-	vocabularyCollections: [],
-	collectionsVocabularyConfig: DEFAULT_VOCABULARY_CONFIG,
-	filteredCollectionsVocabulary: [],
 	filteredWordsVocabulary: [],
 	wordConfig: DEFAULT_WORD_CONFIG,
 	words: [],
@@ -212,25 +188,10 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 	},
 	resolvedExerciseId: [],
 	exerciseListProgress: [],
-	setCollectionsVocabularyConfig: (key, value) => {
-		set((state) => ({
-			...state,
-			collectionsVocabularyConfig: {
-				...state.collectionsVocabularyConfig,
-				[key]: value,
-			},
-		}));
-	},
 	setWordConfig: (key, value) => {
 		set((state) => ({
 			...state,
 			[key]: value,
-		}));
-	},
-	setClean: () => {
-		set((state) => ({
-			...state,
-			collectionsVocabularyConfig: DEFAULT_VOCABULARY_CONFIG,
 		}));
 	},
 	setCleanWordConfig: () => {
@@ -246,23 +207,6 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 
 		set((state) => {
 			return { ...state, filteredWordsVocabulary: filteredWords };
-		});
-	},
-	setFilterVocabularyOnSearch: () => {
-		const collectionsVocabularyConfig = get().collectionsVocabularyConfig;
-		const vocabularyCollections = get().vocabularyCollections;
-		const filteredVocabulary = filterVocabularyCollections(
-			vocabularyCollections,
-			collectionsVocabularyConfig,
-		);
-
-		set((state) => {
-			return { ...state, filteredCollectionsVocabulary: filteredVocabulary };
-		});
-	},
-	setVocabularyCollections: (vocabularyCollections) => {
-		set((state) => {
-			return { ...state, vocabularyCollections: vocabularyCollections };
 		});
 	},
 	setWordsListResponse: (vocabularyList) => {
@@ -334,9 +278,6 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 			},
 		}));
 	},
-	getVocabularyConfig: (key) => {
-		return get().collectionsVocabularyConfig[key];
-	},
 	getWordConfig: () => {
 		return get().wordConfig;
 	},
@@ -359,7 +300,14 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 			const exerciseAnswer = exercise.exerciseAnswer.split(' ');
 			const explanationAnswer = exercise.explanation.split(' ');
 			const explanationVariants = shuffleArray(explanationAnswer);
-			const variants = await getReadyQuestion(exerciseAnswer);
+			let variants = { [exerciseAnswer[0]]: ['1'] };
+			if (exercise?.variants) {
+				variants = { [exerciseAnswer[0]]: exercise.variants };
+			}
+			if (!exercise?.variants) {
+				variants = await getReadyQuestion(exerciseAnswer);
+			}
+			console.log(variants, exerciseListResponse);
 			exercise = {
 				...DEFAULT_DATA_TEST,
 				...exercise,

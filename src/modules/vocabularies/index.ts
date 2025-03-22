@@ -1,0 +1,1 @@
+export { WordDetails } from './WordDetails';
