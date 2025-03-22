@@ -1,5 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { Statistics } from '@/modules/vocabularies/components/statistics/Statistics';
+import { useEffect, useState } from 'react';
+import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
+import { ExerciseModeType } from '@/store/exercise-progress/useExerciseProgressStore';
+import { Statistics } from '@/shared/components/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
 import { SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
@@ -7,21 +10,24 @@ import { EXERCISE_MODE, useVocabularyStore, WORD_CONFIG } from '@/store/vocabula
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { EXERCISE_CONFIG_LABELS } from './constants';
 import { EXERCISE_CONFIG } from '../exercise/constants';
-import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
-
 import styles from './wordDetails.module.css';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
-	const filteredWordsVocabulary = useVocabularyStore((state) => state.filteredWordsVocabulary);
-	const setWordsListResponse = useVocabularyStore((state) => state.setWordsListResponse);
-	const getWordConfig = useVocabularyStore((store) => store.getWordConfig);
-	const setWordConfig = useVocabularyStore((store) => store.setWordConfig);
+	const filteredWordsVocabulary = useVocabularyStore.use.filteredWordsVocabulary();
+	const exerciseMode = useVocabularyStore.use.collectionsExerciseConfig().exerciseMode;
+	const words = useVocabularyStore.use.words();
+	const getWordConfig = useVocabularyStore.use.getWordConfig();
+	const setWordsListResponse = useVocabularyStore.use.setWordsListResponse();
+	const setWordConfig = useVocabularyStore.use.setWordConfig();
 	const setCollectionsExerciseConfig = useVocabularyStore.use.setCollectionsExerciseConfig();
 	const setCleanWordConfig = useVocabularyStore.use.setCleanWordConfig();
 	const setFilterWordOnSearch = useVocabularyStore.use.setFilterWordOnSearch();
 	const getExerciseConfig = useVocabularyStore.use.getExerciseConfig();
+
 	const navigate = useNavigate();
+
+	const [mode, setMode] = useState<ExerciseModeType>(EXERCISE_MODE.isRandom);
 
 	const fieldsDataWord = [
 		{
@@ -47,6 +53,7 @@ export const WordDetails = () => {
 			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE),
 			label: EXERCISE_CONFIG_LABELS.CORRECT_RESPONSE,
 			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
+			disabled: mode === EXERCISE_MODE.isExam,
 		},
 		{
 			keyValue: EXERCISE_CONFIG.FORMATE,
@@ -59,11 +66,22 @@ export const WordDetails = () => {
 
 	useVocabularyListData(setWordsListResponse, vocabulariesId);
 
+	useEffect(() => {
+		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
+		setMode(exerciseConfig as ExerciseModeType);
+	}, [exerciseMode]);
+
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setWordConfig(key, value);
 	};
 
 	const onChangeMode = (key: string, value: number[] | string | boolean | string[] | number) => {
+		if (value === EXERCISE_MODE.isExam) {
+			setCollectionsExerciseConfig(EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE, 1);
+		}
+		if (value === EXERCISE_MODE.isRandom || value === EXERCISE_MODE.isInfinitive) {
+			setCollectionsExerciseConfig(EXERCISE_CONFIG.TOTAL_CORRECT_RESPONSE, 15);
+		}
 		setCollectionsExerciseConfig(key, value);
 	};
 
@@ -82,7 +100,7 @@ export const WordDetails = () => {
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<Statistics collectionsId={vocabulariesId || ''} />
+				<Statistics countWords={words.length} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<div className={styles.sidebarContainer}>

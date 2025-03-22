@@ -55,6 +55,7 @@ export const FieldComponent = ({
 						console.log(option);
 						return { value: 'value', label: 'label' };
 					})}
+					disabled={item.disabled}
 				/>
 			</div>
 		);

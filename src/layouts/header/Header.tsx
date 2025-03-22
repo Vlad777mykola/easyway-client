@@ -13,10 +13,10 @@ const sideMenuItems = [
 		name: 'Collections',
 		link: '/',
 	},
-	// {
-	// 	name: 'Vocabularies',
-	// 	link: '/vocabularies',
-	// },
+	{
+		name: 'Vocabularies',
+		link: '/vocabularies',
+	},
 	{
 		name: 'Dictionary',
 		link: '/dictionaries',

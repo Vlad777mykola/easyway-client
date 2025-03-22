@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { filterVocabularyCollections, filterWordCollection } from './service';
 import { ExerciseResponseType } from '@/shared/constants/collections/data';
 import { getReadyQuestion } from '@/modules/vocabularies/services/fetchDefinition';
-import { localstorage } from '@/shared/utils/local-storage/localstorage';
 
 function shuffleArray(array: string[]) {
 	const newArr = [...array];
@@ -94,7 +93,7 @@ export type Word = {
 export type VocabularyListType = {
 	id: string;
 	title: string;
-	topic: VocabularyTopicType;
+	topic: VocabularyTopicType[];
 	category: string[];
 	level: LevelBasedType[];
 };
@@ -171,7 +170,6 @@ type VocabularyStoreActions = {
 		key: ExerciseConfigKeyType,
 	) => ExerciseModeType | number | ExerciseFormateType;
 	getExerciseProgressById: (id: string) => number;
-	getProgressFromLocalStore: (collectionId: string) => void;
 	setCollectionsExerciseConfig: (
 		key: string,
 		value: number[] | string | boolean | string[] | number,
@@ -189,7 +187,6 @@ type VocabularyStoreActions = {
 	setWordsListResponse: (vocabularyList: Word[]) => void;
 	setExerciseListResponse: (exerciseList: ExerciseResponseType[], collectionId: string) => void;
 	setExerciseListProgress: (id: string, isResolved: boolean) => void;
-	saveProgressToLocalStore: (collectionId: string) => void;
 };
 
 export type VocabularyStoreType = VocabularyStoreState & VocabularyStoreActions;
@@ -373,39 +370,11 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 			};
 			set({ exerciseList: [...exerciseListPrepared, exercise] });
 		}
-		console.log('EXERCISE STORE: ', exercise);
-		return exercise;
-	},
-	getProgressFromLocalStore: (collectionId) => {
-		const existProgress = get().exerciseListProgress.length > 0;
-		if (existProgress) {
-			return;
-		}
-		const {
-			resolvedExerciseId,
-			exerciseListProgress,
-		}: {
-			exerciseListProgress: ExerciseListProgressType[];
-			resolvedExerciseId: string[];
-		} = localstorage.getItem(collectionId) || {
-			exerciseListProgress: [],
-			resolvedExerciseId: [],
-		};
 
-		set((state) => ({
-			...state,
-			exerciseListProgress,
-			resolvedExerciseId,
-		}));
+		return exercise;
 	},
 	getExerciseProgressById: (id) => {
 		const state = get().exerciseListProgress;
 		return state.find((item) => item.id === id)?.countCorrectAnswers || 0;
-	},
-	saveProgressToLocalStore: (collectionId) => {
-		localstorage.removeItem(collectionId);
-		const exerciseListProgress = get().exerciseListProgress;
-		const resolvedExerciseId = get().resolvedExerciseId;
-		localstorage.setItem(collectionId, { exerciseListProgress, resolvedExerciseId });
 	},
 }));
