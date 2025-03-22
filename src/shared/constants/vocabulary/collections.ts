@@ -11,6 +11,7 @@ export const DEFAULT_COLLECTIONS_VOCABULARY = [
 	{
 		id: '1',
 		title: 'Family',
+		subtitle: 'Family',
 		topic: ['Family'],
 		category: ['Other'],
 		level: ['A1', 'B2'],
@@ -18,6 +19,7 @@ export const DEFAULT_COLLECTIONS_VOCABULARY = [
 	{
 		id: '2',
 		title: 'Parts of the body',
+		subtitle: 'Family',
 		topic: ['Parts of the body'],
 		category: ['Other', 'Adjectives'],
 		level: ['A1', 'B2', 'C1'],
@@ -25,6 +27,7 @@ export const DEFAULT_COLLECTIONS_VOCABULARY = [
 	{
 		id: '3',
 		title: 'Clothes',
+		subtitle: 'Clothes',
 		topic: ['Clothes'],
 		category: ['Other', 'Adjectives', 'Verbs'],
 		level: ['A1', 'B2', 'C1', 'C2'],
@@ -32,6 +35,7 @@ export const DEFAULT_COLLECTIONS_VOCABULARY = [
 	{
 		id: '4',
 		title: 'Describing people',
+		subtitle: 'Describing people',
 		topic: ['Describing people'],
 		category: ['Adjectives', 'Verbs'],
 		level: ['B1', 'B2'],
