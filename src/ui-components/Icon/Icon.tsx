@@ -21,6 +21,7 @@ import {
 	FullscreenOutlined,
 	FullscreenExitOutlined,
 	SmileOutlined,
+	InfoCircleOutlined,
 } from '@ant-design/icons';
 
 import styles from './icon.module.css';
@@ -43,6 +44,7 @@ const IconVariants = {
 	fullScreen: FullscreenOutlined,
 	exitFullScreen: FullscreenExitOutlined,
 	smile: SmileOutlined,
+	info: InfoCircleOutlined,
 };
 
 export type IconVariantsType = keyof typeof IconVariants;

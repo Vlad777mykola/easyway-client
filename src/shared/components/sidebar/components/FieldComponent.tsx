@@ -2,11 +2,12 @@ import { useImperativeHandle, useState } from 'react';
 import { Select } from '@/ui-components/Select';
 import { Input } from '@/ui-components/Input';
 import { Checkbox } from '@/ui-components/Checkbox';
+import { TooltipLabel } from '@/ui-components/TooltipLabel';
 import { SIDE_BAR_COMPONENT_TYPE } from '../constants';
+import { Clear } from '../Sidebar';
 import type { CommonStateType, FieldsType } from '../type';
 import { isCheckbox, isInput, isSelectOrMultiple } from '../utils';
 import styles from './fieldComponent.module.css';
-import { Clear } from '../Sidebar';
 
 export const FieldComponent = ({
 	item,
@@ -35,9 +36,9 @@ export const FieldComponent = ({
 	if (isSelectOrMultiple(item)) {
 		return (
 			<div key={item.keyValue} className={styles.fieldContainer}>
+				{item.label && <TooltipLabel label={item.label} />}
 				<Select
 					className={styles.select}
-					label={item.label}
 					value={selectValue}
 					mode={
 						item.componentType === SIDE_BAR_COMPONENT_TYPE.MULTIPLE
@@ -64,6 +65,7 @@ export const FieldComponent = ({
 	if (isInput(item)) {
 		return (
 			<div key={item.keyValue} className={styles.fieldContainer}>
+				{item.label && <TooltipLabel label={item.label} />}
 				<Input
 					name="value"
 					value={selectValue as string}
@@ -81,7 +83,7 @@ export const FieldComponent = ({
 					checked={selectValue as boolean}
 					onChange={(event) => change(item.keyValue, event.target.checked)}
 				>
-					{item.label}
+					{item.label && <TooltipLabel label={item.label} />}
 				</Checkbox>
 			</div>
 		);
