@@ -97,3 +97,9 @@ body {
 	background-color: rgb(var(--color-blue-light-4));
 	margin: 0;
 }
+
+.ant-form-item-label > label {
+  &::after {
+    content: none !important;
+  }
+}
