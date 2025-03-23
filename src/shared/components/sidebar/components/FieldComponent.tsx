@@ -2,12 +2,12 @@ import { useImperativeHandle, useState } from 'react';
 import { Select } from '@/ui-components/Select';
 import { Input } from '@/ui-components/Input';
 import { Checkbox } from '@/ui-components/Checkbox';
+import { TooltipLabel } from '@/ui-components/TooltipLabel';
 import { SIDE_BAR_COMPONENT_TYPE } from '../constants';
+import { Clear } from '../Sidebar';
 import type { CommonStateType, FieldsType } from '../type';
 import { isCheckbox, isInput, isSelectOrMultiple } from '../utils';
 import styles from './fieldComponent.module.css';
-import { Clear } from '../Sidebar';
-import { TooltipLabel } from '@/ui-components/TooltipLabel';
 
 export const FieldComponent = ({
 	item,
