@@ -5,14 +5,9 @@ export {
 	VOCABULARY_CONFIG,
 	WORD_CONFIG,
 	EXERCISE_MODE,
-} from './useVocabularyStore';
+} from './constants';
 
-export type {
-	VocabularyListType,
-	VocabularyConfigType,
-	Word,
-	ExerciseType,
-} from './useVocabularyStore';
+export type { VocabularyListType, VocabularyConfigType, Word, ExerciseType } from './type';
 
 import { createSelectors } from '../createSelectors';
 import { useVocabularyStoreBase } from './useVocabularyStore';

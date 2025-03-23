@@ -1,4 +1,4 @@
-import { VocabularyListType, VocabularyConfigType, Word } from './useVocabularyStore';
+import { VocabularyListType, VocabularyConfigType, Word } from './type';
 
 export const filterVocabularyCollections = (
 	data: VocabularyListType[],
@@ -25,3 +25,12 @@ export const filterWordCollection = (data: Word[], wordConfig: string) => {
 		return item ? item.exerciseAnswer.toLowerCase().includes(wordConfig.toLocaleLowerCase()) : true;
 	});
 };
+
+export function shuffleArray(array: string[]) {
+	const newArr = [...array];
+	for (let i = newArr.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+	}
+	return newArr;
+}

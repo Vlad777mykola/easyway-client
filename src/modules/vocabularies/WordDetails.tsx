@@ -1,11 +1,13 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { EXERCISE_FORMATE } from '@/store/vocabulary-collection/useVocabularyStore';
-import { ExerciseModeType } from '@/store/exercise-progress/useExerciseProgressStore';
+import {
+	EXERCISE_FORMATE,
+	ExerciseModeType,
+} from '@/store/exercise-progress/useExerciseProgressStore';
 import { Statistics } from '@/shared/components/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/shared/components/list';
-import { SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
 import { EXERCISE_MODE, useVocabularyStore, WORD_CONFIG } from '@/store/vocabulary-collection';
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { EXERCISE_CONFIG_LABELS } from './constants';
@@ -39,7 +41,7 @@ export const WordDetails = () => {
 		},
 	];
 
-	const fieldsDataMode = [
+	const fieldsDataMode: FieldsDataType[] = [
 		{
 			keyValue: EXERCISE_CONFIG.MODE,
 			options: Object.values(EXERCISE_MODE),
@@ -61,6 +63,12 @@ export const WordDetails = () => {
 			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.FORMATE),
 			label: EXERCISE_CONFIG_LABELS.FORMAT,
 			componentType: SIDE_BAR_COMPONENT_TYPE.SELECT,
+		},
+		{
+			keyValue: EXERCISE_CONFIG.AUTO_PLAY,
+			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.AUTO_PLAY),
+			label: EXERCISE_CONFIG_LABELS.AUTO_PLAY,
+			componentType: SIDE_BAR_COMPONENT_TYPE.CHECKBOX,
 		},
 	];
 

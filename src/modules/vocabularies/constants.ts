@@ -10,6 +10,7 @@ export const EXERCISE_CONFIG_LABELS = {
 	MODE: 'Exercise Mode',
 	CORRECT_RESPONSE: 'Count of total correct response',
 	FORMAT: 'Use a exercise or exercise explanation',
+	AUTO_PLAY: 'Auto play',
 } as const;
 
 export const MAX_VARIANTS = 8;

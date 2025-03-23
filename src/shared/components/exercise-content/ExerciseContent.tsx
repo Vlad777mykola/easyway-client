@@ -1,38 +1,34 @@
-import { Dispatch, SetStateAction } from 'react';
-import { Button } from '@/ui-components/Button';
-import { Icon } from '@/ui-components/Icon';
+import { ExerciseType, useDictionaryStore, EXERCISE_FORMATE } from '@/store/dictionary';
 import { Typography } from '@/ui-components/Typography';
-import { ExerciseType, useExerciseProgressStore } from '@/store/exercise-progress';
-import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 import { classes } from '@/shared/utils/classes';
+import { Button } from '@/ui-components/Button';
+import { speak } from '@/shared/utils/speak';
+import { Icon } from '@/ui-components/Icon';
 
+import { FormateType } from '@/modules/vocabularies/components/select-formate/types';
 import styles from './exerciseContent.module.css';
 
 export const ExerciseUI = ({
 	task,
+	isAutoPlay,
 	setTask,
 	updateProgress,
 	setIsAutoNavigate,
-}: {
-	task: ExerciseType;
-	setTask: Dispatch<SetStateAction<ExerciseType>>;
-	setIsAutoNavigate: Dispatch<SetStateAction<boolean>>;
-	updateProgress: (id: string, isCorrectWord: boolean) => void;
-}) => {
+}: FormateType) => {
 	const {
 		variants,
 		exercise,
 		isComplete,
-		explanation,
+		// explanation,
+		used = '',
 		currentWord,
 		exerciseAnswer,
 		selectedAnswer,
 		isCorrectAnswer,
 	} = task;
-
 	const isSelectingFormate =
-		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseFormate ===
-		EXERCISE_FORMATE.isSelecting;
+		useDictionaryStore.use.collectionsExerciseConfig().exerciseFormate ===
+		EXERCISE_FORMATE.Selecting;
 
 	const onSelect = (answer: string) => {
 		let word = answer;
@@ -50,9 +46,10 @@ export const ExerciseUI = ({
 		if (isComplete && isCorrectAnswer && isCorrectWord) {
 			setIsAutoNavigate(true);
 		}
-		const utterance = new SpeechSynthesisUtterance(answer);
-		utterance.lang = 'en-US';
-		window.speechSynthesis.speak(utterance);
+
+		if (isAutoPlay) {
+			speak(answer);
+		}
 
 		setTask((prev: ExerciseType) => {
 			return {
@@ -68,7 +65,7 @@ export const ExerciseUI = ({
 	return (
 		<div className={styles.testContainer}>
 			<Typography type="secondary" className={styles.topic}>
-				{explanation}
+				{used}
 			</Typography>
 			<div className={styles.exercise}>{exercise}</div>
 			<div className={styles.correctAnswerContainer}>

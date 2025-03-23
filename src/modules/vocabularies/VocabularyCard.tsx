@@ -1,23 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ExerciseType, useVocabularyStore } from '@/store/vocabulary-collection';
-import {
-	DEFAULT_DATA_TEST,
-	EXERCISE_FORMATE,
-	EXERCISE_MODE,
-} from '@/store/vocabulary-collection/useVocabularyStore';
 import { useVocabularyListData } from './hooks/useVocabularyListData';
 import { useProgressStore } from '@/store/progress';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
 import { Result } from '@/ui-components/Result';
-import { ExerciseUI } from './components/exercise-content/ExerciseContent';
-import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import { PaginationExercise } from './components/pagination/Pagination';
 import { saveVocabularyProgress } from './utils/saveVocabularyProgress';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
 import styles from './vocabularyCard.module.css';
+import {
+	DEFAULT_DATA_TEST,
+	EXERCISE_FORMATE,
+	EXERCISE_MODE,
+} from '@/store/vocabulary-collection/constants';
+import { ExerciseUI } from '@/shared/components/exercise-content/ExerciseContent';
+import { SelectingUI } from '@/shared/components/selecting-formate-ui/SelectingUI';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
@@ -41,6 +41,7 @@ export const VocabularyCard = () => {
 	const random =
 		randomModeProgress.resolved.every((item) => item.isDone === true) &&
 		randomModeProgress.resolved.length === words.length;
+	const isAutoPlay = useVocabularyStore.use.collectionsExerciseConfig().autoPlay;
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();
@@ -121,6 +122,8 @@ export const VocabularyCard = () => {
 						setIsAutoNavigate={setIsAutoNavigate}
 						setTask={setTask}
 						updateProgress={setModesProgress}
+						isAutoPlay={isAutoPlay}
+						isSelectingFormate={isSelectingFormate}
 					/>
 				)}
 				{!testIsDone && task && isSelectingFormate && (
@@ -129,7 +132,7 @@ export const VocabularyCard = () => {
 						task={task}
 						setIsAutoNavigate={setIsAutoNavigate}
 						setTask={setTask}
-						updateProgress={setModesProgress}
+						updateProgress={setExerciseListProgress}
 					/>
 				)}
 				{!testIsDone && exerciseListId && (

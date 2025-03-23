@@ -194,9 +194,6 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 		const examModeProgress = get().examModeProgress;
 		const randomModeProgress = get().randomModeProgress;
 		const takenTestCount = get().takenTestCount;
-		console.log('//examModeProgress: ', examModeProgress);
-		console.log('//randomModeProgress: ', randomModeProgress);
-		console.log('//takenTestCount: ', takenTestCount);
 		return { examModeProgress, randomModeProgress, takenTestCount };
 	},
 	resetItemProgress: (nameProgress) => {

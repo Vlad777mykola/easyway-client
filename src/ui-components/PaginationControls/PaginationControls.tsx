@@ -30,8 +30,6 @@ export const PaginationControls = ({
 		return null;
 	} */
 
-	console.log('//IDS PAGINATION: ', ids);
-
 	return (
 		<div className={styles.pagination}>
 			{ids.map((id, index) => {

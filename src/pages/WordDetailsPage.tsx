@@ -1,4 +1,4 @@
-import { WordDetails } from '@/modules/vocabularies/WordDetails';
+import { WordDetails } from '@/modules/vocabularies';
 
 const WordDetailsPage = () => {
 	return <WordDetails />;
