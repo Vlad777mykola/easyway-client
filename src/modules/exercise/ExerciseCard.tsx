@@ -8,11 +8,16 @@ import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunloa
 import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { useExerciseListData } from './hooks/useExerciseListData';
 import { useExerciseProgressStore, DEFAULT_DATA_TEST } from '@/store/exercise-progress';
-import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
+import {
+	EXERCISE_FORMATE,
+	EXERCISE_MODE,
+} from '@/store/exercise-progress/useExerciseProgressStore';
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import type { ExerciseType } from '@/store/exercise-progress';
 import styles from './exerciseCard.module.css';
 import { PaginationExercise } from './components/pagination/Pagination';
+import { useProgressStore } from '@/store/progress';
+import { saveExerciseProgress } from './components/utils/saveExerciseProgress';
 
 export const ExerciseCard = () => {
 	const navigate = useNavigate();
@@ -29,11 +34,27 @@ export const ExerciseCard = () => {
 	const getExerciseById = useExerciseProgressStore.use.getExerciseById();
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useExerciseProgressStore.use.setExerciseListProgress();
-	const saveProgressToLocalStore = useExerciseProgressStore.use.saveProgressToLocalStore();
 	const getProgressFromLocalStore = useExerciseProgressStore.use.getProgressFromLocalStore();
 
+	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
+
+	const exercise = useExerciseProgressStore((state) => state);
+	const collectionsExerciseConfig = useExerciseProgressStore(
+		(state) => state.collectionsExerciseConfig,
+	);
+
+	const exerciseCorrectResponse = useExerciseProgressStore(
+		(state) => state.collectionsExerciseConfig.exerciseCorrectResponse,
+	);
+
+	const setExamProgress = useProgressStore.use.setExamProgress();
+	const setRandomProgress = useProgressStore.use.setRandomProgress();
+	const setTakenTestCount = useProgressStore.use.setTakenTestCount();
+
+	console.log('EXERCISE: ', exercise);
+
 	useExerciseListData(setExerciseListResponse, collectionsId);
-	useBeforeunload(() => saveProgressToLocalStore(collectionsId));
+	useBeforeunload(() => saveExerciseProgress(saveProgressToIndexedDB, `${collectionsId}_exercise`));
 
 	const onNavigate = useCallback(
 		(id: string) => {
@@ -55,8 +76,22 @@ export const ExerciseCard = () => {
 		getProgressFromLocalStore(collectionsId);
 		setIsAutoNavigate(false);
 
-		return () => saveProgressToLocalStore(collectionsId);
+		return () => {
+			console.log('SAVE EXERCISE PROGRESS EXERCISE CARD');
+			saveExerciseProgress(saveProgressToIndexedDB, `${collectionsId}_exercise`);
+		};
 	}, [taskId]);
+
+	const setModesProgress = async (id: string, isResolved: boolean) => {
+		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isExam) {
+			setExamProgress(id, isResolved);
+		}
+		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
+			setRandomProgress(id, isResolved, exerciseCorrectResponse);
+		}
+		setExerciseListProgress(id, isResolved);
+		setTakenTestCount();
+	};
 
 	return (
 		<WrapperCard id={taskId} goBack={() => navigate(`/collections/${collectionsId}`)}>
@@ -79,7 +114,7 @@ export const ExerciseCard = () => {
 						task={task}
 						setIsAutoNavigate={setIsAutoNavigate}
 						setTask={setTask}
-						updateProgress={setExerciseListProgress}
+						updateProgress={setModesProgress}
 					/>
 				)}
 				{!isDoneExercise && task && isSelectingFormate && (

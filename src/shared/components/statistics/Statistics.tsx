@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Button } from '@/ui-components/Button';
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
@@ -14,8 +13,13 @@ import styles from './statistics.module.css';
 
 const COUNT_UP_DURATION = 1500;
 
-export const Statistics = ({ countWords }: { countWords: number }) => {
-	const { vocabulariesId = '' } = useParams();
+export const Statistics = ({
+	countWords,
+	exercisesId,
+}: {
+	countWords: number;
+	exercisesId: string;
+}) => {
 	const progressStore = useProgressStore.use.randomModeProgress();
 	const takenTestCount = useProgressStore.use.takenTestCount();
 	const totalPercentage = useProgressStore.use.progressPercentage().total;
@@ -24,13 +28,13 @@ export const Statistics = ({ countWords }: { countWords: number }) => {
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
 	const clearAll = useProgressStore.use.clearAll();
 
-	useBeforeunload(() => saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId));
+	useBeforeunload(() => saveVocabularyProgress(saveProgressToIndexedDB, exercisesId));
 
 	useEffect(() => {
 		setProgressPercentage(countWords);
 	}, [countWords, progressStore]);
 
-	useIndexedDB(getProgressFromIndexedDB, vocabulariesId);
+	useIndexedDB(getProgressFromIndexedDB, exercisesId);
 
 	return (
 		<Wrapper>
@@ -40,7 +44,7 @@ export const Statistics = ({ countWords }: { countWords: number }) => {
 						size="small"
 						color="danger"
 						variant="filled"
-						onClick={() => deleteVocabularyCollectionProgress(clearAll, vocabulariesId)}
+						onClick={() => deleteVocabularyCollectionProgress(clearAll, exercisesId)}
 					>
 						Clear Progress
 					</Button>

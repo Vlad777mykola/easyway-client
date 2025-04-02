@@ -27,6 +27,10 @@ export const WordDetails = () => {
 	const setFilterWordOnSearch = useVocabularyStore.use.setFilterWordOnSearch();
 	const getExerciseConfig = useVocabularyStore.use.getExerciseConfig();
 
+	const vocabulary = useVocabularyStore((state) => state);
+
+	console.log('VOCABULARY: ', vocabulary);
+
 	const navigate = useNavigate();
 
 	const [mode, setMode] = useState<ExerciseModeType>(EXERCISE_MODE.isRandom);
@@ -72,7 +76,7 @@ export const WordDetails = () => {
 		},
 	];
 
-	useVocabularyListData(setWordsListResponse, vocabulariesId);
+	useVocabularyListData(setWordsListResponse, vocabulariesId || '');
 
 	useEffect(() => {
 		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
@@ -108,7 +112,7 @@ export const WordDetails = () => {
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<Statistics countWords={words.length} />
+				<Statistics countWords={words.length} exercisesId={`${vocabulariesId}_vocabulary`} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<div className={styles.sidebarContainer}>

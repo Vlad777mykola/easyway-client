@@ -50,7 +50,9 @@ export const VocabularyCard = () => {
 	const setRandomProgress = useProgressStore.use.setRandomProgress();
 	const setTakenTestCount = useProgressStore.use.setTakenTestCount();
 
-	useBeforeunload(() => saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId));
+	useBeforeunload(() =>
+		saveVocabularyProgress(saveProgressToIndexedDB, `${vocabulariesId}_vocabulary`),
+	);
 
 	useEffect(() => {
 		if (collectionsExerciseConfig.exerciseMode === 'randomMode') {
@@ -82,7 +84,7 @@ export const VocabularyCard = () => {
 		setIsAutoNavigate(false);
 
 		return () => {
-			saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId);
+			saveVocabularyProgress(saveProgressToIndexedDB, `${vocabulariesId}_vocabulary`);
 		};
 	}, [wordId]);
 

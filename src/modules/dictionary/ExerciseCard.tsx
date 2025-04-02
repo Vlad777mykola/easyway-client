@@ -11,6 +11,9 @@ import { SelectFormate } from './components/select-formate/SelectFormate';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
 import styles from './exerciseCard.module.css';
+import { saveExerciseProgress } from './utils/saveDictionaryProgress';
+import { useProgressStore } from '@/store/progress';
+import { EXERCISE_MODE } from '@/store/exercise-progress';
 
 export const DictionaryExerciseCard = () => {
 	const navigate = useNavigate();
@@ -27,11 +30,20 @@ export const DictionaryExerciseCard = () => {
 	const getExerciseById = useDictionaryStore.use.getExerciseById();
 	const setExerciseListResponse = useDictionaryStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useDictionaryStore.use.setExerciseListProgress();
-	const saveProgressToLocalStore = useDictionaryStore.use.saveProgressToLocalStore();
 	const getProgressFromLocalStore = useDictionaryStore.use.getProgressFromLocalStore();
 
+	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
+
+	const setExamProgress = useProgressStore.use.setExamProgress();
+	const setRandomProgress = useProgressStore.use.setRandomProgress();
+	const setTakenTestCount = useProgressStore.use.setTakenTestCount();
+
+	const collectionsExerciseConfig = useDictionaryStore((state) => state.collectionsExerciseConfig);
+
 	useExerciseListData(setExerciseListResponse, dictionaryId);
-	useBeforeunload(() => saveProgressToLocalStore(dictionaryId));
+	useBeforeunload(() =>
+		saveExerciseProgress(saveProgressToIndexedDB, `${dictionaryId}_dictionary`),
+	);
 	const onNavigate = useCallback(
 		(id: string) => {
 			navigate(`/dictionaries/${dictionaryId}/word/${id}`);
@@ -56,8 +68,21 @@ export const DictionaryExerciseCard = () => {
 		getProgressFromLocalStore(dictionaryId);
 		setIsAutoNavigate(false);
 
-		return () => saveProgressToLocalStore(dictionaryId);
+		return () => {
+			saveExerciseProgress(saveProgressToIndexedDB, `${dictionaryId}_dictionary`);
+		};
 	}, [wordId]);
+
+	const setModesProgress = async (id: string, isResolved: boolean) => {
+		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isExam) {
+			setExamProgress(id, isResolved);
+		}
+		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
+			setRandomProgress(id, isResolved, collectionsExerciseConfig.exerciseCorrectResponse);
+		}
+		setExerciseListProgress(id, isResolved);
+		setTakenTestCount();
+	};
 
 	return (
 		<WrapperCard id={wordId} goBack={() => navigateToDictionary()}>
@@ -71,7 +96,7 @@ export const DictionaryExerciseCard = () => {
 						task={task}
 						setTask={setTask}
 						setIsAutoNavigate={setIsAutoNavigate}
-						updateProgress={setExerciseListProgress}
+						updateProgress={setModesProgress}
 					/>
 				)}
 

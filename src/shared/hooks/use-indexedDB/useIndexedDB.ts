@@ -7,8 +7,6 @@ import {
 	type TakenTestCount,
 } from '@/store/progress';
 
-const DATA_FIELD = 'vocabulary';
-
 export const useIndexedDB = (
 	func: (
 		examModeProgress: ExamModeProgressType,
@@ -20,8 +18,9 @@ export const useIndexedDB = (
 	useEffect(() => {
 		(async () => {
 			try {
-				const loadedData = await loadState(`${collectionId}_vocabulary`);
-				await updateLastTest(`${collectionId}_${DATA_FIELD}`, `takenTestCount`, {
+				const loadedData = await loadState(collectionId);
+				console.log('LOADED DATA: ', loadedData);
+				await updateLastTest(collectionId, `takenTestCount`, {
 					count: 0,
 					timestamp: 0,
 				});

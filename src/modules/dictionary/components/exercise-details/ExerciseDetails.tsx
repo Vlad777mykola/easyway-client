@@ -4,7 +4,6 @@ import { ContentContainer } from '@/ui-components/Content-Container';
 import { List } from '@/shared/components/list';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from '../../constants';
-import { Statistics } from '../statistics/Statistics';
 import { useExerciseListData } from '../../hooks/useExerciseListData';
 import {
 	useDictionaryStore,
@@ -12,6 +11,7 @@ import {
 	EXERCISE_CONFIG,
 	EXERCISE_FORMATE,
 } from '@/store/dictionary';
+import { Statistics } from '@/shared/components/statistics/Statistics';
 
 export const DictionaryExerciseDetails = (): ReactNode => {
 	const navigate = useNavigate();
@@ -21,6 +21,10 @@ export const DictionaryExerciseDetails = (): ReactNode => {
 	const setExerciseListResponse = useDictionaryStore.use.setExerciseListResponse();
 	const getProgressFromLocalStore = useDictionaryStore.use.getProgressFromLocalStore();
 	const setCollectionsExerciseConfig = useDictionaryStore.use.setCollectionsExerciseConfig();
+
+	const dictionary = useDictionaryStore((state) => state);
+
+	console.log('DICTIONARY: ', dictionary);
 
 	useExerciseListData(setExerciseListResponse, dictionaryId);
 
@@ -73,7 +77,10 @@ export const DictionaryExerciseDetails = (): ReactNode => {
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<Statistics collectionsId={dictionaryId || ''} />
+				<Statistics
+					countWords={exerciseListResponse.length}
+					exercisesId={`${dictionaryId}_dictionary`}
+				/>
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<Sidebar title="Exercise Stings" fieldsData={fieldsData} onChange={onChange} />

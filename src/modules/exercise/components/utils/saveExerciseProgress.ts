@@ -1,7 +1,7 @@
 import { ExamModeProgressType, RandomTest, ResolvedRandomTest } from '@/store/progress';
 import { saveState } from '@/utils/indexedDB';
 
-export const saveVocabularyProgress = async (
+export const saveExerciseProgress = async (
 	func: () => {
 		examModeProgress: ExamModeProgressType;
 		randomModeProgress: { progress: RandomTest[]; resolved: ResolvedRandomTest[] };
@@ -9,6 +9,7 @@ export const saveVocabularyProgress = async (
 	},
 	collectionId?: string,
 ) => {
+	console.log('SAVE EXERCISE PROGRESS');
 	const { examModeProgress, randomModeProgress, takenTestCount } = func() as {
 		examModeProgress: ExamModeProgressType;
 		randomModeProgress: {
@@ -18,9 +19,9 @@ export const saveVocabularyProgress = async (
 		takenTestCount: { count: number; timestamp: number };
 	};
 
-	console.log('examModeProgress VOCABULARY: ', examModeProgress);
-	console.log('randomModeProgress VOCABULARY: ', randomModeProgress);
-	console.log('takenTestCount VOCABULARY: ', takenTestCount);
+	console.log('examModeProgress EXERCISE: ', examModeProgress);
+	console.log('randomModeProgress EXERCISE: ', randomModeProgress);
+	console.log('takenTestCount EXERCISE: ', takenTestCount);
 
 	await saveState(`${collectionId}`, {
 		[`examModeProgress`]: examModeProgress,

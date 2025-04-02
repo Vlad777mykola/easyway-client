@@ -6,7 +6,7 @@ import { EXERCISE_CONFIG, EXERCISE_FORMATE } from '@/store/exercise-progress';
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
-import { Statistics } from './components/statistics/Statistics';
+import { Statistics } from '@/shared/components/statistics/Statistics';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
 export const ExerciseDetails = (): ReactNode => {
@@ -17,6 +17,11 @@ export const ExerciseDetails = (): ReactNode => {
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
 	const getProgressFromLocalStore = useExerciseProgressStore.use.getProgressFromLocalStore();
 	const setCollectionsExerciseConfig = useExerciseProgressStore.use.setCollectionsExerciseConfig();
+
+	const collections = useExerciseProgressStore((store) => store);
+
+	console.log('EXERCISE: ', collections);
+	console.log('exerciseListResponse: ', exerciseListResponse);
 
 	useExerciseListData(setExerciseListResponse, collectionsId);
 
@@ -59,7 +64,10 @@ export const ExerciseDetails = (): ReactNode => {
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<Statistics collectionsId={collectionsId || ''} />
+				<Statistics
+					countWords={exerciseListResponse.length}
+					exercisesId={`${collectionsId}_exercise`}
+				/>
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<Sidebar title="Exercise Stings" fieldsData={fieldsData} onChange={onChange} />
