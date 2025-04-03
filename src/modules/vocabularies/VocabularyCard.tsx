@@ -6,7 +6,6 @@ import { useProgressStore } from '@/store/progress';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { PaginationExercise } from './components/pagination/Pagination';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
-import styles from './vocabularyCard.module.css';
 import {
 	DEFAULT_DATA_TEST,
 	EXERCISE_FORMATE,
@@ -15,6 +14,7 @@ import {
 import { saveProgress } from '@/shared/utils/progress/saveProgress';
 import { DoneCard } from '@/shared/components/done-card';
 import { SelectFormate } from './components/select-formate/SelectFormate';
+import styles from './vocabularyCard.module.css';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
