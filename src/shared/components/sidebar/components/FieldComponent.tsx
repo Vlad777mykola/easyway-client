@@ -11,10 +11,12 @@ import styles from './fieldComponent.module.css';
 
 export const FieldComponent = ({
 	item,
+	showInfo,
 	onChange,
 	ref,
 }: {
 	item: FieldsType;
+	showInfo: boolean;
 	onChange: (key: string, value: string | boolean | string[] | number[] | number) => void;
 	ref: (el: Clear) => void;
 }) => {
@@ -36,7 +38,7 @@ export const FieldComponent = ({
 	if (isSelectOrMultiple(item)) {
 		return (
 			<div key={item.keyValue} className={styles.fieldContainer}>
-				{item.label && <TooltipLabel label={item.label} />}
+				{showInfo && item.label && <TooltipLabel label={item.label} />}
 				<Select
 					className={styles.select}
 					value={selectValue}
@@ -65,7 +67,7 @@ export const FieldComponent = ({
 	if (isInput(item)) {
 		return (
 			<div key={item.keyValue} className={styles.fieldContainer}>
-				{item.label && <TooltipLabel label={item.label} />}
+				{showInfo && item.label && <TooltipLabel label={item.label} />}
 				<Input
 					name="value"
 					value={selectValue as string}
@@ -83,7 +85,7 @@ export const FieldComponent = ({
 					checked={selectValue as boolean}
 					onChange={(event) => change(item.keyValue, event.target.checked)}
 				>
-					{item.label && <TooltipLabel label={item.label} />}
+					{showInfo && item.label && <TooltipLabel label={item.label} />}
 				</Checkbox>
 			</div>
 		);

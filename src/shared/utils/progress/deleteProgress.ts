@@ -1,10 +1,7 @@
 import { deleteState, clearAllState } from '@/utils/indexedDB';
 
-export const deleteVocabularyCollectionProgress = async (
-	func: () => void,
-	collectionId: string,
-) => {
-	await deleteState(`${collectionId}`);
+export const deleteProgress = async (func: () => void, collectionId: string) => {
+	await deleteState(collectionId);
 	func();
 };
 

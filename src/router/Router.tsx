@@ -9,7 +9,7 @@ const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const CompleteTest = lazy(() => import('@/pages/CompleteTest'));
 const DictionaryPage = lazy(() => import('@/pages/DictionaryPage'));
 
-const CollectionsPage = lazy(() => import('@/pages/CollectionsPage'));
+const ExercisesPage = lazy(() => import('@/pages/ExercisesPage'));
 const VocabulariesPage = lazy(() => import('@/pages/VocabulariesPage'));
 const ExerciseDetails = lazy(() => import('@/pages/ExerciseDetailsPage'));
 const WordDetailsPage = lazy(() => import('@/pages/WordDetailsPage'));
@@ -24,11 +24,11 @@ export const router = createBrowserRouter([
 			{ path: 'profile', element: <ProfilePage /> },
 			// { path: 'login', element: <Auth /> },
 			// { path: 'signup', element: <Auth /> },
-			{ path: '', element: <CollectionsPage /> },
+			{ path: '', element: <ExercisesPage /> },
 
-			{ path: 'collections', element: <CollectionsPage /> },
-			{ path: 'collections/:collectionsId', element: <ExerciseDetails /> },
-			{ path: 'collections/:collectionsId/task/:taskId', element: <CompleteTest /> },
+			{ path: 'exercises', element: <ExercisesPage /> },
+			{ path: 'exercises/:exercisesId', element: <ExerciseDetails /> },
+			{ path: 'exercises/:exercisesId/task/:taskId', element: <CompleteTest /> },
 
 			{ path: 'vocabularies', element: <VocabulariesPage /> },
 			{ path: 'vocabularies/:vocabulariesId', element: <WordDetailsPage /> },

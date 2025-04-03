@@ -14,14 +14,15 @@ import {
 } from '@/store/exercise-progress/useExerciseProgressStore';
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import type { ExerciseType } from '@/store/exercise-progress';
-import styles from './exerciseCard.module.css';
 import { PaginationExercise } from './components/pagination/Pagination';
 import { useProgressStore } from '@/store/progress';
-import { saveExerciseProgress } from './components/utils/saveExerciseProgress';
+import { saveProgress } from '@/shared/utils/progress/saveProgress';
+import styles from './exerciseCard.module.css';
 
 export const ExerciseCard = () => {
 	const navigate = useNavigate();
-	const { taskId = '', collectionsId = '' } = useParams();
+	const { taskId = '', exercisesId = '' } = useParams();
+	const ID_EXERCISE = `${exercisesId}_exercise`;
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
 
@@ -38,7 +39,6 @@ export const ExerciseCard = () => {
 
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
 
-	const exercise = useExerciseProgressStore((state) => state);
 	const collectionsExerciseConfig = useExerciseProgressStore(
 		(state) => state.collectionsExerciseConfig,
 	);
@@ -51,16 +51,14 @@ export const ExerciseCard = () => {
 	const setRandomProgress = useProgressStore.use.setRandomProgress();
 	const setTakenTestCount = useProgressStore.use.setTakenTestCount();
 
-	console.log('EXERCISE: ', exercise);
-
-	useExerciseListData(setExerciseListResponse, collectionsId);
-	useBeforeunload(() => saveExerciseProgress(saveProgressToIndexedDB, `${collectionsId}_exercise`));
+	useExerciseListData(setExerciseListResponse, exercisesId);
+	useBeforeunload(() => saveProgress(saveProgressToIndexedDB, ID_EXERCISE));
 
 	const onNavigate = useCallback(
 		(id: string) => {
-			navigate(`/collections/${collectionsId}/task/${id}`);
+			navigate(`/exercises/${exercisesId}/task/${id}`);
 		},
-		[navigate, collectionsId],
+		[navigate, exercisesId],
 	);
 
 	useEffect(() => {
@@ -73,12 +71,11 @@ export const ExerciseCard = () => {
 	}, [taskId]);
 
 	useEffect(() => {
-		getProgressFromLocalStore(collectionsId);
+		getProgressFromLocalStore(exercisesId);
 		setIsAutoNavigate(false);
 
 		return () => {
-			console.log('SAVE EXERCISE PROGRESS EXERCISE CARD');
-			saveExerciseProgress(saveProgressToIndexedDB, `${collectionsId}_exercise`);
+			saveProgress(saveProgressToIndexedDB, ID_EXERCISE);
 		};
 	}, [taskId]);
 
@@ -94,14 +91,14 @@ export const ExerciseCard = () => {
 	};
 
 	return (
-		<WrapperCard id={taskId} goBack={() => navigate(`/collections/${collectionsId}`)}>
+		<WrapperCard id={taskId} goBack={() => navigate(`/exercises/${exercisesId}`)}>
 			<div className={styles.taskContainer}>
 				{isDoneExercise && (
 					<Result
 						icon={<Icon icon="smile" size="xl" />}
 						title="Great, you have done all the exercise!"
 						extra={
-							<Button onClick={() => navigate(`/collections/${collectionsId}`)} type="primary">
+							<Button onClick={() => navigate(`/exercises/${exercisesId}`)} type="primary">
 								Next
 							</Button>
 						}

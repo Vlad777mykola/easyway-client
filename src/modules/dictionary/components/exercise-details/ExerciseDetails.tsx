@@ -16,15 +16,12 @@ import { Statistics } from '@/shared/components/statistics/Statistics';
 export const DictionaryExerciseDetails = (): ReactNode => {
 	const navigate = useNavigate();
 	const { dictionaryId = '' } = useParams();
+	const ID_DICTIONARY_EXERCISE = `${dictionaryId}_dictionary`;
 	const exerciseListResponse = useDictionaryStore.use.exerciseListResponse();
 	const getExerciseConfig = useDictionaryStore.use.getExerciseConfig();
 	const setExerciseListResponse = useDictionaryStore.use.setExerciseListResponse();
 	const getProgressFromLocalStore = useDictionaryStore.use.getProgressFromLocalStore();
 	const setCollectionsExerciseConfig = useDictionaryStore.use.setCollectionsExerciseConfig();
-
-	const dictionary = useDictionaryStore((state) => state);
-
-	console.log('DICTIONARY: ', dictionary);
 
 	useExerciseListData(setExerciseListResponse, dictionaryId);
 
@@ -77,10 +74,7 @@ export const DictionaryExerciseDetails = (): ReactNode => {
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<Statistics
-					countWords={exerciseListResponse.length}
-					exercisesId={`${dictionaryId}_dictionary`}
-				/>
+				<Statistics countWords={exerciseListResponse.length} exercisesId={ID_DICTIONARY_EXERCISE} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<Sidebar title="Exercise Stings" fieldsData={fieldsData} onChange={onChange} />

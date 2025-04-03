@@ -4,11 +4,11 @@ import { Button } from '@/ui-components/Button';
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
 import { CountUp } from '@/ui-components/CountUp';
 import { AddInfo } from './components/add-info/AddInfo';
-import { deleteVocabularyCollectionProgress } from '../../../modules/vocabularies/utils/deleteVocabularyProgress';
 import { useProgressStore } from '@/store/progress';
 import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
-import { saveVocabularyProgress } from '../../../modules/vocabularies/utils/saveVocabularyProgress';
+import { saveProgress } from '@/shared/utils/progress/saveProgress';
+import { deleteProgress } from '@/shared/utils/progress/deleteProgress';
 import styles from './statistics.module.css';
 
 const COUNT_UP_DURATION = 1500;
@@ -28,7 +28,7 @@ export const Statistics = ({
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
 	const clearAll = useProgressStore.use.clearAll();
 
-	useBeforeunload(() => saveVocabularyProgress(saveProgressToIndexedDB, exercisesId));
+	useBeforeunload(() => saveProgress(saveProgressToIndexedDB, exercisesId));
 
 	useEffect(() => {
 		setProgressPercentage(countWords);
@@ -44,7 +44,7 @@ export const Statistics = ({
 						size="small"
 						color="danger"
 						variant="filled"
-						onClick={() => deleteVocabularyCollectionProgress(clearAll, exercisesId)}
+						onClick={() => deleteProgress(clearAll, exercisesId)}
 					>
 						Clear Progress
 					</Button>

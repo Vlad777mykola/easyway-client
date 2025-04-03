@@ -5,11 +5,11 @@ import styles from './tooltip.module.css';
 
 export const TooltipLabel = ({ label = '' }: { label: string }) => {
 	return (
-		<label>
+		<label className={styles.labelContainer}>
+			<span className={styles.label}>{label}</span>
 			<Tooltip title={label} color="grey">
-				<div className={styles.labelContainer}>
-					<span className={styles.label}>{label}</span>
-					<Icon icon="info" />
+				<div>
+					<Icon icon="info" size="xs" />
 				</div>
 			</Tooltip>
 		</label>

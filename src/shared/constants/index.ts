@@ -7,7 +7,7 @@ export { DICTIONARY_COLLECTIONS } from './dictionary/collections';
 export { DEFAULT_COLLECTIONS } from './collections/data';
 
 export const ALL_COLLECTIONS = {
-	collections: DEFAULT_COLLECTIONS,
+	exercises: DEFAULT_COLLECTIONS,
 	dictionaries: DICTIONARY_COLLECTIONS,
 	vocabularies: DEFAULT_COLLECTIONS_VOCABULARY,
 };

@@ -11,13 +11,14 @@ import { SelectFormate } from './components/select-formate/SelectFormate';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
 import styles from './exerciseCard.module.css';
-import { saveExerciseProgress } from './utils/saveDictionaryProgress';
 import { useProgressStore } from '@/store/progress';
 import { EXERCISE_MODE } from '@/store/exercise-progress';
+import { saveProgress } from '@/shared/utils/progress/saveProgress';
 
 export const DictionaryExerciseCard = () => {
 	const navigate = useNavigate();
 	const { wordId = '', dictionaryId = '' } = useParams();
+	const ID_DICTIONARY_EXERCISE = `${dictionaryId}_dictionary`;
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
 
@@ -41,9 +42,9 @@ export const DictionaryExerciseCard = () => {
 	const collectionsExerciseConfig = useDictionaryStore((state) => state.collectionsExerciseConfig);
 
 	useExerciseListData(setExerciseListResponse, dictionaryId);
-	useBeforeunload(() =>
-		saveExerciseProgress(saveProgressToIndexedDB, `${dictionaryId}_dictionary`),
-	);
+
+	useBeforeunload(() => saveProgress(saveProgressToIndexedDB, ID_DICTIONARY_EXERCISE));
+
 	const onNavigate = useCallback(
 		(id: string) => {
 			navigate(`/dictionaries/${dictionaryId}/word/${id}`);
@@ -69,7 +70,7 @@ export const DictionaryExerciseCard = () => {
 		setIsAutoNavigate(false);
 
 		return () => {
-			saveExerciseProgress(saveProgressToIndexedDB, `${dictionaryId}_dictionary`);
+			saveProgress(saveProgressToIndexedDB, ID_DICTIONARY_EXERCISE);
 		};
 	}, [wordId]);
 

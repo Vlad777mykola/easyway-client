@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { filterWordCollection, shuffleArray } from './service';
+import { filterWordCollection } from './service';
 import { ExerciseResponseType } from '@/shared/constants/collections/data';
 import { getReadyQuestion } from '@/modules/vocabularies/services/fetchDefinition';
 import {
@@ -15,6 +15,7 @@ import {
 	ExerciseType,
 	Word,
 } from './type';
+import { shuffleArray } from '@/shared/utils/shuffle-array';
 
 type VocabularyStoreState = {
 	filteredWordsVocabulary: Word[];
