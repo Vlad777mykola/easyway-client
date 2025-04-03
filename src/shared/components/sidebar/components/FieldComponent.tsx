@@ -55,7 +55,6 @@ export const FieldComponent = ({
 						if (typeof option === 'string' || typeof option === 'number') {
 							return { value: option, label: option };
 						}
-						console.log(option);
 						return { value: 'value', label: 'label' };
 					})}
 					disabled={item.disabled}
