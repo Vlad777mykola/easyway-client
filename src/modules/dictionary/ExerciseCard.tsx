@@ -1,19 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useProgressStore } from '@/store/progress';
+import { EXERCISE_MODE } from '@/store/exercise-progress';
 import type { ExerciseType } from '@/store/dictionary';
 import { DoneCard } from '@/shared/components/done-card';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
+import { saveProgress } from '@/shared/utils/progress/saveProgress';
 import { useDictionaryStore, DEFAULT_DATA_TEST, EXERCISE_FORMATE } from '@/store/dictionary';
-
 import { PaginationExercise } from './components/pagination/Pagination';
 import { SelectFormate } from './components/select-formate/SelectFormate';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
 import styles from './exerciseCard.module.css';
-import { useProgressStore } from '@/store/progress';
-import { EXERCISE_MODE } from '@/store/exercise-progress';
-import { saveProgress } from '@/shared/utils/progress/saveProgress';
 
 export const DictionaryExerciseCard = () => {
 	const navigate = useNavigate();
@@ -27,6 +26,7 @@ export const DictionaryExerciseCard = () => {
 	const isSelectingFormate =
 		useDictionaryStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.Selecting;
+	const collectionsExerciseConfig = useDictionaryStore.use.collectionsExerciseConfig();
 
 	const getExerciseById = useDictionaryStore.use.getExerciseById();
 	const setExerciseListResponse = useDictionaryStore.use.setExerciseListResponse();
@@ -38,8 +38,6 @@ export const DictionaryExerciseCard = () => {
 	const setExamProgress = useProgressStore.use.setExamProgress();
 	const setRandomProgress = useProgressStore.use.setRandomProgress();
 	const setTakenTestCount = useProgressStore.use.setTakenTestCount();
-
-	const collectionsExerciseConfig = useDictionaryStore((state) => state.collectionsExerciseConfig);
 
 	useExerciseListData(setExerciseListResponse, dictionaryId);
 

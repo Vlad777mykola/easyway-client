@@ -32,20 +32,16 @@ export const ExerciseCard = () => {
 		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
 
+	const collectionsExerciseConfig = useExerciseProgressStore.use.collectionsExerciseConfig();
+	const exerciseCorrectResponse =
+		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseCorrectResponse;
+
 	const getExerciseById = useExerciseProgressStore.use.getExerciseById();
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useExerciseProgressStore.use.setExerciseListProgress();
 	const getProgressFromLocalStore = useExerciseProgressStore.use.getProgressFromLocalStore();
 
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
-
-	const collectionsExerciseConfig = useExerciseProgressStore(
-		(state) => state.collectionsExerciseConfig,
-	);
-
-	const exerciseCorrectResponse = useExerciseProgressStore(
-		(state) => state.collectionsExerciseConfig.exerciseCorrectResponse,
-	);
 
 	const setExamProgress = useProgressStore.use.setExamProgress();
 	const setRandomProgress = useProgressStore.use.setRandomProgress();
