@@ -36,7 +36,7 @@ export const ErrorProgressPagination = () => {
 
 	const onClickQuestion = (id: string) => {
 		setCollectionsExerciseConfig(EXERCISE_CONFIG.MODE, EXERCISE_MODE.isExam);
-		navigate(`${location.pathname}word/${id}`);
+		navigate(`${location.pathname}/word/${id}`);
 	};
 
 	return (

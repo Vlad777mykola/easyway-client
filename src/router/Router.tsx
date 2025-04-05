@@ -28,7 +28,7 @@ export const router = createBrowserRouter([
 
 			{ path: 'exercises', element: <ExercisesPage /> },
 			{ path: 'exercises/:exercisesId', element: <ExerciseDetails /> },
-			{ path: 'exercises/:exercisesId/task/:taskId', element: <CompleteTest /> },
+			{ path: 'exercises/:exercisesId/word/:taskId', element: <CompleteTest /> },
 
 			{ path: 'vocabularies', element: <VocabulariesPage /> },
 			{ path: 'vocabularies/:vocabulariesId', element: <WordDetailsPage /> },
