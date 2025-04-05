@@ -52,7 +52,7 @@ export const ExerciseCard = () => {
 
 	const onNavigate = useCallback(
 		(id: string) => {
-			navigate(`/exercises/${exercisesId}/task/${id}`);
+			navigate(`/exercises/${exercisesId}/word/${id}`);
 		},
 		[navigate, exercisesId],
 	);

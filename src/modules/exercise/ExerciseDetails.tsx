@@ -54,7 +54,7 @@ export const ExerciseDetails = (): ReactNode => {
 	};
 
 	const onClick = (id: string) => {
-		navigate(`/exercises/${exercisesId}/task/${id}`);
+		navigate(`/exercises/${exercisesId}/word/${id}`);
 	};
 
 	return (
