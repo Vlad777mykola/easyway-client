@@ -16,6 +16,7 @@ import styles from './wordDetails.module.css';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
+	const ID_VOCABULARY_EXERCISE = `${vocabulariesId}_vocabulary`;
 	const filteredWordsVocabulary = useVocabularyStore.use.filteredWordsVocabulary();
 	const exerciseMode = useVocabularyStore.use.collectionsExerciseConfig().exerciseMode;
 	const words = useVocabularyStore.use.words();
@@ -72,7 +73,7 @@ export const WordDetails = () => {
 		},
 	];
 
-	useVocabularyListData(setWordsListResponse, vocabulariesId);
+	useVocabularyListData(setWordsListResponse, vocabulariesId || '');
 
 	useEffect(() => {
 		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
@@ -108,7 +109,7 @@ export const WordDetails = () => {
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<Statistics countWords={words.length} />
+				<Statistics countWords={words.length} exercisesId={ID_VOCABULARY_EXERCISE} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<div className={styles.sidebarContainer}>
@@ -122,7 +123,12 @@ export const WordDetails = () => {
 						/>
 					</div>
 					<div>
-						<Sidebar title="Exercise Stings" fieldsData={fieldsDataMode} onChange={onChangeMode} />
+						<Sidebar
+							title="Exercise Stings"
+							fieldsData={fieldsDataMode}
+							showInfo={true}
+							onChange={onChangeMode}
+						/>
 					</div>
 				</div>
 			</ContentContainer.Sidebar>

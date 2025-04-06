@@ -4,7 +4,6 @@ import { ContentContainer } from '@/ui-components/Content-Container';
 import { List } from '@/shared/components/list';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from '../../constants';
-import { Statistics } from '../statistics/Statistics';
 import { useExerciseListData } from '../../hooks/useExerciseListData';
 import {
 	useDictionaryStore,
@@ -12,10 +11,12 @@ import {
 	EXERCISE_CONFIG,
 	EXERCISE_FORMATE,
 } from '@/store/dictionary';
+import { Statistics } from '@/shared/components/statistics/Statistics';
 
 export const DictionaryExerciseDetails = (): ReactNode => {
 	const navigate = useNavigate();
 	const { dictionaryId = '' } = useParams();
+	const ID_DICTIONARY_EXERCISE = `${dictionaryId}_dictionary`;
 	const exerciseListResponse = useDictionaryStore.use.exerciseListResponse();
 	const getExerciseConfig = useDictionaryStore.use.getExerciseConfig();
 	const setExerciseListResponse = useDictionaryStore.use.setExerciseListResponse();
@@ -73,7 +74,7 @@ export const DictionaryExerciseDetails = (): ReactNode => {
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<Statistics collectionsId={dictionaryId || ''} />
+				<Statistics countWords={exerciseListResponse.length} exercisesId={ID_DICTIONARY_EXERCISE} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<Sidebar title="Exercise Stings" fieldsData={fieldsData} onChange={onChange} />

@@ -99,8 +99,8 @@ body {
 }
 
 .ant-form-item-label > label {
-  &::after {
+	&::after {
 		/* does not show colon in label select */
-    content: none !important;
-  }
+		content: none !important;
+	}
 }

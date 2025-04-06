@@ -6,19 +6,20 @@ import { EXERCISE_CONFIG, EXERCISE_FORMATE } from '@/store/exercise-progress';
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
-import { Statistics } from './components/statistics/Statistics';
+import { Statistics } from '@/shared/components/statistics/Statistics';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
 export const ExerciseDetails = (): ReactNode => {
 	const navigate = useNavigate();
-	const { collectionsId = '' } = useParams();
+	const { exercisesId = '' } = useParams();
+	const ID_EXERCISE = `${exercisesId}_exercise`;
 	const exerciseListResponse = useExerciseProgressStore.use.exerciseListResponse();
 	const getExerciseConfig = useExerciseProgressStore.use.getExerciseConfig();
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
 	const getProgressFromLocalStore = useExerciseProgressStore.use.getProgressFromLocalStore();
 	const setCollectionsExerciseConfig = useExerciseProgressStore.use.setCollectionsExerciseConfig();
 
-	useExerciseListData(setExerciseListResponse, collectionsId);
+	useExerciseListData(setExerciseListResponse, exercisesId);
 
 	const fieldsData: FieldsDataType[] = [
 		{
@@ -45,7 +46,7 @@ export const ExerciseDetails = (): ReactNode => {
 	] as const;
 
 	useEffect(() => {
-		getProgressFromLocalStore(collectionsId || '');
+		getProgressFromLocalStore(exercisesId || '');
 	}, []);
 
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
@@ -53,13 +54,13 @@ export const ExerciseDetails = (): ReactNode => {
 	};
 
 	const onClick = (id: string) => {
-		navigate(`/collections/${collectionsId}/task/${id}`);
+		navigate(`/exercises/${exercisesId}/word/${id}`);
 	};
 
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<Statistics collectionsId={collectionsId || ''} />
+				<Statistics countWords={exerciseListResponse.length} exercisesId={ID_EXERCISE} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<Sidebar title="Exercise Stings" fieldsData={fieldsData} onChange={onChange} />

@@ -16,7 +16,7 @@ type DBStructure = {
 };
 
 async function getDB(): Promise<IDBPDatabase<DBStructure>> {
-	return openDB<DBStructure>(DB_NAME, 21, {
+	return openDB<DBStructure>(DB_NAME, 22, {
 		upgrade(db) {
 			if (!db.objectStoreNames.contains(PROGRESS_STORE)) {
 				db.createObjectStore(PROGRESS_STORE);

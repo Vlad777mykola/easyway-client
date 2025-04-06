@@ -1,21 +1,25 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Button } from '@/ui-components/Button';
 import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
 import { CountUp } from '@/ui-components/CountUp';
 import { AddInfo } from './components/add-info/AddInfo';
-import { deleteVocabularyCollectionProgress } from '../../../modules/vocabularies/utils/deleteVocabularyProgress';
 import { useProgressStore } from '@/store/progress';
 import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
-import { saveVocabularyProgress } from '../../../modules/vocabularies/utils/saveVocabularyProgress';
+import { saveProgress } from '@/shared/utils/progress/saveProgress';
+import { deleteProgress } from '@/shared/utils/progress/deleteProgress';
 import styles from './statistics.module.css';
 
 const COUNT_UP_DURATION = 1500;
 
-export const Statistics = ({ countWords }: { countWords: number }) => {
-	const { vocabulariesId = '' } = useParams();
+export const Statistics = ({
+	countWords,
+	exercisesId,
+}: {
+	countWords: number;
+	exercisesId: string;
+}) => {
 	const progressStore = useProgressStore.use.randomModeProgress();
 	const takenTestCount = useProgressStore.use.takenTestCount();
 	const totalPercentage = useProgressStore.use.progressPercentage().total;
@@ -24,13 +28,13 @@ export const Statistics = ({ countWords }: { countWords: number }) => {
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
 	const clearAll = useProgressStore.use.clearAll();
 
-	useBeforeunload(() => saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId));
+	useBeforeunload(() => saveProgress(saveProgressToIndexedDB, exercisesId));
 
 	useEffect(() => {
 		setProgressPercentage(countWords);
 	}, [countWords, progressStore]);
 
-	useIndexedDB(getProgressFromIndexedDB, vocabulariesId);
+	useIndexedDB(getProgressFromIndexedDB, exercisesId);
 
 	return (
 		<Wrapper>
@@ -40,7 +44,7 @@ export const Statistics = ({ countWords }: { countWords: number }) => {
 						size="small"
 						color="danger"
 						variant="filled"
-						onClick={() => deleteVocabularyCollectionProgress(clearAll, vocabulariesId)}
+						onClick={() => deleteProgress(clearAll, exercisesId)}
 					>
 						Clear Progress
 					</Button>

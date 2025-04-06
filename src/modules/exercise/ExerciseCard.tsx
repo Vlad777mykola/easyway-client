@@ -8,15 +8,21 @@ import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunloa
 import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { useExerciseListData } from './hooks/useExerciseListData';
 import { useExerciseProgressStore, DEFAULT_DATA_TEST } from '@/store/exercise-progress';
-import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
+import {
+	EXERCISE_FORMATE,
+	EXERCISE_MODE,
+} from '@/store/exercise-progress/useExerciseProgressStore';
 import { SelectingUI } from './components/selecting-formate-ui/SelectingUI';
 import type { ExerciseType } from '@/store/exercise-progress';
-import styles from './exerciseCard.module.css';
 import { PaginationExercise } from './components/pagination/Pagination';
+import { useProgressStore } from '@/store/progress';
+import { saveProgress } from '@/shared/utils/progress/saveProgress';
+import styles from './exerciseCard.module.css';
 
 export const ExerciseCard = () => {
 	const navigate = useNavigate();
-	const { taskId = '', collectionsId = '' } = useParams();
+	const { taskId = '', exercisesId = '' } = useParams();
+	const ID_EXERCISE = `${exercisesId}_exercise`;
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
 
@@ -26,20 +32,29 @@ export const ExerciseCard = () => {
 		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseFormate ===
 		EXERCISE_FORMATE.isSelecting;
 
+	const collectionsExerciseConfig = useExerciseProgressStore.use.collectionsExerciseConfig();
+	const exerciseCorrectResponse =
+		useExerciseProgressStore.use.collectionsExerciseConfig().exerciseCorrectResponse;
+
 	const getExerciseById = useExerciseProgressStore.use.getExerciseById();
 	const setExerciseListResponse = useExerciseProgressStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useExerciseProgressStore.use.setExerciseListProgress();
-	const saveProgressToLocalStore = useExerciseProgressStore.use.saveProgressToLocalStore();
 	const getProgressFromLocalStore = useExerciseProgressStore.use.getProgressFromLocalStore();
 
-	useExerciseListData(setExerciseListResponse, collectionsId);
-	useBeforeunload(() => saveProgressToLocalStore(collectionsId));
+	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
+
+	const setExamProgress = useProgressStore.use.setExamProgress();
+	const setRandomProgress = useProgressStore.use.setRandomProgress();
+	const setTakenTestCount = useProgressStore.use.setTakenTestCount();
+
+	useExerciseListData(setExerciseListResponse, exercisesId);
+	useBeforeunload(() => saveProgress(saveProgressToIndexedDB, ID_EXERCISE));
 
 	const onNavigate = useCallback(
 		(id: string) => {
-			navigate(`/collections/${collectionsId}/task/${id}`);
+			navigate(`/exercises/${exercisesId}/word/${id}`);
 		},
-		[navigate, collectionsId],
+		[navigate, exercisesId],
 	);
 
 	useEffect(() => {
@@ -52,21 +67,34 @@ export const ExerciseCard = () => {
 	}, [taskId]);
 
 	useEffect(() => {
-		getProgressFromLocalStore(collectionsId);
+		getProgressFromLocalStore(exercisesId);
 		setIsAutoNavigate(false);
 
-		return () => saveProgressToLocalStore(collectionsId);
+		return () => {
+			saveProgress(saveProgressToIndexedDB, ID_EXERCISE);
+		};
 	}, [taskId]);
 
+	const setModesProgress = async (id: string, isResolved: boolean) => {
+		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isExam) {
+			setExamProgress(id, isResolved);
+		}
+		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
+			setRandomProgress(id, isResolved, exerciseCorrectResponse);
+		}
+		setExerciseListProgress(id, isResolved);
+		setTakenTestCount();
+	};
+
 	return (
-		<WrapperCard id={taskId} goBack={() => navigate(`/collections/${collectionsId}`)}>
+		<WrapperCard id={taskId} goBack={() => navigate(`/exercises/${exercisesId}`)}>
 			<div className={styles.taskContainer}>
 				{isDoneExercise && (
 					<Result
 						icon={<Icon icon="smile" size="xl" />}
 						title="Great, you have done all the exercise!"
 						extra={
-							<Button onClick={() => navigate(`/collections/${collectionsId}`)} type="primary">
+							<Button onClick={() => navigate(`/exercises/${exercisesId}`)} type="primary">
 								Next
 							</Button>
 						}
@@ -79,7 +107,7 @@ export const ExerciseCard = () => {
 						task={task}
 						setIsAutoNavigate={setIsAutoNavigate}
 						setTask={setTask}
-						updateProgress={setExerciseListProgress}
+						updateProgress={setModesProgress}
 					/>
 				)}
 				{!isDoneExercise && task && isSelectingFormate && (

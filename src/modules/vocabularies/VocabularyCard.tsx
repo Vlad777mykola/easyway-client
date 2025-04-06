@@ -4,24 +4,22 @@ import { ExerciseType, useVocabularyStore } from '@/store/vocabulary-collection'
 import { useVocabularyListData } from './hooks/useVocabularyListData';
 import { useProgressStore } from '@/store/progress';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
-import { Icon } from '@/ui-components/Icon';
-import { Button } from '@/ui-components/Button';
-import { Result } from '@/ui-components/Result';
 import { PaginationExercise } from './components/pagination/Pagination';
-import { saveVocabularyProgress } from './utils/saveVocabularyProgress';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
-import styles from './vocabularyCard.module.css';
 import {
 	DEFAULT_DATA_TEST,
 	EXERCISE_FORMATE,
 	EXERCISE_MODE,
 } from '@/store/vocabulary-collection/constants';
-import { ExerciseUI } from '@/shared/components/exercise-content/ExerciseContent';
-import { SelectingUI } from '@/shared/components/selecting-formate-ui/SelectingUI';
+import { saveProgress } from '@/shared/utils/progress/saveProgress';
+import { DoneCard } from '@/shared/components/done-card';
+import { SelectFormate } from './components/select-formate/SelectFormate';
+import styles from './vocabularyCard.module.css';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
 	const { vocabulariesId = '', wordId = '' } = useParams();
+	const ID_VOCABULARY_EXERCISE = `${vocabulariesId}_vocabulary`;
 
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
@@ -50,7 +48,7 @@ export const VocabularyCard = () => {
 	const setRandomProgress = useProgressStore.use.setRandomProgress();
 	const setTakenTestCount = useProgressStore.use.setTakenTestCount();
 
-	useBeforeunload(() => saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId));
+	useBeforeunload(() => saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE));
 
 	useEffect(() => {
 		if (collectionsExerciseConfig.exerciseMode === 'randomMode') {
@@ -71,6 +69,11 @@ export const VocabularyCard = () => {
 		[navigate, vocabulariesId],
 	);
 
+	const navigateToDictionary = useCallback(
+		() => navigate(`/vocabularies/${vocabulariesId}`),
+		[navigate, vocabulariesId],
+	);
+
 	useEffect(() => {
 		if (wordId) {
 			(async () => {
@@ -82,7 +85,7 @@ export const VocabularyCard = () => {
 		setIsAutoNavigate(false);
 
 		return () => {
-			saveVocabularyProgress(saveProgressToIndexedDB, vocabulariesId);
+			saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE);
 		};
 	}, [wordId]);
 
@@ -97,42 +100,19 @@ export const VocabularyCard = () => {
 		setTakenTestCount();
 	};
 
-	const navigateTestPage = () => {
-		navigate(`/vocabularies/${vocabulariesId}`);
-	};
-
 	return (
-		<WrapperCard id={wordId} goBack={() => navigate(`/collections/${vocabulariesId}`)}>
+		<WrapperCard id={wordId} goBack={() => navigateToDictionary()}>
 			<div className={styles.taskContainer}>
-				{testIsDone && (
-					<Result
-						icon={<Icon icon="smile" size="xl" />}
-						title="Great, you have done all the exercise!"
-						extra={
-							<Button onClick={navigateTestPage} type="primary">
-								Next
-							</Button>
-						}
-					/>
-				)}
+				{testIsDone && <DoneCard onClick={() => navigateToDictionary()} />}
 				{!testIsDone && task && !isSelectingFormate && (
-					<ExerciseUI
+					<SelectFormate
+						isSelectingFormate={isSelectingFormate}
 						key={vocabulariesId}
 						task={task}
-						setIsAutoNavigate={setIsAutoNavigate}
 						setTask={setTask}
+						setIsAutoNavigate={setIsAutoNavigate}
 						updateProgress={setModesProgress}
 						isAutoPlay={isAutoPlay}
-						isSelectingFormate={isSelectingFormate}
-					/>
-				)}
-				{!testIsDone && task && isSelectingFormate && (
-					<SelectingUI
-						key={vocabulariesId}
-						task={task}
-						setIsAutoNavigate={setIsAutoNavigate}
-						setTask={setTask}
-						updateProgress={setExerciseListProgress}
 					/>
 				)}
 				{!testIsDone && exerciseListId && (
