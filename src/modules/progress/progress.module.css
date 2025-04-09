@@ -1,0 +1,9 @@
+.progressThemes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.progressContainer {
+  border: 1px solid black;
+}

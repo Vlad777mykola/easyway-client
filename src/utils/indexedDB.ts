@@ -15,6 +15,32 @@ type DBStructure = {
 	};
 };
 
+export async function getAllDataFromIndexedDB(): Promise<DBStructure[]> {
+	return new Promise((resolve, reject) => {
+		const request = indexedDB.open(DB_NAME, 22);
+
+		request.onerror = () => {
+			reject('Error opening IndexedDB');
+		};
+
+		request.onsuccess = () => {
+			const db = request.result;
+			const transaction = db.transaction(PROGRESS_STORE, 'readonly');
+			const objectStore = transaction.objectStore(PROGRESS_STORE);
+
+			const getAllRequest = objectStore.getAll();
+
+			getAllRequest.onsuccess = () => {
+				resolve(getAllRequest.result as DBStructure[]);
+			};
+
+			getAllRequest.onerror = () => {
+				reject('Error getting all data');
+			};
+		};
+	});
+}
+
 async function getDB(): Promise<IDBPDatabase<DBStructure>> {
 	return openDB<DBStructure>(DB_NAME, 22, {
 		upgrade(db) {
