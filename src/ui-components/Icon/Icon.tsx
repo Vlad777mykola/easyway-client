@@ -22,6 +22,11 @@ import {
 	FullscreenExitOutlined,
 	SmileOutlined,
 	InfoCircleOutlined,
+	StockOutlined,
+	FieldTimeOutlined,
+	TrophyOutlined,
+	QuestionOutlined,
+	ClockCircleOutlined,
 } from '@ant-design/icons';
 
 import styles from './icon.module.css';
@@ -45,6 +50,11 @@ const IconVariants = {
 	exitFullScreen: FullscreenExitOutlined,
 	smile: SmileOutlined,
 	info: InfoCircleOutlined,
+	stock: StockOutlined,
+	time: FieldTimeOutlined,
+	trophy: TrophyOutlined,
+	question: QuestionOutlined,
+	clock: ClockCircleOutlined,
 };
 
 export type IconVariantsType = keyof typeof IconVariants;
