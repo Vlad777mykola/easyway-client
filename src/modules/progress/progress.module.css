@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 .progressContainer {
@@ -18,7 +19,7 @@
 	padding: 10px;
 	box-sizing: border-box;
 	cursor: pointer;
-  width: 45%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-self: center;
@@ -33,22 +34,16 @@
 
 .commonProgress {
   display: flex;
-  justify-content: center;
   align-self: center;
-  gap: 0px 40px;
+  gap: 0px 100px;
   width: 60%;
 }
 
 .progressItemContainer {
   display: flex;
-  flex-direction: row;
   gap: 0px 10px;
-}
-
-.showAddInfoContainer {
-  margin: 0 auto;
-  width: 60%;
-  margin-top: 20px;
+  width: 70%;
+  justify-content: start;
 }
 
 .progressItem {
@@ -57,13 +52,20 @@
   margin: 5px 0px;
 }
 
-.addInfo {
+.randomProgress {
+  width: 50%;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  align-items: center;
 }
 
-@media(max-width: 769px) {
+@media(max-width: 1440px) {
+  .progressContainer {
+    width: 80%;
+  }
+}
+
+@media(max-width: 1024px) {
   .progressContainer {
     width: 100%;
   }
@@ -71,8 +73,37 @@
   .commonProgress {
     width: 100%;
   }
+}
 
-  .showAddInfoContainer{
+@media(max-width: 480px) {
+  .progressContainer {
     width: 100%;
+  }
+
+  .commonProgress {
+    flex-direction: column;
+    align-items: center;
+    gap: 0px 0px;
+  }
+
+  .progressItem {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .randomProgress {
+    width: 60%;
+    margin-bottom: 5px;
+  }
+
+  .progressItemContainer {
+    justify-content: start;
+    width: 100%;
+  }
+}
+
+@media(min-width: 1441px) {
+  .progressContainer {
+    width: 50%;
   }
 }
