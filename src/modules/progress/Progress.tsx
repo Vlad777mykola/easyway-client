@@ -3,14 +3,14 @@ import { getAllDataFromIndexedDB } from '@/utils/indexedDB';
 import { getAllCollections } from '@/shared/services/fetch-collections/getCollectionsData';
 import { DefaultCollectionType } from '@/shared/constants/collections/data';
 import { getWordsByVocabulary } from '@/shared/services/fetch-words-vocabulary/getWordsByVocabulary';
-import { Icon } from '@/ui-components/Icon';
 import { ProgressStoreState } from '@/store/progress';
 import { AddInfo } from './components/add-info/AddInfo';
 import { getProgressExercise } from './services/getProgressExercise';
+import { CommonInfo } from './components/total-info/CommonInfo';
 
 import styles from './progress.module.css';
 
-type ProgressStore = {
+export type ProgressStore = {
 	progressStore: {
 		[key: string]: ProgressStoreState | number;
 	};
@@ -38,7 +38,6 @@ export const Progress = () => {
 	const fetchData = async () => {
 		try {
 			const data = await getAllDataFromIndexedDB();
-			console.log('DATA: ', data);
 			setProgressData(data);
 		} catch (error) {
 			console.error('Failed to fetch data:', error);
@@ -88,7 +87,7 @@ export const Progress = () => {
 					const resolvedCount =
 						randomModeProgress?.resolved.filter((resolvedItem) => resolvedItem.isDone).length || 0;
 
-					const { total, exam, random } = getProgressExercise(
+					const { total } = getProgressExercise(
 						examModeProgress,
 						resolvedCount,
 						randomModeProgress,
@@ -96,36 +95,13 @@ export const Progress = () => {
 					);
 
 					const path = `vocabularies/${item.id}`;
-					const errorProgress = examModeProgress?.errorProgress || [];
 
 					return (
 						<div key={item.id} className={styles.progressContainer}>
 							<p className={styles.themeTitle}>{item.title}</p>
-							<div className={styles.commonProgress}>
-								<div className={styles.randomProgress}>
-									<div className={styles.progressItemContainer}>
-										<span className={styles.progressItem}>
-											<Icon icon="stock" />
-										</span>
-										<p className={styles.progressItem}>Total: </p>
-										<p className={styles.progressItem}>{total || 0}%</p>
-									</div>
-								</div>
-								<div className={styles.randomProgress}>
-									<div className={styles.progressItemContainer}>
-										<span className={styles.progressItem}>
-											<Icon icon="time" />
-										</span>
-										<p className={styles.progressItem}>Taken test count: </p>
-										<p className={styles.progressItem}>{takenTestCount?.count}</p>
-									</div>
-								</div>
-							</div>
+							<CommonInfo total={total} takenTestCount={takenTestCount} />
 							<AddInfo
 								progressId={id}
-								exam={exam}
-								random={random}
-								errorProgress={errorProgress}
 								path={path}
 								id={item.id}
 								showInfo={item.showAddInfo}
