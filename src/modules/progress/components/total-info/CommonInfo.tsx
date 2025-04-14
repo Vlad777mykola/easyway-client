@@ -1,14 +1,17 @@
 import { Icon } from '@/ui-components/Icon';
 import { TakenTestCount } from '@/store/progress';
 import styles from './commonInfo.module.css';
+import { useGetProgress } from '../../hooks/useGetProgress';
 
 export const CommonInfo = ({
-	total,
 	takenTestCount,
+	progressId,
 }: {
-	total: number;
 	takenTestCount: TakenTestCount;
+	progressId: string;
 }) => {
+	const { total } = useGetProgress(progressId);
+
 	return (
 		<div className={styles.commonProgress}>
 			<div className={styles.randomProgress}>

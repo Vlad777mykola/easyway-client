@@ -25,15 +25,37 @@
   align-self: center;
 }
 
+.progressTotalContainer {
+  background: #fff;
+	box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 8px;
+	padding: 10px;
+	box-sizing: border-box;
+	cursor: pointer;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
+.totalProgress {
+  width: 60%;
+}
+
 .themeTitle {
   display: flex;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1rem;
   line-height: 2rem;
 }
 
 @media(max-width: 1440px) {
   .progressContainer {
+    width: 80%;
+  }
+
+  .progressTotalContainer {
     width: 80%;
   }
 }
@@ -42,11 +64,24 @@
   .progressContainer {
     width: 100%;
   }
+
+  .progressTotalContainer {
+    width: 100%;
+  }
 }
 
 @media(max-width: 480px) {
   .progressContainer {
     width: 100%;
+  }
+
+  .progressTotalContainer {
+    width: 100%;
+  }
+
+  .themeTitle {
+    font-size: 1rem;
+    line-height: 1.5rem;
   }
 }
 
@@ -54,4 +89,10 @@
   .progressContainer {
     width: 50%;
   }
+
+  .progressTotalContainer {
+    width: 50%;
+  }
 }
+
+
