@@ -59,12 +59,11 @@ export const ProgressPage = () => {
 	};
 
 	return (
-		<div>
-			<p>Progress</p>
+		<>
 			{exercise.map((item) => (
 				<Progress key={item.exercise} exerciseTheme={item.exercise} collection={item.collections} />
 			))}
-		</div>
+		</>
 	);
 };
 
