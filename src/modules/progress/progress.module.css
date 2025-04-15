@@ -37,6 +37,11 @@
 }
 
 @media (max-width: 1440px) {
+  .exerciseContainer {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
 	.progressContainer {
 		width: 80%;
 	}
@@ -49,6 +54,11 @@
 }
 
 @media (max-width: 480px) {
+  .exerciseContainer {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
 	.progressContainer {
 		width: 100%;
 	}
