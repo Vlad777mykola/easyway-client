@@ -1,20 +1,20 @@
 .exerciseContainer {
-  margin-bottom: 40px;
+	margin-bottom: 40px;
 }
 
 .progressTitle {
-  display: flex;
-  justify-content: center;
-  font-size: 1.5rem;
-  line-height: 2rem;
-  font-weight: bold;
+	display: flex;
+	justify-content: center;
+	font-size: 1.5rem;
+	line-height: 2rem;
+	font-weight: bold;
 }
 
 .progressThemes {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-bottom: 10px;
 }
 
 .progressContainer {
@@ -23,46 +23,44 @@
 	padding: 10px;
 	box-sizing: border-box;
 	cursor: pointer;
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  align-self: center;
+	width: 80%;
+	display: flex;
+	flex-direction: column;
+	align-self: center;
 }
 
 .themeTitle {
-  display: flex;
-  justify-content: center;
-  font-size: 1rem;
-  line-height: 2rem;
+	display: flex;
+	justify-content: center;
+	font-size: 1rem;
+	line-height: 2rem;
 }
 
-@media(max-width: 1440px) {
-  .progressContainer {
-    width: 80%;
-  }
+@media (max-width: 1440px) {
+	.progressContainer {
+		width: 80%;
+	}
 }
 
-@media(max-width: 1024px) {
-  .progressContainer {
-    width: 100%;
-  }
+@media (max-width: 1024px) {
+	.progressContainer {
+		width: 100%;
+	}
 }
 
-@media(max-width: 480px) {
-  .progressContainer {
-    width: 100%;
-  }
+@media (max-width: 480px) {
+	.progressContainer {
+		width: 100%;
+	}
 
-  .themeTitle {
-    font-size: 1rem;
-    line-height: 1.5rem;
-  }
+	.themeTitle {
+		font-size: 1rem;
+		line-height: 1.5rem;
+	}
 }
 
-@media(min-width: 1441px) {
-  .progressContainer {
-    width: 50%;
-  }
+@media (min-width: 1441px) {
+	.progressContainer {
+		width: 50%;
+	}
 }
-
-
