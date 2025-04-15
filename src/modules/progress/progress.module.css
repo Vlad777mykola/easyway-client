@@ -1,3 +1,7 @@
+.exerciseContainer {
+  margin-bottom: 40px;
+}
+
 .progressTitle {
   display: flex;
   justify-content: center;
@@ -25,24 +29,6 @@
   align-self: center;
 }
 
-.progressTotalContainer {
-  background: #fff;
-	box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 8px;
-	padding: 10px;
-	box-sizing: border-box;
-	cursor: pointer;
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 auto;
-  margin-bottom: 10px;
-}
-
-.totalProgress {
-  width: 60%;
-}
-
 .themeTitle {
   display: flex;
   justify-content: center;
@@ -54,28 +40,16 @@
   .progressContainer {
     width: 80%;
   }
-
-  .progressTotalContainer {
-    width: 80%;
-  }
 }
 
 @media(max-width: 1024px) {
   .progressContainer {
     width: 100%;
   }
-
-  .progressTotalContainer {
-    width: 100%;
-  }
 }
 
 @media(max-width: 480px) {
   .progressContainer {
-    width: 100%;
-  }
-
-  .progressTotalContainer {
     width: 100%;
   }
 
@@ -87,10 +61,6 @@
 
 @media(min-width: 1441px) {
   .progressContainer {
-    width: 50%;
-  }
-
-  .progressTotalContainer {
     width: 50%;
   }
 }
