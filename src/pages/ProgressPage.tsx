@@ -1,8 +1,13 @@
+import { useEffect, useState } from 'react';
 import { Progress } from '@/modules/progress/Progress';
 import { fetchProgressData } from '@/modules/progress/services/fetchProgressData';
 import { ALL_COLLECTIONS, CollectionsType } from '@/shared/constants';
 import { ProgressStoreState } from '@/store/progress';
-import { useEffect, useState } from 'react';
+import { useCollectionFilter } from '@/store/collection-filter';
+import { ContentContainer } from '@/ui-components/Content-Container';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
+import { FILTER_LABELS } from '@/shared/constants/collections/data';
+import { PROGRESS_COLLECTIONS } from '@/store/collection-filter/constants';
 
 export type ProgressStore = {
 	progressStore: {
@@ -11,13 +16,54 @@ export type ProgressStore = {
 };
 
 type Exercise = {
-	collections: CollectionsType;
-	exercise: string;
+	id: string;
+	category: string[];
+	title: string;
+	topic: [string];
 };
 
 export const ProgressPage = () => {
 	const [progressData, setProgressData] = useState<ProgressStore[]>([]);
 	const [exercise, setExercise] = useState<Exercise[]>([]);
+
+	const collectionsData = useCollectionFilter.use.collectionsData();
+	const filteredCollectionsData = useCollectionFilter.use.filteredCollectionsData();
+	const data = filteredCollectionsData.length > 0 ? filteredCollectionsData : collectionsData;
+
+	const getFiltersData = useCollectionFilter.use.getFiltersData();
+	const setFilter = useCollectionFilter.use.setFilter();
+	const setClean = useCollectionFilter.use.setClean();
+	const setFilterDataOnSearch = useCollectionFilter.use.setFilterDataOnSearch();
+	const setCollections = useCollectionFilter.use.setCollections();
+
+	const fieldsData: FieldsDataType[] = [
+		{
+			keyValue: FILTER_LABELS.title,
+			getDefaultValue: () => getFiltersData(FILTER_LABELS.title),
+			label: FILTER_LABELS.title,
+			componentType: SIDE_BAR_COMPONENT_TYPE.INPUT,
+			placeholder: FILTER_LABELS.title,
+		},
+		{
+			keyValue: FILTER_LABELS.topic,
+			options: Object.values(PROGRESS_COLLECTIONS),
+			getDefaultValue: () => getFiltersData(FILTER_LABELS.topic),
+			label: FILTER_LABELS.topic,
+			componentType: SIDE_BAR_COMPONENT_TYPE.MULTIPLE,
+		},
+	];
+
+	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
+		setFilter(key, value);
+	};
+
+	useEffect(() => {
+		setCollections(exercise);
+
+		return () => {
+			setCollections([]);
+		};
+	}, [exercise]);
 
 	useEffect(() => {
 		(async () => {
@@ -39,17 +85,21 @@ export const ProgressPage = () => {
 				if (fullKey.includes('timestamp')) return;
 
 				const theme = fullKey.slice(2); // remove prefix
-				const isAlreadyAdded = keys.some(({ exercise }) => exercise.includes(theme));
+				const isAlreadyAdded = keys.some(({ title }) => title.includes(theme));
 				if (isAlreadyAdded) return;
 
 				const collectionKey = Object.keys(ALL_COLLECTIONS).find(
-					(collection) => collection.includes(theme.slice(0, -1)), // crude plural-to-singular match
+					(collection) => {
+						return collection.includes(theme.slice(0, -1));
+					}, // crude plural-to-singular match
 				);
 
 				if (collectionKey) {
 					keys.push({
-						exercise: theme,
-						collections: collectionKey as CollectionsType,
+						id: theme,
+						title: theme,
+						category: [collectionKey],
+						topic: [theme],
 					});
 				}
 			});
@@ -59,11 +109,26 @@ export const ProgressPage = () => {
 	};
 
 	return (
-		<>
-			{exercise.map((item) => (
-				<Progress key={item.exercise} exerciseTheme={item.exercise} collection={item.collections} />
-			))}
-		</>
+		<ContentContainer>
+			<ContentContainer.Sidebar>
+				<Sidebar
+					title="Filter"
+					fieldsData={fieldsData}
+					onChange={onChange}
+					onClear={() => setClean()}
+					onSearch={() => setFilterDataOnSearch()}
+				/>
+			</ContentContainer.Sidebar>
+			<ContentContainer.Content>
+				{data.map((item) => (
+					<Progress
+						key={item.id}
+						exerciseTheme={item.title}
+						collection={item.category[0] as CollectionsType}
+					/>
+				))}
+			</ContentContainer.Content>
+		</ContentContainer>
 	);
 };
 

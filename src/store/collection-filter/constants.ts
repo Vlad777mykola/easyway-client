@@ -43,3 +43,8 @@ export const LEARN_BY_SKILL = {
 	READING: 'Reading',
 	WRITING: 'Writing',
 };
+
+export const PROGRESS_COLLECTIONS = {
+	EXERCISE: 'exercise',
+	VOCABULARY: 'vocabulary',
+} as const;
