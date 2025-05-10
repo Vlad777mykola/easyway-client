@@ -27,12 +27,7 @@ type Exercise = {
 export const ProgressPage = () => {
 	const [progressData, setProgressData] = useState<ProgressStore[]>([]);
 	const [exercise, setExercise] = useState<Exercise[]>([]);
-	const [total, setTotal] = useState({
-		total: 0,
-		exam: 0,
-		resolved: 0,
-		progress: 0,
-	});
+	const [takenTest, setTakenTest] = useState<number>(0);
 
 	const [progressIds, setProgressIds] = useState<string[]>([]);
 
@@ -90,31 +85,24 @@ export const ProgressPage = () => {
 	}, [progressData.length, exercise.length]);
 
 	useEffect(() => {
-		const totalData = countTotalResults();
-		setTotal(totalData);
+		const totalData = countTakenTest();
+		setTakenTest(totalData);
 	}, [totalProgress]);
 
-	const countTotalResults = () => {
-		let total: number = 0;
-		let exam: number = 0;
-		let resolved: number = 0;
-		let progress: number = 0;
+	const countTakenTest = () => {
+		let count: number = 0;
 
-		const totalItems = Object.keys(totalProgress).length;
+		progressIds.forEach((item) => {
+			const progress = progressData.find((itemData) => itemData.progressStore[item]);
+			if (
+				typeof progress?.progressStore[item] === 'object' &&
+				progress?.progressStore[item] !== null
+			) {
+				count += progress.progressStore[item].takenTestCount.count;
+			}
+		});
 
-		for (const key in totalProgress) {
-			total += totalProgress[key].total;
-			exam += totalProgress[key].exam;
-			resolved += totalProgress[key].random.resolved;
-			progress += totalProgress[key].random.progress;
-		}
-
-		return {
-			total: Math.ceil(total / totalItems),
-			exam: Math.ceil(exam / totalItems),
-			resolved: Math.ceil(resolved / totalItems),
-			progress: Math.ceil(progress / totalItems),
-		};
+		return count;
 	};
 
 	const getKeysExercise = (progress: ProgressStore[]) => {
@@ -154,12 +142,7 @@ export const ProgressPage = () => {
 	return (
 		<ContentContainer>
 			<ContentContainer.Header>
-				<TotalResult
-					total={total.total}
-					exam={total.exam}
-					resolved={total.resolved}
-					progress={total.progress}
-				/>
+				<TotalResult count={takenTest} />
 			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<Sidebar

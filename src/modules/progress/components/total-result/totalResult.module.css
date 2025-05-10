@@ -16,44 +16,8 @@
 	font-weight: 700;
 }
 
-.progressBarContainer {
-	width: 60%;
-}
-
-.addInfo {
-	margin-top: 25px;
-	display: flex;
-	justify-content: space-between;
-	width: 60%;
-}
-
-.progressItem {
-	display: flex;
-	gap: 0px 10px;
-	justify-content: start;
-	align-self: start;
-	font-size: 1.2rem;
-	line-height: 2rem;
-}
-
-.progressContainer {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
-
 @media (max-width: 480px) {
-	.addInfo {
-		flex-direction: column;
-		gap: 20px;
-	}
-
-	.progressBarContainer {
-		width: 100%;
-	}
-
-	.progressItem {
-		font-size: 1rem;
-		line-height: 1.5rem;
+	.title {
+		font-size: 20px;
 	}
 }
