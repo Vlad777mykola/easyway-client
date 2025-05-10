@@ -19,12 +19,27 @@ type Exercise = DefaultCollectionType & {
 	showAddInfo: boolean;
 };
 
+type TotalProgress = {
+	[key: string]: {
+		total: number;
+		exam: number;
+		errorProgress: string[];
+		random: {
+			resolved: number;
+			progress: number;
+			unTouch: number;
+		};
+	};
+};
+
 export const Progress = ({
 	collection,
 	exerciseTheme,
+	totalProgress,
 }: {
 	collection: CollectionsType;
 	exerciseTheme: string;
+	totalProgress: TotalProgress;
 }) => {
 	const [progressData, setProgressData] = useState<ProgressStore[]>([]);
 	const [exercise, setExercise] = useState<Exercise[]>([]);
@@ -81,18 +96,41 @@ export const Progress = ({
 			<div className={styles.progressThemes}>
 				{exercise.map((item) => {
 					const progressId = `${item.id}_${exerciseTheme}`;
-					const { takenTestCount } =
-						(progressData.find((p) => Object.keys(p.progressStore).includes(progressId))
-							?.progressStore[progressId] as ProgressStoreState) || {};
+					const total = totalProgress[progressId];
+
+					if (
+						!total ||
+						(total.exam === 0 &&
+							total.random.resolved === 0 &&
+							total.random.progress === 0 &&
+							total.total === 0 &&
+							total.errorProgress.length === 0)
+					) {
+						return null;
+					}
+
+					const progressStore = progressData.find((p) =>
+						Object.keys(p.progressStore).includes(progressId),
+					)?.progressStore[progressId] as ProgressStoreState | undefined;
+
+					const takenTestCount = progressStore?.takenTestCount.count || 0;
+
+					const progress = {
+						exam: total.exam,
+						resolved: total.random.resolved,
+						progress: total.random.progress,
+						unTouch: total.random.unTouch,
+						errorProgress: total.errorProgress,
+					};
 
 					const path = `${collection}/${item.id}`;
 
 					return (
 						<div key={item.id} className={styles.progressContainer}>
 							<p className={styles.themeTitle}>{item.title}</p>
-							<CommonInfo takenTestCount={takenTestCount} progressId={progressId} />
+							<CommonInfo takenTestCount={takenTestCount} total={total.total} />
 							<AddInfo
-								progressId={progressId}
+								progress={progress}
 								path={path}
 								id={item.id}
 								showInfo={item.showAddInfo}

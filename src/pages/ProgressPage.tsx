@@ -8,6 +8,8 @@ import { ContentContainer } from '@/ui-components/Content-Container';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
 import { FILTER_LABELS } from '@/shared/constants/collections/data';
 import { PROGRESS_COLLECTIONS } from '@/store/collection-filter/constants';
+import { useMultipleProgress } from '@/modules/progress/hooks/useMultipleProgress';
+import { TotalResult } from '@/modules/progress/components/total-result/TotalResult';
 
 export type ProgressStore = {
 	progressStore: {
@@ -25,6 +27,14 @@ type Exercise = {
 export const ProgressPage = () => {
 	const [progressData, setProgressData] = useState<ProgressStore[]>([]);
 	const [exercise, setExercise] = useState<Exercise[]>([]);
+	const [total, setTotal] = useState({
+		total: 0,
+		exam: 0,
+		resolved: 0,
+		progress: 0,
+	});
+
+	const [progressIds, setProgressIds] = useState<string[]>([]);
 
 	const collectionsData = useCollectionFilter.use.collectionsData();
 	const filteredCollectionsData = useCollectionFilter.use.filteredCollectionsData();
@@ -65,6 +75,8 @@ export const ProgressPage = () => {
 		};
 	}, [exercise]);
 
+	const totalProgress = useMultipleProgress(progressIds);
+
 	useEffect(() => {
 		(async () => {
 			try {
@@ -77,12 +89,43 @@ export const ProgressPage = () => {
 		})();
 	}, [progressData.length, exercise.length]);
 
+	useEffect(() => {
+		const totalData = countTotalResults();
+		setTotal(totalData);
+	}, [totalProgress]);
+
+	const countTotalResults = () => {
+		let total: number = 0;
+		let exam: number = 0;
+		let resolved: number = 0;
+		let progress: number = 0;
+
+		const totalItems = Object.keys(totalProgress).length;
+
+		for (const key in totalProgress) {
+			total += totalProgress[key].total;
+			exam += totalProgress[key].exam;
+			resolved += totalProgress[key].random.resolved;
+			progress += totalProgress[key].random.progress;
+		}
+
+		return {
+			total: Math.ceil(total / totalItems),
+			exam: Math.ceil(exam / totalItems),
+			resolved: Math.ceil(resolved / totalItems),
+			progress: Math.ceil(progress / totalItems),
+		};
+	};
+
 	const getKeysExercise = (progress: ProgressStore[]) => {
 		const keys: Exercise[] = [];
 
 		progress.forEach(({ progressStore }) => {
 			Object.keys(progressStore).forEach((fullKey) => {
-				if (fullKey.includes('timestamp')) return;
+				if (fullKey.includes('timestamp') || fullKey.includes('data')) return;
+				if (!progressIds.includes(fullKey)) {
+					setProgressIds((prev) => [...prev, fullKey]);
+				}
 
 				const theme = fullKey.slice(2); // remove prefix
 				const isAlreadyAdded = keys.some(({ title }) => title.includes(theme));
@@ -110,6 +153,14 @@ export const ProgressPage = () => {
 
 	return (
 		<ContentContainer>
+			<ContentContainer.Header>
+				<TotalResult
+					total={total.total}
+					exam={total.exam}
+					resolved={total.resolved}
+					progress={total.progress}
+				/>
+			</ContentContainer.Header>
 			<ContentContainer.Sidebar>
 				<Sidebar
 					title="Filter"
@@ -125,6 +176,7 @@ export const ProgressPage = () => {
 						key={item.id}
 						exerciseTheme={item.title}
 						collection={item.category[0] as CollectionsType}
+						totalProgress={totalProgress}
 					/>
 				))}
 			</ContentContainer.Content>
