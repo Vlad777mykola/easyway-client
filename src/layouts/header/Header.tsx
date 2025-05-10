@@ -30,7 +30,7 @@ const profileMenuItems = [
 	},
 	{
 		name: 'Progress',
-		link: '/',
+		link: '/progress',
 	},
 ];
 

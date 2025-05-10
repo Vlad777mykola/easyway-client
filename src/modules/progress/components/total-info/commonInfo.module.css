@@ -1,0 +1,55 @@
+.commonProgress {
+	display: flex;
+	align-self: center;
+	gap: 0px 100px;
+	width: 60%;
+}
+
+.randomProgress {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.progressItemContainer {
+	display: flex;
+	gap: 0px 10px;
+	width: 70%;
+	justify-content: start;
+}
+
+.progressItem {
+	font-size: 1.2rem;
+	line-height: 2rem;
+	margin: 5px 0px;
+}
+
+@media (max-width: 1024px) {
+	.commonProgress {
+		width: 100%;
+	}
+}
+
+@media (max-width: 480px) {
+	.commonProgress {
+		flex-direction: column;
+		align-items: center;
+		gap: 0px 0px;
+	}
+
+	.progressItem {
+		font-size: 1rem;
+		line-height: 1.5rem;
+	}
+
+	.randomProgress {
+		width: 60%;
+		margin-bottom: 5px;
+	}
+
+	.progressItemContainer {
+		justify-content: start;
+		width: 100%;
+	}
+}

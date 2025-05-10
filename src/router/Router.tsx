@@ -6,6 +6,7 @@ import { DictionaryExerciseCard, DictionaryExerciseDetails } from '@/modules/dic
 // import Home from '@/pages/Home';
 
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
+const ProgressPage = lazy(() => import('@/pages/ProgressPage'));
 const CompleteTest = lazy(() => import('@/pages/CompleteTest'));
 const DictionaryPage = lazy(() => import('@/pages/DictionaryPage'));
 
@@ -40,6 +41,8 @@ export const router = createBrowserRouter([
 				path: 'dictionaries/:dictionaryId/word/:wordId',
 				element: <DictionaryExerciseCard />,
 			},
+
+			{ path: 'progress', element: <ProgressPage /> },
 		],
 	},
 ]);
