@@ -7,7 +7,6 @@ import { useCollectionFilter } from '@/store/collection-filter';
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
 import { FILTER_LABELS } from '@/shared/constants/collections/data';
-import { PROGRESS_COLLECTIONS } from '@/store/collection-filter/constants';
 import { useMultipleProgress } from '@/modules/progress/hooks/useMultipleProgress';
 import { TotalResult } from '@/modules/progress/components/total-result/TotalResult';
 
@@ -27,6 +26,7 @@ type Exercise = {
 export const ProgressPage = () => {
 	const [progressData, setProgressData] = useState<ProgressStore[]>([]);
 	const [exercise, setExercise] = useState<Exercise[]>([]);
+	const [defaultValues, setDefaultValues] = useState<string[]>([]);
 	const [takenTest, setTakenTest] = useState<number>(0);
 
 	const [progressIds, setProgressIds] = useState<string[]>([]);
@@ -51,7 +51,7 @@ export const ProgressPage = () => {
 		},
 		{
 			keyValue: FILTER_LABELS.topic,
-			options: Object.values(PROGRESS_COLLECTIONS),
+			options: defaultValues,
 			getDefaultValue: () => getFiltersData(FILTER_LABELS.topic),
 			label: FILTER_LABELS.topic,
 			componentType: SIDE_BAR_COMPONENT_TYPE.MULTIPLE,
@@ -65,7 +65,12 @@ export const ProgressPage = () => {
 	useEffect(() => {
 		setCollections(exercise);
 
+		const exerciseValues = exercise.map((item) => item.title);
+
+		setDefaultValues(exerciseValues);
+
 		return () => {
+			setClean();
 			setCollections([]);
 		};
 	}, [exercise]);
@@ -110,7 +115,7 @@ export const ProgressPage = () => {
 
 		progress.forEach(({ progressStore }) => {
 			Object.keys(progressStore).forEach((fullKey) => {
-				if (fullKey.includes('timestamp') || fullKey.includes('data')) return;
+				if (fullKey.includes('timestamp')) return;
 				if (!progressIds.includes(fullKey)) {
 					setProgressIds((prev) => [...prev, fullKey]);
 				}

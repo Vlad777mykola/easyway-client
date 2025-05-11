@@ -28,6 +28,10 @@ export const DictionaryExerciseCard = () => {
 		EXERCISE_FORMATE.Selecting;
 	const collectionsExerciseConfig = useDictionaryStore.use.collectionsExerciseConfig();
 
+	const exerciseListProgress = useDictionaryStore.use.exerciseListProgress();
+
+	console.log('EXERCISE LIST PROGRESS: ', exerciseListProgress);
+
 	const getExerciseById = useDictionaryStore.use.getExerciseById();
 	const setExerciseListResponse = useDictionaryStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useDictionaryStore.use.setExerciseListProgress();

@@ -91,55 +91,59 @@ export const Progress = ({
 	};
 
 	return (
-		<div className={styles.exerciseContainer}>
-			<p className={styles.progressTitle}>{exerciseTheme.toLocaleUpperCase()}</p>
-			<div className={styles.progressThemes}>
-				{exercise.map((item) => {
-					const progressId = `${item.id}_${exerciseTheme}`;
-					const total = totalProgress[progressId];
+		<>
+			{exercise.length > 0 && (
+				<div className={styles.exerciseContainer}>
+					<p className={styles.progressTitle}>{exerciseTheme.toLocaleUpperCase()}</p>
+					<div className={styles.progressThemes}>
+						{exercise?.map((item) => {
+							const progressId = `${item.id}_${exerciseTheme}`;
+							const total = totalProgress[progressId];
 
-					if (
-						!total ||
-						(total.exam === 0 &&
-							total.random.resolved === 0 &&
-							total.random.progress === 0 &&
-							total.total === 0 &&
-							total.errorProgress.length === 0)
-					) {
-						return null;
-					}
+							if (
+								!total ||
+								(total.exam === 0 &&
+									total.random.resolved === 0 &&
+									total.random.progress === 0 &&
+									total.total === 0 &&
+									total.errorProgress.length === 0)
+							) {
+								return null;
+							}
 
-					const progressStore = progressData.find((p) =>
-						Object.keys(p.progressStore).includes(progressId),
-					)?.progressStore[progressId] as ProgressStoreState | undefined;
+							const progressStore = progressData.find((p) =>
+								Object.keys(p.progressStore).includes(progressId),
+							)?.progressStore[progressId] as ProgressStoreState | undefined;
 
-					const takenTestCount = progressStore?.takenTestCount.count || 0;
+							const takenTestCount = progressStore?.takenTestCount.count || 0;
 
-					const progress = {
-						exam: total.exam,
-						resolved: total.random.resolved,
-						progress: total.random.progress,
-						unTouch: total.random.unTouch,
-						errorProgress: total.errorProgress,
-					};
+							const progress = {
+								exam: total.exam,
+								resolved: total.random.resolved,
+								progress: total.random.progress,
+								unTouch: total.random.unTouch,
+								errorProgress: total.errorProgress,
+							};
 
-					const path = `${collection}/${item.id}`;
+							const path = `${collection}/${item.id}`;
 
-					return (
-						<div key={item.id} className={styles.progressContainer}>
-							<p className={styles.themeTitle}>{item.title}</p>
-							<CommonInfo takenTestCount={takenTestCount} total={total.total} />
-							<AddInfo
-								progress={progress}
-								path={path}
-								id={item.id}
-								showInfo={item.showAddInfo}
-								handleShowAddInfo={handleShowAddInfo}
-							/>
-						</div>
-					);
-				})}
-			</div>
-		</div>
+							return (
+								<div key={item.id} className={styles.progressContainer}>
+									<p className={styles.themeTitle}>{item.title}</p>
+									<CommonInfo takenTestCount={takenTestCount} total={total.total} />
+									<AddInfo
+										progress={progress}
+										path={path}
+										id={item.id}
+										showInfo={item.showAddInfo}
+										handleShowAddInfo={handleShowAddInfo}
+									/>
+								</div>
+							);
+						})}
+					</div>
+				</div>
+			)}
+		</>
 	);
 };

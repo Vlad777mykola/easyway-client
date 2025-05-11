@@ -13,6 +13,7 @@ import { ContentContainer } from '@/ui-components/Content-Container';
 import { EXERCISE_CONFIG_LABELS } from './constants';
 import { EXERCISE_CONFIG } from '../exercise/constants';
 import styles from './wordDetails.module.css';
+import { useProgressStore } from '@/store/progress';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
@@ -20,6 +21,13 @@ export const WordDetails = () => {
 	const filteredWordsVocabulary = useVocabularyStore.use.filteredWordsVocabulary();
 	const exerciseMode = useVocabularyStore.use.collectionsExerciseConfig().exerciseMode;
 	const words = useVocabularyStore.use.words();
+
+	const exerciseListProgress = useVocabularyStore.use.exerciseListProgress();
+	const exerciseListProgressStore = useProgressStore.use.exerciseListProgress();
+
+	console.log('exerciseListProgress: ', exerciseListProgress);
+	console.log('exerciseListProgressStore: ', exerciseListProgressStore);
+
 	const getWordConfig = useVocabularyStore.use.getWordConfig();
 	const setWordsListResponse = useVocabularyStore.use.setWordsListResponse();
 	const setWordConfig = useVocabularyStore.use.setWordConfig();
@@ -27,6 +35,8 @@ export const WordDetails = () => {
 	const setCleanWordConfig = useVocabularyStore.use.setCleanWordConfig();
 	const setFilterWordOnSearch = useVocabularyStore.use.setFilterWordOnSearch();
 	const getExerciseConfig = useVocabularyStore.use.getExerciseConfig();
+
+	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();
 
 	const navigate = useNavigate();
 
@@ -79,6 +89,10 @@ export const WordDetails = () => {
 		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
 		setMode(exerciseConfig as ExerciseModeType);
 	}, [exerciseMode]);
+
+	useEffect(() => {
+		setExerciseListProgress('', false, exerciseListProgressStore);
+	}, [exerciseListProgressStore]);
 
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setWordConfig(key, value);

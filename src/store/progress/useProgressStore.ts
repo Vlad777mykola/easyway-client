@@ -23,6 +23,11 @@ export type TakenTestCount = {
 	timestamp: number;
 };
 
+export type ListProgress = {
+	id: string;
+	countCorrectAnswers: number;
+};
+
 export type ProgressStoreState = {
 	examModeProgress: ExamModeProgressType;
 	randomModeProgress: {
@@ -39,6 +44,7 @@ export type ProgressStoreState = {
 			unTouch: number;
 		};
 	};
+	exerciseListProgress: ListProgress[];
 };
 
 type ProgressStoreActions = {
@@ -53,11 +59,13 @@ type ProgressStoreActions = {
 			resolved: ResolvedRandomTest[];
 		},
 		takenTestCount: TakenTestCount,
+		exerciseListProgress: ListProgress[],
 	) => void;
 	saveProgressToIndexedDB: () => {
 		examModeProgress: ExamModeProgressType;
 		randomModeProgress: { progress: RandomTest[]; resolved: ResolvedRandomTest[] };
 		takenTestCount: TakenTestCount;
+		exerciseListProgress: ListProgress[];
 	};
 	resetItemProgress: (collectionId: string, nameProgress: string) => void;
 	clearAll: () => void;
@@ -84,6 +92,7 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			unTouch: 0,
 		},
 	},
+	exerciseListProgress: [],
 	setExamProgress: (id, isResolved) => {
 		set((state) => {
 			const { successProgress, errorProgress } = state.examModeProgress;
@@ -182,19 +191,29 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			},
 		}));
 	},
-	getProgressFromIndexedDB: (examModeProgress, randomModeProgress, takenTestCount) => {
+	getProgressFromIndexedDB: (
+		examModeProgress,
+		randomModeProgress,
+		takenTestCount,
+		exerciseListProgress,
+	) => {
+		console.log('WORK!!!: ', exerciseListProgress);
+
 		set((state) => ({
 			...state,
 			examModeProgress: examModeProgress || { successProgress: [], errorProgress: [] },
 			randomModeProgress: randomModeProgress || { progress: [], resolved: [] },
 			takenTestCount: takenTestCount || { count: 0, timestamp: 0 },
+			exerciseListProgress: exerciseListProgress || [],
 		}));
 	},
 	saveProgressToIndexedDB: () => {
 		const examModeProgress = get().examModeProgress;
 		const randomModeProgress = get().randomModeProgress;
 		const takenTestCount = get().takenTestCount;
-		return { examModeProgress, randomModeProgress, takenTestCount };
+		const exerciseListProgress = get().exerciseListProgress;
+
+		return { examModeProgress, randomModeProgress, takenTestCount, exerciseListProgress };
 	},
 	resetItemProgress: (nameProgress) => {
 		set((state) => ({
