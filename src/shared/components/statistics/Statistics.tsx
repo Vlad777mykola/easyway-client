@@ -6,8 +6,8 @@ import { CountUp } from '@/ui-components/CountUp';
 import { AddInfo } from './components/add-info/AddInfo';
 import { useProgressStore } from '@/store/progress';
 import { useIndexedDB } from '@/shared/hooks/use-indexedDB';
-import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
-import { saveProgress } from '@/shared/utils/progress/saveProgress';
+/* import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
+import { saveProgress } from '@/shared/utils/progress/saveProgress'; */
 import { deleteProgress } from '@/shared/utils/progress/deleteProgress';
 import styles from './statistics.module.css';
 
@@ -25,10 +25,10 @@ export const Statistics = ({
 	const totalPercentage = useProgressStore.use.progressPercentage().total;
 	const getProgressFromIndexedDB = useProgressStore.use.getProgressFromIndexedDB();
 	const setProgressPercentage = useProgressStore.use.setProgressPercentage();
-	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
+	/* const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB(); */
 	const clearAll = useProgressStore.use.clearAll();
 
-	useBeforeunload(() => saveProgress(saveProgressToIndexedDB, exercisesId));
+	/* useBeforeunload(() => saveProgress(saveProgressToIndexedDB, exercisesId)); */
 
 	useEffect(() => {
 		setProgressPercentage(countWords);

@@ -7,6 +7,7 @@ export type {
 	ProgressStoreState,
 	ExamModeProgressType,
 	TakenTestCount,
+	ListProgress,
 } from './useProgressStore';
 
 export const useProgressStore = createSelectors(useProgressStoreBase);

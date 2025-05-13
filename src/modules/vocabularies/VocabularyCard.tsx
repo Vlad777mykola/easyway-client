@@ -40,6 +40,11 @@ export const VocabularyCard = () => {
 		randomModeProgress.resolved.every((item) => item.isDone === true) &&
 		randomModeProgress.resolved.length === words.length;
 	const isAutoPlay = useVocabularyStore.use.collectionsExerciseConfig().autoPlay;
+
+	const exerciseListProgress = useVocabularyStore.use.exerciseListProgress();
+
+	console.log('EXERCISE LIST PROGRESS: ', exerciseListProgress);
+
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();
@@ -48,7 +53,9 @@ export const VocabularyCard = () => {
 	const setRandomProgress = useProgressStore.use.setRandomProgress();
 	const setTakenTestCount = useProgressStore.use.setTakenTestCount();
 
-	useBeforeunload(() => saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE));
+	useBeforeunload(() =>
+		saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE, exerciseListProgress),
+	);
 
 	useEffect(() => {
 		if (collectionsExerciseConfig.exerciseMode === 'randomMode') {
@@ -85,7 +92,7 @@ export const VocabularyCard = () => {
 		setIsAutoNavigate(false);
 
 		return () => {
-			saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE);
+			saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE, exerciseListProgress);
 		};
 	}, [wordId]);
 
@@ -96,6 +103,7 @@ export const VocabularyCard = () => {
 		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
 			setRandomProgress(id, isResolved, exerciseCorrectResponse);
 		}
+
 		setExerciseListProgress(id, isResolved);
 		setTakenTestCount();
 	};

@@ -44,7 +44,11 @@ type VocabularyStoreActions = {
 	setFilterWordOnSearch: () => void;
 	setWordsListResponse: (vocabularyList: Word[]) => void;
 	setExerciseListResponse: (exerciseList: ExerciseResponseType[], collectionId: string) => void;
-	setExerciseListProgress: (id: string, isResolved: boolean) => void;
+	setExerciseListProgress: (
+		id: string,
+		isResolved: boolean,
+		fromData?: { id: string; countCorrectAnswers: number }[],
+	) => void;
 };
 
 export type VocabularyStoreType = VocabularyStoreState & VocabularyStoreActions;
@@ -118,37 +122,46 @@ export const useVocabularyStoreBase = create<VocabularyStoreType>()((set, get) =
 			commonProgressData: { ...state.commonProgressData, collectionId },
 		}));
 	},
-	setExerciseListProgress: (id, isResolved) => {
-		set((state) => {
-			const existingProgress = state.exerciseListProgress.find((e) => e.id === id);
-			let updatedProgressList = state.exerciseListProgress.filter((e) => e.id !== id);
+	setExerciseListProgress: (id = '', isResolved = false, fromData = []) => {
+		console.log('FROM DATA not if: ', fromData.length === 0);
+		if (fromData.length === 0 && id !== '' && isResolved) {
+			set((state) => {
+				const existingProgress = state.exerciseListProgress.find((e) => e.id === id);
+				let updatedProgressList = state.exerciseListProgress.filter((e) => e.id !== id);
 
-			if (isResolved) {
-				const isUntracedMode =
-					get().collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isInfinitive;
-				const exerciseCorrectResponse = get().collectionsExerciseConfig.exerciseCorrectResponse;
-				const countCorrectAnswers = (existingProgress?.countCorrectAnswers || 0) + 1;
+				if (isResolved) {
+					const isUntracedMode =
+						get().collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isInfinitive;
+					const exerciseCorrectResponse = get().collectionsExerciseConfig.exerciseCorrectResponse;
+					const countCorrectAnswers = (existingProgress?.countCorrectAnswers || 0) + 1;
 
-				if (!isUntracedMode && exerciseCorrectResponse === countCorrectAnswers) {
-					const exerciseListIds = get().exerciseListIds;
-					const resolvedExerciseId = get().resolvedExerciseId;
-					const removedExercise = exerciseListIds.filter((i) => i !== id);
+					if (!isUntracedMode && exerciseCorrectResponse === countCorrectAnswers) {
+						const exerciseListIds = get().exerciseListIds;
+						const resolvedExerciseId = get().resolvedExerciseId;
+						const removedExercise = exerciseListIds.filter((i) => i !== id);
 
-					return {
-						...state,
-						exerciseListProgress: updatedProgressList,
-						exerciseListIds: removedExercise,
-						resolvedExerciseId: [...resolvedExerciseId, id],
-					};
+						return {
+							...state,
+							exerciseListProgress: updatedProgressList,
+							exerciseListIds: removedExercise,
+							resolvedExerciseId: [...resolvedExerciseId, id],
+						};
+					} else {
+						updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers }];
+					}
 				} else {
-					updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers }];
+					updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers: 0 }];
 				}
-			} else {
-				updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers: 0 }];
-			}
 
-			return { ...state, exerciseListProgress: updatedProgressList };
-		});
+				return { ...state, exerciseListProgress: updatedProgressList };
+			});
+		} else {
+			console.log('FORM DATA: ', fromData);
+			set((state) => ({
+				...state,
+				exerciseListProgress: fromData,
+			}));
+		}
 	},
 	setCollectionsExerciseConfig: (key, value) => {
 		set((state) => ({
