@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { localstorage } from '@/shared/utils/local-storage/localstorage';
 import { ExerciseResponseType } from '@/shared/constants/collections/data';
 import { getReadyQuestion } from '@/shared/services/get-variants';
 import { shuffleArray } from '@/shared/utils/shuffle-array';
@@ -35,9 +34,9 @@ type ExerciseStoreActions = {
 	getExerciseProgressById: (id: string) => number;
 	setExerciseListProgress: (id: string, isResolved: boolean) => void;
 
-	saveProgressToLocalStore: (collectionId: string) => void;
-	getProgressFromLocalStore: (collectionId: string) => void;
-	removeProgress: (collectionId: string) => void;
+	// saveProgressToLocalStore: (collectionId: string) => void;
+	// getProgressFromLocalStore: (collectionId: string) => void;
+	// removeProgress: (collectionId: string) => void;
 };
 
 export type ExerciseStoreType = ExerciseStoreState & ExerciseStoreActions;
@@ -163,40 +162,40 @@ export const useDictionaryProgressStoreBase = create<ExerciseStoreType>()((set, 
 		});
 	},
 
-	saveProgressToLocalStore: (collectionId) => {
-		localstorage.removeItem(collectionId);
-		const exerciseListProgress = get().exerciseListProgress;
-		const resolvedExerciseId = get().resolvedExerciseId;
-		localstorage.setItem(collectionId, { exerciseListProgress, resolvedExerciseId });
-	},
-	getProgressFromLocalStore: (collectionId) => {
-		const existProgress = get().exerciseListProgress.length > 0;
-		if (existProgress) {
-			return;
-		}
-		const {
-			resolvedExerciseId,
-			exerciseListProgress,
-		}: {
-			exerciseListProgress: ExerciseListProgressType[];
-			resolvedExerciseId: string[];
-		} = localstorage.getItem(collectionId) || {
-			exerciseListProgress: [],
-			resolvedExerciseId: [],
-		};
+	// saveProgressToLocalStore: (collectionId) => {
+	// 	localstorage.removeItem(collectionId);
+	// 	const exerciseListProgress = get().exerciseListProgress;
+	// 	const resolvedExerciseId = get().resolvedExerciseId;
+	// 	localstorage.setItem(collectionId, { exerciseListProgress, resolvedExerciseId });
+	// },
+	// getProgressFromLocalStore: (collectionId) => {
+	// 	const existProgress = get().exerciseListProgress.length > 0;
+	// 	if (existProgress) {
+	// 		return;
+	// 	}
+	// 	const {
+	// 		resolvedExerciseId,
+	// 		exerciseListProgress,
+	// 	}: {
+	// 		exerciseListProgress: ExerciseListProgressType[];
+	// 		resolvedExerciseId: string[];
+	// 	} = localstorage.getItem(collectionId) || {
+	// 		exerciseListProgress: [],
+	// 		resolvedExerciseId: [],
+	// 	};
 
-		set((state) => ({
-			...state,
-			exerciseListProgress,
-			resolvedExerciseId,
-		}));
-	},
-	removeProgress: (collectionId) => {
-		if (localstorage.getItem(collectionId)) {
-			localstorage.removeItem(collectionId);
-			set((state) => ({ ...state, exerciseListProgress: [] }));
-		}
-	},
+	// 	set((state) => ({
+	// 		...state,
+	// 		exerciseListProgress,
+	// 		resolvedExerciseId,
+	// 	}));
+	// },
+	// removeProgress: (collectionId) => {
+	// 	if (localstorage.getItem(collectionId)) {
+	// 		localstorage.removeItem(collectionId);
+	// 		set((state) => ({ ...state, exerciseListProgress: [] }));
+	// 	}
+	// },
 }));
 
 // type MapAdIsType<T extends { [key: string]: string }> = {

@@ -67,6 +67,22 @@ export async function saveState<T>(key: string, value: T): Promise<void> {
 	await db.put(PROGRESS_STORE, updatedEntry, key);
 }
 
+// export async function saveDataToIdb<T>(key: string, value: T): Promise<void> {
+// 	const db = await getDB();
+
+// 	const timestamp = Date.now();
+
+// 	const updatedEntry = {
+// 		progressStore: {
+// 			[key]: { ...value }, // Update the specific field
+// 			timestamp, // Add/update timestamp
+// 		},
+// 	};
+
+// 	// Ensure only one object is saved with the given key
+// 	await db.put(PROGRESS_STORE, updatedEntry, key);
+// }
+
 export async function updateFieldIfNeeded<T>(key: string, field: string, value: T): Promise<void> {
 	const db = await getDB();
 

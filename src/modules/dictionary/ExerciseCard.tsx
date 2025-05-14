@@ -13,13 +13,47 @@ import { SelectFormate } from './components/select-formate/SelectFormate';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
 import styles from './exerciseCard.module.css';
+import { openDB } from 'idb';
+
+export function useIndexedDB(storeName: string, version = 1) {
+	const getDB = () =>
+		openDB('progressStore', version, {
+			upgrade(db) {
+				if (!db.objectStoreNames.contains(storeName)) {
+					db.createObjectStore(storeName);
+				}
+			},
+		});
+
+	return {
+		async get(key: string) {
+			const db = await getDB();
+			return db.get(storeName, key);
+		},
+		async set(key: string, value: unknown) {
+			const db = await getDB();
+			console.log('//////', key, value);
+			await db.put(storeName, value, key);
+		},
+		async remove(key: string) {
+			const db = await getDB();
+			await db.delete(storeName, key);
+		},
+		async clear() {
+			const db = await getDB();
+			await db.clear(storeName);
+		},
+	};
+}
 
 export const DictionaryExerciseCard = () => {
 	const navigate = useNavigate();
 	const { wordId = '', dictionaryId = '' } = useParams();
-	const ID_DICTIONARY_EXERCISE = `${dictionaryId}_dictionary`;
+	const ID_DICTIONARY_EXERCISE = `dictionary_${dictionaryId}`;
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
+
+	const progressDB = useIndexedDB('progressStore');
 
 	const exerciseListId = useDictionaryStore.use.exerciseListIds();
 	const isDoneExercise = wordId === 'done' || exerciseListId.length === 0;
@@ -28,14 +62,12 @@ export const DictionaryExerciseCard = () => {
 		EXERCISE_FORMATE.Selecting;
 	const collectionsExerciseConfig = useDictionaryStore.use.collectionsExerciseConfig();
 
-	const exerciseListProgress = useDictionaryStore.use.exerciseListProgress();
-
-	console.log('EXERCISE LIST PROGRESS: ', exerciseListProgress);
+	// const exerciseListProgress = useDictionaryStore.use.exerciseListProgress();
 
 	const getExerciseById = useDictionaryStore.use.getExerciseById();
 	const setExerciseListResponse = useDictionaryStore.use.setExerciseListResponse();
-	const setExerciseListProgress = useDictionaryStore.use.setExerciseListProgress();
-	const getProgressFromLocalStore = useDictionaryStore.use.getProgressFromLocalStore();
+	// const setExerciseListProgress = useDictionaryStore.use.setExerciseListProgress();
+	// const getProgressFromLocalStore = useDictionaryStore.use.getProgressFromLocalStore();
 
 	const saveProgressToIndexedDB = useProgressStore.use.saveProgressToIndexedDB();
 
@@ -68,12 +100,10 @@ export const DictionaryExerciseCard = () => {
 	}, [wordId]);
 
 	useEffect(() => {
-		getProgressFromLocalStore(dictionaryId);
+		// getProgressFromLocalStore(dictionaryId);
 		setIsAutoNavigate(false);
 
-		return () => {
-			saveProgress(saveProgressToIndexedDB, ID_DICTIONARY_EXERCISE);
-		};
+		progressDB.set(ID_DICTIONARY_EXERCISE, saveProgressToIndexedDB());
 	}, [wordId]);
 
 	const setModesProgress = async (id: string, isResolved: boolean) => {
@@ -83,7 +113,7 @@ export const DictionaryExerciseCard = () => {
 		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isRandom) {
 			setRandomProgress(id, isResolved, collectionsExerciseConfig.exerciseCorrectResponse);
 		}
-		setExerciseListProgress(id, isResolved);
+		// setExerciseListProgress(id, isResolved);
 		setTakenTestCount();
 	};
 

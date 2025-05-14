@@ -22,8 +22,6 @@ export const useIndexedDB = (
 			try {
 				const loadedData = await loadState(collectionId);
 
-				console.log('LOADED DATA: ', loadedData);
-
 				await updateLastTest(collectionId, `takenTestCount`, {
 					count: 0,
 					timestamp: 0,

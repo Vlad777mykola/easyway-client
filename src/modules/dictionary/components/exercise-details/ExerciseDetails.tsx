@@ -1,26 +1,28 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ContentContainer } from '@/ui-components/Content-Container';
 import { List } from '@/shared/components/list';
+import { ContentContainer } from '@/ui-components/Content-Container';
+import { Statistics } from '@/shared/components/statistics/Statistics';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
-import { EXERCISE_CONFIG_LABELS } from '../../constants';
-import { useExerciseListData } from '../../hooks/useExerciseListData';
 import {
 	useDictionaryStore,
 	EXERCISE_MODE,
 	EXERCISE_CONFIG,
 	EXERCISE_FORMATE,
 } from '@/store/dictionary';
-import { Statistics } from '@/shared/components/statistics/Statistics';
+
+import { EXERCISE_CONFIG_LABELS } from '../../constants';
+import { useExerciseListData } from '../../hooks/useExerciseListData';
 
 export const DictionaryExerciseDetails = (): ReactNode => {
 	const navigate = useNavigate();
 	const { dictionaryId = '' } = useParams();
 	const ID_DICTIONARY_EXERCISE = `${dictionaryId}_dictionary`;
+
 	const exerciseListResponse = useDictionaryStore.use.exerciseListResponse();
+
 	const getExerciseConfig = useDictionaryStore.use.getExerciseConfig();
 	const setExerciseListResponse = useDictionaryStore.use.setExerciseListResponse();
-	const getProgressFromLocalStore = useDictionaryStore.use.getProgressFromLocalStore();
 	const setCollectionsExerciseConfig = useDictionaryStore.use.setCollectionsExerciseConfig();
 
 	useExerciseListData(setExerciseListResponse, dictionaryId);
@@ -56,12 +58,13 @@ export const DictionaryExerciseDetails = (): ReactNode => {
 			getDefaultValue: () => getExerciseConfig(EXERCISE_CONFIG.AUTO_PLAY),
 			label: EXERCISE_CONFIG_LABELS.AUTO_PLAY,
 			componentType: SIDE_BAR_COMPONENT_TYPE.CHECKBOX,
+			showTooltip: true,
 		},
 	] as const;
 
-	useEffect(() => {
-		getProgressFromLocalStore(dictionaryId || '');
-	}, []);
+	// useEffect(() => {
+	// 	getProgressFromLocalStore(dictionaryId || '');
+	// }, []);
 
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setCollectionsExerciseConfig(key, value);
