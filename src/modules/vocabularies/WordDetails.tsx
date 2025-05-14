@@ -17,7 +17,7 @@ import { useProgressStore } from '@/store/progress';
 
 export const WordDetails = () => {
 	const { vocabulariesId = '' } = useParams();
-	const ID_VOCABULARY_EXERCISE = `${vocabulariesId}_vocabulary`;
+	const ID_VOCABULARY_EXERCISE = `vocabulary_${vocabulariesId}`;
 	const filteredWordsVocabulary = useVocabularyStore.use.filteredWordsVocabulary();
 	const exerciseMode = useVocabularyStore.use.collectionsExerciseConfig().exerciseMode;
 	const words = useVocabularyStore.use.words();
@@ -83,7 +83,7 @@ export const WordDetails = () => {
 		},
 	];
 
-	useVocabularyListData(setWordsListResponse, vocabulariesId || '');
+	useVocabularyListData(setWordsListResponse, vocabulariesId);
 
 	useEffect(() => {
 		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);

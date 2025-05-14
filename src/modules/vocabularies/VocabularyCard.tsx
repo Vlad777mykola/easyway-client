@@ -14,12 +14,13 @@ import {
 import { saveProgress } from '@/shared/utils/progress/saveProgress';
 import { DoneCard } from '@/shared/components/done-card';
 import { SelectFormate } from './components/select-formate/SelectFormate';
+import { useIndexedDB } from '@/shared/hooks/use-indexedDB-store';
 import styles from './vocabularyCard.module.css';
 
 export const VocabularyCard = () => {
 	const navigate = useNavigate();
 	const { vocabulariesId = '', wordId = '' } = useParams();
-	const ID_VOCABULARY_EXERCISE = `${vocabulariesId}_vocabulary`;
+	const ID_VOCABULARY_EXERCISE = `vocabulary_${vocabulariesId}`;
 
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
@@ -41,8 +42,9 @@ export const VocabularyCard = () => {
 		randomModeProgress.resolved.length === words.length;
 	const isAutoPlay = useVocabularyStore.use.collectionsExerciseConfig().autoPlay;
 
-	const exerciseListProgress = useVocabularyStore.use.exerciseListProgress();
+	const progressDB = useIndexedDB('progressStore');
 
+	const exerciseListProgress = useVocabularyStore.use.exerciseListProgress();
 	console.log('EXERCISE LIST PROGRESS: ', exerciseListProgress);
 
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
@@ -53,9 +55,7 @@ export const VocabularyCard = () => {
 	const setRandomProgress = useProgressStore.use.setRandomProgress();
 	const setTakenTestCount = useProgressStore.use.setTakenTestCount();
 
-	useBeforeunload(() =>
-		saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE, exerciseListProgress),
-	);
+	useBeforeunload(() => saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE));
 
 	useEffect(() => {
 		if (collectionsExerciseConfig.exerciseMode === 'randomMode') {
@@ -91,9 +91,11 @@ export const VocabularyCard = () => {
 
 		setIsAutoNavigate(false);
 
-		return () => {
-			saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE, exerciseListProgress);
-		};
+		progressDB.set(ID_VOCABULARY_EXERCISE, saveProgressToIndexedDB());
+
+		/* return () => {
+			saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE);
+		}; */
 	}, [wordId]);
 
 	const setModesProgress = async (id: string, isResolved: boolean) => {
