@@ -1,0 +1,15 @@
+.formTabs {
+  margin-top: 5%;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  min-height: 800px;
+  background: #fff;
+  border-radius: 6px;
+}
+
+.tapButtons {
+  display: flex;
+}
+
+.tapButton {
+  flex: 1;
+}
