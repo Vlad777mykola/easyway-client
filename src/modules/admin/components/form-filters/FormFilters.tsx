@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
+import { Tag } from '@/ui-components/Tag';
 
 import styles from './formFilters.module.css';
-import { Tag } from '@/ui-components/Tag';
 
 type FormInputs = {
 	tenses: string;
 	topic: string;
 	categories: string;
+};
+
+type FormErrors = FormInputs & {
+	submit: string;
 };
 
 type FormItems = {
@@ -29,35 +33,34 @@ const intialFormItems: FormItems = {
 	categories: [],
 };
 
-const initialFormErrors: FormInputs = {
+const initialFormErrors: FormErrors = {
 	tenses: '',
 	topic: '',
 	categories: '',
+	submit: '',
 };
 
 export const FormFilters = () => {
 	const [formInputs, setFormInputs] = useState<FormInputs>(initialFormInputs);
 	const [formItems, setFormItems] = useState<FormItems>(intialFormItems);
-	const [formErrors, setFormErrors] = useState(initialFormErrors);
+	const [formErrors, setFormErrors] = useState<FormErrors>(initialFormErrors);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
-		console.log('EVENT name: ', name);
-		console.log('EVENT Value: ', value);
 		setFormInputs((prev) => ({ ...prev, [name]: value }));
 	};
 
 	const addItems = (key: keyof FormItems) => {
-		console.log('KEY: ', key);
-
 		setFormInputs((prev) => ({ ...prev, [key]: '' }));
 
-		if (!formItems[key].includes(formInputs[key])) {
+		if (!formItems[key].includes(formInputs[key]) && formInputs[key].length > 0) {
 			setFormItems((prev) => ({
 				...prev,
 				[key]: [...(prev[key] || []), formInputs[key] || ''],
 			}));
-		} else {
+		}
+
+		if (formItems[key].includes(formInputs[key])) {
 			setFormErrors((prev) => ({ ...prev, [key]: 'This item is in list' }));
 			setTimeout(() => {
 				setFormErrors((prev) => ({ ...prev, [key]: '' }));
@@ -65,92 +68,63 @@ export const FormFilters = () => {
 		}
 	};
 
-	console.log('FORM INPUTS: ', formInputs);
-	console.log('FORM ITEMS: ', formItems);
+	const handleSubmit = () => {
+		const haveFilters = Object.values(formItems).some((item) => item.length > 0);
+
+		if (haveFilters) {
+			console.log('FORM ITEMS: ', formItems);
+		} else {
+			setFormErrors((prev) => ({ ...prev, submit: 'Filters are empty.' }));
+			setTimeout(() => {
+				setFormErrors((prev) => ({ ...prev, submit: '' }));
+			}, 3000);
+		}
+	};
 
 	return (
-		<form className={styles.formContainer}>
+		<form className={styles.formContainer} onSubmit={(e) => e.preventDefault()}>
 			<div className={styles.formContent}>
-				<div className={styles.formItemContainer}>
-					<div className={styles.formItem}>
-						<label className={styles.label}>Tenses</label>
-						<div className={styles.inputContainer}>
-							<Input
-								id="tenses"
-								name="tenses"
-								value={formInputs.tenses}
-								onChange={(e) => handleChange(e)}
-							/>
+				<span className={styles.title}>Filters</span>
+				{(Object.keys(formItems) as (keyof FormItems)[]).map((key) => (
+					<div className={styles.formItemContainer} key={key}>
+						<div className={styles.formItem}>
+							<label className={styles.label}>{key.toLocaleUpperCase()}</label>
+							<div className={styles.inputContainer}>
+								<Input
+									id={key}
+									name={key}
+									status={formErrors[key].length > 0 ? 'warning' : ''}
+									value={formInputs[key]}
+									onChange={(e) => handleChange(e)}
+								/>
+							</div>
+							<div className={styles.buttonContainer}>
+								<Button onClick={() => addItems(key)} block>
+									ADD
+								</Button>
+							</div>
 						</div>
-						<div className={styles.buttonContainer}>
-							<Button onClick={() => addItems('tenses')} block>
-								Add
-							</Button>
+						<div className={styles.errorContainer}>
+							<span className={styles.error}>{formErrors[key]}</span>
 						</div>
-					</div>
-					{formErrors.tenses.length > 0 && <div>{formErrors.tenses}</div>}
-					<div className={styles.tagsContainer}>
-						{formItems.tenses.map((item) => (
-							<Tag key={item} color="blue">
-								{item}
-							</Tag>
-						))}
-					</div>
-				</div>
-				<div className={styles.formItemContainer}>
-					<div className={styles.formItem}>
-						<label className={styles.label}>Topic</label>
-						<div className={styles.inputContainer}>
-							<Input
-								id="topic"
-								name="topic"
-								value={formInputs.topic}
-								onChange={(e) => handleChange(e)}
-							/>
-						</div>
-						<div className={styles.buttonContainer}>
-							<Button onClick={() => addItems('topic')} block>
-								Add
-							</Button>
+						<div className={styles.tagsContainer}>
+							{formItems[key].map((item) => (
+								<div key={item}>
+									<Tag color="blue">{item}</Tag>
+								</div>
+							))}
 						</div>
 					</div>
-					{formErrors.topic.length > 0 && <div>{formErrors.topic}</div>}
-					<div className={styles.tagsContainer}>
-						{formItems.topic.map((item) => (
-							<Tag key={item} color="blue">
-								{item}
-							</Tag>
-						))}
-					</div>
-				</div>
-				<div className={styles.formItemContainer}>
-					<div className={styles.formItem}>
-						<label className={styles.label}>Categories</label>
-						<div className={styles.inputContainer}>
-							<Input
-								id="categories"
-								name="categories"
-								value={formInputs.categories}
-								onChange={handleChange}
-							/>
-						</div>
-						<div className={styles.buttonContainer}>
-							<Button onClick={() => addItems('categories')} block>
-								Add
-							</Button>
-						</div>
-					</div>
-					{formErrors.categories.length > 0 && <div>{formErrors.categories}</div>}
-					<div className={styles.tagsContainer}>
-						{formItems.categories.map((item) => (
-							<Tag key={item} color="blue">
-								{item}
-							</Tag>
-						))}
-					</div>
-				</div>
+				))}
 			</div>
-			<Button type="primary">Submit</Button>
+			<div className={styles.handleSubmit}>
+				<div className={styles.errorContainer}>
+					<span className={styles.error}>{formErrors.submit}</span>
+				</div>
+				<Button type="primary" onClick={handleSubmit} block>
+					Submit
+				</Button>
+			</div>
 		</form>
 	);
 };
