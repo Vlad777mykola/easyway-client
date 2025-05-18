@@ -27,7 +27,7 @@ const initialFormInputs: FormInputs = {
 	categories: '',
 };
 
-const intialFormItems: FormItems = {
+const initialFormItems: FormItems = {
 	tenses: [],
 	topic: [],
 	categories: [],
@@ -42,7 +42,7 @@ const initialFormErrors: FormErrors = {
 
 export const FormFilters = () => {
 	const [formInputs, setFormInputs] = useState<FormInputs>(initialFormInputs);
-	const [formItems, setFormItems] = useState<FormItems>(intialFormItems);
+	const [formItems, setFormItems] = useState<FormItems>(initialFormItems);
 	const [formErrors, setFormErrors] = useState<FormErrors>(initialFormErrors);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,6 +73,9 @@ export const FormFilters = () => {
 
 		if (haveFilters) {
 			console.log('FORM ITEMS: ', formItems);
+			setFormInputs(initialFormInputs);
+			setFormItems(initialFormItems);
+			setFormErrors(initialFormErrors);
 		} else {
 			setFormErrors((prev) => ({ ...prev, submit: 'Filters are empty.' }));
 			setTimeout(() => {
