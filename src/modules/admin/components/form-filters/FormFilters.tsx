@@ -92,6 +92,8 @@ export const FormFilters = () => {
 		}
 	};
 
+	console.log('WORK MY ACCOUNT!!!');
+
 	return (
 		<form className={styles.formContainer} onSubmit={(e) => e.preventDefault()}>
 			<div className={styles.formContent}>
