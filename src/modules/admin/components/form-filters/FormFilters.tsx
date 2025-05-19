@@ -4,6 +4,7 @@ import { Button } from '@/ui-components/Button';
 import { Tag } from '@/ui-components/Tag';
 
 import styles from './formFilters.module.css';
+import { Icon } from '@/ui-components/Icon';
 
 type FormInputs = {
 	tenses: string;
@@ -68,6 +69,13 @@ export const FormFilters = () => {
 		}
 	};
 
+	const deleteTag = (key, value) => {
+		console.log('WORK');
+		const updatedItems = { ...formItems, [key]: formItems[key].filter((item) => item !== value) };
+
+		console.log('UPDATED ITEMS: ', updatedItems);
+	};
+
 	const handleSubmit = () => {
 		const haveFilters = Object.values(formItems).some((item) => item.length > 0);
 
@@ -113,7 +121,13 @@ export const FormFilters = () => {
 						<div className={styles.tagsContainer}>
 							{formItems[key].map((item) => (
 								<div key={item}>
-									<Tag color="blue">{item}</Tag>
+									<Tag
+										color="blue"
+										closeIcon={<Icon icon="close" />}
+										onClose={() => deleteTag(key, item)}
+									>
+										{item}
+									</Tag>
 								</div>
 							))}
 						</div>
