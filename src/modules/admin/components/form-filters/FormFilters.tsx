@@ -4,7 +4,6 @@ import { Button } from '@/ui-components/Button';
 import { Tag } from '@/ui-components/Tag';
 
 import styles from './formFilters.module.css';
-import { Icon } from '@/ui-components/Icon';
 
 type FormInputs = {
 	tenses: string;
@@ -69,11 +68,9 @@ export const FormFilters = () => {
 		}
 	};
 
-	const deleteTag = (key, value) => {
-		console.log('WORK');
+	const deleteTag = (key: keyof FormItems, value: string) => {
 		const updatedItems = { ...formItems, [key]: formItems[key].filter((item) => item !== value) };
-
-		console.log('UPDATED ITEMS: ', updatedItems);
+		setFormItems(updatedItems);
 	};
 
 	const handleSubmit = () => {
@@ -92,16 +89,13 @@ export const FormFilters = () => {
 		}
 	};
 
-	console.log('WORK MY ACCOUNT!!!');
-
 	return (
 		<form className={styles.formContainer} onSubmit={(e) => e.preventDefault()}>
 			<div className={styles.formContent}>
-				<span className={styles.title}>Filters</span>
+				<h2 className={styles.title}>Filters</h2>
 				{(Object.keys(formItems) as (keyof FormItems)[]).map((key) => (
 					<div className={styles.formItemContainer} key={key}>
 						<div className={styles.formItem}>
-							<label className={styles.label}>{key.toLocaleUpperCase()}</label>
 							<div className={styles.inputContainer}>
 								<Input
 									id={key}
@@ -109,6 +103,7 @@ export const FormFilters = () => {
 									status={formErrors[key].length > 0 ? 'warning' : ''}
 									value={formInputs[key]}
 									onChange={(e) => handleChange(e)}
+									addonBefore={<label className={styles.label}>{key.toLocaleUpperCase()}</label>}
 								/>
 							</div>
 							<div className={styles.buttonContainer}>
@@ -122,15 +117,15 @@ export const FormFilters = () => {
 						</div>
 						<div className={styles.tagsContainer}>
 							{formItems[key].map((item) => (
-								<div key={item}>
-									<Tag
-										color="blue"
-										closeIcon={<Icon icon="close" />}
-										onClose={() => deleteTag(key, item)}
-									>
-										{item}
-									</Tag>
-								</div>
+								<Tag
+									key={item}
+									className={styles.tag}
+									color="blue"
+									onClose={() => deleteTag(key, item)}
+									closable
+								>
+									{item}
+								</Tag>
 							))}
 						</div>
 					</div>
