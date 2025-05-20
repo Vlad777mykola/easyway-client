@@ -1,11 +1,11 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { Tabs as TabsAnt } from 'antd';
 import type { TabsProps } from 'antd';
 
 export interface TabItem {
 	key: string;
-	label: React.ReactNode;
-	children: React.ReactNode;
+	label: ReactNode;
+	children: ReactNode;
 }
 
 export const Tabs = ({ items, ...props }: { items: TabItem[] } & TabsProps) => {

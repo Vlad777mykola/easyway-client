@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
 import { Tag } from '@/ui-components/Tag';
+import { Space } from '@/ui-components/Space';
 
 import styles from './formFilters.module.css';
+import { Icon } from '@/ui-components/Icon';
 
 type FormInputs = {
 	tenses: string;
@@ -96,7 +98,7 @@ export const FormFilters = () => {
 				{(Object.keys(formItems) as (keyof FormItems)[]).map((key) => (
 					<div className={styles.formItemContainer} key={key}>
 						<div className={styles.formItem}>
-							<div className={styles.inputContainer}>
+							<Space.Compact className={styles.spaceContainer}>
 								<Input
 									id={key}
 									name={key}
@@ -105,12 +107,10 @@ export const FormFilters = () => {
 									onChange={(e) => handleChange(e)}
 									addonBefore={<label className={styles.label}>{key.toLocaleUpperCase()}</label>}
 								/>
-							</div>
-							<div className={styles.buttonContainer}>
-								<Button onClick={() => addItems(key)} block>
-									ADD
+								<Button type="primary" onClick={() => addItems(key)}>
+									<Icon icon="plus" variant="default" size="s" />
 								</Button>
-							</div>
+							</Space.Compact>
 						</div>
 						<div className={styles.errorContainer}>
 							<span className={styles.error}>{formErrors[key]}</span>

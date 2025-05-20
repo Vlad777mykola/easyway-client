@@ -28,6 +28,7 @@ import {
 	QuestionOutlined,
 	ClockCircleOutlined,
 	FrownOutlined,
+	PlusOutlined,
 } from '@ant-design/icons';
 
 import styles from './icon.module.css';
@@ -57,6 +58,7 @@ const IconVariants = {
 	question: QuestionOutlined,
 	clock: ClockCircleOutlined,
 	frown: FrownOutlined,
+	plus: PlusOutlined,
 };
 
 export type IconVariantsType = keyof typeof IconVariants;
