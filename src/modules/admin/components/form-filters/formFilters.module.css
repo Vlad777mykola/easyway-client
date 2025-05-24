@@ -38,9 +38,9 @@
 	align-items: center;
 	font-size: 0.9rem;
 	display: flex;
-  justify-content: center;
+	justify-content: center;
 	font-weight: 500;
-  color: #4e4e4e;
+	color: #4e4e4e;
 }
 
 .errorContainer {
@@ -57,7 +57,7 @@
 .tagsContainer {
 	height: 100px;
 	overflow-y: auto;
-	scrollbar-width: thin;  
+	scrollbar-width: thin;
 	display: flex;
 	width: 100%;
 	flex-wrap: wrap;
