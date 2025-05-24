@@ -23,17 +23,6 @@ export const Admin = () => {
 
 	return (
 		<div className={styles.adminContainer}>
-			{/* <div className={styles.formsContainer}>
-				<FormTabs>
-					<FormTab label="Filters">
-						<FormFilters />
-					</FormTab>
-
-					<FormTab label="Second Tab">
-						<SecondTab />
-					</FormTab>
-				</FormTabs>
-			</div> */}
 			<div className={styles.formsContainer}>
 				<Tabs
 					items={tabs}
