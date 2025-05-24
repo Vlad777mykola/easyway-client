@@ -1,4 +1,4 @@
-import { ExerciseType, useDictionaryStore, EXERCISE_FORMATE } from '@/store/dictionary';
+import { ExerciseType, EXERCISE_FORMATE } from '@/store/dictionary';
 import { Typography } from '@/ui-components/Typography';
 import { classes } from '@/shared/utils/classes';
 import { Button } from '@/ui-components/Button';
@@ -7,6 +7,7 @@ import { Icon } from '@/ui-components/Icon';
 
 import { FormateType } from '../select-formate/types';
 import styles from './exerciseContent.module.css';
+import { useConfigStings } from '../../hooks/useConfigParamWithDefaultData';
 
 export const ExerciseUI = ({ task, setTask, updateProgress, setIsAutoNavigate }: FormateType) => {
 	const {
@@ -20,10 +21,10 @@ export const ExerciseUI = ({ task, setTask, updateProgress, setIsAutoNavigate }:
 		selectedAnswer,
 		isCorrectAnswer,
 	} = task;
-	const isAutoPlay = useDictionaryStore.use.collectionsExerciseConfig().autoPlay;
-	const isSelectingFormate =
-		useDictionaryStore.use.collectionsExerciseConfig().exerciseFormate ===
-		EXERCISE_FORMATE.Selecting;
+
+	const { getFormate, getAutoPlay } = useConfigStings();
+	const isAutoPlay = getAutoPlay();
+	const isSelectingFormate = getFormate() === EXERCISE_FORMATE.Selecting;
 
 	const onSelect = (answer: string) => {
 		let word = answer;
