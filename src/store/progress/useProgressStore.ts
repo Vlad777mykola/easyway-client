@@ -73,16 +73,20 @@ type ProgressStoreActions = {
 
 export type ProgressStoreType = ProgressStoreState & ProgressStoreActions;
 
-export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
+const DEFAULT_STATE = {
 	examModeProgress: {
 		successProgress: [],
 		errorProgress: [],
 	},
 	randomModeProgress: {
+		isDone: false,
 		progress: [],
 		resolved: [],
 	},
-	takenTestCount: { count: 0, timestamp: 0 },
+	takenTestCount: {
+		count: 0,
+		timestamp: 0,
+	},
 	progressPercentage: {
 		total: 0,
 		exam: 0,
@@ -92,6 +96,10 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			unTouch: 0,
 		},
 	},
+};
+
+export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
+	...DEFAULT_STATE,
 	exerciseListProgress: [],
 	setExamProgress: (id, isResolved) => {
 		set((state) => {
@@ -197,8 +205,6 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 		takenTestCount,
 		exerciseListProgress,
 	) => {
-		console.log('WORK!!!: ', exerciseListProgress);
-
 		set((state) => ({
 			...state,
 			examModeProgress: examModeProgress || { successProgress: [], errorProgress: [] },
@@ -238,19 +244,7 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 	clearAll: () => {
 		set((state) => ({
 			...state,
-			examModeProgress: {
-				successProgress: [],
-				errorProgress: [],
-			},
-			randomModeProgress: {
-				isDone: false,
-				progress: [],
-				resolved: [],
-			},
-			takenTestCount: {
-				count: 0,
-				timestamp: 0,
-			},
+			...DEFAULT_STATE,
 		}));
 	},
 }));

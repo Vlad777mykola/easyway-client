@@ -137,12 +137,7 @@ export const WordDetails = () => {
 						/>
 					</div>
 					<div>
-						<Sidebar
-							title="Exercise Stings"
-							fieldsData={fieldsDataMode}
-							showInfo={true}
-							onChange={onChangeMode}
-						/>
+						<Sidebar title="Exercise Stings" fieldsData={fieldsDataMode} onChange={onChangeMode} />
 					</div>
 				</div>
 			</ContentContainer.Sidebar>

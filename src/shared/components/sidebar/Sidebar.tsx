@@ -17,7 +17,6 @@ type Ref = {
 export const Sidebar = <T extends FieldsDataType>({
 	title,
 	fieldsData,
-	showInfo = false,
 	onClear,
 	onSearch,
 	onChange,
@@ -45,7 +44,6 @@ export const Sidebar = <T extends FieldsDataType>({
 							}}
 							key={item.keyValue}
 							item={item}
-							showInfo={showInfo}
 							onChange={onChange}
 						/>
 					))}

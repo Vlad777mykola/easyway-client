@@ -43,8 +43,6 @@ export const VocabularyCard = () => {
 
 	const exerciseListProgress = useVocabularyStore.use.exerciseListProgress();
 
-	console.log('EXERCISE LIST PROGRESS: ', exerciseListProgress);
-
 	const getExerciseById = useVocabularyStore.use.getExerciseById();
 	const setExerciseListResponse = useVocabularyStore.use.setExerciseListResponse();
 	const setExerciseListProgress = useVocabularyStore.use.setExerciseListProgress();

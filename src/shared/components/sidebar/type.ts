@@ -2,6 +2,7 @@ export type BaseFieldsDataType = {
 	keyValue: string;
 	label?: string;
 	placeholder?: string;
+	showTooltip?: boolean;
 };
 
 export type CheckboxFieldsType = BaseFieldsDataType & {
@@ -36,7 +37,6 @@ export type CommonStateType<T extends FieldsType> = T extends CheckboxFieldsType
 export type SideBarType<T> = {
 	title: string;
 	fieldsData: T[];
-	showInfo?: boolean;
 	onClear?: () => void;
 	onSearch?: () => void;
 	onChange: (key: string, value: number[] | string | boolean | string[] | number) => void;
