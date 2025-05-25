@@ -1,10 +1,10 @@
 import { Menu } from '@/ui-components/Menu';
+import { Button } from '@/ui-components/Button';
+import { Icon } from '@/ui-components/Icon';
 import { Navbar } from '@/shared/components/navbar';
 import { NavHeader } from '@/shared/components/nav-header';
 import { SideMenu } from './SideMenu';
 import styles from './header.module.css';
-import { Button } from '@/ui-components/Button';
-import { Icon } from '@/ui-components/Icon';
 
 const sideMenuItems = [
 	// {
