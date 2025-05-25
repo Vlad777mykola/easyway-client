@@ -3,6 +3,8 @@ import { Navbar } from '@/shared/components/navbar';
 import { NavHeader } from '@/shared/components/nav-header';
 import { SideMenu } from './SideMenu';
 import styles from './header.module.css';
+import { Button } from '@/ui-components/Button';
+import { Icon } from '@/ui-components/Icon';
 
 const sideMenuItems = [
 	// {
@@ -39,17 +41,22 @@ const Header = () => {
 		<div className={styles.headersContainer}>
 			<Navbar
 				RightSide={
-					<Menu
-						side="right"
-						icon="user"
-						Items={
-							<SideMenu
-								img="https://imgcdn.stablediffusionweb.com/2024/3/24/17ee935b-c63a-4374-8fc3-91b2559e02f2.jpg"
-								list={profileMenuItems}
-								imgSpan="John Smith"
-							/>
-						}
-					/>
+					<div className={styles.rightSide}>
+						<Menu
+							side="right"
+							icon="user"
+							Items={
+								<SideMenu
+									img="https://imgcdn.stablediffusionweb.com/2024/3/24/17ee935b-c63a-4374-8fc3-91b2559e02f2.jpg"
+									list={profileMenuItems}
+									imgSpan="John Smith"
+								/>
+							}
+						/>
+						<Button className={styles.button} shape="round">
+							Sign in <Icon icon="user" size="s" />
+						</Button>
+					</div>
 				}
 				LeftSide={<Menu side="left" Items={<SideMenu list={sideMenuItems} />} />}
 			/>
