@@ -1,19 +1,27 @@
+.filters {
+  display: flex;
+}
+
 .formContainer {
 	font-family: 'Inter', sans-serif;
 	padding: 40px;
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	width: 100%;
-	height: 800px;
+	width: 50%;
+	height: 860px;
 	justify-content: space-between;
+  border-right: 1px solid #f9f9f9;
 }
 
 .title {
 	text-align: center;
 	font-size: 24px;
-	margin: 0px 0px 30px;
-	padding: 0;
+	padding: 15px;
+  box-sizing: border-box;
+  font-weight: 600;
+  color: #4e4e4e;
+  border-bottom: 1px solid #d9d9d9;
 }
 
 .formContent {
@@ -26,20 +34,33 @@
 .formItem {
 	display: flex;
 	width: 100%;
+  gap: 10px;
 }
 
-.spaceContainer {
-	width: 100%;
+.underlinedInput {
+  border: none;
+  border-bottom: 1px solid #d9d9d9;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+}
+
+.underlinedInput:focus {
+  border-bottom: 1px solid #1677ff;
+  box-shadow: none;
+}
+
+.warning {
+  border-bottom: 1px solid #faad14 !important;
 }
 
 .label {
 	min-width: 110px;
 	display: flex;
 	align-items: center;
-	font-size: 0.9rem;
+	font-size: 12px;
 	display: flex;
-	justify-content: center;
-	font-weight: 500;
+	font-weight: 600;
 	color: #4e4e4e;
 }
 
@@ -54,6 +75,12 @@
 	color: var(--color-warning);
 }
 
+.buttonsContainer {
+  display: flex;
+  gap: 10px;
+  justify-content: end;
+}
+
 .tagsContainer {
 	height: 100px;
 	overflow-y: auto;
@@ -64,16 +91,77 @@
 	gap: 4px;
 	align-content: flex-start;
 
-	background: #f9f9f9;
-	border-radius: 8px;
+	background: #fff;
+  border: 1px solid #d9d9d9;
 	padding: 16px;
 	box-sizing: border-box;
-	box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
 }
 
 /* ATTENTION MAKE GLOBAL CSS STYLE */
 .tag :global(.ant-tag-close-icon) {
 	color: #108ee9;
+}
+
+.quote {
+  width: 50%;
+  font-family: 'Inter', sans-serif;
+	padding: 40px;
+	box-sizing: border-box;
+  background: #f9f9f9;
+  color: #4e4e4e;
+  display: flex;
+  justify-content: center;
+  border-radius: 0px 10px 10px 0px;
+}
+
+.quoteTitle {
+  font-weight: 700;
+  font-size: 36px;
+}
+
+.blockquote {
+  font-style: italic;
+  font-size: 18px;
+  margin-top: 35px;
+}
+
+.blockquote::before {
+  content: "“";
+  font-size: 18px;
+}
+
+.blockquote::after {
+  content: "”";
+  font-size: 18px;
+}
+
+.nameOfQuote {
+  font-weight: 600;
+  font-style: italic;
+}
+
+.explanation {
+  font-family: 'Inter', sans-serif;
+  margin-top: 50px;
+  font-size: 16px;
+  font-weight: 800;
+  counter-reset: item;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.explanation li {
+  counter-increment: item;
+  line-height: 30px;
+}
+
+.explanation li::before {
+  content: counter(item)".";
+  margin-right: 10px;
+  color: #1677ff;
 }
 
 @media (max-width: 1024px) {

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
 import { Tag } from '@/ui-components/Tag';
-import { Space } from '@/ui-components/Space';
+import { Icon } from '@/ui-components/Icon';
+import { classes } from '@/shared/utils/classes';
 
 import styles from './formFilters.module.css';
-import { Icon } from '@/ui-components/Icon';
 
 type FormInputs = {
 	tenses: string;
@@ -75,6 +75,12 @@ export const FormFilters = () => {
 		setFormItems(updatedItems);
 	};
 
+	const clearForm = () => {
+		setFormInputs(initialFormInputs);
+		setFormItems(initialFormItems);
+		setFormErrors(initialFormErrors);
+	};
+
 	const handleSubmit = () => {
 		const haveFilters = Object.values(formItems).some((item) => item.length > 0);
 
@@ -92,53 +98,76 @@ export const FormFilters = () => {
 	};
 
 	return (
-		<form className={styles.formContainer} onSubmit={(e) => e.preventDefault()}>
-			<div className={styles.formContent}>
-				<h2 className={styles.title}>Filters</h2>
-				{(Object.keys(formItems) as (keyof FormItems)[]).map((key) => (
-					<div className={styles.formItemContainer} key={key}>
-						<div className={styles.formItem}>
-							<Space.Compact className={styles.spaceContainer}>
+		<div className={styles.filters}>
+			<form className={styles.formContainer} onSubmit={(e) => e.preventDefault()}>
+				<div className={styles.formContent}>
+					<h2 className={styles.title}>Filters</h2>
+					{(Object.keys(formItems) as (keyof FormItems)[]).map((key) => (
+						<div className={styles.formItemContainer} key={key}>
+							<label className={styles.label}>{key.toLocaleUpperCase()}</label>
+							<div className={styles.formItem}>
 								<Input
+									/* className={formErrors[key].length > 0 ? styles.warning : styles.underlinedInput} */
+									className={classes(styles.underlinedInput, {
+										[styles.warning]: formErrors[key].length > 0,
+									})}
 									id={key}
 									name={key}
-									status={formErrors[key].length > 0 ? 'warning' : ''}
+									/* status={formErrors[key].length > 0 ? 'warning' : ''} */
 									value={formInputs[key]}
 									onChange={(e) => handleChange(e)}
-									addonBefore={<label className={styles.label}>{key.toLocaleUpperCase()}</label>}
 								/>
-								<Button type="primary" onClick={() => addItems(key)}>
+								<Button type="primary" onClick={() => addItems(key)} shape="circle">
 									<Icon icon="plus" variant="default" size="s" />
 								</Button>
-							</Space.Compact>
+							</div>
+							<div className={styles.errorContainer}>
+								<span className={styles.error}>{formErrors[key]}</span>
+							</div>
+							<div className={styles.tagsContainer}>
+								{formItems[key].map((item) => (
+									<Tag
+										key={item}
+										className={styles.tag}
+										color="blue"
+										onClose={() => deleteTag(key, item)}
+										closable
+									>
+										{item}
+									</Tag>
+								))}
+							</div>
 						</div>
-						<div className={styles.errorContainer}>
-							<span className={styles.error}>{formErrors[key]}</span>
-						</div>
-						<div className={styles.tagsContainer}>
-							{formItems[key].map((item) => (
-								<Tag
-									key={item}
-									className={styles.tag}
-									color="blue"
-									onClose={() => deleteTag(key, item)}
-									closable
-								>
-									{item}
-								</Tag>
-							))}
-						</div>
-					</div>
-				))}
-			</div>
-			<div className={styles.handleSubmit}>
-				<div className={styles.errorContainer}>
-					<span className={styles.error}>{formErrors.submit}</span>
+					))}
 				</div>
-				<Button type="primary" onClick={handleSubmit} block>
-					Submit
-				</Button>
+				<div className={styles.handleSubmit}>
+					<div className={styles.errorContainer}>
+						<span className={styles.error}>{formErrors.submit}</span>
+					</div>
+					<div className={styles.buttonsContainer}>
+						<Button type="primary" shape="round" onClick={clearForm}>
+							Clear
+						</Button>
+						<Button type="primary" shape="round" onClick={handleSubmit}>
+							Submit
+						</Button>
+					</div>
+				</div>
+			</form>
+			<div className={styles.quote}>
+				<div className={styles.content}>
+					<h1 className={styles.quoteTitle}>Create Filters</h1>
+					<blockquote className={styles.blockquote}>
+						To have another language is to possess a second soul.
+					</blockquote>
+					<p className={styles.nameOfQuote}>— Charlemagne</p>
+					<ol className={styles.explanation}>
+						<li>This form is designed to create collection filters.</li>
+						<li>At least one of the items must have a list.</li>
+						<li>The form does not allow having the same item in the list.</li>
+					</ol>
+				</div>
 			</div>
-		</form>
+		</div>
 	);
 };
