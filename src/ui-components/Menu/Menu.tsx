@@ -1,6 +1,7 @@
 /* eslint-disable css-modules/no-unused-class */
 import { useState, ReactNode } from 'react';
-import type { IconVariantsType } from '../Icon/Icon';
+import { Button } from '@/ui-components/Button/Button';
+import type { IconVariantsType } from '@/ui-components/Icon/Icon';
 import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { classes } from '@/shared/utils/classes';
@@ -17,13 +18,19 @@ type Props = {
 	Items: ReactNode;
 	side: SideType;
 	icon?: IconVariantsType;
+	text?: string;
+	overrideOnClick?: () => void;
 };
 
-export const Menu = ({ Items, side, icon = 'menu' }: Props) => {
+export const Menu = ({ Items, side, icon = 'menu', text, overrideOnClick }: Props) => {
 	const [open, setOpen] = useState<boolean>(false);
 	const [notShow, setNotShow] = useState<boolean>(true);
 
 	const onClick = () => {
+		if (overrideOnClick) {
+			overrideOnClick();
+			return;
+		}
 		setOpen(!open);
 		setNotShow(false);
 	};
@@ -65,9 +72,16 @@ export const Menu = ({ Items, side, icon = 'menu' }: Props) => {
 					{Items}
 				</div>
 			)}
-			<CircleButton size="middle" variant="filled" onClick={onClick}>
-				<Icon icon={icon} />
-			</CircleButton>
+			{text && (
+				<Button onClick={onClick} className={styles.button} shape="round" size="middle">
+					{text} <Icon icon={icon} size="s" />
+				</Button>
+			)}
+			{!text && (
+				<CircleButton size="middle" variant="filled" onClick={onClick}>
+					<Icon icon={icon} size="s" />
+				</CircleButton>
+			)}
 		</>
 	);
 };

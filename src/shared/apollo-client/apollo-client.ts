@@ -3,7 +3,7 @@ import { ErrorResponse, onError } from '@apollo/client/link/error';
 import { API_URL } from '@/shared/constants/urls';
 import { router } from '@/router/Router';
 
-const EXECUTED_ROUTES = ['/login', '/signup'];
+const EXECUTED_ROUTES = ['/signin', '/signup'];
 
 const logoutLink = onError((error: ErrorResponse) => {
 	const statusCode =
@@ -12,7 +12,7 @@ const logoutLink = onError((error: ErrorResponse) => {
 
 	if (statusCode === 401) {
 		if (!EXECUTED_ROUTES.includes(window.location.pathname)) {
-			router.navigate('/login');
+			router.navigate('/signin');
 			client.resetStore();
 		}
 	}

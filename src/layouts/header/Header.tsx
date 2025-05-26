@@ -1,3 +1,4 @@
+import { router } from '@/router/Router';
 import { Menu } from '@/ui-components/Menu';
 import { Navbar } from '@/shared/components/navbar';
 import { NavHeader } from '@/shared/components/nav-header';
@@ -42,6 +43,8 @@ const Header = () => {
 					<Menu
 						side="right"
 						icon="user"
+						text="Sing in"
+						overrideOnClick={() => router.navigate('/signin')}
 						Items={
 							<SideMenu
 								img="https://imgcdn.stablediffusionweb.com/2024/3/24/17ee935b-c63a-4374-8fc3-91b2559e02f2.jpg"

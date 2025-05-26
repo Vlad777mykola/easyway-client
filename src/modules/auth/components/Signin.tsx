@@ -1,35 +1,28 @@
-import { z } from 'zod';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
-import { Typography } from '@/ui-components/Typography';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
-import axios from 'axios';
+import { Typography } from '@/ui-components/Typography';
+import z from 'zod';
 
-import style from './signUp.module.css';
+import style from './login.module.css';
 import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 const INITIAL_FORM_STATE = {
 	email: '',
 	password: '',
-	repeatPassword: '',
 };
 
-const formDataSchema = z
-	.object({
-		email: z.string().email(),
-		password: z.string().min(8, 'Password must be at least 8 characters'),
-		repeatPassword: z.string().min(8, 'Password must be at least 8 characters'),
-	})
-	.refine((data) => data.password === data.repeatPassword, {
-		message: "Passwords don't match",
-		path: ['repeatPassword'],
-	});
+const formDataSchema = z.object({
+	email: z.string().email(),
+	password: z.string().min(8, 'Password must be at least 8 characters'),
+});
 
 type FormData = z.infer<typeof formDataSchema>;
 
-export const SignUp = () => {
+export const Signin = () => {
 	const [authData, setAuth] = useState<Partial<FormData>>({});
 	const [showErrors, setShowErrors] = useState(false);
 
@@ -68,13 +61,12 @@ export const SignUp = () => {
 	};
 
 	const errors = showErrors ? validate() : undefined;
-
 	return (
 		<WrapperCard>
-			<div className={style.signUpContainer}>
-				<div className={style.signUpForm}>
+			<div className={style.loginContainer}>
+				<div className={style.loginForm}>
 					<Typography.Title className={style.signUpHeader} level={3}>
-						Sign Up
+						Sign In
 					</Typography.Title>
 
 					<div>
@@ -110,34 +102,15 @@ export const SignUp = () => {
 							<Typography.Text type="danger">{errors.password._errors[0]}</Typography.Text>
 						)}
 					</div>
-
-					<div>
-						<Typography.Title marginY="05" level={5}>
-							Repeat Password
-						</Typography.Title>
-						<Input
-							type="password"
-							placeholder="Repeat your password"
-							value={formData.repeatPassword}
-							size="middle"
-							status={errors?.repeatPassword ? 'error' : undefined}
-							onChange={(e) => onChange(e.target.value, 'repeatPassword')}
-						/>
-						{errors?.repeatPassword && (
-							<Typography.Text type="danger">{errors.repeatPassword._errors[0]}</Typography.Text>
-						)}
-					</div>
-
-					<div className={style.sendSignUp}>
+					<div className={style.sendLogin}>
 						<Button type="primary" onClick={() => onSubmit(formData)} size="large" block>
-							Sign Up
+							Sign in
 						</Button>
 					</div>
 				</div>
-
-				<div className={style.loginContainer}>
-					<Link className={style.login} to={'/signin'}>
-						Sign in
+				<div className={style.signUpContainer}>
+					<Link className={style.signUp} to={'/signup'}>
+						Sing up
 					</Link>
 				</div>
 			</div>

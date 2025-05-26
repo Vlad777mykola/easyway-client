@@ -66,9 +66,9 @@ export const ExerciseUI = ({
 
 	return (
 		<div className={styles.testContainer}>
-			{/* <Typography type="secondary" className={styles.topic}>
+			{/* <Typography.Text type="secondary" className={styles.topic}>
 				{explanation}
-			</Typography> */}
+			</Typography.Text> */}
 			<div className={styles.exercise}>{exercise}</div>
 			<div className={styles.correctAnswerContainer}>
 				<div

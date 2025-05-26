@@ -1,19 +1,20 @@
 import { RouterProvider } from 'react-router-dom';
-import { ApolloProvider } from '@apollo/client';
 import { router } from '@/router/Router';
-import { client } from '@/shared/apollo-client';
 import { Guard } from '@/modules/auth';
 import { AppProvider } from './context/AppProvider';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 export const App = () => {
 	return (
-		<ApolloProvider client={client}>
+		<QueryClientProvider client={queryClient}>
 			<Guard>
 				<AppProvider>
 					<RouterProvider router={router} />
 				</AppProvider>
 			</Guard>
-		</ApolloProvider>
+		</QueryClientProvider>
 	);
 };
 
