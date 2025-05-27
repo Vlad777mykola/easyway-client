@@ -1,4 +1,4 @@
-import { ExerciseType, useDictionaryStore, EXERCISE_FORMATE } from '@/store/dictionary';
+import { ExerciseType } from '@/store/dictionary';
 import { Typography } from '@/ui-components/Typography';
 import { classes } from '@/ui-design-atoms/classes';
 import { Button } from '@/ui-components/Button';
@@ -26,9 +26,9 @@ export const ExerciseUI = ({
 		selectedAnswer,
 		isCorrectAnswer,
 	} = task;
-	const isSelectingFormate =
-		useDictionaryStore.use.collectionsExerciseConfig().exerciseFormate ===
-		EXERCISE_FORMATE.Selecting;
+	const isSelectingFormate = false;
+	// useDictionaryStore.use.collectionsExerciseConfig().exerciseFormate ===
+	// EXERCISE_FORMATE.Selecting;
 
 	const onSelect = (answer: string) => {
 		let word = answer;

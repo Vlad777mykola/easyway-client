@@ -3,72 +3,112 @@ import { ExerciseResponseType } from '@/shared/constants/collections/data';
 import { getReadyQuestion } from '@/shared/services/get-variants';
 import { shuffleArray } from '@/shared/utils/shuffle-array';
 import {
-	ExerciseListProgressType,
+	// ExerciseListProgressType,
 	CommonProgressDataType,
-	ExerciseConfigType,
+	// ExerciseConfigType,
 	ExerciseType,
 } from './type';
-import { DEFAULT_DATA_TEST, EXERCISE_FORMATE, EXERCISE_MODE } from './constants';
+import { DEFAULT_DATA_TEST } from './constants';
 
 type ExerciseStoreState = {
-	exerciseListResponse: ExerciseResponseType[];
-	exerciseListIds: string[];
 	exerciseList: ExerciseType[];
-	resolvedExerciseId: string[];
-	collectionsExerciseConfig: ExerciseConfigType;
+	exerciseListResponse: ExerciseResponseType[];
+	// exerciseListIds: string[];
+	// resolvedExerciseId: string[];
+	// collectionsExerciseConfig: ExerciseConfigType;
 
-	exerciseListProgress: ExerciseListProgressType[];
-	commonProgressData: CommonProgressDataType;
+	// exerciseListProgress: ExerciseListProgressType[];
+	commonData: CommonProgressDataType;
 };
 
 type ExerciseStoreActions = {
-	getExerciseConfig: <T extends keyof ExerciseConfigType>(key: T) => ExerciseConfigType[T];
-	setCollectionsExerciseConfig: (
-		key: string,
-		value: number[] | string | boolean | string[] | number,
-	) => void;
+	// getExerciseConfig: <T extends keyof ExerciseConfigType>(key: T) => ExerciseConfigType[T];
+	// setCollectionsExerciseConfig: (
+	// 	key: string,
+	// 	value: number[] | string | boolean | string[] | number,
+	// ) => void;
 
 	getExerciseById: (id: string) => Promise<ExerciseType | null>;
 	setExerciseListResponse: (exerciseList: ExerciseResponseType[], collectionId: string) => void;
-
-	getExerciseProgressById: (id: string) => number;
-	setExerciseListProgress: (id: string, isResolved: boolean) => void;
-
-	// saveProgressToLocalStore: (collectionId: string) => void;
-	// getProgressFromLocalStore: (collectionId: string) => void;
-	// removeProgress: (collectionId: string) => void;
 };
 
 export type ExerciseStoreType = ExerciseStoreState & ExerciseStoreActions;
 
 export const useDictionaryProgressStoreBase = create<ExerciseStoreType>()((set, get) => ({
-	exerciseListResponse: [],
-	exerciseListIds: [],
 	exerciseList: [],
-	exerciseListProgress: [],
-	resolvedExerciseId: [],
-	commonProgressData: {
+	exerciseListResponse: [],
+	// exerciseListIds: [],
+	// exerciseListProgress: [],
+	// resolvedExerciseId: [],
+	commonData: {
 		collectionId: '',
-		resolvedExerciseIds: [],
-	},
-	collectionsExerciseConfig: {
-		exerciseMode: EXERCISE_MODE.Random,
-		exerciseCorrectResponse: 15,
-		exerciseFormate: EXERCISE_FORMATE.Classic,
-		autoPlay: false,
 	},
 
-	getExerciseConfig: (key) => {
-		return get().collectionsExerciseConfig[key];
-	},
-	setCollectionsExerciseConfig: (key, value) => {
+	// collectionsExerciseConfig: {
+	// 	exerciseMode: EXERCISE_MODE.Random,
+	// 	exerciseCorrectResponse: 15,
+	// 	exerciseFormate: EXERCISE_FORMATE.Classic,
+	// 	autoPlay: false,
+	// },
+
+	// getExerciseConfig: (key) => {
+	// 	return get().collectionsExerciseConfig[key];
+	// },
+	// setCollectionsExerciseConfig: (key, value) => {
+	// 	set((state) => ({
+	// 		collectionsExerciseConfig: {
+	// 			...state.collectionsExerciseConfig,
+	// 			[key]: value,
+	// 		},
+	// 	}));
+	// },
+
+	setExerciseListResponse: (exerciseList, collectionId) => {
+		const exerciseListResponse = get().exerciseListResponse;
+		const id = get().commonData.collectionId;
+
+		if (exerciseListResponse?.length > 0 && collectionId === id) {
+			return;
+		}
+
 		set((state) => ({
-			collectionsExerciseConfig: {
-				...state.collectionsExerciseConfig,
-				[key]: value,
-			},
+			...state,
+			exerciseListResponse: exerciseList,
+			commonData: { ...state.commonData, collectionId },
 		}));
 	},
+	// setExerciseListProgress: (id, isResolved) => {
+	// 	set((state) => {
+	// 		const existingProgress = state.exerciseListProgress.find((e) => e.id === id);
+	// 		let updatedProgressList = state.exerciseListProgress.filter((e) => e.id !== id);
+
+	// 		if (isResolved) {
+	// 			const isUntracedMode =
+	// 				get().collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.Infinitive;
+	// 			const exerciseCorrectResponse = get().collectionsExerciseConfig.exerciseCorrectResponse;
+	// 			const countCorrectAnswers = (existingProgress?.countCorrectAnswers || 0) + 1;
+
+	// 			if (!isUntracedMode && exerciseCorrectResponse === countCorrectAnswers) {
+	// 				const exerciseListIds = get().exerciseListIds;
+	// 				const resolvedExerciseId = get().resolvedExerciseId;
+	// 				const removedExercise = exerciseListIds.filter((i) => i !== id);
+
+	// 				return {
+	// 					...state,
+	// 					exerciseListProgress: updatedProgressList,
+	// 					exerciseListIds: removedExercise,
+	// 					resolvedExerciseId: [...resolvedExerciseId, id],
+	// 				};
+	// 			} else {
+	// 				updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers }];
+	// 			}
+	// 		} else {
+	// 			updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers: 0 }];
+	// 		}
+
+	// 		return { ...state, exerciseListProgress: updatedProgressList };
+	// 	});
+	// },
 
 	getExerciseById: async (id) => {
 		let exercise = null;
@@ -100,67 +140,10 @@ export const useDictionaryProgressStoreBase = create<ExerciseStoreType>()((set, 
 
 		return exercise;
 	},
-	setExerciseListResponse: (exerciseList, collectionId) => {
-		const exerciseListResponse = get().exerciseListResponse;
-		const id = get().commonProgressData.collectionId;
-
-		if (exerciseListResponse?.length > 0 && collectionId === id) {
-			return;
-		}
-		const isUntracedMode =
-			get().collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.Infinitive;
-
-		let ids = exerciseList.map((item) => item.id);
-
-		if (!isUntracedMode) {
-			const resolvedExerciseId = get().resolvedExerciseId;
-			ids = ids.filter((i) => !resolvedExerciseId.includes(i));
-		}
-
-		set((state) => ({
-			...state,
-			exerciseListIds: ids,
-			exerciseListResponse: exerciseList,
-			commonProgressData: { ...state.commonProgressData, collectionId },
-		}));
-	},
-
-	getExerciseProgressById: (id) => {
-		const state = get().exerciseListProgress;
-		return state.find((item) => item.id === id)?.countCorrectAnswers || 0;
-	},
-	setExerciseListProgress: (id, isResolved) => {
-		set((state) => {
-			const existingProgress = state.exerciseListProgress.find((e) => e.id === id);
-			let updatedProgressList = state.exerciseListProgress.filter((e) => e.id !== id);
-
-			if (isResolved) {
-				const isUntracedMode =
-					get().collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.Infinitive;
-				const exerciseCorrectResponse = get().collectionsExerciseConfig.exerciseCorrectResponse;
-				const countCorrectAnswers = (existingProgress?.countCorrectAnswers || 0) + 1;
-
-				if (!isUntracedMode && exerciseCorrectResponse === countCorrectAnswers) {
-					const exerciseListIds = get().exerciseListIds;
-					const resolvedExerciseId = get().resolvedExerciseId;
-					const removedExercise = exerciseListIds.filter((i) => i !== id);
-
-					return {
-						...state,
-						exerciseListProgress: updatedProgressList,
-						exerciseListIds: removedExercise,
-						resolvedExerciseId: [...resolvedExerciseId, id],
-					};
-				} else {
-					updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers }];
-				}
-			} else {
-				updatedProgressList = [...updatedProgressList, { id, countCorrectAnswers: 0 }];
-			}
-
-			return { ...state, exerciseListProgress: updatedProgressList };
-		});
-	},
+	// getExerciseProgressById: (id) => {
+	// 	const state = get().exerciseListProgress;
+	// 	return state.find((item) => item.id === id)?.countCorrectAnswers || 0;
+	// },
 
 	// saveProgressToLocalStore: (collectionId) => {
 	// 	localstorage.removeItem(collectionId);

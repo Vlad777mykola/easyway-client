@@ -1,5 +1,6 @@
 import { Pagination } from '@/shared/components/pagination-by-mode/Pagination';
 import { EXERCISE_MODE, useDictionaryStore } from '@/store/dictionary';
+import { useConfigStings } from '../../hooks/useConfigParamWithDefaultData';
 
 export const PaginationExercise = ({
 	taskId,
@@ -10,12 +11,11 @@ export const PaginationExercise = ({
 	isAutoNavigate: boolean;
 	onNavigate: (id: string) => void;
 }) => {
-	const exerciseListId = useDictionaryStore.use.exerciseListIds();
-	const getExerciseProgressById = useDictionaryStore.use.getExerciseProgressById();
-	const exerciseMode = useDictionaryStore.use.collectionsExerciseConfig().exerciseMode;
-	const exerciseCorrectResponse =
-		useDictionaryStore.use.collectionsExerciseConfig().exerciseCorrectResponse;
-
+	const { getMode, getTotalCorrectResponse } = useConfigStings();
+	const exerciseListId = useDictionaryStore.use.exerciseListResponse().map((i) => i.id);
+	const exerciseMode = getMode();
+	const exerciseCorrectResponse = getTotalCorrectResponse() as number;
+	console.log(exerciseCorrectResponse, exerciseMode);
 	return (
 		<>
 			{exerciseMode === EXERCISE_MODE.Exam && (
@@ -44,7 +44,7 @@ export const PaginationExercise = ({
 					isAutoNavigate={isAutoNavigate}
 					navigateTo={(id: string) => onNavigate(id)}
 					totalCount={exerciseCorrectResponse}
-					filledCount={getExerciseProgressById(taskId) || 0}
+					filledCount={1}
 				/>
 			)}
 		</>
