@@ -20,6 +20,7 @@
 		"strictNullChecks": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
+		"noImplicitAny": true,
 		"noFallthroughCasesInSwitch": true
 	},
 	"include": ["src", "jest.setup.js"],
