@@ -1,15 +1,12 @@
-// import { authenticatedVar } from '@/apollo-client';
-// import { useGetUser } from '../hooks/useGetUser';
 import { ReactNode } from 'react';
+import { useUser } from '@/shared/api-hooks/useUser';
 
-//const EXECUTED_ROUTES = ['/login', '/signup', '/profile', '/complete-test', '/test', '/'];
+const EXECUTED_ROUTES = ['/login', '/signup', '/profile', '/'];
 
 export const Guard = ({ children }: { children: ReactNode }) => {
-	// const { data: user } = useGetUser();
+	const { data: user } = useUser();
 
-	// useEffect(() => {
-	// 	if (user) authenticatedVar(true);
-	// }, [user]);
+	const isPublicRoute = EXECUTED_ROUTES.includes(window?.location?.pathname);
 
-	return children; //<>{EXECUTED_ROUTES.includes(window.location.pathname) ? children : user && children}</>;
+	return isPublicRoute ? children : user && children;
 };

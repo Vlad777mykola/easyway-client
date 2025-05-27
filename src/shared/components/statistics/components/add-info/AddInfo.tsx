@@ -1,15 +1,15 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
 import { Button } from '@/ui-components/Button';
 import { ErrorProgressPagination } from '../error-progress-pagination/ErrorProgressPagination';
-import { ScreenSizeContext } from '@/context/ScreenSizeContext';
 import { useProgressStore } from '@/store/progress';
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/ui-design-atoms/classes';
 import styles from './addInfo.module.css';
+import { usePlatformData } from '@/context/platform';
 
 export const AddInfo = () => {
 	const [showMore, setShowMore] = useState(false);
-	const { isMobile, isLaptop, isDesktop } = useContext(ScreenSizeContext);
+	const { isMobile, isLaptop, isDesktop } = usePlatformData();
 	const examPercentage = useProgressStore.use.progressPercentage().exam;
 	const randomPercentage = useProgressStore.use.progressPercentage().random;
 	const moreInfo = showMore || isDesktop || isLaptop;

@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
 import { ExerciseType } from '@/store/exercise-progress';
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/ui-design-atoms/classes';
 
 import styles from './selectingUI.module.css';
 
