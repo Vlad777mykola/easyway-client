@@ -2,8 +2,6 @@ import { useRef } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
 import { Wrapper } from '@/ui-components/Wrapper';
-// import { Menu } from '@/ui-components/Menu';
-// import { ScreenSizeContext } from '@/context/ScreenSizeContext';
 import { FieldsDataType, SideBarType } from './type';
 import { FieldComponent } from './components/FieldComponent';
 import styles from './sidebar.module.css';
@@ -21,7 +19,7 @@ export const Sidebar = <T extends FieldsDataType>({
 	onSearch,
 	onChange,
 }: SideBarType<T>) => {
-	// const { isMobile, isLaptop } = useContext(ScreenSizeContext);
+	// const { isMobile, isLaptop } = usePlatformData();
 
 	const refs: Ref = useRef<Clear[]>([]);
 

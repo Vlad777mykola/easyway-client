@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/ui-design-atoms/classes';
 import { ExerciseType, useExerciseProgressStore } from '@/store/exercise-progress';
 import { EXERCISE_FORMATE } from '@/store/exercise-progress/useExerciseProgressStore';
 

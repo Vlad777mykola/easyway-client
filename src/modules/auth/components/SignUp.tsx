@@ -19,8 +19,8 @@ const INITIAL_FORM_STATE = {
 const formDataSchema = z
 	.object({
 		email: z.string().email(),
-		password: z.string().min(8, 'Password must be at least 8 characters'),
-		repeatPassword: z.string().min(8, 'Password must be at least 8 characters'),
+		password: z.string().min(4, 'Password must be at least 4 characters'),
+		repeatPassword: z.string().min(4, 'Password must be at least 4 characters'),
 	})
 	.refine((data) => data.password === data.repeatPassword, {
 		message: "Passwords don't match",

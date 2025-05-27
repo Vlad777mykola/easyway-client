@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { loadState, updateLastTest } from '@/utils/indexedDB';
+import { loadState, updateLastTest } from '@/db/indexedDB';
 import {
 	type ExamModeProgressType,
 	type RandomTest,

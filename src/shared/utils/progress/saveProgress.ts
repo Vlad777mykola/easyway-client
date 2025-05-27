@@ -4,7 +4,7 @@ import {
 	ResolvedRandomTest,
 	ListProgress,
 } from '@/store/progress';
-import { saveState } from '@/utils/indexedDB';
+import { saveState } from '@/db/indexedDB';
 
 export const saveProgress = async (
 	func: () => {

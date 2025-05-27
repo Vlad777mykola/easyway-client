@@ -4,7 +4,7 @@ import { Button } from '@/ui-components/Button/Button';
 import type { IconVariantsType } from '@/ui-components/Icon/Icon';
 import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/ui-design-atoms/classes';
 import styles from './menu.module.css';
 
 const Side = {

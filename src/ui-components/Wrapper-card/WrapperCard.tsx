@@ -1,8 +1,8 @@
-import { ReactNode, useContext, useLayoutEffect } from 'react';
+import { ReactNode, useLayoutEffect } from 'react';
 import styles from './wrapperCard.module.css';
 import { Icon } from '@/ui-components/Icon';
-import { classes } from '@/shared/utils/classes';
-import { ScreenSizeContext } from '@/context/ScreenSizeContext';
+import { classes } from '@/ui-design-atoms/classes';
+import { usePlatformData } from '@/context/platform';
 import { useCommonStore } from '@/store/common';
 
 export const WrapperCard = ({
@@ -14,7 +14,7 @@ export const WrapperCard = ({
 	id?: string;
 	goBack?: () => void;
 }) => {
-	const { isMobile } = useContext(ScreenSizeContext);
+	const { isMobile } = usePlatformData();
 	const fullScreen = useCommonStore.use.fullExerciseScreen();
 	const setFullScreen = useCommonStore.use.setFullScreen();
 

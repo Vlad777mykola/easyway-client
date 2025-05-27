@@ -1,5 +1,5 @@
 /* eslint-disable css-modules/no-unused-class */
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/ui-design-atoms/classes';
 import styles from './styles.module.css';
 
 const DEFAULT_CSS = '01';

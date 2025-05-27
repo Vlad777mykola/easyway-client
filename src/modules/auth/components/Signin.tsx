@@ -1,23 +1,25 @@
+import z from 'zod';
+import axios from 'axios';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { router } from '@/router/Router';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
+import { useMutation } from '@tanstack/react-query';
 import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { Typography } from '@/ui-components/Typography';
-import z from 'zod';
 
 import style from './login.module.css';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
+import { useAuthData } from '@/context/auth';
 
 const INITIAL_FORM_STATE = {
-	email: '',
-	password: '',
+	email: 'test222@mail.com',
+	password: '1234',
 };
 
 const formDataSchema = z.object({
 	email: z.string().email(),
-	password: z.string().min(8, 'Password must be at least 8 characters'),
+	password: z.string().min(4, 'Password must be at least 4 characters'),
 });
 
 type FormData = z.infer<typeof formDataSchema>;
@@ -25,16 +27,22 @@ type FormData = z.infer<typeof formDataSchema>;
 export const Signin = () => {
 	const [authData, setAuth] = useState<Partial<FormData>>({});
 	const [showErrors, setShowErrors] = useState(false);
+	const { refetch } = useAuthData();
 
 	const mutation = useMutation({
 		mutationFn: (data: { email: string; password: string }) => {
-			return axios.post('http://localhost:3000/auth/signup', data);
+			return axios.post('http://localhost:3000/auth/signin', data, {
+				withCredentials: true,
+			});
+		},
+		onSuccess: () => {
+			refetch();
+			router.navigate('/');
 		},
 	});
 
 	const formData = {
 		...INITIAL_FORM_STATE,
-		// ...fetchedData,
 		...authData,
 	};
 
@@ -63,9 +71,9 @@ export const Signin = () => {
 	const errors = showErrors ? validate() : undefined;
 	return (
 		<WrapperCard>
-			<div className={style.loginContainer}>
-				<div className={style.loginForm}>
-					<Typography.Title className={style.signUpHeader} level={3}>
+			<div className={style.signInContainer}>
+				<div className={style.signInForm}>
+					<Typography.Title className={style.signInHeader} level={3}>
 						Sign In
 					</Typography.Title>
 
@@ -102,7 +110,7 @@ export const Signin = () => {
 							<Typography.Text type="danger">{errors.password._errors[0]}</Typography.Text>
 						)}
 					</div>
-					<div className={style.sendLogin}>
+					<div className={style.signInButton}>
 						<Button type="primary" onClick={() => onSubmit(formData)} size="large" block>
 							Sign in
 						</Button>

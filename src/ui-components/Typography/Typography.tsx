@@ -3,7 +3,7 @@ import { Typography as TypographyAnt } from 'antd';
 import type { TextProps } from 'antd/lib/typography/Text';
 import type { TitleProps } from 'antd/lib/typography/Title';
 import { margin, MarginProps } from '@/ui-design-atoms/margin';
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/ui-design-atoms/classes';
 
 const { Text, Title } = TypographyAnt;
 

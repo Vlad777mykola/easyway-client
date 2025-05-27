@@ -1,15 +1,23 @@
-.loginContainer {
+.signInContainer {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	width: 300px;
+	width: 350px;
+	padding: 20px;
 }
 
-.loginForm {
+.signInHeader {
+	font-size: 32px;
+	font-weight: 500;
+	line-height: 12px;
+	text-align: center;
+}
+
+.signInForm {
 	width: 100%;
 }
 
-.sendLogin {
+.signInButton {
 	margin-top: 50px;
 	margin-bottom: 10px;
 }
