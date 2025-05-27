@@ -10,4 +10,9 @@ export default defineConfig({
 			'@ui-components': path.resolve(__dirname, './src/ui-components'),
 		},
 	},
+	server: {
+		proxy: {
+			'/auth': 'http://localhost:3000',
+		},
+	},
 });

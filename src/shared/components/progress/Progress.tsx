@@ -1,4 +1,4 @@
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/ui-design-atoms/classes';
 import styles from './progress.module.css';
 
 type Props = {

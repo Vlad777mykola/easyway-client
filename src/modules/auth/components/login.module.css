@@ -1,36 +1,23 @@
-.loginContainer {
+.signInContainer {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	width: 300px;
+	width: 350px;
+	padding: 20px;
 }
 
-.loginHeader {
+.signInHeader {
 	font-size: 32px;
 	font-weight: 500;
 	line-height: 12px;
 	text-align: center;
 }
 
-.loginForm {
+.signInForm {
 	width: 100%;
 }
 
-.formItem {
-	display: flex;
-	flex-direction: column;
-	align-items: start;
-	width: 100%;
-}
-
-.nameOfItem {
-	display: block;
-	margin-top: 30px;
-	font-size: 16px;
-	font-weight: 500;
-}
-
-.sendLogin {
+.signInButton {
 	margin-top: 50px;
 	margin-bottom: 10px;
 }
@@ -44,25 +31,4 @@
 .signUp {
 	text-decoration: none;
 	color: var(--color-primary);
-}
-
-@media (min-width: 320px) {
-	.loginHeader {
-		margin-top: 50px;
-		margin-bottom: 50px;
-	}
-}
-
-@media (min-width: 769px) {
-	.loginHeader {
-		margin-top: 100px;
-		margin-bottom: 120px;
-	}
-}
-
-@media (min-width: 1201px) {
-	.loginHeader {
-		margin-top: 30px;
-		margin-bottom: 30px;
-	}
 }

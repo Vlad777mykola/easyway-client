@@ -1,6 +1,6 @@
 import { ExerciseType, useDictionaryStore, EXERCISE_FORMATE } from '@/store/dictionary';
 import { Typography } from '@/ui-components/Typography';
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/ui-design-atoms/classes';
 import { Button } from '@/ui-components/Button';
 import { speak } from '@/shared/utils/speak';
 import { Icon } from '@/ui-components/Icon';
@@ -59,9 +59,9 @@ export const ExerciseUI = ({ task, setTask, updateProgress, setIsAutoNavigate }:
 
 	return (
 		<div className={styles.testContainer}>
-			<Typography type="secondary" className={styles.topic}>
+			<Typography.Text type="secondary" className={styles.topic}>
 				{used}
-			</Typography>
+			</Typography.Text>
 			<div className={styles.exercise}>{exercise}</div>
 			<div className={styles.correctAnswerContainer}>
 				<div

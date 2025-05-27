@@ -1,40 +1,15 @@
+import { router } from '@/router/Router';
 import { Menu } from '@/ui-components/Menu';
+import { useAuthData } from '@/context/auth';
 import { Navbar } from '@/shared/components/navbar';
 import { NavHeader } from '@/shared/components/nav-header';
-import { SideMenu } from './SideMenu';
+import { SideMenu } from './components/side-menu/SideMenu';
+import { profileMenuItems, sideMenuItems } from './constants';
+
 import styles from './header.module.css';
 
-const sideMenuItems = [
-	// {
-	// 	name: 'Home',
-	// 	link: '/',
-	// },
-	{
-		name: 'Collections',
-		link: '/',
-	},
-	{
-		name: 'Vocabularies',
-		link: '/vocabularies',
-	},
-	{
-		name: 'Dictionary',
-		link: '/dictionaries',
-	},
-];
-
-const profileMenuItems = [
-	{
-		name: 'Profile',
-		link: '/profile',
-	},
-	{
-		name: 'Progress',
-		link: '/progress',
-	},
-];
-
 const Header = () => {
+	const { isLogIn } = useAuthData();
 	return (
 		<div className={styles.headersContainer}>
 			<Navbar
@@ -42,6 +17,8 @@ const Header = () => {
 					<Menu
 						side="right"
 						icon="user"
+						text={isLogIn ? '' : 'Sing in'}
+						overrideOnClick={isLogIn ? undefined : () => router.navigate('/signin')}
 						Items={
 							<SideMenu
 								img="https://imgcdn.stablediffusionweb.com/2024/3/24/17ee935b-c63a-4374-8fc3-91b2559e02f2.jpg"

@@ -1,4 +1,4 @@
-import { getAllDataFromIndexedDB } from '@/utils/indexedDB';
+import { getAllDataFromIndexedDB } from '@/db/indexedDB';
 
 export const fetchProgressData = async () => {
 	try {

@@ -1,47 +1,48 @@
-import { z } from 'zod';
+import z from 'zod';
+import axios from 'axios';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { router } from '@/router/Router';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
-import { Typography } from '@/ui-components/Typography';
-import { WrapperCard } from '@/ui-components/Wrapper-card';
-import axios from 'axios';
-
-import style from './signUp.module.css';
 import { useMutation } from '@tanstack/react-query';
+import { WrapperCard } from '@/ui-components/Wrapper-card';
+import { Typography } from '@/ui-components/Typography';
+
+import style from './login.module.css';
+import { useAuthData } from '@/context/auth';
 
 const INITIAL_FORM_STATE = {
-	email: '',
-	password: '',
-	repeatPassword: '',
+	email: 'test222@mail.com',
+	password: '1234',
 };
 
-const formDataSchema = z
-	.object({
-		email: z.string().email(),
-		password: z.string().min(4, 'Password must be at least 4 characters'),
-		repeatPassword: z.string().min(4, 'Password must be at least 4 characters'),
-	})
-	.refine((data) => data.password === data.repeatPassword, {
-		message: "Passwords don't match",
-		path: ['repeatPassword'],
-	});
+const formDataSchema = z.object({
+	email: z.string().email(),
+	password: z.string().min(4, 'Password must be at least 4 characters'),
+});
 
 type FormData = z.infer<typeof formDataSchema>;
 
-export const SignUp = () => {
+export const Signin = () => {
 	const [authData, setAuth] = useState<Partial<FormData>>({});
 	const [showErrors, setShowErrors] = useState(false);
+	const { refetch } = useAuthData();
 
 	const mutation = useMutation({
 		mutationFn: (data: { email: string; password: string }) => {
-			return axios.post('http://localhost:3000/auth/signup', data);
+			return axios.post('http://localhost:3000/auth/signin', data, {
+				withCredentials: true,
+			});
+		},
+		onSuccess: () => {
+			refetch();
+			router.navigate('/');
 		},
 	});
 
 	const formData = {
 		...INITIAL_FORM_STATE,
-		// ...fetchedData,
 		...authData,
 	};
 
@@ -68,13 +69,12 @@ export const SignUp = () => {
 	};
 
 	const errors = showErrors ? validate() : undefined;
-
 	return (
 		<WrapperCard>
-			<div className={style.signUpContainer}>
-				<div className={style.signUpForm}>
-					<Typography.Title className={style.signUpHeader} level={3}>
-						Sign Up
+			<div className={style.signInContainer}>
+				<div className={style.signInForm}>
+					<Typography.Title className={style.signInHeader} level={3}>
+						Sign In
 					</Typography.Title>
 
 					<div>
@@ -110,34 +110,15 @@ export const SignUp = () => {
 							<Typography.Text type="danger">{errors.password._errors[0]}</Typography.Text>
 						)}
 					</div>
-
-					<div>
-						<Typography.Title marginY="05" level={5}>
-							Repeat Password
-						</Typography.Title>
-						<Input
-							type="password"
-							placeholder="Repeat your password"
-							value={formData.repeatPassword}
-							size="middle"
-							status={errors?.repeatPassword ? 'error' : undefined}
-							onChange={(e) => onChange(e.target.value, 'repeatPassword')}
-						/>
-						{errors?.repeatPassword && (
-							<Typography.Text type="danger">{errors.repeatPassword._errors[0]}</Typography.Text>
-						)}
-					</div>
-
-					<div className={style.sendSignUp}>
+					<div className={style.signInButton}>
 						<Button type="primary" onClick={() => onSubmit(formData)} size="large" block>
-							Sign Up
+							Sign in
 						</Button>
 					</div>
 				</div>
-
-				<div className={style.loginContainer}>
-					<Link className={style.login} to={'/signin'}>
-						Sign in
+				<div className={style.signUpContainer}>
+					<Link className={style.signUp} to={'/signup'}>
+						Sing up
 					</Link>
 				</div>
 			</div>

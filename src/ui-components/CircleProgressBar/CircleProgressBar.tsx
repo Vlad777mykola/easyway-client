@@ -1,7 +1,7 @@
 /* eslint-disable css-modules/no-unused-class */
 import { useEffect, useState } from 'react';
 import { CountUp } from '@ui-components/CountUp';
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/ui-design-atoms/classes';
 import { Size, SizeType, VariantType } from '@/shared/constants/parameters';
 import styles from './circleProgressBar.module.css';
 
