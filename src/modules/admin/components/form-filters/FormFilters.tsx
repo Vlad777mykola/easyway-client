@@ -3,6 +3,7 @@ import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
 import { Tag } from '@/ui-components/Tag';
 import { Icon } from '@/ui-components/Icon';
+import { Explanation } from '../exaplanation/Explanation';
 import { classes } from '@/shared/utils/classes';
 
 import styles from './formFilters.module.css';
@@ -42,27 +43,41 @@ const initialFormErrors: FormErrors = {
 	submit: '',
 };
 
+const initialExistTags: FormItems = {
+	tenses: ['Present', 'Past', 'Future'],
+	topic: ['Present', 'Past', 'Future'],
+	categories: ['Present', 'Past', 'Future'],
+};
+
 export const FormFilters = () => {
 	const [formInputs, setFormInputs] = useState<FormInputs>(initialFormInputs);
-	const [formItems, setFormItems] = useState<FormItems>(initialFormItems);
 	const [formErrors, setFormErrors] = useState<FormErrors>(initialFormErrors);
+	const [formItems, setFormItems] = useState<FormItems>(initialFormItems);
+	const [deletedTags, setDeletedTags] = useState<FormItems>(initialFormItems);
+	const [existTags, setExistTags] = useState<FormItems>(initialExistTags);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
 		setFormInputs((prev) => ({ ...prev, [name]: value }));
 	};
 
+	const capitalizeFirst = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+
 	const addItems = (key: keyof FormItems) => {
 		setFormInputs((prev) => ({ ...prev, [key]: '' }));
 
-		if (!formItems[key].includes(formInputs[key]) && formInputs[key].length > 0) {
+		if (
+			!formItems[key].includes(formInputs[key]) &&
+			!existTags[key].includes(formInputs[key]) &&
+			formInputs[key].length > 0
+		) {
 			setFormItems((prev) => ({
 				...prev,
 				[key]: [...(prev[key] || []), formInputs[key] || ''],
 			}));
 		}
 
-		if (formItems[key].includes(formInputs[key])) {
+		if (formItems[key].includes(formInputs[key]) || existTags[key].includes(formInputs[key])) {
 			setFormErrors((prev) => ({ ...prev, [key]: 'This item is in list' }));
 			setTimeout(() => {
 				setFormErrors((prev) => ({ ...prev, [key]: '' }));
@@ -70,16 +85,51 @@ export const FormFilters = () => {
 		}
 	};
 
-	const deleteTag = (key: keyof FormItems, value: string) => {
-		const updatedItems = { ...formItems, [key]: formItems[key].filter((item) => item !== value) };
-		setFormItems(updatedItems);
+	const deleteTag = (
+		key: keyof FormItems,
+		value: string,
+		setFunc: (updated: FormItems) => void,
+		items: FormItems,
+	) => {
+		const updatedItems = { ...items, [key]: items[key].filter((item) => item !== value) };
+		setFunc(updatedItems);
+		setDeletedTags((prev) => ({
+			...prev,
+			[key]: [...(prev[key] || []), value],
+		}));
+	};
+
+	const returnTag = (key: keyof FormItems, value: string) => {
+		setDeletedTags((prev) => ({
+			...prev,
+			[key]: prev[key].filter((item) => item !== value),
+		}));
+
+		if (initialExistTags[key].includes(value)) {
+			setExistTags((prev) => ({
+				...prev,
+				[key]: [...prev[key], value],
+			}));
+		} else {
+			setFormItems((prev) => ({
+				...prev,
+				[key]: [...prev[key], value],
+			}));
+		}
 	};
 
 	const clearForm = () => {
 		setFormInputs(initialFormInputs);
+		setExistTags(initialExistTags);
 		setFormItems(initialFormItems);
+		setDeletedTags(initialFormItems);
 		setFormErrors(initialFormErrors);
+
+		console.log('EXIST TAGS CLEAR: ', existTags);
 	};
+
+	console.log('EXIST TAGS: ', existTags);
+	console.log('FORM ITEMS: ', formItems);
 
 	const handleSubmit = () => {
 		const haveFilters = Object.values(formItems).some((item) => item.length > 0);
@@ -89,6 +139,8 @@ export const FormFilters = () => {
 			setFormInputs(initialFormInputs);
 			setFormItems(initialFormItems);
 			setFormErrors(initialFormErrors);
+
+			setExistTags(initialExistTags);
 		} else {
 			setFormErrors((prev) => ({ ...prev, submit: 'Filters are empty.' }));
 			setTimeout(() => {
@@ -100,20 +152,18 @@ export const FormFilters = () => {
 	return (
 		<div className={styles.filters}>
 			<form className={styles.formContainer} onSubmit={(e) => e.preventDefault()}>
+				<h2 className={styles.title}>Filters</h2>
 				<div className={styles.formContent}>
-					<h2 className={styles.title}>Filters</h2>
 					{(Object.keys(formItems) as (keyof FormItems)[]).map((key) => (
 						<div className={styles.formItemContainer} key={key}>
-							<label className={styles.label}>{key.toLocaleUpperCase()}</label>
+							<label className={styles.label}>{capitalizeFirst(key)}</label>
 							<div className={styles.formItem}>
 								<Input
-									/* className={formErrors[key].length > 0 ? styles.warning : styles.underlinedInput} */
 									className={classes(styles.underlinedInput, {
 										[styles.warning]: formErrors[key].length > 0,
 									})}
 									id={key}
 									name={key}
-									/* status={formErrors[key].length > 0 ? 'warning' : ''} */
 									value={formInputs[key]}
 									onChange={(e) => handleChange(e)}
 								/>
@@ -124,18 +174,54 @@ export const FormFilters = () => {
 							<div className={styles.errorContainer}>
 								<span className={styles.error}>{formErrors[key]}</span>
 							</div>
-							<div className={styles.tagsContainer}>
-								{formItems[key].map((item) => (
-									<Tag
-										key={item}
-										className={styles.tag}
-										color="blue"
-										onClose={() => deleteTag(key, item)}
-										closable
-									>
-										{item}
-									</Tag>
-								))}
+							<div className={styles.allTags}>
+								<div className={styles.typeTags}>
+									<span className={styles.titleType}>New: </span>
+									<div className={styles.tagsContainer}>
+										{formItems[key].map((item) => (
+											<Tag
+												key={item}
+												className={styles.tag}
+												color="blue"
+												onClose={() => deleteTag(key, item, setFormItems, formItems)}
+												closable
+											>
+												{item}
+											</Tag>
+										))}
+									</div>
+								</div>
+								<div className={styles.typeTags}>
+									<span className={styles.titleType}>Deleted: </span>
+									<div className={styles.tagsContainer}>
+										{deletedTags[key].map((item) => (
+											<Tag
+												key={item}
+												className={styles.tag}
+												color="blue"
+												onClick={() => returnTag(key, item)}
+											>
+												{item}
+											</Tag>
+										))}
+									</div>
+								</div>
+								<div className={styles.typeTags}>
+									<span className={styles.titleType}>Existing: </span>
+									<div className={styles.tagsContainer}>
+										{existTags[key].map((item) => (
+											<Tag
+												key={item}
+												className={styles.tag}
+												color="blue"
+												onClose={() => deleteTag(key, item, setExistTags, existTags)}
+												closable
+											>
+												{item}
+											</Tag>
+										))}
+									</div>
+								</div>
 							</div>
 						</div>
 					))}
@@ -154,20 +240,7 @@ export const FormFilters = () => {
 					</div>
 				</div>
 			</form>
-			<div className={styles.quote}>
-				<div className={styles.content}>
-					<h1 className={styles.quoteTitle}>Create Filters</h1>
-					<blockquote className={styles.blockquote}>
-						To have another language is to possess a second soul.
-					</blockquote>
-					<p className={styles.nameOfQuote}>— Charlemagne</p>
-					<ol className={styles.explanation}>
-						<li>This form is designed to create collection filters.</li>
-						<li>At least one of the items must have a list.</li>
-						<li>The form does not allow having the same item in the list.</li>
-					</ol>
-				</div>
-			</div>
+			<Explanation />
 		</div>
 	);
 };

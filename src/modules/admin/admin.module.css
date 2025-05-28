@@ -3,38 +3,57 @@
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+.tab {
+	padding: 0px 30px;
+}
+
+.tabs :global(.ant-tabs-nav) {
+	margin: 0px !important;
 }
 
 .formsContainer {
 	width: 65%;
-	margin-top: 50px;
 	background: #fff;
 	box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 	border-radius: 10px;
+	/* padding-left: 10px; */
 }
 
-@media (min-width: 1442px) {
+@media (min-width: 1441px) {
 	.formsContainer {
-		width: 60%;
+		width: 1400px;
 	}
 }
 
-@media (max-width: 1441px) {
+@media (min-width: 1025px) and (max-width: 1440px) {
 	.formsContainer {
-		width: 60%;
+		width: 90%;
+		margin-top: 20px;
+		margin-bottom: 20px;
 	}
 }
 
 @media (max-width: 1024px) {
+	.adminContainer {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+
 	.formsContainer {
-		width: 75%;
-		margin-top: 30px;
+		width: 90%;
+		margin-top: 20px;
+		margin-bottom: 20px;
 	}
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
 	.formsContainer {
 		width: 100%;
 		margin-top: 0;
+		margin-bottom: 0px;
 	}
 }
