@@ -1,6 +1,7 @@
 import { Tag } from '@/ui-components/Tag';
 import { FormItems } from '../form-filters/FormFilters';
 import styles from './tagSection.module.css';
+import { Typography } from '@/ui-components/Typography';
 
 export const TagSection = ({
 	title,
@@ -21,7 +22,7 @@ export const TagSection = ({
 	setFormItems: (updated: FormItems) => void;
 }) => (
 	<div className={styles.typeTags}>
-		<span className={styles.titleType}>{title}: </span>
+		<Typography.Text className={styles.titleType}>{title}: </Typography.Text>
 		<div className={styles.tagsContainer}>
 			{formItems[keyOfForm]?.map((item) => (
 				<Tag

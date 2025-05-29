@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
+import { Typography } from '@/ui-components/Typography';
 import { TagSection } from '../tag-section/TagSection';
 import { Icon } from '@/ui-components/Icon';
 import { Explanation } from '../exaplanation/Explanation';
 import { classes } from '@/ui-design-atoms/classes';
+import { LIST_OF_EXPLANATIONS, TITLE_EXPLANATION } from '../../constants';
 
 import styles from './formFilters.module.css';
-import { LIST_OF_EXPLANATIONS, TITLE_EXPLANATION } from '../../constants';
 
 type FormInputs = {
 	tenses: string;
@@ -154,11 +155,13 @@ export const FormFilters = () => {
 	return (
 		<div className={styles.filters}>
 			<form className={styles.formContainer} onSubmit={(e) => e.preventDefault()}>
-				<h2 className={styles.title}>Filters</h2>
+				<Typography.Title className={styles.title} level={2}>
+					Filters
+				</Typography.Title>
 				<div className={styles.formContent}>
 					{(Object.keys(formItems) as (keyof FormItems)[]).map((key) => (
 						<div className={styles.formItemContainer} key={key}>
-							<label className={styles.label}>{capitalizeFirst(key)}</label>
+							<Typography.Text className={styles.label}>{capitalizeFirst(key)}</Typography.Text>
 							<div className={styles.formItem}>
 								<Input
 									className={classes(styles.underlinedInput, {
@@ -174,7 +177,7 @@ export const FormFilters = () => {
 								</Button>
 							</div>
 							<div className={styles.errorContainer}>
-								<span className={styles.error}>{formErrors[key]}</span>
+								<Typography.Text className={styles.error}>{formErrors[key]}</Typography.Text>
 							</div>
 							<div className={styles.allTags}>
 								{allTagsList.map((section) => (
@@ -193,7 +196,7 @@ export const FormFilters = () => {
 				</div>
 				<div className={styles.handleSubmit}>
 					<div className={styles.errorContainer}>
-						<span className={styles.error}>{formErrors.submit}</span>
+						<Typography.Text className={styles.error}>{formErrors.submit}</Typography.Text>
 					</div>
 					<div className={styles.buttonsContainer}>
 						<Button type="primary" shape="round" onClick={clearForm}>
