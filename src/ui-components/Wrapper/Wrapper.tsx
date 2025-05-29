@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/shared/services/classes';
 import styles from './wrapper.module.css';
 
 export const Wrapper = ({ children, isSticky }: { children: ReactNode; isSticky?: boolean }) => {

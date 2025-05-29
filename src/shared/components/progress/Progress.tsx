@@ -1,4 +1,4 @@
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/shared/services/classes';
 import styles from './progress.module.css';
 
 type Props = {
