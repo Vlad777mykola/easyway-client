@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { CountUp } from '../CountUp';
 import { Size, Variant } from '@/shared/constants/parameters';
 import type { SizeType, VariantType } from '@/shared/constants/parameters';
-import { classes } from '@/shared/services/classes';
+import { classes } from '@/shared/utils/classes';
 import styles from './standartProgressBar.module.css';
 
 const COUNT_UP_DURATION = 1500;

@@ -1,7 +1,7 @@
 import { ReactNode, useContext, useLayoutEffect } from 'react';
 import styles from './wrapperCard.module.css';
 import { Icon } from '@/ui-components/Icon';
-import { classes } from '@/shared/services/classes';
+import { classes } from '@/shared/utils/classes';
 import { ScreenSizeContext } from '@/context/ScreenSizeContext';
 import { useCommonStore } from '@/store/common';
 

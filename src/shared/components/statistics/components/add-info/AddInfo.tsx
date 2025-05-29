@@ -4,7 +4,7 @@ import { Button } from '@/ui-components/Button';
 import { ErrorProgressPagination } from '../error-progress-pagination/ErrorProgressPagination';
 import { ScreenSizeContext } from '@/context/ScreenSizeContext';
 import { useProgressStore } from '@/store/progress';
-import { classes } from '@/shared/services/classes';
+import { classes } from '@/shared/utils/classes';
 import styles from './addInfo.module.css';
 
 export const AddInfo = () => {
