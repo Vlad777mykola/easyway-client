@@ -4,7 +4,7 @@ import { Button } from '@/ui-components/Button';
 import { TagSection } from '../tag-section/TagSection';
 import { Icon } from '@/ui-components/Icon';
 import { Explanation } from '../exaplanation/Explanation';
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/ui-design-atoms/classes';
 
 import styles from './formFilters.module.css';
 
