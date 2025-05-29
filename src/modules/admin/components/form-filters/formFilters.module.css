@@ -9,7 +9,6 @@
 	display: flex;
 	flex-direction: column;
 	width: 50%;
-	/* height: 725px; */
 	justify-content: space-between;
 	border-right: 1px solid #f9f9f9;
 }
@@ -17,11 +16,8 @@
 .title {
 	text-align: center;
 	font-size: 24px;
-	/* padding: 15px;
-  box-sizing: border-box; */
 	font-weight: 600;
 	color: #4e4e4e;
-	/* border-bottom: 1px solid #d9d9d9; */
 }
 
 .formContent {
