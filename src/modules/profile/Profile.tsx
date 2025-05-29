@@ -1,7 +1,7 @@
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { Input } from 'antd';
-import { Button } from '@/ui-components/Button';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { Upload } from '@/ui-components/Upload';
+import { Button } from '@/ui-components/Button';
 import styles from './profile.module.css';
 
 interface SaveProfile {

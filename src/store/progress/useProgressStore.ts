@@ -199,18 +199,10 @@ export const useProgressStoreBase = create<ProgressStoreType>()((set, get) => ({
 			},
 		}));
 	},
-	getProgressFromIndexedDB: (
-		examModeProgress,
-		randomModeProgress,
-		takenTestCount,
-		exerciseListProgress,
-	) => {
+	getProgressFromIndexedDB: (data) => {
 		set((state) => ({
 			...state,
-			examModeProgress: examModeProgress || { successProgress: [], errorProgress: [] },
-			randomModeProgress: randomModeProgress || { progress: [], resolved: [] },
-			takenTestCount: takenTestCount || { count: 0, timestamp: 0 },
-			exerciseListProgress: exerciseListProgress || [],
+			...data,
 		}));
 	},
 	saveProgressToIndexedDB: () => {

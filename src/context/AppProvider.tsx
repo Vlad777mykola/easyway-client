@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
-import { UserProvider } from './UserContext';
-import { ScreenSizeProvider } from './ScreenSizeContext';
+import { AuthProvider } from './auth/AuthContext';
+import { ScreenSizeProvider } from './platform/ScreenSizeContext';
 
 export const AppProvider = ({ children }: { children: ReactNode }): ReactNode => {
 	return (
-		<UserProvider>
+		<AuthProvider>
 			<ScreenSizeProvider>{children}</ScreenSizeProvider>
-		</UserProvider>
+		</AuthProvider>
 	);
 };

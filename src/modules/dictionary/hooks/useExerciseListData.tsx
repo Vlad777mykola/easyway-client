@@ -5,12 +5,13 @@ import { getExerciseByCollection } from '@/shared/services/fetch-exercise/getExe
 export const useExerciseListData = (
 	func: (exerciseList: ExerciseResponseType[], collectionsId: string) => void,
 	collectionsId: string,
+	isPause = false,
 ) => {
 	const exercise = getExerciseByCollection(collectionsId);
 
 	useEffect(() => {
-		if (exercise) {
+		if (exercise && !isPause) {
 			func(exercise, collectionsId);
 		}
-	}, [exercise]);
+	}, [exercise, collectionsId]);
 };

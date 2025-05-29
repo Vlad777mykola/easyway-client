@@ -25,7 +25,7 @@ export type ExerciseListProgressType = {
 
 export type CommonProgressDataType = {
 	collectionId: string;
-	resolvedExerciseIds: string[];
+	// resolvedExerciseIds: string[];
 };
 
 export type ExerciseConfigType = {

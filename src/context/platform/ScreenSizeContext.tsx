@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useState, ReactNode, useContext, useLayoutEffect } from 'react';
 
 type ScreenSizeData = {
 	isMobile: boolean;
@@ -18,14 +18,14 @@ const ScreenSizeContext = createContext<ScreenSizeData>({
 
 const WIDTH_SCREEN = window.innerWidth;
 
-const ScreenSizeProvider = ({ children }: ScreenSizeProviderType) => {
+export const ScreenSizeProvider = ({ children }: ScreenSizeProviderType) => {
 	const [typeOfScreen, setTypeOfScreen] = useState<ScreenSizeData>({
 		isMobile: false,
 		isLaptop: false,
 		isDesktop: false,
 	});
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (WIDTH_SCREEN >= 320 && WIDTH_SCREEN <= 480) {
 			setTypeOfScreen({
 				...typeOfScreen,
@@ -53,4 +53,7 @@ const ScreenSizeProvider = ({ children }: ScreenSizeProviderType) => {
 	);
 };
 
-export { ScreenSizeContext, ScreenSizeProvider };
+export const usePlatformData = () => {
+	const context = useContext(ScreenSizeContext);
+	return context;
+};

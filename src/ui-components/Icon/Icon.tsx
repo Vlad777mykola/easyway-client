@@ -1,7 +1,7 @@
 /* eslint-disable css-modules/no-unused-class */
 import { Size, Variant } from '@/shared/constants/parameters';
 import type { SizeType, VariantType } from '@/shared/constants/parameters';
-import { classes } from '@/shared/utils/classes';
+import { classes } from '@/ui-design-atoms/classes';
 
 import {
 	CloseOutlined,
