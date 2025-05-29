@@ -95,30 +95,6 @@
 	gap: 30px;
 }
 
-.titleType {
-	font-size: 12px;
-	font-weight: 600;
-	color: #4e4e4e;
-}
-
-.typeTags {
-	width: 100%;
-	display: flex;
-	gap: 10px;
-}
-
-.tagsContainer {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 4px;
-	align-content: flex-start;
-}
-
-/* ATTENTION MAKE GLOBAL CSS STYLE */
-.tag :global(.ant-tag-close-icon) {
-	color: #108ee9;
-}
-
 @media (max-width: 1200px) {
 	.formContent {
 		width: 100%;

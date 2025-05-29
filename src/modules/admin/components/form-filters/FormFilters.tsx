@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
-import { Tag } from '@/ui-components/Tag';
+import { TagSection } from '../tag-section/TagSection';
 import { Icon } from '@/ui-components/Icon';
 import { Explanation } from '../exaplanation/Explanation';
 import { classes } from '@/shared/utils/classes';
@@ -18,7 +18,7 @@ type FormErrors = FormInputs & {
 	submit: string;
 };
 
-type FormItems = {
+export type FormItems = {
 	tenses: string[];
 	topic: string[];
 	categories: string[];
@@ -88,8 +88,8 @@ export const FormFilters = () => {
 	const deleteTag = (
 		key: keyof FormItems,
 		value: string,
-		setFunc: (updated: FormItems) => void,
 		items: FormItems,
+		setFunc: (updated: FormItems) => void,
 	) => {
 		const updatedItems = { ...items, [key]: items[key].filter((item) => item !== value) };
 		setFunc(updatedItems);
@@ -118,18 +118,19 @@ export const FormFilters = () => {
 		}
 	};
 
+	const allTagsList = [
+		{ title: 'Tenses', list: formItems, onClose: deleteTag, setFunc: setFormItems },
+		{ title: 'Delete', list: deletedTags, onClose: returnTag, setFunc: setDeletedTags },
+		{ title: 'Existing', list: existTags, onClose: deleteTag, setFunc: setExistTags },
+	];
+
 	const clearForm = () => {
 		setFormInputs(initialFormInputs);
 		setExistTags(initialExistTags);
 		setFormItems(initialFormItems);
 		setDeletedTags(initialFormItems);
 		setFormErrors(initialFormErrors);
-
-		console.log('EXIST TAGS CLEAR: ', existTags);
 	};
-
-	console.log('EXIST TAGS: ', existTags);
-	console.log('FORM ITEMS: ', formItems);
 
 	const handleSubmit = () => {
 		const haveFilters = Object.values(formItems).some((item) => item.length > 0);
@@ -175,53 +176,16 @@ export const FormFilters = () => {
 								<span className={styles.error}>{formErrors[key]}</span>
 							</div>
 							<div className={styles.allTags}>
-								<div className={styles.typeTags}>
-									<span className={styles.titleType}>New: </span>
-									<div className={styles.tagsContainer}>
-										{formItems[key].map((item) => (
-											<Tag
-												key={item}
-												className={styles.tag}
-												color="blue"
-												onClose={() => deleteTag(key, item, setFormItems, formItems)}
-												closable
-											>
-												{item}
-											</Tag>
-										))}
-									</div>
-								</div>
-								<div className={styles.typeTags}>
-									<span className={styles.titleType}>Deleted: </span>
-									<div className={styles.tagsContainer}>
-										{deletedTags[key].map((item) => (
-											<Tag
-												key={item}
-												className={styles.tag}
-												color="blue"
-												onClick={() => returnTag(key, item)}
-											>
-												{item}
-											</Tag>
-										))}
-									</div>
-								</div>
-								<div className={styles.typeTags}>
-									<span className={styles.titleType}>Existing: </span>
-									<div className={styles.tagsContainer}>
-										{existTags[key].map((item) => (
-											<Tag
-												key={item}
-												className={styles.tag}
-												color="blue"
-												onClose={() => deleteTag(key, item, setExistTags, existTags)}
-												closable
-											>
-												{item}
-											</Tag>
-										))}
-									</div>
-								</div>
+								{allTagsList.map((section) => (
+									<TagSection
+										key={section.title}
+										title={section.title}
+										keyOfForm={key}
+										formItems={section.list}
+										showOrHideTag={section.onClose}
+										setFormItems={section.setFunc}
+									/>
+								))}
 							</div>
 						</div>
 					))}
