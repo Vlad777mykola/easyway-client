@@ -19,27 +19,23 @@ export const TagSection = ({
 		setFunc: (updated: FormItems) => void,
 	) => void;
 	setFormItems: (updated: FormItems) => void;
-}) => {
-	console.log('FORM ITEMS TAG SECTION: ', formItems);
-
-	return (
-		<div className={styles.typeTags}>
-			<span className={styles.titleType}>{title}: </span>
-			<div className={styles.tagsContainer}>
-				{formItems[keyOfForm]?.map((item) => (
-					<Tag
-						key={item}
-						className={styles.tag}
-						color="blue"
-						onClose={() => {
-							showOrHideTag(keyOfForm, item, formItems, setFormItems);
-						}}
-						closable
-					>
-						{item}
-					</Tag>
-				))}
-			</div>
+}) => (
+	<div className={styles.typeTags}>
+		<span className={styles.titleType}>{title}: </span>
+		<div className={styles.tagsContainer}>
+			{formItems[keyOfForm]?.map((item) => (
+				<Tag
+					key={item}
+					className={styles.tag}
+					color="blue"
+					onClose={() => {
+						showOrHideTag(keyOfForm, item, formItems, setFormItems);
+					}}
+					closable
+				>
+					{item}
+				</Tag>
+			))}
 		</div>
-	);
-};
+	</div>
+);

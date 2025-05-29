@@ -7,6 +7,7 @@ import { Explanation } from '../exaplanation/Explanation';
 import { classes } from '@/ui-design-atoms/classes';
 
 import styles from './formFilters.module.css';
+import { LIST_OF_EXPLANATIONS, TITLE_EXPLANATION } from '../../constants';
 
 type FormInputs = {
 	tenses: string;
@@ -204,7 +205,7 @@ export const FormFilters = () => {
 					</div>
 				</div>
 			</form>
-			<Explanation />
+			<Explanation title={TITLE_EXPLANATION} listOfAdvice={LIST_OF_EXPLANATIONS} />
 		</div>
 	);
 };

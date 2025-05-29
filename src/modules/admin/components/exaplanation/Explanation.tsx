@@ -1,17 +1,17 @@
 import styles from './explanation.module.css';
 
-export const Explanation = () => (
+export const Explanation = ({ title, listOfAdvice }: { title: string; listOfAdvice: string[] }) => (
 	<div className={styles.explanationContainer}>
 		<div className={styles.content}>
-			<h1 className={styles.quoteTitle}>Create Filters</h1>
+			<h1 className={styles.quoteTitle}>{title}</h1>
 			<blockquote className={styles.blockquote}>
 				To have another language is to possess a second soul.
 			</blockquote>
 			<p className={styles.nameOfQuote}>— Charlemagne</p>
 			<ol className={styles.explanation}>
-				<li>This form is designed to create collection filters.</li>
-				<li>At least one of the items must have a list.</li>
-				<li>The form does not allow having the same item in the list.</li>
+				{listOfAdvice.map((item, index) => (
+					<li key={index}>{item}</li>
+				))}
 			</ol>
 		</div>
 	</div>
