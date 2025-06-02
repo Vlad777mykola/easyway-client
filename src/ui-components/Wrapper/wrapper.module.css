@@ -10,6 +10,8 @@
 	padding: 40px;
 	height: fit-content;
 	width: auto;
+	margin-top: 10px;
+	max-width: 1400px;
 }
 
 .sticky {

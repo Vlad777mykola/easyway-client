@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import { List } from '@/shared/components/list';
+import { useNavigate } from '@/shared/hooks/use-navigate';
+import { useQueryParam } from '@/shared/hooks/use-query-params';
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { Statistics } from '@/shared/components/statistics/Statistics';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
@@ -11,12 +13,10 @@ import {
 	EXERCISE_FORMATE,
 } from '@/store/dictionary';
 
+import { formatNavigate } from '../../utils';
 import { EXERCISE_CONFIG_LABELS } from '../../constants';
 import { useExerciseListData } from '../../hooks/useExerciseListData';
-import { formatNavigate } from '../../utils';
-import { useQueryParam } from '@/shared/hooks/use-query-params';
 import { useConfigStings } from '../../hooks/useConfigParamWithDefaultData';
-import { useNavigate } from '@/shared/hooks/use-navigate';
 
 export const DictionaryExerciseDetails = (): ReactNode => {
 	const { navWithQueryParams } = useNavigate();
