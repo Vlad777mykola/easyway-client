@@ -1,7 +1,7 @@
 import { Tag } from '@/ui-components/Tag';
-import { FormItems } from '../form-filters/FormFilters';
-import styles from './tagSection.module.css';
 import { Typography } from '@/ui-components/Typography';
+import { FormItems } from '@/modules/admin/components/form-filters/FormFilters';
+import styles from './tagSection.module.css';
 
 export const TagSection = ({
 	title,

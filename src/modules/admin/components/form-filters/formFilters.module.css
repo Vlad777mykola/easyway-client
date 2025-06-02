@@ -48,6 +48,10 @@
 	box-shadow: none;
 }
 
+.add {
+	color: #1677ff;
+}
+
 .warning {
 	border-bottom: 1px solid #faad14 !important;
 }
@@ -64,18 +68,23 @@
 	padding: 5px 0px;
 	margin-bottom: 15px;
 	box-sizing: border-box;
-	border-bottom: 1.4px solid #d9d9d9;
 }
 
 .errorContainer {
 	width: 100%;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	height: 15px;
+	height: 30px;
 	font-size: 15px;
 	display: flex;
-	justify-content: center;
-	color: var(--color-warning);
+	/* justify-content: center; */
+	/* color: var(--color-warning); */
+}
+
+.alert {
+	text-align: center;
+  width: 100%;
+  color: #ffa39e;
 }
 
 .buttonsContainer {
