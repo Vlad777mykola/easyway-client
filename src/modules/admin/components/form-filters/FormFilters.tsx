@@ -1,104 +1,50 @@
-import React, { useState } from 'react';
-import { z } from 'zod';
+import React, { useMemo, useState } from 'react';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
 import { Typography } from '@/ui-components/Typography';
 import { Alert } from '@/ui-components/Alert';
 import { TagSection } from '../tag-section/TagSection';
 import { capitalizeFirst } from '@/shared/utils/capitalize-first/capitalizeFirst';
-import { Icon } from '@/ui-components/Icon';
 import { Explanation } from '../exaplanation/Explanation';
-import { classes } from '@/ui-design-atoms/classes';
 import { LIST_OF_EXPLANATIONS, TITLE_EXPLANATION } from '@/modules/admin/constants';
+import { FormInputs, FormItems } from '@/modules/admin/types/form-filters.types';
+import { FormattedErrorsFilters, FormDataFilters } from '@/modules/admin/types/zod-errors.types';
+import {
+	createInputSchema,
+	formFiltersDataSchema,
+} from '@/modules/admin/zod-schemas/form-filters.schema';
+import {
+	initialExistTags,
+	initialFormInputs,
+	initialFormItems,
+	KEYS,
+} from '@/modules/admin/constants/form-filters.constants';
 
 import styles from './formFilters.module.css';
 
-type FormInputs = {
-	tenses: string;
-	topic: string;
-	categories: string;
-};
-
-export type FormItems = {
-	tenses: string[];
-	topic: string[];
-	categories: string[];
-};
-
-const initialFormInputs: FormInputs = {
-	tenses: '',
-	topic: '',
-	categories: '',
-};
-
-const initialFormItems: FormItems = {
-	tenses: [],
-	topic: [],
-	categories: [],
-};
-
-const initialExistTags: FormItems = {
-	tenses: ['Present', 'Past', 'Future'],
-	topic: ['Present', 'Past', 'Future'],
-	categories: ['Present', 'Past', 'Future'],
-};
-
-type ZodFieldError = { _errors: string[] };
-
-type FormattedErrors = {
-	tenses?: ZodFieldError;
-	topic?: ZodFieldError;
-	categories?: ZodFieldError;
-	submit?: ZodFieldError;
-};
-
-const uniqueArray = z.array(z.string()).refine((arr) => new Set(arr).size === arr.length, {
-	message: 'Items must be unique.',
-});
-
-const formDataSchema = z
-	.object({
-		tenses: uniqueArray,
-		topic: uniqueArray,
-		categories: uniqueArray,
-	})
-	.refine((data) => data.tenses.length > 0 || data.topic.length > 0 || data.categories.length > 0, {
-		message: 'At least one filter must have at least one item.',
-		path: ['submit'],
-	});
-
-type FormData = z.infer<typeof formDataSchema>;
-
-const createInputSchema = (existingItems: string[]) =>
-	z
-		.string()
-		.min(1, 'Input is required')
-		.refine((val) => !existingItems.includes(val), {
-			message: 'This item is already in the list.',
-		});
-
-// Айтеми з беку приходять стрінгами, має бути existTags [tag1, tag2, tag3],
-// модифіковуєш, робиш список (масив) з об'єктів, де має бути action
-
 export const FormFilters = () => {
 	const [formInputs, setFormInputs] = useState<FormInputs>(initialFormInputs);
-	const [formItems, setFormItems] = useState<FormData>(initialFormItems);
+	const [formItems, setFormItems] = useState<FormDataFilters>(initialFormItems);
 	const [deletedTags, setDeletedTags] = useState<FormItems>(initialFormItems);
-
-	let tags = initialExistTags;
-
-	// from existTags фільтрую з deletedTags
-	// from existingTags remove deletedTags no need useState
-	// const [existTags, setExistTags] = useState<FormItems>(initialExistTags);
 	const [showErrors, setShowErrors] = useState(false);
-	const [inputError, setInputError] = useState<FormInputs>({
-		tenses: '',
-		topic: '',
-		categories: '',
-	});
+	const [inputError, setInputError] = useState<FormInputs>(initialFormInputs);
 
-	console.log('FORM ITEMS: ', formItems);
-	console.log('DELETED TAGS: ', deletedTags);
+	const validate = (): FormattedErrorsFilters | undefined => {
+		const res = formFiltersDataSchema.safeParse(formItems);
+		if (res.success) {
+			return undefined;
+		}
+		return res.error.format();
+	};
+
+	const errors = useMemo(() => (showErrors ? validate() : undefined), [showErrors, formItems]);
+
+	const tags = useMemo(() => {
+		return KEYS.reduce((acc, key) => {
+			acc[key] = initialExistTags[key].filter((item) => !deletedTags[key].includes(item));
+			return acc;
+		}, {} as FormItems);
+	}, [deletedTags]);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -110,50 +56,37 @@ export const FormFilters = () => {
 		setFormInputs((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const validate = (): FormattedErrors | undefined => {
-		const res = formDataSchema.safeParse(formItems);
-		if (res.success) {
-			return undefined;
-		}
-		return res.error.format();
-	};
-
 	const addItems = (key: keyof FormItems) => {
-		setFormInputs((prev) => ({ ...prev, [key]: '' }));
-
+		const value = formInputs[key];
 		const inputSchema = createInputSchema(formItems[key]);
-		const result = inputSchema.safeParse(formInputs[key]);
+		const result = inputSchema.safeParse(value);
 
-		setInputError((prev) => ({
-			...prev,
-			[key]: result.error?.format()._errors.join(', '),
-		}));
+		if (!result.success) {
+			const message = result.error.format()._errors.join(', ');
+			setInputError((prev) => ({
+				...prev,
+				[key]: message,
+			}));
+		}
 
-		console.log('RESULT: ', result.error?.format()._errors.join(', '));
-
-		if (
-			!formItems[key].includes(formInputs[key]) &&
-			// !existTags[key].includes(formInputs[key]) &&
-			formInputs[key].length > 0
-		) {
+		if (!formItems[key].includes(value) && formInputs[key].length > 0) {
 			setFormItems((prev) => ({
 				...prev,
 				[key]: [...(prev[key] || []), formInputs[key] || ''],
 			}));
+			setInputError((prev) => ({ ...prev, [key]: '' }));
+			setFormInputs((prev) => ({ ...prev, [key]: '' }));
 		}
 	};
 
-	const deleteTag = (
-		key: keyof FormItems,
-		value: string,
-		items: FormItems,
-		setFunc: (updated: FormItems) => void,
-	) => {
-		console.log('KEY: ', key);
-		console.log('VALUE: ', value);
-		console.log('ITEMS: ', items);
-		const updatedItems = { ...items, [key]: items[key].filter((item) => item !== value) };
-		setFunc(updatedItems);
+	const deleteTag = (key: keyof FormItems, value: string) => {
+		setFormItems((prev) => ({
+			...prev,
+			[key]: prev[key].filter((item) => item !== value),
+		}));
+	};
+
+	const deleteExistTag = (key: keyof FormItems, value: string) => {
 		setDeletedTags((prev) => ({
 			...prev,
 			[key]: [...prev[key], value],
@@ -165,20 +98,6 @@ export const FormFilters = () => {
 			...prev,
 			[key]: prev[key].filter((item) => item !== value),
 		}));
-
-		if (initialExistTags[key].includes(value)) {
-			/* setExistTags((prev) => ({
-				...prev,
-				[key]: [...prev[key], value],
-			})); */
-
-			console.log('Must be logic');
-		} else {
-			setFormItems((prev) => ({
-				...prev,
-				[key]: [...prev[key], value],
-			}));
-		}
 	};
 
 	const allTagsList = [
@@ -187,21 +106,17 @@ export const FormFilters = () => {
 		{
 			title: 'Existing',
 			list: tags,
-			onClose: deleteTag,
+			onClose: deleteExistTag,
 			setFunc: () => {},
 		},
 	];
 
-	// example code
-	// const tenses = existTags.tenses.filter((i) => deletedTags.tenses.includes(i));
-
-	// console.log('TENSES: ', tenses);
-
 	const clearForm = () => {
 		setFormInputs(initialFormInputs);
-		// setExistTags(initialExistTags);
 		setFormItems(initialFormItems);
 		setDeletedTags(initialFormItems);
+		setInputError(initialFormInputs);
+		setShowErrors(false);
 	};
 
 	const handleSubmit = () => {
@@ -216,16 +131,10 @@ export const FormFilters = () => {
 
 		if (haveFilters) {
 			console.log('FORM ITEMS: ', formItems);
-			setFormInputs(initialFormInputs);
-			setFormItems(initialFormItems);
-			// setExistTags(initialExistTags);
+			console.log('TAGS: ', tags);
+			clearForm();
 		}
 	};
-
-	const errors = showErrors ? validate() : undefined;
-
-	console.log('ERRORS: ', errors);
-	console.log('DELETED: ', deletedTags);
 
 	return (
 		<div className={styles.filters}>
@@ -234,19 +143,17 @@ export const FormFilters = () => {
 					Filters
 				</Typography.Title>
 				<div className={styles.formContent}>
-					{(Object.keys(formItems) as (keyof FormItems)[]).map((key) => (
+					{KEYS.map((key) => (
 						<div className={styles.formItemContainer} key={key}>
 							<Typography.Title className={styles.label} level={3}>
 								{capitalizeFirst(key)}
 							</Typography.Title>
 							<div className={styles.formItem}>
 								<Input
-									/* className={classes(styles.underlinedInput, {
-										[styles.warning]: formErrors[key].length > 0,
-									})} */
 									id={key}
 									name={key}
 									value={formInputs[key]}
+									status={inputError[key]?.length > 0 ? 'error' : ''}
 									onChange={(e) => handleChange(e)}
 								/>
 								<Button onClick={() => addItems(key)}>
@@ -266,7 +173,6 @@ export const FormFilters = () => {
 										keyOfForm={key}
 										formItems={section.list}
 										showOrHideTag={section.onClose}
-										setFormItems={section.setFunc}
 									/>
 								))}
 							</div>
@@ -275,13 +181,13 @@ export const FormFilters = () => {
 				</div>
 				<div className={styles.handleSubmit}>
 					<div className={styles.errorContainer}>
-						{errors && errors.submit ? (
+						{errors?.submit && (
 							<Alert
 								className={styles.alert}
 								message={errors.submit?._errors.join(', ')}
 								type="error"
 							/>
-						) : null}
+						)}
 					</div>
 					<div className={styles.buttonsContainer}>
 						<Button type="primary" shape="round" onClick={clearForm}>

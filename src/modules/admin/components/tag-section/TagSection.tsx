@@ -1,6 +1,6 @@
 import { Tag } from '@/ui-components/Tag';
 import { Typography } from '@/ui-components/Typography';
-import { FormItems } from '@/modules/admin/components/form-filters/FormFilters';
+import { FormItems } from '../../types/form-filters.types';
 import styles from './tagSection.module.css';
 
 export const TagSection = ({
@@ -8,18 +8,11 @@ export const TagSection = ({
 	keyOfForm,
 	formItems,
 	showOrHideTag,
-	setFormItems,
 }: {
 	title: string;
 	keyOfForm: keyof FormItems;
 	formItems: FormItems;
-	showOrHideTag: (
-		key: keyof FormItems,
-		value: string,
-		items: FormItems,
-		setFunc: (updated: FormItems) => void,
-	) => void;
-	setFormItems: (updated: FormItems) => void;
+	showOrHideTag: (key: keyof FormItems, value: string) => void;
 }) => (
 	<div className={styles.typeTags}>
 		<Typography.Text className={styles.titleType}>{title}: </Typography.Text>
@@ -30,7 +23,7 @@ export const TagSection = ({
 					className={styles.tag}
 					color="blue"
 					onClose={() => {
-						showOrHideTag(keyOfForm, item, formItems, setFormItems);
+						showOrHideTag(keyOfForm, item);
 					}}
 					closable
 				>

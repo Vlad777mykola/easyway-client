@@ -20,6 +20,10 @@
 	color: #4e4e4e;
 }
 
+.formItemContainer {
+	margin-top: 15px;
+}
+
 .formContent {
 	width: 100%;
 	display: flex;
@@ -35,25 +39,8 @@
 	gap: 10px;
 }
 
-.underlinedInput {
-	border: none;
-	border-bottom: 1px solid #d9d9d9;
-	border-radius: 0;
-	box-shadow: none;
-	outline: none;
-}
-
-.underlinedInput:focus {
-	border-bottom: 1px solid #1677ff;
-	box-shadow: none;
-}
-
 .add {
 	color: #1677ff;
-}
-
-.warning {
-	border-bottom: 1px solid #faad14 !important;
 }
 
 .label {
@@ -77,8 +64,6 @@
 	height: 30px;
 	font-size: 15px;
 	display: flex;
-	/* justify-content: center; */
-	/* color: var(--color-warning); */
 }
 
 .alert {
