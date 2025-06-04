@@ -2,11 +2,11 @@ import React, { useMemo, useState } from 'react';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
 import { Typography } from '@/ui-components/Typography';
-import { Alert } from '@/ui-components/Alert';
-import { TagSection } from '../tag-section/TagSection';
-import { capitalizeFirst } from '@/shared/utils/capitalize-first/capitalizeFirst';
-import { Explanation } from '../exaplanation/Explanation';
-import { LIST_OF_EXPLANATIONS, TITLE_EXPLANATION } from '@/modules/admin/constants';
+// import { Alert } from '@/ui-components/Alert';
+// import { TagSection } from '../tag-section/TagSection';
+import { capitalize } from '@/shared/utils/capitalize';
+// import { Explanation } from '../exaplanation/Explanation';
+// import { LIST_OF_EXPLANATIONS, TITLE_EXPLANATION } from '@/modules/admin/constants';
 import { FormInputs, FormItems } from '@/modules/admin/types/form-filters.types';
 import { FormattedErrorsFilters, FormDataFilters } from '@/modules/admin/types/zod-errors.types';
 import {
@@ -21,6 +21,7 @@ import {
 } from '@/modules/admin/constants/form-filters.constants';
 
 import styles from './formFilters.module.css';
+import { FieldGroup } from '@/ui-components/FieldGroup';
 
 export const FormFilters = () => {
 	const [formInputs, setFormInputs] = useState<FormInputs>(initialFormInputs);
@@ -37,7 +38,7 @@ export const FormFilters = () => {
 		return res.error.format();
 	};
 
-	const errors = useMemo(() => (showErrors ? validate() : undefined), [showErrors, formItems]);
+	// const errors = useMemo(() => (showErrors ? validate() : undefined), [showErrors, formItems]);
 
 	const tags = useMemo(() => {
 		return KEYS.reduce((acc, key) => {
@@ -101,8 +102,14 @@ export const FormFilters = () => {
 	};
 
 	const allTagsList = [
-		{ title: 'Tenses', list: formItems, onClose: deleteTag, setFunc: setFormItems },
-		{ title: 'Delete', list: deletedTags, onClose: returnTag, setFunc: setDeletedTags },
+		{ title: 'Tenses', color: 'green', list: formItems, onClose: deleteTag, setFunc: setFormItems },
+		{
+			title: 'Delete',
+			color: 'red',
+			list: deletedTags,
+			onClose: returnTag,
+			setFunc: setDeletedTags,
+		},
 		{
 			title: 'Existing',
 			list: tags,
@@ -110,6 +117,8 @@ export const FormFilters = () => {
 			setFunc: () => {},
 		},
 	];
+
+	console.log(allTagsList);
 
 	const clearForm = () => {
 		setFormInputs(initialFormInputs);
@@ -131,23 +140,20 @@ export const FormFilters = () => {
 
 		if (haveFilters) {
 			console.log('FORM ITEMS: ', formItems);
-			console.log('TAGS: ', tags);
+			console.log('TAGS: ', tags, showErrors);
 			clearForm();
 		}
 	};
 
 	return (
-		<div className={styles.filters}>
-			<form className={styles.formContainer} onSubmit={(e) => e.preventDefault()}>
-				<Typography.Title className={styles.title} level={2}>
-					Filters
-				</Typography.Title>
-				<div className={styles.formContent}>
-					{KEYS.map((key) => (
-						<div className={styles.formItemContainer} key={key}>
-							<Typography.Title className={styles.label} level={3}>
-								{capitalizeFirst(key)}
-							</Typography.Title>
+		<div className={styles.filtersContainer}>
+			<Typography.Title className={styles.title} level={2}>
+				Filters
+			</Typography.Title>
+			<div className={styles.formContent}>
+				{KEYS.map((key) => (
+					<div className={styles.formItemContainer} key={key}>
+						<FieldGroup marginY="07" title={capitalize(key)}>
 							<div className={styles.formItem}>
 								<Input
 									id={key}
@@ -160,46 +166,29 @@ export const FormFilters = () => {
 									<Typography.Text className={styles.add}>Add</Typography.Text>
 								</Button>
 							</div>
-							<div className={styles.errorContainer}>
-								{inputError[key]?.length > 0 && (
-									<Alert className={styles.alert} message={inputError[key]} type="error" />
-								)}
-							</div>
-							<div className={styles.allTags}>
-								{allTagsList.map((section) => (
-									<TagSection
-										key={section.title}
-										title={section.title}
-										keyOfForm={key}
-										formItems={section.list}
-										showOrHideTag={section.onClose}
-									/>
-								))}
-							</div>
+						</FieldGroup>
+						<div className={styles.allTags}>
+							{/* {allTagsList.map((section) => (
+								<TagSection
+									key={section.title}
+									title={section.title}
+									keyOfForm={key}
+									formItems={section.list}
+									showOrHideTag={section.onClose}
+								/>
+							))} */}
 						</div>
-					))}
-				</div>
-				<div className={styles.handleSubmit}>
-					<div className={styles.errorContainer}>
-						{errors?.submit && (
-							<Alert
-								className={styles.alert}
-								message={errors.submit?._errors.join(', ')}
-								type="error"
-							/>
-						)}
 					</div>
-					<div className={styles.buttonsContainer}>
-						<Button type="primary" shape="round" onClick={clearForm}>
-							Clear
-						</Button>
-						<Button type="primary" shape="round" onClick={handleSubmit}>
-							Submit
-						</Button>
-					</div>
-				</div>
-			</form>
-			<Explanation title={TITLE_EXPLANATION} listOfAdvice={LIST_OF_EXPLANATIONS} />
+				))}
+			</div>
+			<div className={styles.filtersButtons}>
+				<Button type="primary" shape="round" onClick={clearForm}>
+					Clear
+				</Button>
+				<Button type="primary" shape="round" onClick={handleSubmit}>
+					Submit
+				</Button>
+			</div>
 		</div>
 	);
 };

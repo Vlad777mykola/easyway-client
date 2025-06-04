@@ -5,11 +5,13 @@ import styles from './tagSection.module.css';
 
 export const TagSection = ({
 	title,
+	color,
 	keyOfForm,
 	formItems,
 	showOrHideTag,
 }: {
 	title: string;
+	color: 'green' | 'red';
 	keyOfForm: keyof FormItems;
 	formItems: FormItems;
 	showOrHideTag: (key: keyof FormItems, value: string) => void;
@@ -21,7 +23,7 @@ export const TagSection = ({
 				<Tag
 					key={item}
 					className={styles.tag}
-					color="blue"
+					color={color || 'blue'}
 					onClose={() => {
 						showOrHideTag(keyOfForm, item);
 					}}
