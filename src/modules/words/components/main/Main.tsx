@@ -4,6 +4,8 @@ import { Input } from 'antd';
 import { useState } from 'react';
 import { WordCard } from '../word-card/WordCard';
 
+import styles from './main.module.css';
+
 const { Search } = Input;
 
 const data = {
@@ -23,6 +25,8 @@ export const Main = () => {
 	const { data: words, refetch } = useWords(word);
 	console.log(words, data);
 	console.log(words?.length > 0);
+	console.log('WORDS: ', words);
+	console.log('DATA: ', data);
 	return (
 		<>
 			<Wrapper>
@@ -35,7 +39,9 @@ export const Main = () => {
 					onSearch={() => refetch()}
 				/>
 			</Wrapper>
-			{words?.length > 0 && words.map((w: WordsType) => <WordCard {...w} />)}
+			<div className={styles.cards}>
+				{words?.length > 0 && words.map((w: WordsType) => <WordCard {...w} />)}
+			</div>
 		</>
 	);
 };

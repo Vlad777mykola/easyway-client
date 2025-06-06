@@ -1,3 +1,68 @@
+.card {
+	width: 358px;
+  height: 332px;
+  padding: 1rem;
+	box-sizing: border-box;
+	border: 0 solid #e5e7eb;
+	box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+	background: #fff;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	align-items: center;
+}
+
 .img {
-	height: 50px;
+	width: 100px;
+	height: 80px;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+}
+
+.explanation {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.translate {
+	color: rgba(102, 102, 102, 1);
+	font-size: 18px;
+	line-height: 1.75rem;
+}
+
+.useCase {
+	color: rgba(102, 102, 102, 1);
+	font-size: .875rem;
+	line-height: 1.25rem;
+}
+
+.type {
+	text-transform: capitalize;
+	font-weight: 700;
+	font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+/* stylelint-disable-next-line selector-class-pattern */
+.adjective {
+	color: rgb(230 126 34);
+}
+
+.verb {
+	color: rgb(26 188 106);
+}
+
+.pronoun {
+	color: rgb(52 73 94);
+}
+
+.noun {
+	color: rgb(41 128 195);
 }

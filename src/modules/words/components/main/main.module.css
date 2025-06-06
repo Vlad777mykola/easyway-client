@@ -1,0 +1,14 @@
+.cards {
+  display: flex;
+  width: 60%;
+  justify-content: start;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 50px auto;
+}
+
+@media (max-width: 480px) {
+  .cards {
+    width: 90%;
+  }
+}
