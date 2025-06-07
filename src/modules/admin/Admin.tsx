@@ -11,12 +11,12 @@ export const Admin = () => {
 	const tabs = [
 		{
 			key: '1',
-			label: 'Filters',
+			label: <span className={styles.tab}>Filters</span>,
 			children: <FormFilters />,
 		},
 		{
 			key: '2',
-			label: 'Second Tab',
+			label: <span className={styles.tab}>Second Tab</span>,
 			children: <SecondTab />,
 		},
 	];
@@ -25,11 +25,12 @@ export const Admin = () => {
 		<div className={styles.adminContainer}>
 			<div className={styles.formsContainer}>
 				<Tabs
+					className={styles.tabs}
 					items={tabs}
 					activeKey={activeKey}
 					onChange={setActiveKey}
 					size="large"
-					tabPosition="left"
+					tabPosition="top"
 				/>
 			</div>
 		</div>
