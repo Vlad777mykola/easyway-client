@@ -43,30 +43,6 @@
 	line-height: 1.25rem;
 }
 
-.type {
-	text-transform: capitalize;
-	font-weight: 700;
-	font-size: 0.875rem;
-	line-height: 1.25rem;
-}
-
-/* stylelint-disable-next-line selector-class-pattern */
-.adjective {
-	color: rgb(230 126 34);
-}
-
-.verb {
-	color: rgb(26 188 106);
-}
-
-.pronoun {
-	color: rgb(52 73 94);
-}
-
-.noun {
-	color: rgb(41 128 195);
-}
-
 @media (max-width: 1024px) {
 	.img {
 		width: 75px;
@@ -83,10 +59,5 @@
 	.img {
 		width: 89px;
 		height: 71px;
-	}
-
-	.type {
-		font-size: 0.75rem;
-		line-height: 1rem;
 	}
 }

@@ -1,8 +1,7 @@
 import { Typography } from '@/ui-components/Typography';
-import { classes } from '@/ui-design-atoms/classes';
+import { PartOfSpeech } from '@/ui-components/PartOfSpeech/PartOfSpeech';
 import img from '@/assets/download.jpeg';
 
-// eslint-disable-next-line css-modules/no-unused-class
 import styles from './wordCard.module.css';
 
 export const WordCard = ({
@@ -29,9 +28,7 @@ export const WordCard = ({
 				</div>
 			</div>
 			<div className={styles.typeContainer}>
-				<span className={classes(styles.type, styles[`${type.toLowerCase()}`])}>
-					{'['} {type} {']'}
-				</span>
+				<PartOfSpeech type={type} />
 			</div>
 		</div>
 	</div>
