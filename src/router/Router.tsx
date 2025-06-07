@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@/layouts/main/Layouts';
 import { DictionaryExerciseCard, DictionaryExerciseDetails } from '@/modules/dictionary';
 import { Auth } from '@/pages/Auth';
+import { Main } from '@/modules/words/components/main/Main';
 // import Home from '@/pages/Home';
 
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
@@ -23,11 +24,10 @@ export const router = createBrowserRouter([
 		path: '/',
 		element: <Layout />,
 		children: [
-			// { path: '', element: <Home /> },
+			{ path: '', element: <Main /> },
 			{ path: 'profile', element: <ProfilePage /> },
 			{ path: 'signin', element: <Auth isSignup={true} /> },
 			{ path: 'signup', element: <Auth /> },
-			{ path: '', element: <ExercisesPage /> },
 
 			{ path: 'exercises', element: <ExercisesPage /> },
 			{ path: 'exercises/:exercisesId', element: <ExerciseDetails /> },

@@ -21,7 +21,7 @@ export const Item = <
 			<div className={styles.infoCard}>
 				<div className={styles.topicContainer}>
 					<p className={styles.nameOfTopic}>Topic: </p>
-					{data.topic.join(', ')}
+					{data.topic}
 				</div>
 				<div className={styles.topicContainer}>
 					<p className={styles.nameOfTopic}>Category: </p>
