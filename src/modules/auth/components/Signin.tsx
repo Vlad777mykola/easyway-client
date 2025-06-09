@@ -64,6 +64,7 @@ export const Signin = () => {
 	const onSubmit = (formData: FormData) => {
 		if (validate()) {
 			setShowErrors(true);
+			return;
 		}
 		mutation.mutate({ email: formData.email, password: formData.password });
 	};
