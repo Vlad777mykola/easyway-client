@@ -1,16 +1,12 @@
-.filters {
-	display: flex;
-}
-
-.formContainer {
+.filtersContainer {
+	width: 800px;
 	font-family: 'Inter', sans-serif;
 	padding: 40px;
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	width: 50%;
 	justify-content: space-between;
-	border-right: 1px solid #f9f9f9;
+	align-items: center;
 }
 
 .title {
@@ -33,49 +29,10 @@
 	box-sizing: border-box;
 }
 
-.formItem {
-	display: flex;
-	width: 100%;
-	gap: 10px;
-}
-
-.add {
-	color: #1677ff;
-}
-
-.label {
-	min-width: 110px;
-	display: flex;
-	align-items: center;
-	font-size: 16px;
-	display: flex;
-	font-weight: 600;
-	color: #4e4e4e;
-
-	padding: 5px 0px;
-	margin-bottom: 15px;
-	box-sizing: border-box;
-}
-
-.errorContainer {
-	width: 100%;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	height: 30px;
-	font-size: 15px;
-	display: flex;
-}
-
-.alert {
-	text-align: center;
-	width: 100%;
-	color: #ffa39e;
-}
-
-.buttonsContainer {
+.filtersButtons {
 	display: flex;
 	gap: 10px;
-	justify-content: end;
+	align-self: end;
 }
 
 .allTags {
@@ -89,15 +46,5 @@
 	.formContent {
 		width: 100%;
 		padding: 0px;
-	}
-
-	.formContainer {
-		width: 100%;
-		padding: 20px;
-	}
-
-	.label {
-		font-size: 13px;
-		width: 100%;
 	}
 }
