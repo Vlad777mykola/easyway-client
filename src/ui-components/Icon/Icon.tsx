@@ -29,6 +29,9 @@ import {
 	ClockCircleOutlined,
 	FrownOutlined,
 	PlusOutlined,
+	SoundOutlined,
+	FolderAddOutlined,
+	AppstoreAddOutlined,
 } from '@ant-design/icons';
 
 import styles from './icon.module.css';
@@ -59,6 +62,9 @@ const IconVariants = {
 	clock: ClockCircleOutlined,
 	frown: FrownOutlined,
 	plus: PlusOutlined,
+	sound: SoundOutlined,
+	folder: FolderAddOutlined,
+	appStoreAdd: AppstoreAddOutlined,
 };
 
 export type IconVariantsType = keyof typeof IconVariants;

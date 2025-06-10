@@ -9,13 +9,15 @@ export const WordCard = ({
 	translate,
 	type,
 	useCase,
+	onClick,
 }: {
 	name: string;
 	translate: string;
 	type: string;
 	useCase: string;
+	onClick: () => void;
 }) => (
-	<div className={styles.card}>
+	<div className={styles.card} onClick={onClick}>
 		<img className={styles.img} src={img} />
 		<div className={styles.content}>
 			<div className={styles.explanation}>
