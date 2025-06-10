@@ -12,5 +12,5 @@ export const useExerciseListData = (
 		if (exercise) {
 			func(exercise, collectionsId);
 		}
-	}, [exercise]);
+	}, [exercise, func, collectionsId]);
 };

@@ -47,7 +47,7 @@ export const ExerciseDetails = (): ReactNode => {
 
 	useEffect(() => {
 		getProgressFromLocalStore(exercisesId || '');
-	}, []);
+	}, [exercisesId, getProgressFromLocalStore]);
 
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setCollectionsExerciseConfig(key, value);

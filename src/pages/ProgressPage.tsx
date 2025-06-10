@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Progress } from '@/modules/progress/Progress';
 import { fetchProgressData } from '@/modules/progress/services/fetchProgressData';
 import { ALL_COLLECTIONS, CollectionsType } from '@/shared/constants';
@@ -73,9 +73,45 @@ export const ProgressPage = () => {
 			setClean();
 			setCollections([]);
 		};
-	}, [exercise]);
+	}, [exercise, setClean, setCollections]);
 
 	const totalProgress = useMultipleProgress(progressIds);
+	const getKeysExercise = useCallback(
+		(progress: ProgressStore[]) => {
+			const keys: Exercise[] = [];
+
+			progress.forEach(({ progressStore }) => {
+				Object.keys(progressStore).forEach((fullKey) => {
+					if (fullKey.includes('timestamp')) return;
+					if (!progressIds.includes(fullKey)) {
+						setProgressIds((prev) => [...prev, fullKey]);
+					}
+
+					const theme = fullKey.slice(2); // remove prefix
+					const isAlreadyAdded = keys.some(({ title }) => title.includes(theme));
+					if (isAlreadyAdded) return;
+
+					const collectionKey = Object.keys(ALL_COLLECTIONS).find(
+						(collection) => {
+							return collection.includes(theme.slice(0, -1));
+						}, // crude plural-to-singular match
+					);
+
+					if (collectionKey) {
+						keys.push({
+							id: theme,
+							title: theme,
+							category: [collectionKey],
+							topic: [theme],
+						});
+					}
+				});
+			});
+
+			setExercise(keys);
+		},
+		[progressIds],
+	);
 
 	useEffect(() => {
 		(async () => {
@@ -87,62 +123,28 @@ export const ProgressPage = () => {
 				console.log('Error fetching progress data: ', err);
 			}
 		})();
-	}, [progressData.length, exercise.length]);
+	}, [progressData.length, exercise.length, getKeysExercise, progressData]);
 
 	useEffect(() => {
-		const totalData = countTakenTest();
-		setTakenTest(totalData);
-	}, [totalProgress]);
+		const countTakenTest = () => {
+			let count: number = 0;
 
-	const countTakenTest = () => {
-		let count: number = 0;
-
-		progressIds.forEach((item) => {
-			const progress = progressData.find((itemData) => itemData.progressStore[item]);
-			if (
-				typeof progress?.progressStore[item] === 'object' &&
-				progress?.progressStore[item] !== null
-			) {
-				count += progress.progressStore[item].takenTestCount.count;
-			}
-		});
-
-		return count;
-	};
-
-	const getKeysExercise = (progress: ProgressStore[]) => {
-		const keys: Exercise[] = [];
-
-		progress.forEach(({ progressStore }) => {
-			Object.keys(progressStore).forEach((fullKey) => {
-				if (fullKey.includes('timestamp')) return;
-				if (!progressIds.includes(fullKey)) {
-					setProgressIds((prev) => [...prev, fullKey]);
-				}
-
-				const theme = fullKey.slice(2); // remove prefix
-				const isAlreadyAdded = keys.some(({ title }) => title.includes(theme));
-				if (isAlreadyAdded) return;
-
-				const collectionKey = Object.keys(ALL_COLLECTIONS).find(
-					(collection) => {
-						return collection.includes(theme.slice(0, -1));
-					}, // crude plural-to-singular match
-				);
-
-				if (collectionKey) {
-					keys.push({
-						id: theme,
-						title: theme,
-						category: [collectionKey],
-						topic: [theme],
-					});
+			progressIds.forEach((item) => {
+				const progress = progressData.find((itemData) => itemData.progressStore[item]);
+				if (
+					typeof progress?.progressStore[item] === 'object' &&
+					progress?.progressStore[item] !== null
+				) {
+					count += progress.progressStore[item].takenTestCount.count;
 				}
 			});
-		});
 
-		setExercise(keys);
-	};
+			return count;
+		};
+
+		const totalData = countTakenTest();
+		setTakenTest(totalData);
+	}, [totalProgress, progressData, progressIds]);
 
 	return (
 		<ContentContainer>

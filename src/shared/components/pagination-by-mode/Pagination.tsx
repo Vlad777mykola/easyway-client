@@ -29,16 +29,17 @@ export type InfinitiveModeType = BaseFieldsDataType & {
 };
 
 export const Pagination = (props: InfinitiveModeType | RandomModeType | ExamModeType) => {
-	const debouncedAutoNavigate = useDebounce(props.isAutoNavigate, 1000);
-	const currentIndex: number = props.ids.findIndex((id) => id === props.currentId);
+	const { ids, navigateTo, currentId, isAutoNavigate, exerciseMode } = props;
+	const debouncedAutoNavigate = useDebounce(isAutoNavigate, 1000);
+	const currentIndex: number = ids.findIndex((id) => id === currentId);
 
 	useEffect(() => {
 		if (debouncedAutoNavigate) {
-			swapQuestion(STEP.NEXT, currentIndex, props.ids, props.navigateTo);
+			swapQuestion(STEP.NEXT, currentIndex, ids, navigateTo);
 		}
-	}, [debouncedAutoNavigate]);
+	}, [debouncedAutoNavigate, currentIndex, ids, navigateTo]);
 
-	switch (props.exerciseMode) {
+	switch (exerciseMode) {
 		case EXERCISE_MODE.isRandom:
 			return <Random {...props} />;
 		case EXERCISE_MODE.isExam:

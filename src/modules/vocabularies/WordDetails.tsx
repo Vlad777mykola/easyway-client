@@ -88,11 +88,11 @@ export const WordDetails = () => {
 	useEffect(() => {
 		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
 		setMode(exerciseConfig as ExerciseModeType);
-	}, [exerciseMode]);
+	}, [exerciseMode, getExerciseConfig]);
 
 	useEffect(() => {
 		setExerciseListProgress('', false, exerciseListProgressStore);
-	}, [exerciseListProgressStore]);
+	}, [exerciseListProgressStore, setExerciseListProgress]);
 
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setWordConfig(key, value);

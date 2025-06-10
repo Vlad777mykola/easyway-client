@@ -64,7 +64,7 @@ export const ExerciseCard = () => {
 				if (exercise) setTask(exercise);
 			})();
 		}
-	}, [taskId]);
+	}, [taskId, getExerciseById]);
 
 	useEffect(() => {
 		getProgressFromLocalStore(exercisesId);
@@ -73,7 +73,7 @@ export const ExerciseCard = () => {
 		return () => {
 			saveProgress(saveProgressToIndexedDB, ID_EXERCISE);
 		};
-	}, [taskId]);
+	}, [taskId, ID_EXERCISE, exercisesId, getProgressFromLocalStore, saveProgressToIndexedDB]);
 
 	const setModesProgress = async (id: string, isResolved: boolean) => {
 		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isExam) {

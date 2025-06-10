@@ -1,22 +1,9 @@
-import { createContext, useState, ReactNode, useContext, useLayoutEffect } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { useState, useLayoutEffect } from 'react';
+import type { ScreenSizeData, ScreenSizeProviderType } from './types';
+import { ScreenSizeContext } from '.';
 
-type ScreenSizeData = {
-	isMobile: boolean;
-	isLaptop: boolean;
-	isDesktop: boolean;
-};
-
-type ScreenSizeProviderType = {
-	children: ReactNode;
-};
-
-const ScreenSizeContext = createContext<ScreenSizeData>({
-	isMobile: false,
-	isLaptop: false,
-	isDesktop: false,
-});
-
-const WIDTH_SCREEN = window.innerWidth;
+export const WIDTH_SCREEN = window.innerWidth;
 
 export const ScreenSizeProvider = ({ children }: ScreenSizeProviderType) => {
 	const [typeOfScreen, setTypeOfScreen] = useState<ScreenSizeData>({
@@ -46,14 +33,9 @@ export const ScreenSizeProvider = ({ children }: ScreenSizeProviderType) => {
 				isDesktop: true,
 			});
 		}
-	}, []);
+	}, [typeOfScreen]);
 
 	return (
 		<ScreenSizeContext.Provider value={{ ...typeOfScreen }}>{children}</ScreenSizeContext.Provider>
 	);
-};
-
-export const usePlatformData = () => {
-	const context = useContext(ScreenSizeContext);
-	return context;
 };

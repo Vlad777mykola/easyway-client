@@ -20,15 +20,10 @@ export const PaginationControls = ({
 	currentIndex: number;
 	navigateTo?: (id: string) => void;
 }) => {
-	const paginationRange: (string | number)[] =
-		useMemo(
-			() => getRangePagination(ids.length, PAGE_SIZE, SIBLING_COUNT, currentIndex + 1),
-			[ids.length, PAGE_SIZE, SIBLING_COUNT, currentIndex],
-		) || [];
-
-	/* if (paginationRange.length < 2) {
-		return null;
-	} */
+	const paginationRange: (string | number)[] = useMemo(
+		() => getRangePagination(ids.length, PAGE_SIZE, SIBLING_COUNT, currentIndex + 1) || [],
+		[ids.length, currentIndex],
+	);
 
 	return (
 		<div className={styles.pagination}>

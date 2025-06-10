@@ -24,7 +24,7 @@ export const VocabularyCard = () => {
 	const [isAutoNavigate, setIsAutoNavigate] = useState(false);
 	const [task, setTask] = useState<ExerciseType>(DEFAULT_DATA_TEST);
 	const [testIsDone, setTestIsDone] = useState<boolean>();
-
+	console.log(setTestIsDone);
 	const exerciseListId = useVocabularyStore.use.exerciseListIds();
 	const isSelectingFormate =
 		useVocabularyStore.use.collectionsExerciseConfig().exerciseFormate ===
@@ -32,13 +32,13 @@ export const VocabularyCard = () => {
 	const collectionsExerciseConfig = useVocabularyStore.use.collectionsExerciseConfig();
 	const exerciseCorrectResponse =
 		useVocabularyStore.use.collectionsExerciseConfig().exerciseCorrectResponse;
-	const words = useVocabularyStore.use.words();
-	const examModeProgress = useProgressStore.use.examModeProgress();
-	const randomModeProgress = useProgressStore.use.randomModeProgress();
-	const examIsDone = examModeProgress.successProgress.length === words.length;
-	const random =
-		randomModeProgress.resolved.every((item) => item.isDone === true) &&
-		randomModeProgress.resolved.length === words.length;
+	// const words = useVocabularyStore.use.words();
+	// const examModeProgress = useProgressStore.use.examModeProgress();
+	// const randomModeProgress = useProgressStore.use.randomModeProgress();
+	// const examIsDone = examModeProgress.successProgress.length === words.length;
+	// const random =
+	// 	randomModeProgress.resolved.every((item) => item.isDone === true) &&
+	// 	randomModeProgress.resolved.length === words.length;
 	const isAutoPlay = useVocabularyStore.use.collectionsExerciseConfig().autoPlay;
 
 	const exerciseListProgress = useVocabularyStore.use.exerciseListProgress();
@@ -55,15 +55,15 @@ export const VocabularyCard = () => {
 		saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE, exerciseListProgress),
 	);
 
-	useEffect(() => {
-		if (collectionsExerciseConfig.exerciseMode === 'randomMode') {
-			setTestIsDone(random);
-		}
+	// useEffect(() => {
+	// 	if (collectionsExerciseConfig.exerciseMode === 'randomMode') {
+	// 		setTestIsDone(random);
+	// 	}
 
-		if (collectionsExerciseConfig.exerciseMode === 'examMode') {
-			setTestIsDone(examIsDone);
-		}
-	}, []);
+	// 	if (collectionsExerciseConfig.exerciseMode === 'examMode') {
+	// 		setTestIsDone(examIsDone);
+	// 	}
+	// }, []);
 
 	useVocabularyListData(setExerciseListResponse, vocabulariesId);
 
@@ -92,7 +92,13 @@ export const VocabularyCard = () => {
 		return () => {
 			saveProgress(saveProgressToIndexedDB, ID_VOCABULARY_EXERCISE, exerciseListProgress);
 		};
-	}, [wordId]);
+	}, [
+		wordId,
+		ID_VOCABULARY_EXERCISE,
+		exerciseListProgress,
+		getExerciseById,
+		saveProgressToIndexedDB,
+	]);
 
 	const setModesProgress = async (id: string, isResolved: boolean) => {
 		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isExam) {

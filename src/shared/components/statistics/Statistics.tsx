@@ -32,7 +32,7 @@ export const Statistics = ({
 
 	useEffect(() => {
 		setProgressPercentage(countWords);
-	}, [countWords, progressStore]);
+	}, [countWords, progressStore, setProgressPercentage]);
 
 	useIndexedDB(getProgressFromIndexedDB, exercisesId);
 

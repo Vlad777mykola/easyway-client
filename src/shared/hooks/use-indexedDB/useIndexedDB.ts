@@ -42,5 +42,5 @@ export const useIndexedDB = (
 				console.error(error);
 			}
 		})();
-	}, []);
+	}, [collectionId, func]);
 };

@@ -63,13 +63,13 @@ export const DictionaryExerciseCard = () => {
 				if (exercise) setTask(exercise);
 			})();
 		}
-	}, [wordId]);
+	}, [wordId, getExerciseById]);
 
 	useEffect(() => {
 		setIsAutoNavigate(false);
 
 		progressDB.set(ID_DICTIONARY_EXERCISE, saveProgressToIndexedDB());
-	}, [wordId]);
+	}, [wordId, getExerciseById, ID_DICTIONARY_EXERCISE, progressDB, saveProgressToIndexedDB]);
 
 	// const setModesProgress = async (id: string, isResolved: boolean) => {
 	// 	if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isExam) {

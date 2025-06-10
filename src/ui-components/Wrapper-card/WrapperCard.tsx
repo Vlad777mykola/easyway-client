@@ -22,7 +22,7 @@ export const WrapperCard = ({
 		if (isMobile && id && !fullScreen) {
 			setFullScreen?.(true);
 		}
-	}, [id]);
+	}, [id, isMobile, fullScreen, setFullScreen]);
 
 	return (
 		<div

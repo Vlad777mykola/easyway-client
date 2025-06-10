@@ -78,7 +78,15 @@ export const CircleProgressBar = ({
 		}, 200);
 
 		return () => clearTimeout(timeout);
-	}, [progress, resolved, untouched]);
+	}, [
+		progress,
+		resolved,
+		untouched,
+		dashArray,
+		dashOffset,
+		dashOffsetResolved,
+		dashOffsetUntouched,
+	]);
 
 	return (
 		<>
