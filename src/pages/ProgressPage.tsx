@@ -63,7 +63,7 @@ export const ProgressPage = () => {
 	};
 
 	useEffect(() => {
-		setCollections(exercise);
+		// setCollections(exercise);
 
 		const exerciseValues = exercise.map((item) => item.title);
 

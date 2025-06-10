@@ -4,13 +4,13 @@ import Layout from '@/layouts/main/Layouts';
 import { DictionaryExerciseCard, DictionaryExerciseDetails } from '@/modules/dictionary';
 import { Auth } from '@/pages/Auth';
 import { WordsSearch } from '@/modules/words';
-import { CreateCollections } from '@/modules/create-collections/CreateCollections';
 
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const ProgressPage = lazy(() => import('@/pages/ProgressPage'));
 const CompleteTest = lazy(() => import('@/pages/CompleteTest'));
 const DictionaryPage = lazy(() => import('@/pages/DictionaryPage'));
 
+const CreateCollections = lazy(() => import('@/modules/create-collections'));
 const ExercisesPage = lazy(() => import('@/pages/ExercisesPage'));
 const VocabulariesPage = lazy(() => import('@/pages/VocabulariesPage'));
 const ExerciseDetails = lazy(() => import('@/pages/ExerciseDetailsPage'));

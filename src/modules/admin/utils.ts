@@ -1,5 +1,5 @@
-import { FiltersRes } from '@/shared/api-hooks/useFilters';
-import { FiltersKeys, FiltersMap } from './types';
+import { FiltersKeys, FiltersRes } from '@/shared/api-hooks/useFilters';
+import { FiltersMap } from './types';
 
 export const getModifyFilters = (filters: FiltersRes) => {
 	const map: FiltersMap = new Map();

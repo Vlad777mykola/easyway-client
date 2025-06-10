@@ -41,6 +41,8 @@ export const FILTER_LABELS = {
 	title: 'title',
 	topic: 'topic',
 	category: 'category',
+	tenses: 'tenses',
+	level: 'level',
 } as const;
 
 export const DEFAULT_COLLECTIONS = [
