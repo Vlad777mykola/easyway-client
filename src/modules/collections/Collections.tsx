@@ -38,17 +38,15 @@ export const Collections = ({ collectionId }: { collectionId: CollectionsType })
 		},
 	] as const;
 
-	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
-		setFilter(key, value);
-	};
-
 	return (
 		<ContentContainer>
 			<ContentContainer.Sidebar>
 				<Sidebar
 					title="Filter"
 					fieldsData={fieldsData}
-					onChange={onChange}
+					onChange={(key: string, value: number[] | string | boolean | string[] | number) =>
+						setFilter(key, value)
+					}
 					onClear={() => setClean()}
 					onSearch={() => setFilterDataOnSearch()}
 				/>
