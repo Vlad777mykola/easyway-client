@@ -21,6 +21,7 @@ type WordsType = {
 export const Main = () => {
 	const [word, setWord] = useState<string>('');
 	const { data: words, refetch } = useWords(word);
+
 	return (
 		<>
 			<Wrapper>
@@ -34,7 +35,7 @@ export const Main = () => {
 				/>
 			</Wrapper>
 			<div className={styles.cards}>
-				{words?.length > 0 && words.map((w: WordsType) => <WordCard {...w} />)}
+				{words?.length > 0 && words.map((w: WordsType) => <WordCard {...w} key={w.id} />)}
 			</div>
 		</>
 	);
