@@ -1,19 +1,23 @@
-.formContainer {
+.filtersContainer {
+	width: 800px;
 	font-family: 'Inter', sans-serif;
 	padding: 40px;
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	width: 100%;
-	height: 800px;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .title {
 	text-align: center;
 	font-size: 24px;
-	margin: 0px 0px 30px;
-	padding: 0;
+	font-weight: 600;
+	color: #4e4e4e;
+}
+
+.formItemContainer {
+	margin-top: 15px;
 }
 
 .formContent {
@@ -21,68 +25,26 @@
 	display: flex;
 	gap: 1.5rem;
 	flex-direction: column;
-}
-
-.formItem {
-	display: flex;
-	width: 100%;
-}
-
-.spaceContainer {
-	width: 100%;
-}
-
-.label {
-	min-width: 110px;
-	display: flex;
-	align-items: center;
-	font-size: 0.9rem;
-	display: flex;
-	justify-content: center;
-	font-weight: 500;
-	color: #4e4e4e;
-}
-
-.errorContainer {
-	width: 100%;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	height: 15px;
-	font-size: 15px;
-	display: flex;
-	justify-content: center;
-	color: var(--color-warning);
-}
-
-.tagsContainer {
-	height: 100px;
-	overflow-y: auto;
-	scrollbar-width: thin;
-	display: flex;
-	width: 100%;
-	flex-wrap: wrap;
-	gap: 4px;
-	align-content: flex-start;
-
-	background: #f9f9f9;
-	border-radius: 8px;
-	padding: 16px;
+	padding: 40px;
 	box-sizing: border-box;
-	box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
 }
 
-/* ATTENTION MAKE GLOBAL CSS STYLE */
-.tag :global(.ant-tag-close-icon) {
-	color: #108ee9;
+.filtersButtons {
+	display: flex;
+	gap: 10px;
+	align-self: end;
 }
 
-@media (max-width: 1024px) {
+.allTags {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	gap: 30px;
+}
+
+@media (max-width: 1200px) {
 	.formContent {
 		width: 100%;
-	}
-
-	.label {
-		font-size: 13px;
-		width: 25%;
+		padding: 0px;
 	}
 }

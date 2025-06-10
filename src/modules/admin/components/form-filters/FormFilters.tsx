@@ -1,144 +1,92 @@
-import React, { useState } from 'react';
-import { Input } from '@/ui-components/Input';
+import { useEffect, useState } from 'react';
 import { Button } from '@/ui-components/Button';
-import { Tag } from '@/ui-components/Tag';
-import { Space } from '@/ui-components/Space';
+import { Typography } from '@/ui-components/Typography';
+import { useFilters } from '@/shared/api-hooks/useFilters';
+
+import { TagSection } from '../tag-section/TagSection';
+import { InputSection } from '../input-section/InputSection';
+import { FiltersKeys, FiltersMap, FiltersValue } from '../../types';
+import { useFiltersMutation } from '../../hooks/useFiltersMutation';
+import { extractValues, getModifyFilters, hasChanges } from '../../utils';
 
 import styles from './formFilters.module.css';
-import { Icon } from '@/ui-components/Icon';
-
-type FormInputs = {
-	tenses: string;
-	topic: string;
-	categories: string;
-};
-
-type FormErrors = FormInputs & {
-	submit: string;
-};
-
-type FormItems = {
-	tenses: string[];
-	topic: string[];
-	categories: string[];
-};
-
-const initialFormInputs: FormInputs = {
-	tenses: '',
-	topic: '',
-	categories: '',
-};
-
-const initialFormItems: FormItems = {
-	tenses: [],
-	topic: [],
-	categories: [],
-};
-
-const initialFormErrors: FormErrors = {
-	tenses: '',
-	topic: '',
-	categories: '',
-	submit: '',
-};
 
 export const FormFilters = () => {
-	const [formInputs, setFormInputs] = useState<FormInputs>(initialFormInputs);
-	const [formItems, setFormItems] = useState<FormItems>(initialFormItems);
-	const [formErrors, setFormErrors] = useState<FormErrors>(initialFormErrors);
+	const [showErrors, setShowErrors] = useState(false);
+	const [filters, setFilters] = useState<FiltersMap>(new Map());
 
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = event.target;
-		setFormInputs((prev) => ({ ...prev, [name]: value }));
+	const { data, refetch } = useFilters();
+
+	const { mutate, isPending, error } = useFiltersMutation(() => {
+		clearForm();
+	});
+
+	useEffect(() => {
+		if (data) {
+			setFilters(getModifyFilters(data));
+		}
+	}, [data]);
+
+	const onUpdateValue = (key: FiltersKeys, value: FiltersValue[]) => {
+		setFilters((prev) => {
+			const copy = new Map(prev);
+			copy.set(key, value);
+			return copy;
+		});
 	};
 
-	const addItems = (key: keyof FormItems) => {
-		setFormInputs((prev) => ({ ...prev, [key]: '' }));
-
-		if (!formItems[key].includes(formInputs[key]) && formInputs[key].length > 0) {
-			setFormItems((prev) => ({
-				...prev,
-				[key]: [...(prev[key] || []), formInputs[key] || ''],
-			}));
+	const onSubmit = () => {
+		if (!hasChanges(filters)) {
+			setShowErrors(true);
+			return;
 		}
 
-		if (formItems[key].includes(formInputs[key])) {
-			setFormErrors((prev) => ({ ...prev, [key]: 'This item is in list' }));
-			setTimeout(() => {
-				setFormErrors((prev) => ({ ...prev, [key]: '' }));
-			}, 3000);
-		}
+		mutate({
+			level: extractValues('level', filters),
+			tenses: extractValues('tenses', filters),
+			topic: extractValues('topic', filters),
+			category: extractValues('category', filters),
+		});
 	};
 
-	const deleteTag = (key: keyof FormItems, value: string) => {
-		const updatedItems = { ...formItems, [key]: formItems[key].filter((item) => item !== value) };
-		setFormItems(updatedItems);
-	};
+	const clearForm = async () => {
+		const result = await refetch();
 
-	const handleSubmit = () => {
-		const haveFilters = Object.values(formItems).some((item) => item.length > 0);
-
-		if (haveFilters) {
-			console.log('FORM ITEMS: ', formItems);
-			setFormInputs(initialFormInputs);
-			setFormItems(initialFormItems);
-			setFormErrors(initialFormErrors);
-		} else {
-			setFormErrors((prev) => ({ ...prev, submit: 'Filters are empty.' }));
-			setTimeout(() => {
-				setFormErrors((prev) => ({ ...prev, submit: '' }));
-			}, 3000);
+		if (result.isSuccess && result.data) {
+			setFilters(getModifyFilters(result.data));
+			setShowErrors(false);
 		}
 	};
 
 	return (
-		<form className={styles.formContainer} onSubmit={(e) => e.preventDefault()}>
-			<div className={styles.formContent}>
-				<h2 className={styles.title}>Filters</h2>
-				{(Object.keys(formItems) as (keyof FormItems)[]).map((key) => (
-					<div className={styles.formItemContainer} key={key}>
-						<div className={styles.formItem}>
-							<Space.Compact className={styles.spaceContainer}>
-								<Input
-									id={key}
-									name={key}
-									status={formErrors[key].length > 0 ? 'warning' : ''}
-									value={formInputs[key]}
-									onChange={(e) => handleChange(e)}
-									addonBefore={<label className={styles.label}>{key.toLocaleUpperCase()}</label>}
-								/>
-								<Button type="primary" onClick={() => addItems(key)}>
-									<Icon icon="plus" variant="default" size="s" />
-								</Button>
-							</Space.Compact>
+		<div className={styles.filtersContainer}>
+			<Typography.Title className={styles.title} level={2}>
+				FiltersMap
+			</Typography.Title>
+			{filters && (
+				<div className={styles.formContent}>
+					{[...filters.entries()].map(([key, value]) => (
+						<div className={styles.formItemContainer} key={key}>
+							<InputSection keyOfFilters={key} filters={value} onAdd={onUpdateValue} />
+
+							<div className={styles.allTags}>
+								<TagSection keyOfFilters={key} filters={value} onAction={onUpdateValue} />
+							</div>
 						</div>
-						<div className={styles.errorContainer}>
-							<span className={styles.error}>{formErrors[key]}</span>
-						</div>
-						<div className={styles.tagsContainer}>
-							{formItems[key].map((item) => (
-								<Tag
-									key={item}
-									className={styles.tag}
-									color="blue"
-									onClose={() => deleteTag(key, item)}
-									closable
-								>
-									{item}
-								</Tag>
-							))}
-						</div>
-					</div>
-				))}
-			</div>
-			<div className={styles.handleSubmit}>
-				<div className={styles.errorContainer}>
-					<span className={styles.error}>{formErrors.submit}</span>
+					))}
 				</div>
-				<Button type="primary" onClick={handleSubmit} block>
+			)}
+			{(showErrors || error) && (
+				<Typography.Text color="red">{error?.message || 'Required some changes'}</Typography.Text>
+			)}
+			<div className={styles.filtersButtons}>
+				<Button type="primary" shape="round" onClick={clearForm}>
+					Clear
+				</Button>
+				<Button type="primary" shape="round" disabled={isPending} onClick={onSubmit}>
 					Submit
 				</Button>
 			</div>
-		</form>
+		</div>
 	);
 };

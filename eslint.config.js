@@ -35,8 +35,11 @@ export default [
 		},
 		rules: {
 			...tseslint.configs.recommended.rules, // Use recommended TypeScript rules
-			'@typescript-eslint/no-unused-vars': ['error'],
 			'css-modules/no-unused-class': 'error',
+			'@typescript-eslint/no-unused-vars': [
+				'error',
+				{ argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+			],
 		},
 
 		ignores: ['dist/', 'node_modules/'],

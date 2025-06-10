@@ -1,9 +1,10 @@
+import { useState } from 'react';
+import { Tabs } from '@/ui-components/Tabs';
+import { Typography } from '@/ui-components/Typography';
+import { WrapperCard } from '@/ui-components/Wrapper-card';
+
 import { FormFilters } from './components/form-filters/FormFilters';
 import { SecondTab } from './components/second-tab/SecondTab';
-import { Tabs } from '@/ui-components/Tabs';
-import { useState } from 'react';
-
-import styles from './admin.module.css';
 
 export const Admin = () => {
 	const [activeKey, setActiveKey] = useState('1');
@@ -11,27 +12,25 @@ export const Admin = () => {
 	const tabs = [
 		{
 			key: '1',
-			label: 'Filters',
+			label: <Typography.Title level={5}>Filters</Typography.Title>,
 			children: <FormFilters />,
 		},
 		{
 			key: '2',
-			label: 'Second Tab',
+			label: <Typography.Title level={5}>Second</Typography.Title>,
 			children: <SecondTab />,
 		},
 	];
 
 	return (
-		<div className={styles.adminContainer}>
-			<div className={styles.formsContainer}>
-				<Tabs
-					items={tabs}
-					activeKey={activeKey}
-					onChange={setActiveKey}
-					size="large"
-					tabPosition="left"
-				/>
-			</div>
-		</div>
+		<WrapperCard>
+			<Tabs
+				items={tabs}
+				activeKey={activeKey}
+				onChange={setActiveKey}
+				size="large"
+				tabPosition="top"
+			/>
+		</WrapperCard>
 	);
 };

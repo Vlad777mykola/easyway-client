@@ -1,0 +1,67 @@
+.explanationContainer {
+	width: 50%;
+	font-family: 'Inter', sans-serif;
+	padding: 40px;
+	box-sizing: border-box;
+	background: #f9f9f9;
+	color: #4e4e4e;
+	display: flex;
+	justify-content: center;
+	border-radius: 0px 0px 10px 0px;
+}
+
+.quoteTitle {
+	font-weight: 700;
+	font-size: 36px;
+}
+
+.blockquote {
+	font-style: italic;
+	font-size: 18px;
+	margin-top: 35px;
+}
+
+.blockquote::before {
+	content: '“';
+	font-size: 18px;
+}
+
+.blockquote::after {
+	content: '”';
+	font-size: 18px;
+}
+
+.nameOfQuote {
+	font-weight: 600;
+	font-style: italic;
+}
+
+.explanation {
+	font-family: 'Inter', sans-serif;
+	margin-top: 50px;
+	font-size: 16px;
+	font-weight: 800;
+	counter-reset: item;
+	list-style: none;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.explanation li {
+	counter-increment: item;
+	line-height: 30px;
+}
+
+.explanation li::before {
+	content: counter(item) '.';
+	margin-right: 10px;
+	color: #1677ff;
+}
+
+@media (max-width: 1200px) {
+	.explanationContainer {
+		display: none;
+	}
+}

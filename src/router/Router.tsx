@@ -3,8 +3,8 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@/layouts/main/Layouts';
 import { DictionaryExerciseCard, DictionaryExerciseDetails } from '@/modules/dictionary';
 import { Auth } from '@/pages/Auth';
+import { WordsSearch } from '@/modules/words';
 import { CreateCollections } from '@/modules/create-collections/CreateCollections';
-// import Home from '@/pages/Home';
 
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const ProgressPage = lazy(() => import('@/pages/ProgressPage'));
@@ -24,10 +24,11 @@ export const router = createBrowserRouter([
 		path: '/',
 		element: <Layout />,
 		children: [
+			{ path: '', element: <WordsSearch /> },
 			{ path: 'profile', element: <ProfilePage /> },
 			{ path: 'signin', element: <Auth isSignup={true} /> },
 			{ path: 'signup', element: <Auth /> },
-			{ path: '', element: <ExercisesPage /> },
+
 			{ path: 'create/collection', element: <CreateCollections /> },
 
 			{ path: 'exercises', element: <ExercisesPage /> },
