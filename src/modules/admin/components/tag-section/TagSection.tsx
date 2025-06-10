@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { Tag } from '@/ui-components/Tag';
 import { Typography } from '@/ui-components/Typography';
-import { FiltersKeys, FiltersValue } from '../form-filters/FormFilters';
 
 import styles from './tagSection.module.css';
+import { FiltersKeys, FiltersValue } from '../../types';
 
 export const TagSection = ({
 	keyOfFilters,
@@ -52,7 +52,13 @@ export const TagSection = ({
 				<div className={styles.tagsContainer}>
 					{created &&
 						created.map((i) => (
-							<Tag className={styles.tag} color="green" onClose={() => onClose(i)} closable>
+							<Tag
+								className={styles.tag}
+								key={i.value}
+								color="green"
+								onClose={() => onClose(i)}
+								closable
+							>
 								{i.value}
 							</Tag>
 						))}
@@ -66,6 +72,7 @@ export const TagSection = ({
 							<Tag
 								className={styles.tag}
 								color="red"
+								key={i.value}
 								onClose={() => onClose({ ...i, action: 'existing' })}
 								closable
 							>
@@ -82,6 +89,7 @@ export const TagSection = ({
 							<Tag
 								className={styles.tag}
 								color="blue"
+								key={i.value}
 								onClose={() => onClose({ ...i, action: 'deleted' })}
 								closable
 							>

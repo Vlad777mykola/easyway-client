@@ -1,24 +1,13 @@
-import z from 'zod';
 import { useState } from 'react';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
 import { Typography } from '@/ui-components/Typography';
 import { capitalize } from '@/shared/utils/capitalize';
 import { FieldGroup } from '@/ui-components/FieldGroup';
-import { FiltersKeys, FiltersValue } from '../form-filters/FormFilters';
+import { FiltersKeys, FiltersValue } from '../../types';
 
 import styles from './inputSection.module.css';
-
-const createFormDataSchema = (filters: FiltersValue[]) =>
-	z
-		.string()
-		.min(3, 'Input is required')
-		.max(20, 'Too long')
-		.regex(/^[A-Za-z]+$/, 'Only letters are allowed (no numbers or symbols)')
-		.transform((val) => val.trim())
-		.refine((val) => !filters.some((f) => f.value.toLowerCase() === val.toLowerCase()), {
-			message: 'This value already exists',
-		});
+import { createFormDataSchema } from '../../zod-schemas/form-filters.schema';
 
 export const InputSection = ({
 	keyOfFilters,

@@ -1,11 +1,10 @@
 import { useState } from 'react';
-
-import { WrapperCard } from '@/ui-components/Wrapper-card';
 import { Tabs } from '@/ui-components/Tabs';
+import { Typography } from '@/ui-components/Typography';
+import { WrapperCard } from '@/ui-components/Wrapper-card';
 
 import { FormFilters } from './components/form-filters/FormFilters';
 import { SecondTab } from './components/second-tab/SecondTab';
-import { Typography } from '@/ui-components/Typography';
 
 export const Admin = () => {
 	const [activeKey, setActiveKey] = useState('1');
@@ -26,7 +25,6 @@ export const Admin = () => {
 	return (
 		<WrapperCard>
 			<Tabs
-				// className={styles.tabs}
 				items={tabs}
 				activeKey={activeKey}
 				onChange={setActiveKey}
