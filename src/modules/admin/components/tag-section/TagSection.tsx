@@ -3,7 +3,8 @@ import { Tag } from '@/ui-components/Tag';
 import { Typography } from '@/ui-components/Typography';
 
 import styles from './tagSection.module.css';
-import { FiltersKeys, FiltersValue } from '../../types';
+import { FiltersValue } from '../../types';
+import { FiltersKeys } from '@/shared/api-hooks/useFilters';
 
 export const TagSection = ({
 	keyOfFilters,

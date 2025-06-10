@@ -15,6 +15,10 @@ export const sideMenuItems = [
 
 export const profileMenuItems = [
 	{
+		name: 'Admin',
+		link: '/admin',
+	},
+	{
 		name: 'Profile',
 		link: '/profile',
 	},

@@ -10,6 +10,7 @@ const ProgressPage = lazy(() => import('@/pages/ProgressPage'));
 const CompleteTest = lazy(() => import('@/pages/CompleteTest'));
 const DictionaryPage = lazy(() => import('@/pages/DictionaryPage'));
 
+const CreateCollections = lazy(() => import('@/modules/create-collections'));
 const ExercisesPage = lazy(() => import('@/pages/ExercisesPage'));
 const VocabulariesPage = lazy(() => import('@/pages/VocabulariesPage'));
 const ExerciseDetails = lazy(() => import('@/pages/ExerciseDetailsPage'));
@@ -27,6 +28,8 @@ export const router = createBrowserRouter([
 			{ path: 'profile', element: <ProfilePage /> },
 			{ path: 'signin', element: <Auth isSignup={true} /> },
 			{ path: 'signup', element: <Auth /> },
+
+			{ path: 'create/collection', element: <CreateCollections /> },
 
 			{ path: 'exercises', element: <ExercisesPage /> },
 			{ path: 'exercises/:exercisesId', element: <ExerciseDetails /> },

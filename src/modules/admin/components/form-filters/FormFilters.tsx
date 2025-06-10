@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Typography } from '@/ui-components/Typography';
-import { useFilters } from '@/shared/api-hooks/useFilters';
+import { FiltersKeys, useFilters } from '@/shared/api-hooks/useFilters';
 
 import { TagSection } from '../tag-section/TagSection';
 import { InputSection } from '../input-section/InputSection';
-import { FiltersKeys, FiltersMap, FiltersValue } from '../../types';
+import { FiltersMap, FiltersValue } from '../../types';
 import { useFiltersMutation } from '../../hooks/useFiltersMutation';
 import { extractValues, getModifyFilters, hasChanges } from '../../utils';
 
@@ -77,7 +77,7 @@ export const FormFilters = () => {
 				</div>
 			)}
 			{(showErrors || error) && (
-				<Typography.Text color="red">{error?.message || 'Required some changes'}</Typography.Text>
+				<Typography.Text type="danger">{error?.message || 'Required some changes'}</Typography.Text>
 			)}
 			<div className={styles.filtersButtons}>
 				<Button type="primary" shape="round" onClick={clearForm}>

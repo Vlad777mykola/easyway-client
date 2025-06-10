@@ -9,6 +9,8 @@ export type FiltersRes = {
 	category: string[];
 };
 
+export type FiltersKeys = keyof FiltersRes;
+
 export const useFilters = (): UseQueryResult<FiltersRes, Error> => {
 	return useQuery<FiltersRes, Error>({
 		queryKey: ['filters'],
