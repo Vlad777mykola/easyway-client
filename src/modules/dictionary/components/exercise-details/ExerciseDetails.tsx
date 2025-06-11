@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
-import { List } from '@/shared/components/list';
+import { List } from '@/features/list';
 import { useNavigate } from '@/shared/hooks/use-navigate';
 import { useQueryParam } from '@/shared/hooks/use-query-params';
 import { ContentContainer } from '@/ui-components/Content-Container';
-import { Statistics } from '@/shared/components/statistics/Statistics';
-import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
+import { Statistics } from '@/features/statistics/Statistics';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sidebar';
 import {
 	useDictionaryStore,
 	EXERCISE_MODE,

@@ -3,7 +3,7 @@ import { CollectionsType } from '@/shared/constants';
 import { useCollectionFilter } from '@/store/collection-filter';
 import { FILTER_LABELS } from '@/shared/constants/collections/data';
 import { ContentContainer } from '@/ui-components/Content-Container';
-import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sidebar';
 
 import { ListCollections } from './components/lits-collections/ListCollections';
 import { useFilters } from '@/shared/api-hooks/useFilters';

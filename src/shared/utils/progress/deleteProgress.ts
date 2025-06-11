@@ -1,4 +1,4 @@
-import { deleteState, clearAllState } from '@/db/indexedDB';
+import { deleteState, clearAllState } from '@/shared/db/indexedDB';
 
 export const deleteProgress = async (func: () => void, collectionId: string) => {
 	await deleteState(collectionId);

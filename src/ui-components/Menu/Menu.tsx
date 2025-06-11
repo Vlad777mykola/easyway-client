@@ -1,10 +1,11 @@
 /* eslint-disable css-modules/no-unused-class */
 import { useState, ReactNode } from 'react';
-import { Button } from '@/ui-components/Button/Button';
-import type { IconVariantsType } from '@/ui-components/Icon/Icon';
 import { Icon } from '@/ui-components/Icon';
-import { CircleButton } from '@/ui-components/CircleButton';
 import { classes } from '@/ui-design-atoms/classes';
+import { Button } from '@/ui-components/Button/Button';
+import { CircleButton } from '@/ui-components/CircleButton';
+import type { IconVariantsType } from '@/ui-components/Icon/Icon';
+
 import styles from './menu.module.css';
 
 const Side = {

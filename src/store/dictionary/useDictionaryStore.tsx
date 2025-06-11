@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { ExerciseResponseType } from '@/shared/constants/collections/data';
-import { getReadyQuestion } from '@/shared/services/get-variants';
+import { getReadyQuestion } from '@/shared/utils/get-variants';
 import { shuffleArray } from '@/shared/utils/shuffle-array';
 import {
 	// ExerciseListProgressType,

@@ -5,7 +5,7 @@ import { ALL_COLLECTIONS, CollectionsType } from '@/shared/constants';
 import { ProgressStoreState } from '@/store/progress';
 import { useCollectionFilter } from '@/store/collection-filter';
 import { ContentContainer } from '@/ui-components/Content-Container';
-import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sidebar';
 import { FILTER_LABELS } from '@/shared/constants/collections/data';
 import { useMultipleProgress } from '@/modules/progress/hooks/useMultipleProgress';
 import { TotalResult } from '@/modules/progress/components/total-result/TotalResult';

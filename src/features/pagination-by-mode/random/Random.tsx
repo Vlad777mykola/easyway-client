@@ -1,5 +1,5 @@
 import { RandomModeType } from '../Pagination';
-import { Progress } from '@/shared/components/progress';
+import { Progress } from '@/features/progress';
 import { getRandomInteger } from '@/shared/utils/get-random-integer';
 import { NextPrevQuestion } from '@/ui-components/NextPrevQuestion/NextPrevQuestion';
 

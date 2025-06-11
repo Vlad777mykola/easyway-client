@@ -1,9 +1,10 @@
 import { ReactNode, useLayoutEffect } from 'react';
-import styles from './wrapperCard.module.css';
 import { Icon } from '@/ui-components/Icon';
 import { classes } from '@/ui-design-atoms/classes';
 import { usePlatformData } from '@/context/platform';
 import { useCommonStore } from '@/store/common';
+
+import styles from './wrapperCard.module.css';
 
 export const WrapperCard = ({
 	children,

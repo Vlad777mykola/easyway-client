@@ -1,12 +1,11 @@
 import z from 'zod';
 import axios from 'axios';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { router } from '@/router/Router';
+import { Link, useNavigate } from 'react-router-dom';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
 import { useMutation } from '@tanstack/react-query';
-import { WrapperCard } from '@/ui-components/Wrapper-card';
+import { WrapperCard } from '@/features/Wrapper-card';
 import { Typography } from '@/ui-components/Typography';
 
 import style from './login.module.css';
@@ -28,6 +27,7 @@ export const Signin = () => {
 	const [authData, setAuth] = useState<Partial<FormData>>({});
 	const [showErrors, setShowErrors] = useState(false);
 	const { refetch } = useAuthData();
+	const navigate = useNavigate();
 
 	const mutation = useMutation({
 		mutationFn: (data: { email: string; password: string }) => {
@@ -37,7 +37,7 @@ export const Signin = () => {
 		},
 		onSuccess: () => {
 			refetch();
-			router.navigate('/');
+			navigate('/');
 		},
 	});
 

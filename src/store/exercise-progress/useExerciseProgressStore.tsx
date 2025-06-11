@@ -1,8 +1,22 @@
-import { localstorage } from '@/shared/utils/local-storage/localstorage';
 import { create } from 'zustand';
-import { ExerciseResponseType } from '@/shared/constants/collections/data';
-import { getReadyQuestion } from '@/shared/services/get-variants';
 import { shuffleArray } from '@/shared/utils/shuffle-array';
+import { localstorage } from '@/shared/utils/local-storage/localstorage';
+import { ExerciseResponseType } from '@/shared/constants/collections/data';
+import { fetchDefinition, VariantsType } from '@/shared/utils/get-variants/fetchDefinition';
+
+export const getReadyQuestion = async (correctAnswers: string[]) => {
+	const hourPattern = /(?:[01]?\d|2[0-3]):([0-5]?\d)?/;
+	let readyAnswers: VariantsType = {};
+	for (let i = 0; i < correctAnswers.length; i++) {
+		const word = hourPattern.test(correctAnswers[i])
+			? correctAnswers[i]
+			: correctAnswers[i].replace(/[^a-zA-Z0-9]/g, '');
+		const answers: string[] = await fetchDefinition(word);
+		readyAnswers[correctAnswers[i]] = answers;
+	}
+
+	return readyAnswers;
+};
 
 export const EXERCISE_MODE = {
 	isExam: 'examMode',

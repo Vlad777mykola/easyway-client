@@ -1,4 +1,4 @@
-import { getAllDataFromIndexedDB } from '@/db/indexedDB';
+import { getAllDataFromIndexedDB } from '@/shared/db/indexedDB';
 
 export const fetchProgressData = async () => {
 	try {

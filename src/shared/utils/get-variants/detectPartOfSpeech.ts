@@ -1,5 +1,19 @@
 import nlp from 'compromise';
-import { ARTICLES, PRONOUN_CATEGORIES } from '../../../modules/exercise/constants';
+import { Variants } from './showVariants';
+
+export const PRONOUN_CATEGORIES: Variants = {
+	subject: ['I', 'you', 'he', 'she', 'it', 'we', 'they'],
+	object: ['me', 'you', 'him', 'her', 'it', 'us', 'them'],
+	indefinite: ['some', 'any', 'no', 'little', 'few', 'many', 'much'],
+	interrogative: ['who', 'what', 'which', 'whose', 'whom'],
+	relative: ['who', 'what', 'which', 'whose', 'whom'],
+	possessive: ['my', 'your', 'his', 'her', 'its', 'our', 'their'],
+	reflexive: ['myself', 'yourself', 'himself', 'herself', 'itself', 'ourselves', 'themselves'],
+};
+
+export const ARTICLES: string[] = ['a', 'an', 'the'];
+
+export const NEGATIONS: string[] = ['not', 'never', 'without', 'nor'];
 
 const detectPartOfSpeech = (word: string) => {
 	const doc = nlp(word.toLocaleLowerCase());

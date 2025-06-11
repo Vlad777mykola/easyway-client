@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { Icon } from '@/ui-components/Icon';
-import { PaginationControls } from '@/ui-components/PaginationControls/PaginationControls';
 
 import styles from './errorProgressPagination.module.css';
+import { PaginationControls } from '../pagination-controls/PaginationControls';
 
 const RIGHT = 'right';
 const LEFT = 'left';

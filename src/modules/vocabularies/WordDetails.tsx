@@ -4,10 +4,10 @@ import {
 	EXERCISE_FORMATE,
 	ExerciseModeType,
 } from '@/store/exercise-progress/useExerciseProgressStore';
-import { Statistics } from '@/shared/components/statistics/Statistics';
+import { Statistics } from '@/features/statistics/Statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
-import { List } from '@/shared/components/list';
-import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
+import { List } from '@/features/list';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sidebar';
 import { EXERCISE_MODE, useVocabularyStore, WORD_CONFIG } from '@/store/vocabulary-collection';
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { EXERCISE_CONFIG_LABELS } from './constants';

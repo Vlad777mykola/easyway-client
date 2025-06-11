@@ -1,4 +1,4 @@
-import { detectPartOfSpeech } from '@/shared/services/get-variants/detectPartOfSpeech';
+import { detectPartOfSpeech } from '@/shared/utils/get-variants/detectPartOfSpeech';
 import { getNounsOrAdverbs, showVariants, getVerbs } from './showVariants';
 import {
 	ARTICLES,

@@ -13,27 +13,12 @@ export const ScreenSizeProvider = ({ children }: ScreenSizeProviderType) => {
 	});
 
 	useLayoutEffect(() => {
-		if (WIDTH_SCREEN >= 320 && WIDTH_SCREEN <= 480) {
-			setTypeOfScreen({
-				...typeOfScreen,
-				isMobile: true,
-			});
-		}
-
-		if (WIDTH_SCREEN >= 481 && WIDTH_SCREEN <= 1024) {
-			setTypeOfScreen({
-				...typeOfScreen,
-				isLaptop: true,
-			});
-		}
-
-		if (WIDTH_SCREEN >= 1201) {
-			setTypeOfScreen({
-				...typeOfScreen,
-				isDesktop: true,
-			});
-		}
-	}, [typeOfScreen]);
+		setTypeOfScreen({
+			isMobile: WIDTH_SCREEN >= 320 && WIDTH_SCREEN <= 480,
+			isLaptop: WIDTH_SCREEN >= 481 && WIDTH_SCREEN <= 1024,
+			isDesktop: WIDTH_SCREEN >= 1201,
+		});
+	}, []);
 
 	return (
 		<ScreenSizeContext.Provider value={{ ...typeOfScreen }}>{children}</ScreenSizeContext.Provider>

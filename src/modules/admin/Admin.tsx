@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Tabs } from '@/ui-components/Tabs';
 import { Typography } from '@/ui-components/Typography';
-import { WrapperCard } from '@/ui-components/Wrapper-card';
+import { WrapperCard } from '@/features/Wrapper-card';
 
 import { FormFilters } from './components/form-filters/FormFilters';
 import { SecondTab } from './components/second-tab/SecondTab';

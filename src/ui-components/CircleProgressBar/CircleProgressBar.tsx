@@ -2,8 +2,8 @@
 import { useEffect, useState } from 'react';
 import { CountUp } from '@ui-components/CountUp';
 import { classes } from '@/ui-design-atoms/classes';
-import { Size, SizeType, VariantType } from '@/shared/constants/parameters';
 import styles from './circleProgressBar.module.css';
+import { Size, SizeType, VariantType } from '@/ui-design-atoms/parameters';
 
 const SIZE_TYPES = {
 	xs: 50,

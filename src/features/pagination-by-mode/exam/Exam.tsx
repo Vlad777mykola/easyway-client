@@ -2,7 +2,7 @@ import { ExamModeType } from '../Pagination';
 import { swapQuestion } from '../utils/swapQuestion';
 import { STEP } from '../constants/constants';
 import { NextPrevQuestion } from '@/ui-components/NextPrevQuestion/NextPrevQuestion';
-import { PaginationControls } from '@/ui-components/PaginationControls/PaginationControls';
+import { PaginationControls } from '@/features/pagination-controls/PaginationControls';
 
 export const Exam = (props: ExamModeType) => {
 	const { ids, currentId, navigateTo } = props;

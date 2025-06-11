@@ -1,7 +1,7 @@
-import { ErrorProgressPagination } from '@/shared/components/error-progress-pagination/ErrorProgressPagination';
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
 import styles from './addInfo.module.css';
+import { ErrorProgressPagination } from '@/features/error-progress-pagination/ErrorProgressPagination';
 
 export const AddInfo = ({
 	progress,

@@ -3,11 +3,11 @@ import { useProgressStore } from '@/store/progress';
 import { useVocabularyStore } from '@/store/vocabulary-collection';
 import { Icon } from '@/ui-components/Icon';
 import { CircleButton } from '@/ui-components/CircleButton';
-import { PaginationControls } from '@/ui-components/PaginationControls/PaginationControls';
-import { EXERCISE_CONFIG } from '@/modules/exercise/constants';
 import { EXERCISE_MODE } from '@/store/exercise-progress';
 import { useNavigate } from 'react-router-dom';
 import styles from './errorProgressPagination.module.css';
+import { PaginationControls } from '@/features/pagination-controls/PaginationControls';
+import { EXERCISE_CONFIG } from './constants';
 
 const RIGHT = 'right';
 const LEFT = 'left';

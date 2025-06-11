@@ -5,8 +5,17 @@ import { Button } from '@/ui-components/Button';
 import { speak } from '@/shared/utils/speak';
 import { Icon } from '@/ui-components/Icon';
 
-import { FormateType } from '@/modules/vocabularies/components/select-formate/types';
 import styles from './exerciseContent.module.css';
+import { Dispatch, SetStateAction } from 'react';
+
+export type FormateType = {
+	task: ExerciseType;
+	isSelectingFormate: boolean;
+	isAutoPlay: boolean;
+	setTask: Dispatch<SetStateAction<ExerciseType>>;
+	setIsAutoNavigate: Dispatch<SetStateAction<boolean>>;
+	updateProgress: (id: string, isCorrectWord: boolean) => void;
+};
 
 export const ExerciseUI = ({
 	task,
