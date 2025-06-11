@@ -4,7 +4,7 @@ import { DOTS, PAGE_SIZE, SIBLING_COUNT } from '@/features/pagination-by-mode/co
 import { getRangePagination } from './utils/getRangePagination';
 import { ExerciseModeType } from '@/store/exercise-progress/useExerciseProgressStore';
 
-import styles from './pagination-controls.module.css';
+import styles from './paginationControls.module.css';
 
 export const PaginationControls = ({
 	exerciseMode,

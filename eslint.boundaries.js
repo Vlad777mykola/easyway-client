@@ -12,6 +12,10 @@ export const eslintBoundariesConfig = {
 		},
 
 		'boundaries/elements': [
+			// {
+			// 	type: 'app',
+			// 	pattern: './src/app',
+			// },
 			{
 				type: 'context',
 				pattern: './src/context',
@@ -239,12 +243,16 @@ export const eslintBoundariesConfig = {
 
 				rules: [
 					{
-						target: ['layouts', 'modules', 'pages', 'router', 'shared', 'store', 'context'],
+						target: ['layouts', 'modules', 'router', 'shared', 'store', 'context'],
 						allow: '**',
 					},
 					{
 						target: ['ui-components', 'ui-design-atoms', 'features'],
 						allow: ['index.(ts|tsx)'],
+					},
+					{
+						target: ['pages'],
+						allow: ['index.(ts|tsx)', '*pages.tsx'],
 					},
 				],
 			},

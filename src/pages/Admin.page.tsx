@@ -1,7 +1,7 @@
 import { Admin } from '@/modules/admin/Admin';
 
-const AdminPage = () => {
+function AdminPage() {
 	return <Admin />;
-};
+}
 
-export default AdminPage;
+export const Component = AdminPage;

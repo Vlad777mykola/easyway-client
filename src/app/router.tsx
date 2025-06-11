@@ -1,11 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy } from 'react';
+import { ROUTES } from '@/shared/model/routes';
 import { createBrowserRouter } from 'react-router-dom';
-import Layout from '@/layouts/main/Layouts';
-import { DictionaryExerciseCard, DictionaryExerciseDetails } from '@/modules/dictionary';
+// import { DictionaryExerciseCard, DictionaryExerciseDetails } from '@/modules/dictionary';
 import { Auth } from '@/pages/Auth';
-import { WordsSearch } from '@/modules/words';
 
+const Layout = lazy(() => import('@/layouts/main/Layouts'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const ProgressPage = lazy(() => import('@/pages/ProgressPage'));
 const CompleteTest = lazy(() => import('@/pages/CompleteTest'));
@@ -18,14 +18,12 @@ const ExerciseDetails = lazy(() => import('@/pages/ExerciseDetailsPage'));
 const WordDetailsPage = lazy(() => import('@/pages/WordDetailsPage'));
 const CompleteWordTest = lazy(() => import('@/pages/CompleteWordTest'));
 
-const AdminPage = lazy(() => import('@/pages/AdminPage'));
-
 export const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <Layout />,
 		children: [
-			{ path: '', element: <WordsSearch /> },
+			{ path: '', lazy: () => import('@/pages/Dictionary.page') },
 			{ path: 'profile', element: <ProfilePage /> },
 			{ path: 'signin', element: <Auth isSignup={true} /> },
 			{ path: 'signup', element: <Auth /> },
@@ -41,15 +39,18 @@ export const router = createBrowserRouter([
 			{ path: 'vocabularies/:vocabulariesId/word/:wordId', element: <CompleteWordTest /> },
 
 			{ path: 'dictionaries', element: <DictionaryPage /> },
-			{ path: 'dictionaries/:dictionaryId', element: <DictionaryExerciseDetails /> },
-			{
-				path: 'dictionaries/:dictionaryId/word/:wordId',
-				element: <DictionaryExerciseCard />,
-			},
+			// { path: 'dictionaries/:dictionaryId', element: <DictionaryExerciseDetails /> },
+			// {
+			// 	path: 'dictionaries/:dictionaryId/word/:wordId',
+			// 	element: <DictionaryExerciseCard />,
+			// },
 
 			{ path: 'progress', element: <ProgressPage /> },
 
-			{ path: 'admin', element: <AdminPage /> },
+			{
+				path: ROUTES.ADMIN,
+				lazy: () => import('@/pages/Admin.page'),
+			},
 		],
 	},
 ]);
