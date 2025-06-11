@@ -43,6 +43,13 @@ export default [
 				{ argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
 			],
 		},
+		settings: {
+			'import/resolver': {
+				typescript: {
+					project: './tsconfig.json',
+				},
+			},
+		},
 
 		ignores: ['dist/', 'node_modules/'],
 	},

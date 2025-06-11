@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
 import { Typography } from '@/ui-components/Typography';
-import { WrapperCard } from '@/features/wrapper-card';
+import { WrapperCard } from '@/features/wrap-card';
 import axios from 'axios';
 
 import style from './signUp.module.css';

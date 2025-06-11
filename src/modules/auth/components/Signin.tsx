@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
 import { useMutation } from '@tanstack/react-query';
-import { WrapperCard } from '@/features/wrapper-card';
+import { WrapperCard } from '@/features/wrap-card';
 import { Typography } from '@/ui-components/Typography';
 import { useAuthData } from '@/context/auth';
 

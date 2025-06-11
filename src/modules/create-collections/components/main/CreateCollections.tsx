@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/ui-components/Input';
 import { useForm, Controller } from 'react-hook-form';
 import { FieldGroup } from '@/ui-components/FieldGroup';
-import { WrapperCard } from '@/features/wrapper-card';
+import { WrapperCard } from '@/features/wrap-card';
 import { FiltersKeys, useFilters } from '@/shared/api-hooks/useFilters';
 import { Button } from '@/ui-components/Button';
 import { Select } from '@/ui-components/Select';
