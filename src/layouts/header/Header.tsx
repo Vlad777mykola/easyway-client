@@ -1,12 +1,12 @@
-import { Menu } from '@/ui-components/Menu';
+import { Menu } from '@/features/Menu';
 import { useAuthData } from '@/context/auth';
 import { Navbar } from '@/features/navbar';
+import { useNavigate } from 'react-router-dom';
 import { NavHeader } from '@/features/nav-header';
 import { SideMenu } from './components/side-menu/SideMenu';
 import { profileMenuItems, sideMenuItems } from './constants';
 
 import styles from './header.module.css';
-import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
 	const { isLogIn } = useAuthData();

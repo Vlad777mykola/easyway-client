@@ -117,7 +117,7 @@ export const eslintBoundariesConfig = {
 							// 'context',
 							// 'features',
 							'layouts',
-							// 'modules',
+							'modules',
 							'pages',
 							'router',
 							// 'shared',
@@ -169,7 +169,7 @@ export const eslintBoundariesConfig = {
 							'modules',
 							'pages',
 							'router',
-							// 'shared',
+							'shared',
 							// 'store', // need to remove and no to allow
 							// 'ui-components',
 							// 'ui-design-atoms',
@@ -204,7 +204,7 @@ export const eslintBoundariesConfig = {
 							'router',
 							'shared',
 							'store',
-							// 'ui-components',
+							// 'ui-components',  // need to be changed
 							// 'ui-design-atoms',
 						],
 						message:
@@ -228,6 +228,25 @@ export const eslintBoundariesConfig = {
 							'The module of the lower layer (${file.type}) cannot import the module of the higher layer (${dependency.type})',
 					},
 				],
+				// 'boundaries/entry-point': [
+				// 	2,
+				// 	{
+				// 		default: 'disallow',
+				// 		message:
+				// 			'The module (${file.type}) must be imported via the public API. Direct import from ${dependency.source} is prohibited',
+
+				// 		rules: [
+				// 			{
+				// 				target: ['ui-components', 'ui-design-atoms'],
+				// 				allow: '**',
+				// 			},
+				// 			{
+				// 				target: ['features'],
+				// 				allow: ['index.(ts|tsx)'],
+				// 			},
+				// 		],
+				// 	},
+				// ],
 			},
 		],
 	},
