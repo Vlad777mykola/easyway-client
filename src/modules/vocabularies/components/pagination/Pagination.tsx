@@ -1,4 +1,4 @@
-import { Pagination } from '@/features/pagination-by-mode/Pagination';
+import { Pagination } from '@/features/pagination-by-mode';
 import { EXERCISE_MODE, useVocabularyStore } from '@/store/vocabulary-collection';
 
 export const PaginationExercise = ({

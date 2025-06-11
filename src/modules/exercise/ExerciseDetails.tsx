@@ -1,12 +1,12 @@
 import { ReactNode, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ContentContainer } from '@/ui-components/Content-Container';
-import { List } from '@/features/list/List';
+import { List } from '@/features/list';
 import { EXERCISE_CONFIG, EXERCISE_FORMATE } from '@/store/exercise-progress';
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
-import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../features/sidebar';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
-import { Statistics } from '@/features/statistics/Statistics';
+import { Statistics } from '@/features/statistics';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
 export const ExerciseDetails = (): ReactNode => {

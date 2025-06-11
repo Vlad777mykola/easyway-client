@@ -4,7 +4,7 @@ import { useProgressStore } from '@/store/progress';
 import { EXERCISE_CONFIG } from '@/store/exercise-progress';
 import type { ExerciseType } from '@/store/dictionary';
 // import { DoneCard } from '@/shared/components/done-card';
-import { WrapperCard } from '@/features/Wrapper-card';
+import { WrapperCard } from '@/features/wrapper-card';
 // import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
 import { useDictionaryStore, DEFAULT_DATA_TEST, EXERCISE_FORMATE } from '@/store/dictionary';
 import { useIndexDB } from '@/shared/hooks/use-index-db';

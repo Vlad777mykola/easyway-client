@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Button } from '@/ui-components/Button';
-import { StandardProgressBar } from '@/ui-components/CustomProgress/StandartProgressBar';
+import { StandardProgressBar } from '@/ui-components/CustomProgress';
 import { CountUp } from '@/ui-components/CountUp';
 import { AddInfo } from './components/add-info/AddInfo';
 import { useProgressStore } from '@/store/progress';

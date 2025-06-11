@@ -228,25 +228,25 @@ export const eslintBoundariesConfig = {
 							'The module of the lower layer (${file.type}) cannot import the module of the higher layer (${dependency.type})',
 					},
 				],
-				// 'boundaries/entry-point': [
-				// 	2,
-				// 	{
-				// 		default: 'disallow',
-				// 		message:
-				// 			'The module (${file.type}) must be imported via the public API. Direct import from ${dependency.source} is prohibited',
+			},
+		],
+		'boundaries/entry-point': [
+			2,
+			{
+				default: 'disallow',
+				message:
+					'The module (${file.type}) must be imported via the public API. Direct import from ${dependency.source} is prohibited',
 
-				// 		rules: [
-				// 			{
-				// 				target: ['ui-components', 'ui-design-atoms'],
-				// 				allow: '**',
-				// 			},
-				// 			{
-				// 				target: ['features'],
-				// 				allow: ['index.(ts|tsx)'],
-				// 			},
-				// 		],
-				// 	},
-				// ],
+				rules: [
+					{
+						target: ['layouts', 'modules', 'pages', 'router', 'shared', 'store', 'context'],
+						allow: '**',
+					},
+					{
+						target: ['ui-components', 'ui-design-atoms', 'features'],
+						allow: ['index.(ts|tsx)'],
+					},
+				],
 			},
 		],
 	},

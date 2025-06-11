@@ -4,7 +4,7 @@ import {
 	EXERCISE_FORMATE,
 	ExerciseModeType,
 } from '@/store/exercise-progress/useExerciseProgressStore';
-import { Statistics } from '@/features/statistics/Statistics';
+import { Statistics } from '@/features/statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
 import { List } from '@/features/list';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sidebar';

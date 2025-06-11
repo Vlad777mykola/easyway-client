@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
 import { Result } from '@/ui-components/Result';
-import { WrapperCard } from '@/features/Wrapper-card';
+import { WrapperCard } from '@/features/wrapper-card';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
 import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { useExerciseListData } from './hooks/useExerciseListData';

@@ -5,11 +5,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
 import { useMutation } from '@tanstack/react-query';
-import { WrapperCard } from '@/features/Wrapper-card';
+import { WrapperCard } from '@/features/wrapper-card';
 import { Typography } from '@/ui-components/Typography';
+import { useAuthData } from '@/context/auth';
 
 import style from './login.module.css';
-import { useAuthData } from '@/context/auth';
 
 const INITIAL_FORM_STATE = {
 	email: 'test222@mail.com',

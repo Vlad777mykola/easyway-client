@@ -1,8 +1,8 @@
-import { PaginationControls } from '@/features/pagination-controls/PaginationControls';
+import { NextPrevQuestion } from '@/ui-components/NextPrevQuestion';
+import { PaginationControls } from '@/features/pagination-by-mode/PaginationControls';
 import { InfinitiveModeType } from '../Pagination';
 import { STEP } from '../constants/constants';
 import { swapQuestion } from '../utils/swapQuestion';
-import { NextPrevQuestion } from '@/ui-components/NextPrevQuestion/NextPrevQuestion';
 
 export const Infinitive = ({ currentId, ids, navigateTo, exerciseMode }: InfinitiveModeType) => {
 	const currentIndex: number = ids.findIndex((id) => id === currentId);

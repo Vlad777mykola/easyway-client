@@ -6,8 +6,8 @@ import { CircleButton } from '@/ui-components/CircleButton';
 import { EXERCISE_MODE } from '@/store/exercise-progress';
 import { useNavigate } from 'react-router-dom';
 import styles from './errorProgressPagination.module.css';
-import { PaginationControls } from '@/features/pagination-controls/PaginationControls';
 import { EXERCISE_CONFIG } from './constants';
+import { PaginationControls } from '@/features/pagination-by-mode';
 
 const RIGHT = 'right';
 const LEFT = 'left';

@@ -24,7 +24,6 @@ export const WrapperCard = ({
 			setFullScreen?.(true);
 		}
 	}, [id, isMobile, fullScreen, setFullScreen]);
-
 	return (
 		<div
 			className={classes(styles.wrapperCard, {

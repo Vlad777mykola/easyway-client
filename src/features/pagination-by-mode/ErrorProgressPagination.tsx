@@ -4,7 +4,7 @@ import { CircleButton } from '@/ui-components/CircleButton';
 import { Icon } from '@/ui-components/Icon';
 
 import styles from './errorProgressPagination.module.css';
-import { PaginationControls } from '../pagination-controls/PaginationControls';
+import { PaginationControls } from './PaginationControls';
 
 const RIGHT = 'right';
 const LEFT = 'left';

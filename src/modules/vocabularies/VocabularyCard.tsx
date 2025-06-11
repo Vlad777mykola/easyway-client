@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ExerciseType, useVocabularyStore } from '@/store/vocabulary-collection';
 import { useVocabularyListData } from './hooks/useVocabularyListData';
 import { useProgressStore } from '@/store/progress';
-import { WrapperCard } from '@/features/Wrapper-card';
+import { WrapperCard } from '@/features/wrapper-card';
 import { PaginationExercise } from './components/pagination/Pagination';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
 import {

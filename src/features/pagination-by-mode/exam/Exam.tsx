@@ -1,8 +1,8 @@
 import { ExamModeType } from '../Pagination';
 import { swapQuestion } from '../utils/swapQuestion';
 import { STEP } from '../constants/constants';
-import { NextPrevQuestion } from '@/ui-components/NextPrevQuestion/NextPrevQuestion';
-import { PaginationControls } from '@/features/pagination-controls/PaginationControls';
+import { PaginationControls } from '@/features/pagination-by-mode/PaginationControls';
+import { NextPrevQuestion } from '@/ui-components/NextPrevQuestion';
 
 export const Exam = (props: ExamModeType) => {
 	const { ids, currentId, navigateTo } = props;

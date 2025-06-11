@@ -2,11 +2,11 @@
 import { useState, ReactNode } from 'react';
 import { Icon } from '@/ui-components/Icon';
 import { classes } from '@/ui-design-atoms/classes';
-import { Button } from '@/ui-components/Button/Button';
+import { Button } from '@/ui-components/Button';
 import { CircleButton } from '@/ui-components/CircleButton';
-import type { IconVariantsType } from '@/ui-components/Icon/Icon';
 
 import styles from './menu.module.css';
+import { IconVariantsType } from '@/ui-components/Icon';
 
 const Side = {
 	left: 'left',

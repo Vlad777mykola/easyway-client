@@ -4,7 +4,7 @@ import { List } from '@/features/list';
 import { useNavigate } from '@/shared/hooks/use-navigate';
 import { useQueryParam } from '@/shared/hooks/use-query-params';
 import { ContentContainer } from '@/ui-components/Content-Container';
-import { Statistics } from '@/features/statistics/Statistics';
+import { Statistics } from '@/features/statistics';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sidebar';
 import {
 	useDictionaryStore,

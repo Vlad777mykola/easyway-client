@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CircleProgressBar } from '@/ui-components/CircleProgressBar/CircleProgressBar';
+import { CircleProgressBar } from '@/ui-components/CircleProgressBar';
 import { Button } from '@/ui-components/Button';
 import { ErrorProgressPagination } from '../error-progress-pagination/ErrorProgressPagination';
 import { useProgressStore } from '@/store/progress';
