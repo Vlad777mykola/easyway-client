@@ -28,6 +28,16 @@ export const BaseInfo = ({ name, transcription }: { name: string; transcription:
 				<div className={styles.transcriptionContainer}>
 					<span className={styles.transcription}>{transcription}</span>
 				</div>
+				<div className={styles.buttonsMobile}>
+					<div className={styles.buttonsContainer}>
+						<Button color="default" variant="filled">
+							<Icon icon="folder" variant="dark" />
+						</Button>
+						<Button color="default" variant="filled">
+							<Icon icon="appStoreAdd" variant="dark" />
+						</Button>
+					</div>
+				</div>
 			</div>
 			<div className={styles.meaning}>
 				<div className={styles.buttonsContainer}>

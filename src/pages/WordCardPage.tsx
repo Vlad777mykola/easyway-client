@@ -13,7 +13,12 @@ const WordCardPage = () => {
 	console.log('WORD: ', word);
 
 	return (
-		<WordInfo name={word?.name} transcription={word?.transcription} translate={word?.translate} />
+		<WordInfo
+			name={word?.name}
+			transcription={word?.transcription}
+			translate={word?.translate}
+			type="verb"
+		/>
 	);
 };
 

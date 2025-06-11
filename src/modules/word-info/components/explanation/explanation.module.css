@@ -46,7 +46,6 @@
   padding-bottom: 0.5rem;
   padding-right: 1rem;
   box-sizing: border-box;
-  background: rgb(26 188 106);
   height: 2.5rem;
 }
 
@@ -57,13 +56,14 @@
   height: 2rem;
   right: 0;
   height: 2.5rem;
-  width: 120px;
+  width: 210px;
 }
 
 .type {
   color: #fff;
   font-size: 1rem;
   line-height: 1.5rem;
+  font-weight: 700;
 }
 
 .wordItem {
@@ -119,18 +119,6 @@
   margin-top: 24px;
 }
 
-.transitiveContainer {
-  margin-top: 1.5rem;
-  display: flex;
-  gap: .20rem;
-  font-size: .875rem;
-  line-height: 1.25rem;
-}
-
-.transitive {
-  color: rgb(26 188 106);
-}
-
 .imgContainer {
   width: 240px;
   height: 209px;
@@ -141,4 +129,36 @@
   max-width: 100%;
   height: auto;
   border-radius: 1rem;
+}
+
+.adjective {
+	background: rgb(230 126 34);
+}
+
+.verb {
+	background: rgb(26 188 106);
+}
+
+.pronoun {
+	background: rgb(52 73 94);
+}
+
+.noun {
+	background: rgb(41 128 195);
+}
+
+.adjectiveSvg {
+	fill: rgb(230 126 34);
+}
+
+.verbSvg {
+	fill: rgb(26 188 106);
+}
+
+.pronounSvg {
+	fill: rgb(52 73 94);
+}
+
+.nounSvg {
+	fill: rgb(41 128 195);
 }

@@ -1,0 +1,21 @@
+.transitiveAndIntransitive {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .40rem;
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+.transitiveContainer {
+  display: flex;
+  gap: .20rem;
+}
+
+.transitive {
+  color: rgb(26 188 106);
+}
+
+.inTransitive {
+  color: rgb(221 51 49);
+}
