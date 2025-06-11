@@ -1,4 +1,5 @@
 /* eslint-disable css-modules/no-unused-class */
+/* eslint-disable react-refresh/only-export-components */
 import { classes } from '@/ui-design-atoms/classes';
 import styles from './styles.module.css';
 

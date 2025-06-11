@@ -45,6 +45,24 @@ export const Progress = ({
 	const [exercise, setExercise] = useState<Exercise[]>([]);
 
 	useEffect(() => {
+		const filterData = (exercise: Exercise[]) => {
+			const filteredData = progressData.filter((item) => {
+				const progressStore = item.progressStore;
+				return Object.keys(progressStore).some((key) => key.includes(exerciseTheme));
+			});
+
+			const filteredStore = exercise
+				.filter((item) => {
+					const id = `${item.id}_${exerciseTheme}`;
+					return filteredData.some((p) => Object.keys(p.progressStore).includes(id));
+				})
+				.map((item) => ({
+					...item,
+				}));
+
+			return filteredStore;
+		};
+
 		(async () => {
 			try {
 				const fetchedProgressData = await fetchProgressData();
@@ -60,25 +78,7 @@ export const Progress = ({
 				console.log('Error fetching progress data: ', err);
 			}
 		})();
-	}, [progressData.length]);
-
-	const filterData = (exercise: Exercise[]) => {
-		const filteredData = progressData.filter((item) => {
-			const progressStore = item.progressStore;
-			return Object.keys(progressStore).some((key) => key.includes(exerciseTheme));
-		});
-
-		const filteredStore = exercise
-			.filter((item) => {
-				const id = `${item.id}_${exerciseTheme}`;
-				return filteredData.some((p) => Object.keys(p.progressStore).includes(id));
-			})
-			.map((item) => ({
-				...item,
-			}));
-
-		return filteredStore;
-	};
+	}, [progressData.length, collection, exerciseTheme, progressData]);
 
 	const handleShowAddInfo = (id: string) => {
 		const updateExercise = exercise.map((item) => {

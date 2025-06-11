@@ -12,5 +12,5 @@ export const useVocabularyListData = (
 		if (words) {
 			func(words, vocabulariesId);
 		}
-	}, []);
+	}, [func, words, vocabulariesId]);
 };

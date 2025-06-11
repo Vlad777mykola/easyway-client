@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Icon } from '@/ui-components/Icon';
 import { Button } from '@/ui-components/Button';
 import { Result } from '@/ui-components/Result';
-import { WrapperCard } from '@/ui-components/Wrapper-card';
+import { WrapperCard } from '@/features/wrap-card';
 import { useBeforeunload } from '@/shared/hooks/use-before-unload/useBeforeunload';
 import { ExerciseUI } from './components/exercise-content/ExerciseContent';
 import { useExerciseListData } from './hooks/useExerciseListData';
@@ -64,7 +64,7 @@ export const ExerciseCard = () => {
 				if (exercise) setTask(exercise);
 			})();
 		}
-	}, [taskId]);
+	}, [taskId, getExerciseById]);
 
 	useEffect(() => {
 		getProgressFromLocalStore(exercisesId);
@@ -73,7 +73,7 @@ export const ExerciseCard = () => {
 		return () => {
 			saveProgress(saveProgressToIndexedDB, ID_EXERCISE);
 		};
-	}, [taskId]);
+	}, [taskId, ID_EXERCISE, exercisesId, getProgressFromLocalStore, saveProgressToIndexedDB]);
 
 	const setModesProgress = async (id: string, isResolved: boolean) => {
 		if (collectionsExerciseConfig.exerciseMode === EXERCISE_MODE.isExam) {

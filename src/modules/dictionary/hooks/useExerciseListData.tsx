@@ -13,5 +13,5 @@ export const useExerciseListData = (
 		if (exercise && !isPause) {
 			func(exercise, collectionsId);
 		}
-	}, [exercise, collectionsId]);
+	}, [exercise, collectionsId, isPause, func]);
 };

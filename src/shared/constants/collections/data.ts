@@ -1,5 +1,4 @@
 import { id1, id2, id3 } from '../fr-questions/wordsJSCSS';
-import { common1000 } from '../dictionary/1000words';
 import { tsQ } from '../fr-questions/tsQ';
 
 export type ExerciseResponseType = {
@@ -27,7 +26,7 @@ export const DEFAULT_TASKS = [...id1, ...id2];
 export const ALL_COLLECTIONS_TASKS_BY_ID = new Map<string, ExerciseResponseType[]>([
 	['1', id1],
 	['2', id2],
-	['3', common1000],
+	// ['3', common1000],
 	['4', tsQ],
 	['5', id3],
 	['6', id3],

@@ -1,4 +1,4 @@
-import { Pagination } from '@/shared/components/pagination-by-mode/Pagination';
+import { Pagination } from '@/features/pagination-by-mode';
 import { EXERCISE_MODE, useDictionaryStore } from '@/store/dictionary';
 import { useConfigStings } from '../../hooks/useConfigParamWithDefaultData';
 

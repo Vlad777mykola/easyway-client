@@ -1,4 +1,5 @@
-import { createContext, useState, ReactNode, useContext, useLayoutEffect } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { useState, useLayoutEffect, ReactNode, createContext, useContext } from 'react';
 
 type ScreenSizeData = {
 	isMobile: boolean;
@@ -10,13 +11,13 @@ type ScreenSizeProviderType = {
 	children: ReactNode;
 };
 
+const WIDTH_SCREEN = window.innerWidth;
+
 const ScreenSizeContext = createContext<ScreenSizeData>({
 	isMobile: false,
 	isLaptop: false,
 	isDesktop: false,
 });
-
-const WIDTH_SCREEN = window.innerWidth;
 
 export const ScreenSizeProvider = ({ children }: ScreenSizeProviderType) => {
 	const [typeOfScreen, setTypeOfScreen] = useState<ScreenSizeData>({
@@ -26,26 +27,11 @@ export const ScreenSizeProvider = ({ children }: ScreenSizeProviderType) => {
 	});
 
 	useLayoutEffect(() => {
-		if (WIDTH_SCREEN >= 320 && WIDTH_SCREEN <= 480) {
-			setTypeOfScreen({
-				...typeOfScreen,
-				isMobile: true,
-			});
-		}
-
-		if (WIDTH_SCREEN >= 481 && WIDTH_SCREEN <= 1024) {
-			setTypeOfScreen({
-				...typeOfScreen,
-				isLaptop: true,
-			});
-		}
-
-		if (WIDTH_SCREEN >= 1201) {
-			setTypeOfScreen({
-				...typeOfScreen,
-				isDesktop: true,
-			});
-		}
+		setTypeOfScreen({
+			isMobile: WIDTH_SCREEN >= 320 && WIDTH_SCREEN <= 480,
+			isLaptop: WIDTH_SCREEN >= 481 && WIDTH_SCREEN <= 1024,
+			isDesktop: WIDTH_SCREEN >= 1201,
+		});
 	}, []);
 
 	return (

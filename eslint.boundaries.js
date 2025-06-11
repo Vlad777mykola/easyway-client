@@ -12,20 +12,54 @@ export const eslintBoundariesConfig = {
 		},
 
 		'boundaries/elements': [
+			// {
+			// 	type: 'app',
+			// 	pattern: './src/app',
+			// },
 			{
-				type: 'app',
-				pattern: './src/app',
+				type: 'context',
+				pattern: './src/context',
 			},
 			{
 				type: 'features',
 				pattern: './src/features/*',
 			},
 			{
+				type: 'layouts',
+				pattern: './src/layouts',
+			},
+			{
+				type: 'modules',
+				pattern: './src/modules',
+			},
+			{
+				type: 'pages',
+				pattern: './src/pages',
+			},
+			{
+				type: 'router',
+				pattern: './src/router',
+			},
+			{
 				type: 'shared',
 				pattern: './src/shared',
 			},
+			{
+				type: 'store',
+				pattern: './src/store',
+			},
+			{
+				type: 'ui-components',
+				pattern: './src/ui-components/*',
+			},
+			{
+				type: 'ui-design-atoms',
+				pattern: './src/ui-components/*',
+			},
 		],
 	},
+	// [ 'context', 'features', 'layouts', 'modules', 'pages', 'router','shared', 'store', 'ui-components', 'ui-design-atoms' ],
+
 	rules: {
 		'boundaries/element-types': [
 			2,
@@ -33,16 +67,169 @@ export const eslintBoundariesConfig = {
 				default: 'allow',
 				rules: [
 					{
-						from: 'shared',
-						disallow: ['app', 'features'],
+						from: 'context',
+						disallow: [
+							'features',
+							'layouts',
+							'modules',
+							'pages',
+							'router',
+							'store',
+							'ui-components',
+							'ui-design-atoms',
+						],
 						message:
-							'Модуль нижележащего слоя (${file.type}) не может импортировать модуль вышележащего слоя (${dependency.type})',
+							'The module of the lower layer (${file.type}) cannot import the module of the higher layer (${dependency.type})',
 					},
 					{
 						from: 'features',
-						disallow: ['app'],
+						disallow: [
+							// 'context',
+							// 'features',
+							'layouts',
+							'modules',
+							'pages',
+							'router',
+							// 'shared',
+							// 'store',
+							// 'ui-components',
+							// 'ui-design-atoms',
+						],
 						message:
-							'Модуль нижележащего слоя (${file.type}) не может импортировать модуль вышележащего слоя (${dependency.type})',
+							'The module of the lower layer (${file.type}) cannot import the module of the higher layer (${dependency.type})',
+					},
+					{
+						from: 'layouts',
+						disallow: [
+							// 'context',
+							// 'features',
+							// 'layouts',
+							'modules',
+							'pages',
+							'router',
+							// 'shared',
+							// 'store',
+							// 'ui-components',
+							// 'ui-design-atoms',
+						],
+						message:
+							'The module of the lower layer (${file.type}) cannot import the module of the higher layer (${dependency.type})',
+					},
+					{
+						from: 'modules',
+						disallow: [
+							// 'context',
+							// 'features',
+							'layouts',
+							'modules',
+							'pages',
+							'router',
+							// 'shared',
+							// 'store',
+							// 'ui-components',
+							// 'ui-design-atoms',
+						],
+						message:
+							'The module of the lower layer (${file.type}) cannot import the module of the higher layer (${dependency.type})',
+					},
+					{
+						from: 'pages',
+						disallow: [
+							'context',
+							// 'features',
+							'layouts',
+							// 'modules',
+							'pages',
+							'router',
+							// 'shared',
+							// 'store',
+							// 'ui-components',
+							'ui-design-atoms',
+						],
+						message: 'Higher layer (${file.type}) must not import lower layer (${dependency.type})',
+					},
+					{
+						from: 'router',
+						disallow: [
+							'context',
+							'features',
+							// 'layouts',
+							// 'modules',
+							// 'pages',
+							'router',
+							'shared',
+							'store',
+							'ui-components',
+							'ui-design-atoms',
+						],
+						message: 'Higher layer (${file.type}) must not import lower layer (${dependency.type})',
+					},
+					{
+						from: 'shared',
+						disallow: [
+							'context',
+							'features',
+							'layouts',
+							'modules',
+							'pages',
+							'router',
+							'shared',
+							// 'store', // need to remove and no to allow
+							// 'ui-components',
+							// 'ui-design-atoms',
+						],
+						message: 'Higher layer (${file.type}) must not import lower layer (${dependency.type})',
+					},
+					{
+						from: 'store',
+						disallow: [
+							'context',
+							'features',
+							'layouts',
+							'modules',
+							'pages',
+							'router',
+							// 'shared',
+							// 'store',
+							'ui-components',
+							'ui-design-atoms',
+						],
+						message:
+							'The module of the lower layer (${file.type}) cannot import the module of the higher layer (${dependency.type})',
+					},
+					{
+						from: 'ui-components',
+						disallow: [
+							'context',
+							'features',
+							'layouts',
+							'modules',
+							'pages',
+							'router',
+							'shared',
+							'store',
+							// 'ui-components',  // need to be changed
+							// 'ui-design-atoms',
+						],
+						message:
+							'The module of the lower layer (${file.type}) cannot import the module of the higher layer (${dependency.type})',
+					},
+					{
+						from: 'ui-design-atoms',
+						disallow: [
+							'context',
+							'features',
+							'layouts',
+							'modules',
+							'pages',
+							'router',
+							'shared',
+							'store',
+							'ui-components',
+							// 'ui-design-atoms',
+						],
+						message:
+							'The module of the lower layer (${file.type}) cannot import the module of the higher layer (${dependency.type})',
 					},
 				],
 			},
@@ -52,16 +239,20 @@ export const eslintBoundariesConfig = {
 			{
 				default: 'disallow',
 				message:
-					'Модуль (${file.type}) должен импортироваться через public API. Прямой импорт из ${dependency.source} запрещен',
+					'The module (${file.type}) must be imported via the public API. Direct import from ${dependency.source} is prohibited',
 
 				rules: [
 					{
-						target: ['shared', 'app'],
+						target: ['layouts', 'modules', 'router', 'shared', 'store', 'context'],
 						allow: '**',
 					},
 					{
-						target: ['features'],
-						allow: ['index.(ts|tsx)', '*.page.tsx'],
+						target: ['ui-components', 'ui-design-atoms', 'features'],
+						allow: ['index.(ts|tsx)'],
+					},
+					{
+						target: ['pages'],
+						allow: ['index.(ts|tsx)', '*pages.tsx'],
 					},
 				],
 			},

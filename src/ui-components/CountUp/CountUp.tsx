@@ -15,7 +15,7 @@ export const CountUp = ({ end = 100, duration = 2000 }) => {
 			} else {
 				setCount(Math.ceil(start));
 			}
-		}, 16); // Runs every 16ms (~60fps)
+		}, 16);
 
 		return () => clearInterval(interval);
 	}, [end, duration]);

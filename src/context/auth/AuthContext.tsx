@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useUser } from '@/shared/api-hooks/useUser';
 import { createContext, ReactNode, useContext } from 'react';
 
@@ -6,17 +7,17 @@ type UserData = {
 	email: string;
 };
 
-type TAuthContext = {
+type AuthContextType = {
 	user: UserData;
-	isLogIn: false;
+	isLogIn: boolean;
 	refetch: () => void;
 };
 
-type TUserProvider = {
+type UserProvider = {
 	children: ReactNode;
 };
 
-const AuthContext = createContext<TAuthContext>({
+const AuthContext = createContext<AuthContextType>({
 	user: {
 		username: '',
 		email: '',
@@ -25,11 +26,11 @@ const AuthContext = createContext<TAuthContext>({
 	refetch: () => {},
 });
 
-export const AuthProvider = ({ children }: TUserProvider) => {
+export const AuthProvider = ({ children }: UserProvider) => {
 	const { data: user, refetch } = useUser();
 
 	return (
-		<AuthContext.Provider value={{ user, isLogIn: user?.id, refetch }}>
+		<AuthContext.Provider value={{ user, isLogIn: !!user?.id, refetch }}>
 			{children}
 		</AuthContext.Provider>
 	);

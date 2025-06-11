@@ -1,9 +1,10 @@
 /* eslint-disable css-modules/no-unused-class */
 import { useEffect, useState } from 'react';
-import { CountUp } from '../CountUp';
-import { Size, Variant } from '@/shared/constants/parameters';
-import type { SizeType, VariantType } from '@/shared/constants/parameters';
+import { Size, Variant } from '@/ui-design-atoms/parameters';
+import type { SizeType, VariantType } from '@/ui-design-atoms/parameters';
 import { classes } from '@/ui-design-atoms/classes';
+import { CountUp } from '../CountUp';
+
 import styles from './standartProgressBar.module.css';
 
 const COUNT_UP_DURATION = 1500;

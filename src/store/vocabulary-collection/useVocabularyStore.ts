@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { filterWordCollection } from './service';
 import { ExerciseResponseType } from '@/shared/constants/collections/data';
-import { getReadyQuestion } from '@/modules/vocabularies/services/fetchDefinition';
 import {
 	DEFAULT_DATA_TEST,
 	DEFAULT_WORD_CONFIG,
@@ -16,6 +15,7 @@ import {
 	Word,
 } from './type';
 import { shuffleArray } from '@/shared/utils/shuffle-array';
+import { getReadyQuestion } from '@/shared/utils/get-variants';
 
 type VocabularyStoreState = {
 	filteredWordsVocabulary: Word[];

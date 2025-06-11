@@ -1,12 +1,12 @@
 import { ReactNode, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ContentContainer } from '@/ui-components/Content-Container';
-import { List } from '@/shared/components/list/List';
+import { List } from '@/features/list';
 import { EXERCISE_CONFIG, EXERCISE_FORMATE } from '@/store/exercise-progress';
 import { useExerciseProgressStore, EXERCISE_MODE } from '@/store/exercise-progress';
-import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '../../shared/components/sidebar';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sidebar';
 import { EXERCISE_CONFIG_LABELS } from './constants';
-import { Statistics } from '@/shared/components/statistics/Statistics';
+import { Statistics } from '@/features/statistics';
 import { useExerciseListData } from './hooks/useExerciseListData';
 
 export const ExerciseDetails = (): ReactNode => {
@@ -47,7 +47,7 @@ export const ExerciseDetails = (): ReactNode => {
 
 	useEffect(() => {
 		getProgressFromLocalStore(exercisesId || '');
-	}, []);
+	}, [exercisesId, getProgressFromLocalStore]);
 
 	const onChange = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setCollectionsExerciseConfig(key, value);

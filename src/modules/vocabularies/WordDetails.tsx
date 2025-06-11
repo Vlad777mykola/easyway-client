@@ -4,10 +4,10 @@ import {
 	EXERCISE_FORMATE,
 	ExerciseModeType,
 } from '@/store/exercise-progress/useExerciseProgressStore';
-import { Statistics } from '@/shared/components/statistics/Statistics';
+import { Statistics } from '@/features/statistics';
 import { useVocabularyListData } from '@/modules/vocabularies/hooks/useVocabularyListData';
-import { List } from '@/shared/components/list';
-import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/shared/components/sidebar';
+import { List } from '@/features/list';
+import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sidebar';
 import { EXERCISE_MODE, useVocabularyStore, WORD_CONFIG } from '@/store/vocabulary-collection';
 import { ContentContainer } from '@/ui-components/Content-Container';
 import { EXERCISE_CONFIG_LABELS } from './constants';
@@ -88,11 +88,11 @@ export const WordDetails = () => {
 	useEffect(() => {
 		const exerciseConfig = getExerciseConfig(EXERCISE_CONFIG.MODE);
 		setMode(exerciseConfig as ExerciseModeType);
-	}, [exerciseMode]);
+	}, [exerciseMode, getExerciseConfig]);
 
 	useEffect(() => {
 		setExerciseListProgress('', false, exerciseListProgressStore);
-	}, [exerciseListProgressStore]);
+	}, [exerciseListProgressStore, setExerciseListProgress]);
 
 	const onChangeWord = (key: string, value: number[] | string | boolean | string[] | number) => {
 		setWordConfig(key, value);

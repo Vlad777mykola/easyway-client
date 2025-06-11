@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { ExerciseResponseType } from '@/shared/constants/collections/data';
-import { getReadyQuestion } from '@/shared/services/get-variants';
+import { getReadyQuestion } from '@/shared/utils/get-variants';
 import { shuffleArray } from '@/shared/utils/shuffle-array';
 import {
 	// ExerciseListProgressType,
@@ -9,6 +9,7 @@ import {
 	ExerciseType,
 } from './type';
 import { DEFAULT_DATA_TEST } from './constants';
+import { createSelectors } from '../createSelectors';
 
 type ExerciseStoreState = {
 	exerciseList: ExerciseType[];
@@ -207,3 +208,5 @@ export const useDictionaryProgressStoreBase = create<ExerciseStoreType>()((set, 
 // 		isSelecting: formate === EXERCISE_FORMATE.Selecting,
 // 	};
 // },
+
+export const useDictionaryStore = createSelectors(useDictionaryProgressStoreBase);
