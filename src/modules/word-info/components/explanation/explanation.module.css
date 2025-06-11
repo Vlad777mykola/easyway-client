@@ -1,0 +1,144 @@
+.explanation {
+  background: #fff;
+  width: 100%;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: 1.5rem;
+}
+
+.wordHeader {
+  background: rgb(235 238 255);
+  width: 100%;
+  padding: 1.5rem 0 1.5rem 1.5rem;
+  border-top-right-radius: 1.5rem;
+  border-top-left-radius: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wordContainer {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.word {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.past {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: rgb(53 55 56)
+}
+
+.typeContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.flag {
+  position: relative;
+  z-index: 10;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+  background: rgb(26 188 106);
+  height: 2.5rem;
+}
+
+.svg {
+  position: absolute;
+  z-index: 5;
+  fill: rgb(26, 188, 156);
+  height: 2rem;
+  right: 0;
+  height: 2.5rem;
+  width: 120px;
+}
+
+.type {
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.wordItem {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.wordItemExplanation {
+  padding: 1.5rem;
+  box-sizing: border-box;
+  width: 60%;
+}
+
+.translateContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.number {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: rgb(123 86 189);
+  padding: 0.25rem 0.5rem;
+  box-sizing: border-box;
+  background-color: rgb(235 238 255);
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+.translate {
+  color: rgb(10 10 10);
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.exampleMeaningContainer {
+  margin-left: 0.25rem;
+  margin-top: .5rem;
+  opacity: 0.8;
+}
+
+.example {
+  font-size: 16px;
+  color: rgb(102, 102, 102, 1);
+  margin-left: .75rem;
+  margin-top: .5rem;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 1rem;
+  margin-top: 24px;
+}
+
+.transitiveContainer {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: .20rem;
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+.transitive {
+  color: rgb(26 188 106);
+}
+
+.imgContainer {
+  width: 240px;
+  height: 209px;
+  margin: 1.5rem;
+}
+
+.img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+}

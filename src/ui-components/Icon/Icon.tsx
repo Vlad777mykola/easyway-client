@@ -32,6 +32,7 @@ import {
 	SoundOutlined,
 	FolderAddOutlined,
 	AppstoreAddOutlined,
+	AimOutlined,
 } from '@ant-design/icons';
 
 import styles from './icon.module.css';
@@ -65,6 +66,7 @@ const IconVariants = {
 	sound: SoundOutlined,
 	folder: FolderAddOutlined,
 	appStoreAdd: AppstoreAddOutlined,
+	aim: AimOutlined,
 };
 
 export type IconVariantsType = keyof typeof IconVariants;

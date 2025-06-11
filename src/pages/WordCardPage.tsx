@@ -12,7 +12,9 @@ const WordCardPage = () => {
 	console.log('PARAMS: ', wordId, wordName);
 	console.log('WORD: ', word);
 
-	return <WordInfo name={word?.name} transcription={word?.transcription} />;
+	return (
+		<WordInfo name={word?.name} transcription={word?.transcription} translate={word?.translate} />
+	);
 };
 
 export default WordCardPage;

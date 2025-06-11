@@ -1,0 +1,84 @@
+.mainWordInfo {
+  background: #fff;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 1536px;
+  width: 100%;
+  border-top-right-radius: 1.5rem;
+  border-top-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+  border-bottom-left-radius: 1.5rem;
+}
+
+.topInfo {
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.nameBaseInfo {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+}
+
+.nameContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.writeAndSound {
+  display: flex;
+  flex-direction: row;
+  gap: .2rem;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  line-height: 2rem;
+  font-weight: bold;
+}
+
+.noHover:hover {
+  background-color: inherit !important;
+  border-color: none;
+  color: inherit;
+  box-shadow: none;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: .5rem;
+}
+
+.transcriptionContainer {
+  margin-bottom: 1.5rem;
+}
+
+.transcription {
+  font-size: .875rem;
+  line-height: 1.25rem;
+  color: rgb(107 114 128);
+}
+
+.meaning {
+  display: flex;
+  justify-content: space-between;
+  padding: .75rem 1.5rem;
+  box-sizing: border-box;
+  background: #fbfcfc;
+  border-bottom-right-radius: 1.5rem;
+  border-bottom-left-radius: 1.5rem;
+}
+
+.explanation {
+  color: rgb(108 117 125);
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+}
