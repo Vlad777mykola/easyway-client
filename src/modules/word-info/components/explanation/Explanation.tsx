@@ -1,12 +1,12 @@
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
-import { classes } from '@/ui-design-atoms/classes';
 import { Subtranslate } from '../subtranslate/Subtranslate';
 import { Transitive } from '../transitive/Transitive';
 import { UseExample } from '../use-example/UseExample';
 import img from '@/assets/download.jpeg';
 
 import styles from './explanation.module.css';
+import { PartOfSpeechFlag } from '@/ui-components/PartOfSpeechFlag/PartOfSpeechFlag';
 
 const wordTypes = {
 	verb: 'дієслово',
@@ -16,24 +16,27 @@ const wordTypes = {
 	interjection: 'вставне слово',
 } as const;
 
+export type WordTypes = 'дієслово' | 'іменник' | 'прикметник' | 'вставне слово';
+export type WordTypeKey = keyof typeof wordTypes;
+
 export const Explanation = ({
 	id,
 	name,
 	translate,
+	isHeader,
 	type = 'verb',
 }: {
 	id: number;
 	name: string;
 	translate: string;
-	type?: string;
+	isHeader: boolean;
+	type?: WordTypeKey;
 }) => {
 	const translated = translate?.split(',') || [];
 
-	console.log('TRANSLATED: ', translated);
-
 	return (
 		<div className={styles.explanation}>
-			{id === 1 && (
+			{isHeader && (
 				<div className={styles.wordHeader}>
 					<div className={styles.wordContainer}>
 						<span className={styles.word}>{name}</span>
@@ -41,18 +44,7 @@ export const Explanation = ({
 							{'['} past form: did {']'}
 						</span>
 					</div>
-					<div className={styles.typeContainer}>
-						<div className={classes(styles.flag, styles[`${type.toLowerCase()}`])}>
-							<span className={styles.type}>{wordTypes[type].toUpperCase()}</span>
-						</div>
-						<svg
-							className={classes(styles.svg, styles[`${type.toLowerCase()}Svg`])}
-							viewBox="0 0 104 40"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path d="M 3.51735 3.43156 C 2.23343 2.17895 3.12026 0 4.914 0 H 103 V 40 H 4.914 C 3.12026 40 2.23343 37.821 3.51735 36.5684 L 19.0326 21.4316 C 19.8371 20.6467 19.8371 19.3533 19.0326 18.5684 L 3.51735 3.43156 Z"></path>
-						</svg>
-					</div>
+					<PartOfSpeechFlag type={type} ukrainianType={wordTypes[type]} />
 				</div>
 			)}
 			<div className={styles.wordItem}>
