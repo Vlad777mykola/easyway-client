@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useWords } from '@/shared/api-hooks/useWords';
+import { useWords, WordsType } from '@/shared/api-hooks/useWords';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Input } from '@/ui-components/Input';
 import { useState } from 'react';
@@ -9,18 +9,8 @@ import styles from './main.module.css';
 
 const { Search } = Input;
 
-export type WordsType = {
-	id: string;
-	name: string;
-	transcription: string;
-	translate: string;
-	type: string;
-	useCase: string;
-	variants: string[];
-};
-
 export const Main = () => {
-	const [word, setWord] = useState<string>('');
+	const [word, setWord] = useState<string>('w');
 	const { data: words, refetch } = useWords(word);
 
 	const navigate = useNavigate();

@@ -1,6 +1,6 @@
 /* eslint-disable css-modules/no-unused-class */
-import { Size, Variant } from '@/shared/constants/parameters';
-import type { SizeType, VariantType } from '@/shared/constants/parameters';
+import { Size, Variant } from '@/ui-design-atoms/parameters';
+import type { SizeType, VariantType } from '@/ui-design-atoms/parameters';
 import { classes } from '@/ui-design-atoms/classes';
 
 import {

@@ -1,4 +1,4 @@
-import { Pagination } from '@/shared/components/pagination-by-mode/Pagination';
+import { Pagination } from '@/features/pagination-by-mode';
 import { EXERCISE_MODE, useExerciseProgressStore } from '@/store/exercise-progress';
 
 export const PaginationExercise = ({

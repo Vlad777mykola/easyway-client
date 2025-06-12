@@ -1,9 +1,9 @@
 /* eslint-disable css-modules/no-unused-class */
 import { useEffect, useState } from 'react';
-import { CountUp } from '@ui-components/CountUp';
 import { classes } from '@/ui-design-atoms/classes';
-import { Size, SizeType, VariantType } from '@/shared/constants/parameters';
 import styles from './circleProgressBar.module.css';
+import { Size, SizeType, VariantType } from '@/ui-design-atoms/parameters';
+import { CountUp } from '../CountUp';
 
 const SIZE_TYPES = {
 	xs: 50,
@@ -78,7 +78,15 @@ export const CircleProgressBar = ({
 		}, 200);
 
 		return () => clearTimeout(timeout);
-	}, [progress, resolved, untouched]);
+	}, [
+		progress,
+		resolved,
+		untouched,
+		dashArray,
+		dashOffset,
+		dashOffsetResolved,
+		dashOffsetUntouched,
+	]);
 
 	return (
 		<>

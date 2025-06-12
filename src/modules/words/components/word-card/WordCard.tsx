@@ -1,5 +1,5 @@
 import { Typography } from '@/ui-components/Typography';
-import { PartOfSpeech } from '@/ui-components/PartOfSpeech/PartOfSpeech';
+import { PartOfSpeech } from '@/ui-components/PartOfSpeech';
 import img from '@/assets/download.jpeg';
 
 import styles from './wordCard.module.css';

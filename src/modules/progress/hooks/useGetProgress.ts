@@ -36,7 +36,7 @@ export const useGetProgress = (progressId: string) => {
 				console.log('Error fetching progress data: ', err);
 			}
 		})();
-	}, []);
+	}, [progressId]);
 
 	return data;
 };

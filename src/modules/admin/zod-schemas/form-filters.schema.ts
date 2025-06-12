@@ -1,24 +1,13 @@
 import { z } from 'zod';
+import { FiltersValue } from '../types';
 
-const uniqueArray = z.array(z.string()).refine((arr) => new Set(arr).size === arr.length, {
-	message: 'Items must be unique.',
-});
-
-export const formFiltersDataSchema = z
-	.object({
-		tenses: uniqueArray,
-		topic: uniqueArray,
-		categories: uniqueArray,
-	})
-	.refine((data) => data.tenses.length > 0 || data.topic.length > 0 || data.categories.length > 0, {
-		message: 'At least one filter must have at least one item.',
-		path: ['submit'],
-	});
-
-export const createInputSchema = (existingItems: string[]) =>
+export const createFormDataSchema = (filters: FiltersValue[]) =>
 	z
 		.string()
-		.min(1, 'Input is required')
-		.refine((val) => !existingItems.includes(val), {
-			message: 'This item is already in the list.',
+		.min(3, 'Input is required')
+		.max(20, 'Too long')
+		.regex(/^[A-Za-z]+$/, 'Only letters are allowed (no numbers or symbols)')
+		.transform((val) => val.trim())
+		.refine((val) => !filters.some((f) => f.value.toLowerCase() === val.toLowerCase()), {
+			message: 'This value already exists',
 		});

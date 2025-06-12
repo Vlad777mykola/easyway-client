@@ -30,5 +30,5 @@ export const useCollectionsData = (
 		return () => {
 			func([]);
 		};
-	}, [id, data]);
+	}, [id, data, func]);
 };

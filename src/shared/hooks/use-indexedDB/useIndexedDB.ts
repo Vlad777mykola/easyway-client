@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { loadState, updateLastTest } from '@/db/indexedDB';
+import { loadState, updateLastTest } from '@/shared/db/indexedDB';
 import {
 	type ExamModeProgressType,
 	type RandomTest,
@@ -42,5 +42,5 @@ export const useIndexedDB = (
 				console.error(error);
 			}
 		})();
-	}, []);
+	}, [collectionId, func]);
 };

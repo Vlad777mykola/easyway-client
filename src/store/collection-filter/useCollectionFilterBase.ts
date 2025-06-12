@@ -6,41 +6,35 @@ export const FILTER_LABELS = {
 	title: 'title',
 	topic: 'topic',
 	category: 'category',
+	tenses: 'tenses',
+	level: 'level',
 };
 
 const DEFAULT_FILTER = {
 	title: '',
 	topic: [],
 	category: [],
+	tenses: [],
+	level: [],
 };
 
 type CollectionTensesType = (typeof TOPIC_TENSES)[keyof typeof TOPIC_TENSES];
-/* type LevelType = (typeof LEVEL)[keyof typeof LEVEL];
-type LearningStyleType = (typeof LEARNING_STYLE)[keyof typeof LEARNING_STYLE];
-type LearnByInterestType = (typeof LEARN_BY_INTEREST)[keyof typeof LEARN_BY_INTEREST];
-type LearnBySkillType = (typeof LEARN_BY_SKILL)[keyof typeof LEARN_BY_SKILL]; */
 
 export type CollectionType = {
 	id: string;
 	title: string;
-	/* subtitle: string; */
-	/* level: string; */
 	category: string[];
 	topic: string[];
-	/* 	learningStyle: string;
-	learnByInterest: string;
-	learnBySkill: string; */
+	tenses: string[];
+	level: string[];
 };
 
 export type FilterDataType = {
 	title: string;
 	topic: CollectionTensesType[];
-	/* subtitle: string; */
 	category: CollectionTensesType[];
-	/* level: LevelType;
-	learningStyle: LearningStyleType;
-	learnByInterest: LearnByInterestType;
-	learnBySkill: LearnBySkillType; */
+	level: string[];
+	tenses: string[];
 };
 
 export type FilterDataKeyType = keyof FilterDataType;
