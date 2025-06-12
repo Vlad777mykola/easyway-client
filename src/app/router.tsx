@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy } from 'react';
-import { ROUTES } from '@/shared/model/routes';
+//import { ROUTES } from '@/shared/model/routes';
 import { createBrowserRouter } from 'react-router-dom';
 // import { DictionaryExerciseCard, DictionaryExerciseDetails } from '@/modules/dictionary';
 import { Auth } from '@/pages/Auth';
@@ -17,6 +17,10 @@ const VocabulariesPage = lazy(() => import('@/pages/VocabulariesPage'));
 const ExerciseDetails = lazy(() => import('@/pages/ExerciseDetailsPage'));
 const WordDetailsPage = lazy(() => import('@/pages/WordDetailsPage'));
 const CompleteWordTest = lazy(() => import('@/pages/CompleteWordTest'));
+
+const WordCardPage = lazy(() => import('@/pages/WordCardPage'));
+
+//const AdminPage = lazy(() => import('@/pages/AdminPage'));
 
 export const router = createBrowserRouter([
 	{
@@ -47,10 +51,9 @@ export const router = createBrowserRouter([
 
 			{ path: 'progress', element: <ProgressPage /> },
 
-			{
-				path: ROUTES.ADMIN,
-				lazy: () => import('@/pages/Admin.page'),
-			},
+			// { path: 'admin', element: <AdminPage /> },
+
+			{ path: 'word/:wordName/:wordId', element: <WordCardPage /> },
 		],
 	},
 ]);
