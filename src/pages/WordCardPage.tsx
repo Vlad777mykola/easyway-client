@@ -1,6 +1,5 @@
-import { useWords } from '@/shared/api-hooks/useWords';
 import { useParams } from 'react-router-dom';
-import type { WordsType } from '@/modules/words/components/main/Main';
+import { useWords, WordsType } from '@/shared/api-hooks/useWords';
 import { WordInfo } from '@/modules/word-info/WordInfo';
 
 const WordCardPage = () => {
@@ -13,7 +12,7 @@ const WordCardPage = () => {
 			name={word?.name}
 			transcription={word?.transcription}
 			translate={word?.translate}
-			type="verb"
+			type={word?.type}
 		/>
 	);
 };

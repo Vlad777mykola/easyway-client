@@ -1,3 +1,5 @@
+import { Typography } from '@/ui-components/Typography';
+
 import styles from './transitive.module.css';
 
 export const Transitive = ({
@@ -20,22 +22,22 @@ export const Transitive = ({
 		<div className={styles.transitiveAndIntransitive}>
 			{isTransitive && (
 				<div className={styles.transitiveContainer}>
-					<span className={styles.transitive}>Transitive: </span>
-					<span className={styles.wordTransitive}>
+					<Typography.Text className={styles.transitive}>Transitive: </Typography.Text>
+					<Typography.Text className={styles.wordTransitive}>
 						<b>{name}</b>
-					</span>
-					<span className={styles.sth}>sth</span>
+					</Typography.Text>
+					<Typography.Text className={styles.sth}>{sentenceWithoutName}</Typography.Text>
 				</div>
 			)}
 			{isNotTransitive && (
 				<div className={styles.transitiveContainer}>
-					<span className={styles.inTransitive}>{inTransitiveTitle}</span>
+					<Typography.Text className={styles.inTransitive}>{inTransitiveTitle}</Typography.Text>
 					{inTransitiveSentence && (
 						<div>
-							<span className={styles.wordTransitive}>
+							<Typography.Text className={styles.wordTransitive}>
 								<b>{name}</b>
-							</span>
-							<span className={styles.sth}>{sentenceWithoutName}</span>
+							</Typography.Text>
+							<Typography.Text className={styles.sth}>{sentenceWithoutName}</Typography.Text>
 						</div>
 					)}
 				</div>

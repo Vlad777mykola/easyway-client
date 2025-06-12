@@ -1,5 +1,6 @@
 import { BaseInfo } from './components/base-info/BaseInfo';
 import { Explanation, WordTypeKey } from './components/explanation/Explanation';
+
 import styles from './wordInfo.module.css';
 
 export const WordInfo = ({

@@ -1,6 +1,8 @@
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
+import { Typography } from '@/ui-components/Typography';
 import { speak } from '@/shared/utils/speak';
+
 import styles from './baseInfo.module.css';
 
 export const BaseInfo = ({ name, transcription }: { name: string; transcription: string }) => {
@@ -10,7 +12,7 @@ export const BaseInfo = ({ name, transcription }: { name: string; transcription:
 				<div className={styles.nameBaseInfo}>
 					<div className={styles.nameContainer}>
 						<div className={styles.writeAndSound}>
-							<span className={styles.name}>{name}</span>
+							<Typography.Text className={styles.name}>{name}</Typography.Text>
 							<Button type="text" className={styles.noHover} onClick={() => speak(name)}>
 								<Icon icon="sound" variant="dark" size="l" />
 							</Button>
@@ -26,7 +28,7 @@ export const BaseInfo = ({ name, transcription }: { name: string; transcription:
 					</div>
 				</div>
 				<div className={styles.transcriptionContainer}>
-					<span className={styles.transcription}>{transcription}</span>
+					<Typography.Text className={styles.transcription}>{transcription}</Typography.Text>
 				</div>
 				<div className={styles.buttonsMobile}>
 					<div className={styles.buttonsContainer}>
@@ -48,7 +50,9 @@ export const BaseInfo = ({ name, transcription }: { name: string; transcription:
 						Noun (1)
 					</Button>
 				</div>
-				<span className={styles.explanation}>Визначення та Значення "do"</span>
+				<Typography.Text className={styles.explanation}>
+					Визначення та Значення "do"
+				</Typography.Text>
 			</div>
 		</div>
 	);

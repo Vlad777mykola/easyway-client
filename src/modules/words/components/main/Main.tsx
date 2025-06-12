@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useWords, WordsType } from '@/shared/api-hooks/useWords';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Input } from '@/ui-components/Input';
-import { useState } from 'react';
 import { WordCard } from '../word-card/WordCard';
 
 import styles from './main.module.css';
@@ -18,8 +18,6 @@ export const Main = () => {
 	const onClick = (name: string, id: string) => {
 		navigate(`/word/${name}/${id}`);
 	};
-
-	console.log('WORDS: ', words);
 
 	return (
 		<>

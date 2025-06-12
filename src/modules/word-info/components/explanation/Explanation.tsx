@@ -1,12 +1,13 @@
 import { Button } from '@/ui-components/Button';
 import { Icon } from '@/ui-components/Icon';
+import { PartOfSpeechFlag } from '@/ui-components/PartOfSpeechFlag';
+import { Typography } from '@/ui-components/Typography';
 import { Subtranslate } from '../subtranslate/Subtranslate';
 import { Transitive } from '../transitive/Transitive';
 import { UseExample } from '../use-example/UseExample';
 import img from '@/assets/download.jpeg';
 
 import styles from './explanation.module.css';
-import { PartOfSpeechFlag } from '@/ui-components/PartOfSpeechFlag/PartOfSpeechFlag';
 
 const wordTypes = {
 	verb: 'дієслово',
@@ -39,10 +40,10 @@ export const Explanation = ({
 			{isHeader && (
 				<div className={styles.wordHeader}>
 					<div className={styles.wordContainer}>
-						<span className={styles.word}>{name}</span>
-						<span className={styles.past}>
+						<Typography.Text className={styles.word}>{name}</Typography.Text>
+						<Typography.Text className={styles.past}>
 							{'['} past form: did {']'}
-						</span>
+						</Typography.Text>
 					</div>
 					<PartOfSpeechFlag type={type} ukrainianType={wordTypes[type]} />
 				</div>
@@ -50,13 +51,15 @@ export const Explanation = ({
 			<div className={styles.wordItem}>
 				<div className={styles.wordItemExplanation}>
 					<div className={styles.translateContainer}>
-						<span className={styles.number}>{id < 10 ? `0${id}` : `${id}`}</span>
-						<span className={styles.translate}>{translated[0]}</span>
+						<Typography.Text className={styles.number}>
+							{id < 10 ? `0${id}` : `${id}`}
+						</Typography.Text>
+						<Typography.Text className={styles.translate}>{translated[0]}</Typography.Text>
 					</div>
 					<div className={styles.exampleMeaningContainer}>
-						<span className={styles.example}>
+						<Typography.Text className={styles.example}>
 							to perform an action that is not mentioned by name
-						</span>
+						</Typography.Text>
 					</div>
 					<div className={styles.buttonsContainer}>
 						<Button color="default" variant="filled">

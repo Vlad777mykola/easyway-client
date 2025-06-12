@@ -1,3 +1,4 @@
+import { Typography } from '../Typography';
 import { classes } from '@/ui-design-atoms/classes';
 
 // eslint-disable-next-line css-modules/no-unused-class
@@ -12,7 +13,7 @@ export const PartOfSpeechFlag = ({
 }) => (
 	<div className={styles.typeContainer}>
 		<div className={classes(styles.flag, styles[`${type.toLowerCase()}`])}>
-			<span className={styles.type}>{ukrainianType.toUpperCase()}</span>
+			<Typography.Text className={styles.type}>{ukrainianType.toUpperCase()}</Typography.Text>
 		</div>
 		<svg
 			className={classes(styles.svg, styles[`${type.toLowerCase()}Svg`])}
