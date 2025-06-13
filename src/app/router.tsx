@@ -24,6 +24,10 @@ export const router = createBrowserRouter([
 		element: <Layout />,
 		children: [
 			{ path: '', lazy: () => import('@/pages/Dictionary.page') },
+			{
+				path: ROUTES.ADMIN,
+				lazy: () => import('@/pages/Admin.page'),
+			},
 			{ path: 'profile', element: <ProfilePage /> },
 			{ path: 'signin', element: <Auth isSignup={true} /> },
 			{ path: 'signup', element: <Auth /> },
@@ -46,11 +50,6 @@ export const router = createBrowserRouter([
 			// },
 
 			{ path: 'progress', element: <ProgressPage /> },
-
-			{
-				path: ROUTES.ADMIN,
-				lazy: () => import('@/pages/Admin.page'),
-			},
 		],
 	},
 ]);

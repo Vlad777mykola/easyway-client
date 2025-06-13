@@ -6,7 +6,7 @@ import { ContentContainer } from '@/ui-components/Content-Container';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sidebar';
 
 import { ListCollections } from './components/lits-collections/ListCollections';
-import { useFilters } from '@/shared/api-hooks/useFilters';
+import { filtersApi } from '@/shared/api/generated';
 
 export const Collections = ({ collectionId }: { collectionId: CollectionsType }): ReactNode => {
 	const setClean = useCollectionFilter.use.setClean();
@@ -14,7 +14,7 @@ export const Collections = ({ collectionId }: { collectionId: CollectionsType })
 	const getFiltersData = useCollectionFilter.use.getFiltersData();
 	const setFilterDataOnSearch = useCollectionFilter.use.setFilterDataOnSearch();
 
-	const { data: filters } = useFilters();
+	const { data: filters } = filtersApi.useFiltersControllerFindSuspense();
 
 	const fieldsData: FieldsDataType[] = [
 		{

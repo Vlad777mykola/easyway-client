@@ -12,7 +12,8 @@
 		"lint": "eslint .",
 		"preview": "vite preview",
 		"verify": "npm run format && npm run lint && npm run ts",
-		"deploy": "aws s3 sync dist/ s3://best-way"
+		"deploy": "aws s3 sync dist/ s3://best-way",
+		"api:g": "orval"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.0.1",
@@ -23,6 +24,7 @@
 		"idb": "^8.0.2",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
+		"react-error-boundary": "^6.0.0",
 		"react-hook-form": "^7.57.0",
 		"react-router-dom": "^7.5.3",
 		"zod": "^3.25.46",
@@ -33,6 +35,7 @@
 		"@commitlint/config-conventional": "^19.6.0",
 		"@eslint/js": "^9.16.0",
 		"@types/node": "^22.10.2",
+		"@types/node-fetch": "^2.6.12",
 		"@types/react": "^18.3.12",
 		"@types/react-dom": "^18.3.1",
 		"@vitejs/plugin-react": "^4.3.4",
@@ -47,6 +50,7 @@
 		"globals": "^15.12.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.2.11",
+		"orval": "^7.9.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.6.2",
 		"typescript-eslint": "^8.15.0",

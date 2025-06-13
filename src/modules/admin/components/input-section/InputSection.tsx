@@ -4,11 +4,11 @@ import { Button } from '@/ui-components/Button';
 import { Typography } from '@/ui-components/Typography';
 import { capitalize } from '@/shared/utils/capitalize';
 import { FieldGroup } from '@/ui-components/FieldGroup';
-import { FiltersValue } from '../../types';
+
+import { FiltersKeys, FiltersValue } from '../../types';
+import { createFormDataSchema } from '../../zod-schemas/form-filters.schema';
 
 import styles from './inputSection.module.css';
-import { createFormDataSchema } from '../../zod-schemas/form-filters.schema';
-import { FiltersKeys } from '@/shared/api-hooks/useFilters';
 
 export const InputSection = ({
 	keyOfFilters,

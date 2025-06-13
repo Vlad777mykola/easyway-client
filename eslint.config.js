@@ -12,6 +12,9 @@ import tseslint from '@typescript-eslint/eslint-plugin';
 import { eslintBoundariesConfig } from './eslint.boundaries.js';
 
 export default [
+	{
+		ignores: ['dist/', 'node_modules/', 'src/shared/api/generated/'],
+	},
 	// Base JavaScript recommended rules
 	js.configs.recommended,
 
@@ -50,8 +53,6 @@ export default [
 				},
 			},
 		},
-
-		ignores: ['dist/', 'node_modules/'],
 	},
 
 	// React-specific rules
