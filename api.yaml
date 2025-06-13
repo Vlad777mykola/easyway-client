@@ -1,0 +1,543 @@
+openapi: 3.0.0
+paths:
+  /:
+    get:
+      operationId: AppController_getHello
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelloWordDto'
+      tags:
+        - App
+  /collections:
+    get:
+      operationId: CollectionsController_find
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags: &a1
+        - Collections
+    post:
+      operationId: CollectionsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCollectionDto'
+      responses:
+        '201':
+          description: ''
+      tags: *a1
+  /collections/saved:
+    get:
+      operationId: CollectionsController_getSavedCollections
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags: *a1
+  /collections/find:
+    get:
+      operationId: CollectionsController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags: *a1
+  /collections/{id}:
+    patch:
+      operationId: CollectionsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCollectionDto'
+      responses:
+        '200':
+          description: ''
+      tags: *a1
+    delete:
+      operationId: CollectionsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *a1
+  /collections/saveWord/{id}:
+    patch:
+      operationId: CollectionsController_saveWord
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveWordDto'
+      responses:
+        '200':
+          description: ''
+      tags: *a1
+  /collections/words/{id}:
+    get:
+      operationId: CollectionsController_getWordsByCollectionsId
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *a1
+  /auth/signup:
+    post:
+      operationId: UserController_signup
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: ''
+      tags: &a2
+        - User
+  /auth/signin:
+    post:
+      operationId: UserController_signin
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: ''
+      tags: *a2
+  /auth/signout:
+    post:
+      operationId: UserController_signout
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags: *a2
+  /auth/me:
+    get:
+      operationId: UserController_me
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags: *a2
+  /auth:
+    get:
+      operationId: UserController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags: *a2
+  /auth/{id}:
+    get:
+      operationId: UserController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *a2
+    patch:
+      operationId: UserController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: ''
+      tags: *a2
+    delete:
+      operationId: UserController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *a2
+  /auth/save/{collectionId}:
+    post:
+      operationId: UserController_saveCollection
+      parameters:
+        - name: collectionId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+      tags: *a2
+  /filters:
+    get:
+      operationId: FiltersController_find
+      parameters: []
+      responses:
+        '200':
+          description: List of filters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiltersDto'
+      summary: Get all filters
+      tags: &a3
+        - Filters
+    post:
+      operationId: FiltersController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFilterDto'
+      responses:
+        '201':
+          description: Filter created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiltersDto'
+      summary: Create new filters
+      tags: *a3
+    patch:
+      operationId: FiltersController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFilterDto'
+      responses:
+        '200':
+          description: Filter updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiltersDto'
+      summary: Update existing filters
+      tags: *a3
+  /filters/{id}:
+    delete:
+      operationId: FiltersController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Filter removed
+      summary: Delete a filter by ID
+      tags: *a3
+  /words:
+    post:
+      operationId: WordsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWordDto'
+      responses:
+        '201':
+          description: ''
+      tags: &a4
+        - Words
+  /words/{id}:
+    get:
+      operationId: WordsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *a4
+    patch:
+      operationId: WordsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWordDto'
+      responses:
+        '200':
+          description: ''
+      tags: *a4
+    delete:
+      operationId: WordsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *a4
+  /filters-collections:
+    post:
+      operationId: FiltersCollectionsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFiltersCollectionDto'
+      responses:
+        '201':
+          description: ''
+      tags: &a5
+        - FiltersCollections
+    get:
+      operationId: FiltersCollectionsController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags: *a5
+  /filters-collections/{id}:
+    get:
+      operationId: FiltersCollectionsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *a5
+    patch:
+      operationId: FiltersCollectionsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFiltersCollectionDto'
+      responses:
+        '200':
+          description: ''
+      tags: *a5
+    delete:
+      operationId: FiltersCollectionsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *a5
+info:
+  title: API
+  description: ''
+  version: 1.0.0
+  contact: {}
+tags: []
+servers: []
+components:
+  schemas:
+    HelloWordDto:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    CreateCollectionDto:
+      type: object
+      properties: {}
+    UpdateCollectionDto:
+      type: object
+      properties: {}
+    SaveWordDto:
+      type: object
+      properties: {}
+    CreateUserDto:
+      type: object
+      properties: {}
+    UpdateUserDto:
+      type: object
+      properties: {}
+    FiltersDto:
+      type: object
+      properties:
+        level:
+          type: array
+          items:
+            type: string
+        tenses:
+          type: array
+          items:
+            type: string
+        topic:
+          type: array
+          items:
+            type: string
+        category:
+          type: array
+          items:
+            type: string
+      required:
+        - level
+        - tenses
+        - topic
+        - category
+    CreateFilterDto:
+      type: object
+      properties:
+        tenses:
+          description: List of tenses to filter by
+          type: array
+          items:
+            type: string
+        level:
+          description: List of levels to filter by
+          type: array
+          items:
+            type: string
+        topic:
+          description: List of topics to filter by
+          type: array
+          items:
+            type: string
+        category:
+          description: List of categories to filter by
+          type: array
+          items:
+            type: string
+      required:
+        - tenses
+        - level
+        - topic
+        - category
+    UpdateFilterDto:
+      type: object
+      properties:
+        tenses:
+          description: List of tenses to update
+          example:
+            - past
+            - present
+            - future
+          type: array
+          items:
+            type: string
+        level:
+          description: List of levels to update
+          example:
+            - beginner
+            - intermediate
+          type: array
+          items:
+            type: string
+        topic:
+          description: List of topics to update
+          example:
+            - travel
+            - education
+          type: array
+          items:
+            type: string
+        category:
+          description: List of categories to update
+          example:
+            - grammar
+            - vocabulary
+          type: array
+          items:
+            type: string
+    CreateWordDto:
+      type: object
+      properties: {}
+    UpdateWordDto:
+      type: object
+      properties: {}
+    CreateFiltersCollectionDto:
+      type: object
+      properties: {}
+    UpdateFiltersCollectionDto:
+      type: object
+      properties: {}

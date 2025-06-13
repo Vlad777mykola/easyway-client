@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 import { Tag } from '@/ui-components/Tag';
 import { Typography } from '@/ui-components/Typography';
 
+import { FiltersKeys, FiltersValue } from '../../types';
+
 import styles from './tagSection.module.css';
-import { FiltersValue } from '../../types';
-import { FiltersKeys } from '@/shared/api-hooks/useFilters';
 
 export const TagSection = ({
 	keyOfFilters,

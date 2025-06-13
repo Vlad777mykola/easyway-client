@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy } from 'react';
-//import { ROUTES } from '@/shared/model/routes';
+import { ROUTES } from '@/shared/model/routes';
 import { createBrowserRouter } from 'react-router-dom';
 // import { DictionaryExerciseCard, DictionaryExerciseDetails } from '@/modules/dictionary';
 import { Auth } from '@/pages/Auth';
@@ -28,6 +28,10 @@ export const router = createBrowserRouter([
 		element: <Layout />,
 		children: [
 			{ path: '', lazy: () => import('@/pages/Dictionary.page') },
+			{
+				path: ROUTES.ADMIN,
+				lazy: () => import('@/pages/Admin.page'),
+			},
 			{ path: 'profile', element: <ProfilePage /> },
 			{ path: 'signin', element: <Auth isSignup={true} /> },
 			{ path: 'signup', element: <Auth /> },

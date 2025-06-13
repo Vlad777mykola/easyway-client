@@ -4,20 +4,22 @@ import { Input } from '@/ui-components/Input';
 import { useForm, Controller } from 'react-hook-form';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { WrapperCard } from '@/features/wrap-card';
-import { FiltersKeys, useFilters } from '@/shared/api-hooks/useFilters';
+
 import { Button } from '@/ui-components/Button';
 import { Select } from '@/ui-components/Select';
 import { capitalize } from '@/shared/utils/capitalize';
 import { Typography } from '@/ui-components/Typography';
+import { filtersApi } from '@/shared/api/generated';
 
 import { useCollectionsMutation } from '../../hooks/useCollectionsMutation';
 import { schema } from '../../zod-schemas/form.schema';
-import { FormValues } from '../../types';
+import { FiltersKeys, FormValues } from '../../types';
 
 import styles from './createCollections.module.css';
 
 export const CreateCollections = () => {
-	const { data: filters } = useFilters();
+	const { data: filters } = filtersApi.useFiltersControllerFindSuspense();
+
 	const { mutate, isPending, error } = useCollectionsMutation(() => {
 		clearForm();
 	});

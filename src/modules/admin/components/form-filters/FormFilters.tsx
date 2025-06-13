@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/ui-components/Button';
 import { Typography } from '@/ui-components/Typography';
-import { FiltersKeys, useFilters } from '@/shared/api-hooks/useFilters';
+import { filtersApi } from '@/shared/api/generated';
+import type { ApiError } from '@/shared/api/types';
 
 import { TagSection } from '../tag-section/TagSection';
 import { InputSection } from '../input-section/InputSection';
-import { FiltersMap, FiltersValue } from '../../types';
-import { useFiltersMutation } from '../../hooks/useFiltersMutation';
+import { FiltersKeys, FiltersMap, FiltersValue } from '../../types';
 import { extractValues, getModifyFilters, hasChanges } from '../../utils';
 
 import styles from './formFilters.module.css';
@@ -15,10 +15,17 @@ export const FormFilters = () => {
 	const [showErrors, setShowErrors] = useState(false);
 	const [filters, setFilters] = useState<FiltersMap>(new Map());
 
-	const { data, refetch } = useFilters();
+	const { data, refetch } = filtersApi.useFiltersControllerFindSuspense();
 
-	const { mutate, isPending, error } = useFiltersMutation(() => {
-		clearForm();
+	const { mutate, isPending } = filtersApi.useFiltersControllerUpdate<ApiError>({
+		mutation: {
+			onSuccess: () => {
+				clearForm();
+			},
+			onError: (error) => {
+				console.error('Error creating filter:', error);
+			},
+		},
 	});
 
 	useEffect(() => {
@@ -42,16 +49,17 @@ export const FormFilters = () => {
 		}
 
 		mutate({
-			level: extractValues('level', filters),
-			tenses: extractValues('tenses', filters),
-			topic: extractValues('topic', filters),
-			category: extractValues('category', filters),
+			data: {
+				level: extractValues('level', filters),
+				tenses: extractValues('tenses', filters),
+				topic: extractValues('topic', filters),
+				category: extractValues('category', filters),
+			},
 		});
 	};
 
 	const clearForm = async () => {
 		const result = await refetch();
-
 		if (result.isSuccess && result.data) {
 			setFilters(getModifyFilters(result.data));
 			setShowErrors(false);
@@ -76,9 +84,7 @@ export const FormFilters = () => {
 					))}
 				</div>
 			)}
-			{(showErrors || error) && (
-				<Typography.Text type="danger">{error?.message || 'Required some changes'}</Typography.Text>
-			)}
+			{showErrors && <Typography.Text type="danger">Required some changes</Typography.Text>}
 			<div className={styles.filtersButtons}>
 				<Button type="primary" shape="round" onClick={clearForm}>
 					Clear

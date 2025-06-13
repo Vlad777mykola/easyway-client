@@ -1,7 +1,7 @@
-import { FiltersKeys, FiltersRes } from '@/shared/api-hooks/useFilters';
-import { FiltersMap } from './types';
+import { FiltersDto } from '@/shared/api/generated/model';
+import { FiltersKeys, FiltersMap } from './types';
 
-export const getModifyFilters = (filters: FiltersRes) => {
+export const getModifyFilters = (filters: FiltersDto) => {
 	const map: FiltersMap = new Map();
 	Object.entries(filters).forEach(([key, values]) => {
 		const arr = values.map((value: string) => ({
