@@ -1,7 +1,8 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useWords, WordsType } from '@/shared/api-hooks/useWords';
 import { Wrapper } from '@/ui-components/Wrapper';
 import { Input } from '@/ui-components/Input';
-import { useState } from 'react';
 import { WordCard } from '../word-card/WordCard';
 
 import styles from './main.module.css';
@@ -11,6 +12,12 @@ const { Search } = Input;
 export const Main = () => {
 	const [word, setWord] = useState<string>('w');
 	const { data: words, refetch } = useWords(word);
+
+	const navigate = useNavigate();
+
+	const onClick = (name: string, id: string) => {
+		navigate(`/word/${name}/${id}`);
+	};
 
 	return (
 		<>
@@ -25,7 +32,10 @@ export const Main = () => {
 				/>
 			</Wrapper>
 			<div className={styles.cards}>
-				{words?.length > 0 && words.map((w: WordsType) => <WordCard {...w} key={w.id} />)}
+				{words?.length > 0 &&
+					words.map((w: WordsType) => (
+						<WordCard key={w.id} onClick={() => onClick(w.name, w.id)} {...w} />
+					))}
 			</div>
 		</>
 	);

@@ -18,6 +18,10 @@ const ExerciseDetails = lazy(() => import('@/pages/ExerciseDetailsPage'));
 const WordDetailsPage = lazy(() => import('@/pages/WordDetailsPage'));
 const CompleteWordTest = lazy(() => import('@/pages/CompleteWordTest'));
 
+const WordCardPage = lazy(() => import('@/pages/WordCardPage'));
+
+//const AdminPage = lazy(() => import('@/pages/AdminPage'));
+
 export const router = createBrowserRouter([
 	{
 		path: '/',
@@ -50,6 +54,10 @@ export const router = createBrowserRouter([
 			// },
 
 			{ path: 'progress', element: <ProgressPage /> },
+
+			// { path: 'admin', element: <AdminPage /> },
+
+			{ path: 'word/:wordName/:wordId', element: <WordCardPage /> },
 		],
 	},
 ]);

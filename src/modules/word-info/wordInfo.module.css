@@ -1,0 +1,43 @@
+.wordInfo {
+	margin: 0 auto;
+	margin-top: 50px;
+	width: 50%;
+}
+
+.explanation {
+	margin: 50px 0;
+	display: flex;
+	flex-direction: column;
+	gap: 50px;
+	width: 100%;
+}
+
+@media (min-width: 1536px) {
+	.wordInfo {
+		width: 45%;
+	}
+}
+
+@media (max-width: 1535px) {
+	.wordInfo {
+		width: 70%;
+	}
+}
+
+@media (max-width: 1200px) {
+	.wordInfo {
+		width: 75%;
+	}
+}
+
+@media (max-width: 1024px) {
+	.wordInfo {
+		width: 80%;
+	}
+}
+
+@media (max-width: 768px) {
+	.wordInfo {
+		width: 95%;
+	}
+}

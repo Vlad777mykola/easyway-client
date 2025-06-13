@@ -9,29 +9,29 @@ export const WordCard = ({
 	translate,
 	type,
 	useCase,
+	onClick,
 }: {
 	name: string;
 	translate: string;
 	type: string;
 	useCase: string;
-}) => {
-	return (
-		<div className={styles.card}>
-			<img className={styles.img} src={img} />
-			<div className={styles.content}>
-				<div className={styles.explanation}>
-					<Typography.Title level={4}>{name}</Typography.Title>
-					<div className={styles.translateContainer}>
-						<Typography.Text className={styles.translate}>{translate}</Typography.Text>
-					</div>
-					<div className={styles.useCaseContainer}>
-						<Typography.Text className={styles.useCase}>{useCase}</Typography.Text>
-					</div>
+	onClick: () => void;
+}) => (
+	<div className={styles.card} onClick={onClick}>
+		<img className={styles.img} src={img} />
+		<div className={styles.content}>
+			<div className={styles.explanation}>
+				<Typography.Title level={4}>{name}</Typography.Title>
+				<div className={styles.translateContainer}>
+					<Typography.Text className={styles.translate}>{translate}</Typography.Text>
 				</div>
-				<div className={styles.typeContainer}>
-					<PartOfSpeech type={type} />
+				<div className={styles.useCaseContainer}>
+					<Typography.Text className={styles.useCase}>{useCase}</Typography.Text>
 				</div>
 			</div>
+			<div className={styles.typeContainer}>
+				<PartOfSpeech type={type} />
+			</div>
 		</div>
-	);
-};
+	</div>
+);
