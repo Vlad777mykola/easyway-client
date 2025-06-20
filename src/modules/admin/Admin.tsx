@@ -5,7 +5,7 @@ import { WrapperCard } from '@/features/wrap-card';
 
 import { FormFilters } from './components/form-filters/FormFilters';
 import CreateWords from '../create-words';
-import { SecondTab } from './components/second-tab/SecondTab';
+/* import { SecondTab } from './components/second-tab/SecondTab'; */
 
 export const Admin = () => {
 	const [activeKey, setActiveKey] = useState('2');
