@@ -1,8 +1,21 @@
 .container {
-	width: 400px;
+	width: 800px;
+	font-family: 'Inter', sans-serif;
+	padding: 40px;
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.formContent {
+	width: 100%;
+	display: flex;
+	gap: 1.5rem;
+	flex-direction: column;
+	padding: 40px;
+	box-sizing: border-box;
 }
 
 .title {
@@ -11,8 +24,13 @@
 
 .collectionButtons {
 	display: flex;
-	flex-direction: row;
-	justify-content: center;
 	gap: 10px;
-	margin-top: 30px;
+	align-self: end;
+}
+
+@media (max-width: 1200px) {
+	.formContent {
+		width: 100%;
+		padding: 0px;
+	}
 }
