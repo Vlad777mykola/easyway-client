@@ -14,42 +14,16 @@ import { schema } from '../../zod-schemas/form.schema';
 import { FormValues } from '../../types';
 import styles from './createWords.module.css';
 import { Table } from '@/ui-components/Table';
+import { Space } from '@/ui-components/Space';
+import { Icon } from '@/ui-components/Icon';
+import { ColumnType } from 'antd/es/table';
+import type { FilterConfirmProps } from 'antd/es/table/interface';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
 const types = ['pronoun', 'noun', 'interjection', 'adjective', 'verb'];
 
-const columns = [
-	Table.EXPAND_COLUMN,
-	{
-		title: 'Name',
-		dataIndex: 'name',
-		key: 'name',
-		sorter: (a: DataWords, b: DataWords) => a.name.localeCompare(b.name),
-	},
-	{
-		title: 'Transcription',
-		dataIndex: 'transcription',
-		key: 'transcription',
-	},
-	{
-		title: 'Translate',
-		dataIndex: 'translate',
-		key: 'translate',
-	},
-	{
-		title: 'Type',
-		dataIndex: 'type',
-		key: 'type',
-	},
-	{
-		title: 'Variants',
-		dataIndex: 'variants',
-		key: 'variants',
-	},
-];
-
-type DataWords = {
+export type DataWords = {
 	key: React.Key;
 	name: string;
 	transcription: string;
@@ -62,6 +36,8 @@ type DataWords = {
 export const CreateWords = () => {
 	const [tableWords, setTableWords] = useState<DataWords[]>([]);
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+	const [, setSearchText] = useState('');
+	const [, setSearchedColumn] = useState<keyof DataWords | ''>('');
 	const { data: filters } = filtersApi.useFiltersControllerFindSuspense();
 
 	const { mutate, isPending, error } = useWordsMutation(() => {
@@ -76,6 +52,8 @@ export const CreateWords = () => {
 	} = useForm<FormValues>({
 		resolver: zodResolver(schema),
 	});
+
+	console.log('ERRORS FORM: ', errors);
 
 	const addWord = (data: FormValues) => {
 		console.log('DATA: ', data);
@@ -120,6 +98,130 @@ export const CreateWords = () => {
 
 		setTableWords(newRows);
 	};
+
+	const handleSearch = (
+		selectedKeys: string[],
+		confirm: (param?: FilterConfirmProps) => void,
+		dataIndex: keyof DataWords,
+	) => {
+		confirm();
+		setSearchText(selectedKeys[0]);
+		setSearchedColumn(dataIndex);
+	};
+
+	const handleReset = (clearFilters?: () => void) => {
+		clearFilters?.();
+		setSearchText('');
+	};
+
+	const getColumnSearchProps = (dataIndex: keyof DataWords): ColumnType<DataWords> => ({
+		filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+			<div style={{ padding: 8 }}>
+				<Input
+					placeholder={`Search ${dataIndex}`}
+					value={selectedKeys[0]}
+					onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+					onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+					style={{ marginBottom: 8, display: 'block' }}
+				/>
+				<Space>
+					<Button
+						type="primary"
+						onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+						icon={<Icon icon="search" />}
+						size="small"
+						style={{ width: 90 }}
+					>
+						Search
+					</Button>
+					<Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+						Reset
+					</Button>
+				</Space>
+			</div>
+		),
+		filterIcon: (filtered: boolean) => (
+			<Icon icon="search" size="xs" variant={filtered ? 'primary' : 'secondary'} />
+		),
+		onFilter: (value, record) =>
+			record[dataIndex]
+				?.toString()
+				.toLowerCase()
+				.includes((value as string).toLowerCase()),
+	});
+
+	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0];
+		if (file && file.type === 'text/xml') {
+			const reader = new FileReader();
+			reader.onload = (e: ProgressEvent<FileReader>) => {
+				const xmlString = e.target?.result as string;
+				parseXML(xmlString);
+			};
+			reader.readAsText(file);
+		} else {
+			console.log('Please upload a valid XML file.');
+		}
+	};
+
+	const parseXML = (xmlString: string) => {
+		const parser = new DOMParser();
+		const xml = parser.parseFromString(xmlString, 'application/xml');
+
+		console.log('XML: ', xml);
+
+		const items: DataWords[] = Array.from(xml.getElementsByTagName('word')).map((item) => {
+			const variantsParent = item.getElementsByTagName('variants')[0];
+			const variants = variantsParent
+				? Array.from(variantsParent.getElementsByTagName('variant'))
+						.map((v) => v.textContent)
+						.join(', ')
+				: '';
+
+			return {
+				key: item.getElementsByTagName('name')[0].textContent || '',
+				name: item.getElementsByTagName('name')[0].textContent || '',
+				transcription: item.getElementsByTagName('transcription')[0].textContent || '',
+				translate: item.getElementsByTagName('translate')[0].textContent || '',
+				type: item.getElementsByTagName('type')[0].textContent || '',
+				description: item.getElementsByTagName('useCase')[0].textContent || '',
+				variants,
+			};
+		});
+
+		setTableWords((prev) => [...prev, ...items]);
+	};
+
+	const columns = [
+		Table.EXPAND_COLUMN,
+		{
+			title: 'Name',
+			dataIndex: 'name',
+			key: 'name',
+			sorter: (a: DataWords, b: DataWords) => a.name.localeCompare(b.name),
+			...getColumnSearchProps('name'),
+		},
+		{
+			title: 'Transcription',
+			dataIndex: 'transcription',
+			key: 'transcription',
+		},
+		{
+			title: 'Translate',
+			dataIndex: 'translate',
+			key: 'translate',
+		},
+		{
+			title: 'Type',
+			dataIndex: 'type',
+			key: 'type',
+		},
+		{
+			title: 'Variants',
+			dataIndex: 'variants',
+			key: 'variants',
+		},
+	];
 
 	const rowSelection: TableRowSelection<DataWords> = {
 		selectedRowKeys,
@@ -223,6 +325,25 @@ export const CreateWords = () => {
 								status={errors.type ? 'error' : undefined}
 								onChange={field.onChange}
 								value={field.value}
+							/>
+						)}
+					/>
+				</FieldGroup>
+				<FieldGroup marginY="03" title="Send XML file" error={errors?.xmlFile?.message}>
+					<Controller
+						name="xmlFile"
+						control={control}
+						render={({ field }) => (
+							<Input
+								type="file"
+								accept=".xml"
+								onChange={(e) => {
+									handleFileChange(e);
+									const file = e.target.files?.[0];
+									field.onChange(file);
+								}}
+								size="middle"
+								status={errors?.xmlFile && 'error'}
 							/>
 						)}
 					/>
