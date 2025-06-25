@@ -10,7 +10,7 @@ import { Select } from '@/ui-components/Select';
 import { Button } from '@/ui-components/Button';
 import { filtersApi } from '@/shared/api/generated';
 import { useWordsMutation } from '../../hooks/useWordsMutation';
-import { schema } from '../../zod-schemas/form.schema';
+import { dataWordsArraySchema, dataWordSchema } from '../../zod-schemas/form.schema';
 import { FormValues } from '../../types';
 import styles from './createWords.module.css';
 import { Table } from '@/ui-components/Table';
@@ -36,6 +36,7 @@ export type DataWords = {
 export const CreateWords = () => {
 	const [tableWords, setTableWords] = useState<DataWords[]>([]);
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+	const [xmlInputError, setXmlInputError] = useState('');
 	const [, setSearchText] = useState('');
 	const [, setSearchedColumn] = useState<keyof DataWords | ''>('');
 	const { data: filters } = filtersApi.useFiltersControllerFindSuspense();
@@ -50,7 +51,8 @@ export const CreateWords = () => {
 		handleSubmit,
 		formState: { errors },
 	} = useForm<FormValues>({
-		resolver: zodResolver(schema),
+		mode: 'onChange',
+		resolver: zodResolver(dataWordSchema),
 	});
 
 	console.log('ERRORS FORM: ', errors);
@@ -87,15 +89,7 @@ export const CreateWords = () => {
 	};
 
 	const deleteRows = () => {
-		const newRows = [];
-		for (let i = 0; i < tableWords.length; i++) {
-			for (let j = 0; j < selectedRowKeys.length; j++) {
-				if (tableWords[i].key !== selectedRowKeys[j]) {
-					newRows.push(tableWords[i]);
-				}
-			}
-		}
-
+		const newRows = tableWords.filter((row) => !selectedRowKeys.includes(row.key));
 		setTableWords(newRows);
 	};
 
@@ -152,6 +146,9 @@ export const CreateWords = () => {
 
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
+
+		if (!file) return;
+
 		if (file && file.type === 'text/xml') {
 			const reader = new FileReader();
 			reader.onload = (e: ProgressEvent<FileReader>) => {
@@ -159,9 +156,40 @@ export const CreateWords = () => {
 				parseXML(xmlString);
 			};
 			reader.readAsText(file);
-		} else {
-			console.log('Please upload a valid XML file.');
 		}
+
+		if (file && file.type === 'application/json') {
+			const reader = new FileReader();
+			reader.onload = (e: ProgressEvent<FileReader>) => {
+				const jsonString = e.target?.result as string;
+				parseJSON(jsonString);
+			};
+			reader.readAsText(file);
+		}
+	};
+
+	const parseJSON = (jsonString: string) => {
+		const json = JSON.parse(jsonString);
+		console.log('JSON FILE: ', json);
+
+		const result: DataWords[] = json.map((word) => ({
+			key: word.name,
+			name: word.name,
+			transcription: word.transcription,
+			translate: word.translate,
+			type: word.type,
+			description: word.useCase,
+			variants: word.variants.join(', '),
+		}));
+
+		const uniqueWords = Array.from(
+			new Map([...tableWords, ...result].map((word) => [word.name, word])).values(),
+		);
+
+		console.log('RESULT: ', result);
+		console.log('UNIQUE WORDS: ', uniqueWords);
+
+		setTableWords(uniqueWords);
 	};
 
 	const parseXML = (xmlString: string) => {
@@ -189,7 +217,24 @@ export const CreateWords = () => {
 			};
 		});
 
-		setTableWords((prev) => [...prev, ...items]);
+		const merged = [...tableWords, ...items];
+		const result = dataWordsArraySchema.safeParse(merged);
+
+		if (!result.success) {
+			console.log('Validation error:', result.error.errors);
+			setXmlInputError(result.error.errors[0].message);
+		} else {
+			console.log('Valid data:', result.data);
+			setXmlInputError('');
+		}
+
+		const uniqueWords = Array.from(
+			new Map([...tableWords, ...items].map((word) => [word.name, word])).values(),
+		);
+
+		console.log('UNIQUE WORDS: ', uniqueWords);
+
+		setTableWords(uniqueWords);
 	};
 
 	const columns = [
@@ -329,7 +374,11 @@ export const CreateWords = () => {
 						)}
 					/>
 				</FieldGroup>
-				<FieldGroup marginY="03" title="Send XML file" error={errors?.xmlFile?.message}>
+				<FieldGroup
+					marginY="03"
+					title="Send XML file"
+					error={errors?.xmlFile?.message || xmlInputError}
+				>
 					<Controller
 						name="xmlFile"
 						control={control}
@@ -337,6 +386,29 @@ export const CreateWords = () => {
 							<Input
 								type="file"
 								accept=".xml"
+								onChange={(e) => {
+									handleFileChange(e);
+									const file = e.target.files?.[0];
+									field.onChange(file);
+								}}
+								size="middle"
+								status={errors?.xmlFile && 'error'}
+							/>
+						)}
+					/>
+				</FieldGroup>
+				<FieldGroup
+					marginY="03"
+					title="Send JSON file"
+					error={errors?.xmlFile?.message || xmlInputError}
+				>
+					<Controller
+						name="jsonFile"
+						control={control}
+						render={({ field }) => (
+							<Input
+								type="file"
+								accept=".json"
 								onChange={(e) => {
 									handleFileChange(e);
 									const file = e.target.files?.[0];
