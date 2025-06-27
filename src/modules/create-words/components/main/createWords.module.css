@@ -28,6 +28,23 @@
 	align-self: end;
 }
 
+.submitButton {
+	display: flex;
+	align-self: end;
+	margin-top: 20px;
+}
+
+.variantsContainer {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	gap: 10px;
+}
+
+.variants {
+	width: 100%;
+}
+
 .tableContainer {
 	margin-top: 30px;
 	width: 100%;

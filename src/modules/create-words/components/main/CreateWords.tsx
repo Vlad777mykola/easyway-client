@@ -10,7 +10,13 @@ import { Select } from '@/ui-components/Select';
 import { Button } from '@/ui-components/Button';
 import { filtersApi } from '@/shared/api/generated';
 import { useWordsMutation } from '../../hooks/useWordsMutation';
-import { dataWordsArraySchema, dataWordSchema } from '../../zod-schemas/form.schema';
+import {
+	dataWordsArraySchema,
+	dataWordSchema,
+	arrayOfFilledWordsSchema,
+	arrayOfHasRequiredKeysJson,
+	arrayOfHasRequiredKeysXml,
+} from '../../zod-schemas/form.schema';
 import { FormValues } from '../../types';
 import styles from './createWords.module.css';
 import { Table } from '@/ui-components/Table';
@@ -37,6 +43,7 @@ export const CreateWords = () => {
 	const [tableWords, setTableWords] = useState<DataWords[]>([]);
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 	const [xmlInputError, setXmlInputError] = useState('');
+	const [jsonInputError, setJsonInputError] = useState('');
 	const [, setSearchText] = useState('');
 	const [, setSearchedColumn] = useState<keyof DataWords | ''>('');
 	const { data: filters } = filtersApi.useFiltersControllerFindSuspense();
@@ -48,6 +55,8 @@ export const CreateWords = () => {
 	const {
 		reset,
 		control,
+		setValue,
+		watch,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<FormValues>({
@@ -55,7 +64,21 @@ export const CreateWords = () => {
 		resolver: zodResolver(dataWordSchema),
 	});
 
+	const variants = watch('variants');
+
 	console.log('ERRORS FORM: ', errors);
+
+	const getSelectInputValue = (): string => {
+		const input = document.querySelector('.ant-select-selector input') as HTMLInputElement;
+		return input?.value?.trim() || '';
+	};
+
+	const handleAdd = () => {
+		const newValue = getSelectInputValue();
+		if (newValue && !variants.includes(newValue)) {
+			setValue('variants', [...variants, newValue]);
+		}
+	};
 
 	const addWord = (data: FormValues) => {
 		console.log('DATA: ', data);
@@ -170,6 +193,25 @@ export const CreateWords = () => {
 
 	const parseJSON = (jsonString: string) => {
 		const json = JSON.parse(jsonString);
+		const parseFilledSchema = arrayOfFilledWordsSchema.safeParse(json);
+		const parsedAllKeys = arrayOfHasRequiredKeysJson.safeParse(json);
+		console.log('PARSE FILLED SCHEMA: ', parseFilledSchema);
+		console.log('PARSED ALL KEYS: ', parsedAllKeys);
+
+		if (!parseFilledSchema.success) {
+			setJsonInputError(parseFilledSchema.error.errors[0].message);
+			return;
+		} else {
+			setJsonInputError('');
+		}
+
+		if (!parsedAllKeys.success) {
+			setJsonInputError(parsedAllKeys.error.errors[0].message);
+			return;
+		} else {
+			setJsonInputError('');
+		}
+
 		console.log('JSON FILE: ', json);
 
 		const result: DataWords[] = json.map((word) => ({
@@ -182,6 +224,19 @@ export const CreateWords = () => {
 			variants: word.variants.join(', '),
 		}));
 
+		const merged = [...tableWords, ...result];
+		const parseCondition = dataWordsArraySchema.safeParse(merged);
+
+		if (!parseCondition.success) {
+			console.log('Validation error:', parseCondition.error.errors);
+			setJsonInputError(parseCondition.error.errors[0].message);
+		} else {
+			console.log('Valid data:', parseCondition.data);
+			setJsonInputError('');
+		}
+
+		console.log('PARSE CONDITION: ', parseCondition);
+
 		const uniqueWords = Array.from(
 			new Map([...tableWords, ...result].map((word) => [word.name, word])).values(),
 		);
@@ -191,6 +246,8 @@ export const CreateWords = () => {
 
 		setTableWords(uniqueWords);
 	};
+
+	console.log('NO JSON: ', JSON.parse('123'));
 
 	const parseXML = (xmlString: string) => {
 		const parser = new DOMParser();
@@ -216,6 +273,25 @@ export const CreateWords = () => {
 				variants,
 			};
 		});
+
+		const parseFilledSchema = arrayOfFilledWordsSchema.safeParse(items);
+		const parsedAllKeys = arrayOfHasRequiredKeysXml.safeParse(items);
+		console.log('PARSE FILLED SCHEMA: ', parseFilledSchema);
+		console.log('PARSED ALL KEYS: ', parsedAllKeys);
+
+		if (!parseFilledSchema.success) {
+			setXmlInputError(parseFilledSchema.error.errors[0].message);
+			return;
+		} else {
+			setXmlInputError('');
+		}
+
+		if (!parsedAllKeys.success) {
+			setXmlInputError(parsedAllKeys.error.errors[0].message);
+			return;
+		} else {
+			setXmlInputError('');
+		}
 
 		const merged = [...tableWords, ...items];
 		const result = dataWordsArraySchema.safeParse(merged);
@@ -357,22 +433,27 @@ export const CreateWords = () => {
 					/>
 				</FieldGroup>
 				<FieldGroup marginY="03" title="Variants" error={errors.type?.message}>
-					<Controller
-						name="variants"
-						control={control}
-						render={({ field }) => (
-							<Select
-								{...field}
-								mode="tags"
-								open={false}
-								suffixIcon={null}
-								placeholder="Press Enter to add tags"
-								status={errors.type ? 'error' : undefined}
-								onChange={field.onChange}
-								value={field.value}
-							/>
-						)}
-					/>
+					<div className={styles.variantsContainer}>
+						<Controller
+							name="variants"
+							control={control}
+							render={({ field }) => (
+								<div className={styles.variants}>
+									<Select
+										{...field}
+										mode="tags"
+										open={false}
+										suffixIcon={null}
+										placeholder="Press Enter to add tags"
+										status={errors.type ? 'error' : undefined}
+										onChange={field.onChange}
+										value={field.value}
+									/>
+								</div>
+							)}
+						/>
+						<Button onClick={handleAdd}>Add</Button>
+					</div>
 				</FieldGroup>
 				<FieldGroup
 					marginY="03"
@@ -400,7 +481,7 @@ export const CreateWords = () => {
 				<FieldGroup
 					marginY="03"
 					title="Send JSON file"
-					error={errors?.xmlFile?.message || xmlInputError}
+					error={errors?.jsonFile?.message || jsonInputError}
 				>
 					<Controller
 						name="jsonFile"
@@ -446,6 +527,11 @@ export const CreateWords = () => {
 					columns={columns}
 					rowSelection={rowSelection}
 				/>
+			</div>
+			<div className={styles.submitButton}>
+				<Button type="primary" shape="round" onClick={onSubmit}>
+					Submit
+				</Button>
 			</div>
 		</div>
 	);

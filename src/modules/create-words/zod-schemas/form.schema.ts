@@ -37,13 +37,58 @@ export const dataWordsArraySchema = z.array(fileDataSchema).refine(
 	},
 );
 
+const filledWordSchema = z
+	.record(z.any())
+	.refine((obj) => Object.values(obj).every((v) => v !== undefined && v !== null && v !== ''), {
+		message: 'All fields in the object must be filled',
+	});
+
+export const arrayOfFilledWordsSchema = z.array(filledWordSchema);
+
+const hasRequiredKeysJson = z
+	.record(z.any())
+	.refine(
+		(obj) =>
+			['name', 'transcription', 'translate', 'useCase', 'type', 'variants'].every(
+				(key) => key in obj,
+			),
+		{
+			message: 'Missing required keys',
+		},
+	);
+
+const hasRequiredKeysXml = z
+	.record(z.any())
+	.refine(
+		(obj) =>
+			['name', 'transcription', 'translate', 'description', 'type', 'variants'].every(
+				(key) => key in obj,
+			),
+		{
+			message: 'Missing required keys',
+		},
+	);
+
+export const arrayOfHasRequiredKeysJson = z.array(hasRequiredKeysJson);
+export const arrayOfHasRequiredKeysXml = z.array(hasRequiredKeysXml);
+
 export const dataWordSchema = z.object({
 	name: z.string().min(3, 'Name is required'),
 	transcription: z.string().min(3, 'Transcription is required'),
 	translate: z.string().min(3, 'Translate is required'),
 	useCase: z.string().min(3, 'Use case is required'),
 	type: z.string().min(1, 'Select at least one type'),
-	variants: z.array(z.string()).min(1, 'Select at least one type'),
-	xmlFile: z.union([xmlFileSchema.optional(), dataWordsArraySchema]),
-	jsonFile: z.union([jsonFileSchema.optional(), dataWordsArraySchema]),
+	variants: z.array(z.string()).min(1, 'Variants must have at least one variant'),
+	xmlFile: z.union([
+		xmlFileSchema.optional(),
+		dataWordsArraySchema,
+		arrayOfFilledWordsSchema,
+		arrayOfHasRequiredKeysJson,
+	]),
+	jsonFile: z.union([
+		jsonFileSchema.optional(),
+		dataWordsArraySchema,
+		arrayOfFilledWordsSchema,
+		arrayOfHasRequiredKeysXml,
+	]),
 });
