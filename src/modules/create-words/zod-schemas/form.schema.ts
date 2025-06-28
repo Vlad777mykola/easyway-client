@@ -18,16 +18,7 @@ const jsonFileSchema = z
 		message: 'File cannot be empty.',
 	});
 
-const fileDataSchema = z.object({
-	name: z.string().min(3, 'Name is required'),
-	transcription: z.string().min(3, 'Transcription is required'),
-	translate: z.string().min(3, 'Translate is required'),
-	description: z.string().min(3, 'Use case is required'),
-	type: z.string().min(1, 'Select at least one type'),
-	variants: z.string().min(1, 'Select at least one type'),
-});
-
-export const dataWordsArraySchema = z.array(fileDataSchema).refine(
+export const dataWordsArraySchema = z.array(z.any()).refine(
 	(arr) => {
 		const names = arr.map((item) => item.name);
 		return new Set(names).size === names.length;
@@ -45,7 +36,7 @@ const filledWordSchema = z
 
 export const arrayOfFilledWordsSchema = z.array(filledWordSchema);
 
-const hasRequiredKeysJson = z
+const hasRequiredKeys = z
 	.record(z.any())
 	.refine(
 		(obj) =>
@@ -57,20 +48,7 @@ const hasRequiredKeysJson = z
 		},
 	);
 
-const hasRequiredKeysXml = z
-	.record(z.any())
-	.refine(
-		(obj) =>
-			['name', 'transcription', 'translate', 'description', 'type', 'variants'].every(
-				(key) => key in obj,
-			),
-		{
-			message: 'Missing required keys',
-		},
-	);
-
-export const arrayOfHasRequiredKeysJson = z.array(hasRequiredKeysJson);
-export const arrayOfHasRequiredKeysXml = z.array(hasRequiredKeysXml);
+export const arrayOfHasRequiredKeys = z.array(hasRequiredKeys);
 
 export const dataWordSchema = z.object({
 	name: z.string().min(3, 'Name is required'),
@@ -83,12 +61,12 @@ export const dataWordSchema = z.object({
 		xmlFileSchema.optional(),
 		dataWordsArraySchema,
 		arrayOfFilledWordsSchema,
-		arrayOfHasRequiredKeysJson,
+		hasRequiredKeys,
 	]),
 	jsonFile: z.union([
 		jsonFileSchema.optional(),
 		dataWordsArraySchema,
 		arrayOfFilledWordsSchema,
-		arrayOfHasRequiredKeysXml,
+		hasRequiredKeys,
 	]),
 });

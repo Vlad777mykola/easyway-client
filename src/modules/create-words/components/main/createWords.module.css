@@ -22,54 +22,10 @@
 	align-self: center;
 }
 
-.collectionButtons {
-	display: flex;
-	gap: 10px;
-	align-self: end;
-}
-
 .submitButton {
 	display: flex;
 	align-self: end;
 	margin-top: 20px;
-}
-
-.variantsContainer {
-	display: flex;
-	flex-direction: row;
-	width: 100%;
-	gap: 10px;
-}
-
-.variants {
-	width: 100%;
-}
-
-.tableContainer {
-	margin-top: 30px;
-	width: 100%;
-	overflow-x: auto;
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-}
-
-.table {
-	width: 100%;
-}
-
-.table :global(.ant-table-thead > tr > th) {
-  background-color: #f0f2f5;
-  color: #000;
-}
-
-.table :global(.ant-table-expanded-row) {
-  background-color: #f0f2f5;
-  padding: 16px;
-}
-
-.description {
-	margin: 0;
 }
 
 @media (max-width: 1200px) {
