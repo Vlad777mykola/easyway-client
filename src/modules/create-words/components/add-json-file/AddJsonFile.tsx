@@ -37,7 +37,6 @@ export const AddJsonFile = ({
 	const parseJSON = (jsonString: string) => {
 		const json = JSON.parse(jsonString);
 		const parseFilledSchema = arrayOfFilledWordsSchema.safeParse(json);
-		console.log('JSON: ', json);
 		const parsedAllKeys = arrayOfHasRequiredKeys.safeParse(json);
 
 		if (!parseFilledSchema.success) {
