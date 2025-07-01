@@ -34,26 +34,48 @@ export const AddJsonFile = ({
 }) => {
 	const [jsonInputError, setJsonInputError] = useState('');
 
+	console.log('INPUT ERROR: ', jsonInputError);
+
 	const parseJSON = (jsonString: string) => {
 		const json = JSON.parse(jsonString);
 		const parseFilledSchema = arrayOfFilledWordsSchema.safeParse(json);
 		const parsedAllKeys = arrayOfHasRequiredKeys.safeParse(json);
+		const requiredKeys = ['name', 'transcription', 'translate', 'useCase', 'type', 'variants'];
+
+		console.log('JSON: ', json);
+		console.log('SUCCESS: ', parseFilledSchema.success);
 
 		if (!parseFilledSchema.success) {
-			setJsonInputError(parseFilledSchema.error.errors[0].message);
-			return;
-		} else {
-			setJsonInputError('');
+			for (const [_, value] of Object.entries(parseFilledSchema.error.format())) {
+				for (let i = 0; i < requiredKeys.length; i++) {
+					if (value[requiredKeys[i]]) {
+						console.log('REQUIRED KEYS: ', value[requiredKeys[i]]);
+						setJsonInputError((prev) => `${prev} ${value[requiredKeys[i]]._errors}`);
+					}
+				}
+			}
+			//setJsonInputError(parseFilledSchema.error.errors[0].message);
 		}
 
 		if (!parsedAllKeys.success) {
-			setJsonInputError(parsedAllKeys.error.errors[0].message);
-			return;
-		} else {
-			setJsonInputError('');
+			console.log('KEYS FORMAT: ', parsedAllKeys.error.format());
+			for (const [_, value] of Object.entries(parsedAllKeys.error.format())) {
+				for (let i = 0; i < requiredKeys.length; i++) {
+					if (value[requiredKeys[i]]) {
+						console.log('REQUIRED KEYS: ', value[requiredKeys[i]]);
+						setJsonInputError((prev) => `${prev} ${value[requiredKeys[i]]._errors}`);
+					}
+				}
+			}
 		}
 
-		const result: DataWords[] = json.map((word: JsonWord) => ({
+		const filterJson = json.filter((word) =>
+			requiredKeys.every(
+				(key) => word[key] !== undefined && word[key] !== null && word[key] !== '',
+			),
+		);
+
+		const result: DataWords[] = filterJson.map((word: JsonWord) => ({
 			...word,
 			key: word.name,
 			variants: word.variants.join(', '),
@@ -62,9 +84,14 @@ export const AddJsonFile = ({
 		const merged = [...tableWords, ...result];
 		const parseCondition = dataWordsArraySchema.safeParse(merged);
 
+		const successParse =
+			parseFilledSchema.success && parsedAllKeys.success && parseCondition.success;
+
 		if (!parseCondition.success) {
 			setJsonInputError(parseCondition.error.errors[0].message);
-		} else {
+		}
+
+		if (successParse) {
 			setJsonInputError('');
 		}
 

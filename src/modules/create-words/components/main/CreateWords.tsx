@@ -9,8 +9,8 @@ import { AddXmlFile } from '../add-xml-file/AddXmlFile';
 import { AddJsonFile } from '../add-json-file/AddJsonFile';
 import { TableWords } from '../table-words/TableWords';
 import { useWordsMutation } from '../../hooks/useWordsMutation';
-import { dataWordSchema } from '../../zod-schemas/form.schema';
-import { FormValues } from '../../types';
+import { dataWordSchema, editWordSchema } from '../../zod-schemas/form.schema';
+import { FormValues, EditFormValues } from '../../types';
 import styles from './createWords.module.css';
 
 export type DataWords = {
@@ -30,7 +30,7 @@ export const CreateWords = () => {
 		clearForm();
 	});
 
-	const {
+	/* const {
 		reset,
 		control,
 		setValue,
@@ -40,9 +40,21 @@ export const CreateWords = () => {
 	} = useForm<FormValues>({
 		mode: 'onChange',
 		resolver: zodResolver(dataWordSchema),
+	}); */
+
+	console.log('TABLE WORDS: ', tableWords);
+
+	const createWord = useForm<FormValues>({
+		mode: 'onChange',
+		resolver: zodResolver(dataWordSchema),
 	});
 
-	const variants = watch('variants');
+	const editWord = useForm<EditFormValues>({
+		mode: 'onChange',
+		resolver: zodResolver(editWordSchema),
+	});
+
+	const variants = createWord.watch('variants');
 
 	const getSelectInputValue = (): string => {
 		const input = document.querySelector('.ant-select-selector input') as HTMLInputElement;
@@ -52,7 +64,14 @@ export const CreateWords = () => {
 	const handleAdd = () => {
 		const newValue = getSelectInputValue();
 		if (newValue && !variants.includes(newValue)) {
-			setValue('variants', [...variants, newValue]);
+			createWord.setValue('variants', [...variants, newValue]);
+		}
+	};
+
+	const handleAddEdit = () => {
+		const newValue = getSelectInputValue();
+		if (newValue && !variants.includes(newValue)) {
+			editWord.setValue('variants', [...variants, newValue]);
 		}
 	};
 
@@ -73,12 +92,34 @@ export const CreateWords = () => {
 		]);
 	};
 
+	const editWordAndClose = (editObject: EditFormValues) => {
+		console.log('EDIT OBJECT: ', editObject);
+		const filteredWords = tableWords.filter((word) => word.key !== editObject.key);
+		setTableWords([...filteredWords, { ...editObject, variants: editObject.variants.join(', ') }]);
+	};
+
 	const onSubmit = (data: DataWords[]) => {
 		mutate(data);
 	};
 
 	const clearForm = () => {
-		reset();
+		createWord.reset();
+	};
+
+	const clearEditForm = () => {
+		editWord.reset();
+	};
+
+	const editWordForm = {
+		errors: editWord.formState.errors,
+		control: editWord.control,
+		error,
+		isPending,
+		setValue: editWord.setValue,
+		clearForm: clearEditForm,
+		addWord: editWordAndClose,
+		handleAdd: handleAddEdit,
+		handleSubmit: editWord.handleSubmit,
 	};
 
 	return (
@@ -88,29 +129,33 @@ export const CreateWords = () => {
 			</Typography.Title>
 			<div className={styles.formContent}>
 				<AddWordForm
-					errors={errors}
-					control={control}
+					errors={createWord.formState.errors}
+					control={createWord.control}
 					isPending={isPending}
 					error={error}
 					clearForm={clearForm}
 					addWord={addWord}
 					handleAdd={handleAdd}
-					handleSubmit={handleSubmit}
+					handleSubmit={createWord.handleSubmit}
 				/>
 				<AddXmlFile
-					errors={errors}
-					control={control}
+					errors={createWord.formState.errors}
+					control={createWord.control}
 					tableWords={tableWords}
 					setTableWords={setTableWords}
 				/>
 				<AddJsonFile
-					errors={errors}
-					control={control}
+					errors={createWord.formState.errors}
+					control={createWord.control}
 					tableWords={tableWords}
 					setTableWords={setTableWords}
 				/>
 			</div>
-			<TableWords tableWords={tableWords} setTableWords={setTableWords} />
+			<TableWords
+				tableWords={tableWords}
+				editWordForm={editWordForm}
+				setTableWords={setTableWords}
+			/>
 			<div className={styles.submitButton}>
 				<Button
 					type="primary"

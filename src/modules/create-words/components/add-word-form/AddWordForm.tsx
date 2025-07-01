@@ -6,6 +6,7 @@ import { Button } from '@/ui-components/Button';
 import { Typography } from '@/ui-components/Typography';
 import { FormValues } from '../../types';
 import styles from './addWordForm.module.css';
+import { useEffect } from 'react';
 
 const types = ['pronoun', 'noun', 'interjection', 'adjective', 'verb'];
 

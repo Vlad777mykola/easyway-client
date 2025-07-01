@@ -38,44 +38,60 @@ export const AddXmlFile = ({
 				: '';
 
 			return {
-				key: item.getElementsByTagName('name')[0].textContent || '',
-				name: item.getElementsByTagName('name')[0].textContent || '',
-				transcription: item.getElementsByTagName('transcription')[0].textContent || '',
-				translate: item.getElementsByTagName('translate')[0].textContent || '',
-				type: item.getElementsByTagName('type')[0].textContent || '',
-				useCase: item.getElementsByTagName('useCase')[0].textContent || '',
+				key: item.getElementsByTagName('name')[0]?.textContent || '',
+				name: item.getElementsByTagName('name')[0]?.textContent || '',
+				transcription: item.getElementsByTagName('transcription')[0]?.textContent || '',
+				translate: item.getElementsByTagName('translate')[0]?.textContent || '',
+				type: item.getElementsByTagName('type')[0]?.textContent || '',
+				useCase: item.getElementsByTagName('useCase')[0]?.textContent || '',
 				variants,
 			};
 		});
+
+		const requiredKeys = ['name', 'transcription', 'translate', 'useCase', 'type', 'variants'];
+
+		const filterXML = items.filter((word) =>
+			requiredKeys.every(
+				(key) => word[key] !== undefined && word[key] !== null && word[key] !== '',
+			),
+		);
+
+		console.log('ITEMS: ', items);
+		console.log('FILTER ITEMS XML: ', filterXML);
 
 		const parseFilledSchema = arrayOfFilledWordsSchema.safeParse(items);
 		const parsedAllKeys = arrayOfHasRequiredKeys.safeParse(items);
 
 		if (!parseFilledSchema.success) {
-			setXmlInputError(parseFilledSchema.error.errors[0].message);
-			return;
-		} else {
-			setXmlInputError('');
+			for (const [_, value] of Object.entries(parseFilledSchema.error.format())) {
+				for (let i = 0; i < requiredKeys.length; i++) {
+					if (value[requiredKeys[i]]) {
+						setXmlInputError((prev) => `${prev} ${value[requiredKeys[i]]._errors}`);
+					}
+				}
+			}
 		}
 
 		if (!parsedAllKeys.success) {
 			setXmlInputError(parsedAllKeys.error.errors[0].message);
-			return;
-		} else {
-			setXmlInputError('');
 		}
 
 		const merged = [...tableWords, ...items];
-		const result = dataWordsArraySchema.safeParse(merged);
+		const parseCondition = dataWordsArraySchema.safeParse(merged);
 
-		if (!result.success) {
-			setXmlInputError(result.error.errors[0].message);
-		} else {
+		const successParse =
+			parseFilledSchema.success && parsedAllKeys.success && parseCondition.success;
+
+		if (!parseCondition.success) {
+			setXmlInputError(parseCondition.error.errors[0].message);
+		}
+
+		if (successParse) {
 			setXmlInputError('');
 		}
 
 		const uniqueWords = Array.from(
-			new Map([...tableWords, ...items].map((word) => [word.name, word])).values(),
+			new Map([...tableWords, ...filterXML].map((word) => [word.name, word])).values(),
 		);
 
 		setTableWords(uniqueWords);

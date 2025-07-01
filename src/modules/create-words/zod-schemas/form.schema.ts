@@ -28,25 +28,33 @@ export const dataWordsArraySchema = z.array(z.any()).refine(
 	},
 );
 
-const filledWordSchema = z
-	.record(z.any())
-	.refine((obj) => Object.values(obj).every((v) => v !== undefined && v !== null && v !== ''), {
-		message: 'All fields in the object must be filled',
-	});
+const filledWordSchema = z.record(z.any()).superRefine((obj, ctx) => {
+	for (const [key, value] of Object.entries(obj)) {
+		if (value === undefined || value === null || value === '') {
+			ctx.addIssue({
+				path: [key],
+				code: z.ZodIssueCode.custom,
+				message: `Field "${key}" in ${obj.name} must be filled.`,
+			});
+		}
+	}
+});
 
 export const arrayOfFilledWordsSchema = z.array(filledWordSchema);
 
-const hasRequiredKeys = z
-	.record(z.any())
-	.refine(
-		(obj) =>
-			['name', 'transcription', 'translate', 'useCase', 'type', 'variants'].every(
-				(key) => key in obj,
-			),
-		{
-			message: 'Missing required keys',
-		},
-	);
+const hasRequiredKeys = z.record(z.any()).superRefine((obj, ctx) => {
+	const keys = ['name', 'transcription', 'translate', 'useCase', 'type', 'variants'];
+
+	for (let i = 0; i < keys.length; i++) {
+		if (!obj[keys[i]]) {
+			ctx.addIssue({
+				path: [keys[i]],
+				code: z.ZodIssueCode.custom,
+				message: `Key "${keys[i]}" in ${obj.name} object must be.`,
+			});
+		}
+	}
+});
 
 export const arrayOfHasRequiredKeys = z.array(hasRequiredKeys);
 
@@ -69,4 +77,14 @@ export const dataWordSchema = z.object({
 		arrayOfFilledWordsSchema,
 		hasRequiredKeys,
 	]),
+});
+
+export const editWordSchema = z.object({
+	key: z.string(),
+	name: z.string().min(3, 'Name is required'),
+	transcription: z.string().min(3, 'Transcription is required'),
+	translate: z.string().min(3, 'Translate is required'),
+	useCase: z.string().min(3, 'Use case is required'),
+	type: z.string().min(1, 'Select at least one type'),
+	variants: z.array(z.string()).min(1, 'Variants must have at least one variant'),
 });

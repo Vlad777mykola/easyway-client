@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Control, FieldErrors, UseFormHandleSubmit } from 'react-hook-form';
 import { TableProps } from 'antd';
 import { ColumnType } from 'antd/es/table';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
@@ -9,19 +10,50 @@ import { Space } from '@/ui-components/Space';
 import { Icon } from '@/ui-components/Icon';
 import { DataWords } from '../main/CreateWords';
 import styles from './tableWords.module.css';
+import { Modal } from '@/ui-components/Modal';
+import { AddWordForm } from '../add-word-form/AddWordForm';
+import { FormValues } from '../../types';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
 export const TableWords = ({
 	tableWords,
+	editWordForm,
 	setTableWords,
 }: {
 	tableWords: DataWords[];
+	editWordForm: {
+		errors: FieldErrors<FormValues>;
+		control: Control<FormValues>;
+		error: Error | null;
+		isPending: boolean;
+		handleAdd: () => void;
+		clearForm: () => void;
+		addWord: (data: FormValues) => void;
+		handleSubmit: UseFormHandleSubmit<FormValues>;
+	};
 	setTableWords: React.Dispatch<React.SetStateAction<DataWords[]>>;
 }) => {
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 	const [, setSearchText] = useState('');
 	const [, setSearchedColumn] = useState<keyof DataWords | ''>('');
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [editData, setEditData] = useState({});
+
+	console.log('EDIT DATA: ', editData);
+
+	useEffect(() => {
+		setIsModalOpen(false);
+	}, [tableWords]);
+
+	const showModal = (record) => {
+		setEditData({ ...record, variants: record.variants.split(', ') });
+		setIsModalOpen(true);
+	};
+
+	const handleCancel = () => {
+		setIsModalOpen(false);
+	};
 
 	const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
 		setSelectedRowKeys(newSelectedRowKeys);
@@ -112,17 +144,58 @@ export const TableWords = ({
 			dataIndex: 'variants',
 			key: 'variants',
 		},
+		{
+			title: 'Action',
+			dataIndex: '',
+			key: 'action',
+			render: (_, record) => (
+				<Button type="link" onClick={() => showModal(record)}>
+					Edit
+				</Button>
+			),
+		},
 	];
 
 	const rowSelection: TableRowSelection<DataWords> = {
 		selectedRowKeys,
 		onChange: onSelectChange,
 	};
+
+	const fillForm = () => {
+		Object.entries(editData).forEach(([key, value]) => {
+			editWordForm.setValue(key as keyof FormValues, value);
+		});
+	};
+
+	useEffect(() => {
+		if (fillForm) {
+			fillForm();
+		}
+	}, [editData]);
+
 	return (
 		<div className={styles.tableContainer}>
 			<div className={styles.deleteButtonContainer}>
 				<Button onClick={deleteRows}>Delete</Button>
 			</div>
+			<Modal
+				title="Basic Modal"
+				closable={{ 'aria-label': 'Custom Close Button' }}
+				open={isModalOpen}
+				onCancel={handleCancel}
+				footer={null}
+			>
+				<AddWordForm
+					errors={editWordForm.errors}
+					control={editWordForm.control}
+					isPending={editWordForm.isPending}
+					error={editWordForm.error}
+					clearForm={editWordForm.clearForm}
+					addWord={editWordForm.addWord}
+					handleAdd={editWordForm.handleAdd}
+					handleSubmit={editWordForm.handleSubmit}
+				/>
+			</Modal>
 			<Table<DataWords>
 				className={styles.table}
 				size="small"
