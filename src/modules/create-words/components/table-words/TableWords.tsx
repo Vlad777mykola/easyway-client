@@ -188,16 +188,7 @@ export const TableWords = ({
 				onCancel={handleCancel}
 				footer={null}
 			>
-				<AddWordForm
-					errors={editWordForm.errors}
-					control={editWordForm.control}
-					isPending={editWordForm.isPending}
-					error={editWordForm.error}
-					clearForm={editWordForm.clearForm}
-					addWord={editWordForm.addWord}
-					handleAdd={editWordForm.handleAdd}
-					handleSubmit={editWordForm.handleSubmit}
-				/>
+				<AddWordForm createWordForm={editWordForm} />
 			</Modal>
 			<Table<DataWords>
 				className={styles.table}

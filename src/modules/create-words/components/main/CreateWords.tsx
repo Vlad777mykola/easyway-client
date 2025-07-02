@@ -107,22 +107,24 @@ export const CreateWords = () => {
 		handleSubmit: editWord.handleSubmit,
 	};
 
+	const createWordForm = {
+		errors: createWord.formState.errors,
+		control: createWord.control,
+		error,
+		isPending,
+		clearForm,
+		addWord,
+		handleAdd,
+		handleSubmit: createWord.handleSubmit,
+	};
+
 	return (
 		<div className={styles.container}>
 			<Typography.Title className={styles.title} level={2}>
 				Create new word
 			</Typography.Title>
 			<div className={styles.formContent}>
-				<AddWordForm
-					errors={createWord.formState.errors}
-					control={createWord.control}
-					isPending={isPending}
-					error={error}
-					clearForm={clearForm}
-					addWord={addWord}
-					handleAdd={handleAdd}
-					handleSubmit={createWord.handleSubmit}
-				/>
+				<AddWordForm createWordForm={createWordForm} />
 				<AddXmlFile
 					errors={createWord.formState.errors}
 					control={createWord.control}
