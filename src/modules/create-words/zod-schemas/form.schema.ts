@@ -28,20 +28,6 @@ export const dataWordsArraySchema = z.array(z.any()).refine(
 	},
 );
 
-const filledWordSchema = z.record(z.any()).superRefine((obj, ctx) => {
-	for (const [key, value] of Object.entries(obj)) {
-		if (value === undefined || value === null || value === '') {
-			ctx.addIssue({
-				path: [key],
-				code: z.ZodIssueCode.custom,
-				message: `Field "${key}" in ${obj.name} must be filled.`,
-			});
-		}
-	}
-});
-
-export const arrayOfFilledWordsSchema = z.array(filledWordSchema);
-
 const hasRequiredKeys = z.record(z.any()).superRefine((obj, ctx) => {
 	const keys = ['name', 'transcription', 'translate', 'useCase', 'type', 'variants'];
 
@@ -50,7 +36,7 @@ const hasRequiredKeys = z.record(z.any()).superRefine((obj, ctx) => {
 			ctx.addIssue({
 				path: [keys[i]],
 				code: z.ZodIssueCode.custom,
-				message: `Key "${keys[i]}" in ${obj.name} object must be.`,
+				message: `Key "${keys[i]}" in ${obj.name} object must be filled.`,
 			});
 		}
 	}
@@ -66,18 +52,8 @@ export const dataWordSchema = z.object({
 	useCase: z.string().min(3, 'Use case is required'),
 	type: z.string().min(1, 'Select at least one type'),
 	variants: z.array(z.string()).min(1, 'Variants must have at least one variant'),
-	xmlFile: z.union([
-		xmlFileSchema.optional(),
-		dataWordsArraySchema,
-		arrayOfFilledWordsSchema,
-		hasRequiredKeys,
-	]),
-	jsonFile: z.union([
-		jsonFileSchema.optional(),
-		dataWordsArraySchema,
-		arrayOfFilledWordsSchema,
-		hasRequiredKeys,
-	]),
+	xmlFile: z.union([xmlFileSchema.optional(), dataWordsArraySchema, hasRequiredKeys]),
+	jsonFile: z.union([jsonFileSchema.optional(), dataWordsArraySchema, hasRequiredKeys]),
 });
 
 export const editWordSchema = z.object({

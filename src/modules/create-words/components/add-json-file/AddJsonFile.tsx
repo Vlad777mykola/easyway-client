@@ -5,11 +5,9 @@ import { DataWords } from '../main/CreateWords';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { handleFileChange } from '../../utils/handleFileChange';
 import { FormValues } from '../../types';
-import {
-	arrayOfFilledWordsSchema,
-	arrayOfHasRequiredKeys,
-	dataWordsArraySchema,
-} from '../../zod-schemas/form.schema';
+import { arrayOfHasRequiredKeys, dataWordsArraySchema } from '../../zod-schemas/form.schema';
+import { checkCorrectFormat } from '../../utils/checkCorrectFormat';
+import { requiredKeys } from '../../constants/constants';
 
 type JsonWord = {
 	key: React.Key;
@@ -36,47 +34,10 @@ export const AddJsonFile = ({
 
 	const parseJSON = (jsonString: string) => {
 		const json = JSON.parse(jsonString);
-		const parseFilledSchema = arrayOfFilledWordsSchema.safeParse(json);
 		const parsedAllKeys = arrayOfHasRequiredKeys.safeParse(json);
-		const requiredKeys: (keyof DataWords)[] = [
-			'name',
-			'transcription',
-			'translate',
-			'useCase',
-			'type',
-			'variants',
-		];
-
-		if (!parseFilledSchema.success) {
-			for (const [_, value] of Object.entries(parseFilledSchema.error.format())) {
-				if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-					for (let i = 0; i < requiredKeys.length; i++) {
-						const key = requiredKeys[i];
-						if (key in value) {
-							const errorField = value[key];
-							if (errorField && typeof errorField === 'object' && '_errors' in errorField) {
-								setJsonInputError((prev) => `${prev} ${errorField._errors.join(' ')}`);
-							}
-						}
-					}
-				}
-			}
-		}
 
 		if (!parsedAllKeys.success) {
-			for (const [_, value] of Object.entries(parsedAllKeys.error.format())) {
-				if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-					for (let i = 0; i < requiredKeys.length; i++) {
-						const key = requiredKeys[i];
-						if (key in value) {
-							const errorField = value[key];
-							if (errorField && typeof errorField === 'object' && '_errors' in errorField) {
-								setJsonInputError((prev) => `${prev} ${errorField._errors.join(' ')}`);
-							}
-						}
-					}
-				}
-			}
+			setJsonInputError((prev) => `${prev} ${checkCorrectFormat(parsedAllKeys)}`);
 		}
 
 		const filterJson: JsonWord[] = json.filter((word: JsonWord) =>
@@ -94,11 +55,10 @@ export const AddJsonFile = ({
 		const merged = [...tableWords, ...result];
 		const parseCondition = dataWordsArraySchema.safeParse(merged);
 
-		const successParse =
-			parseFilledSchema.success && parsedAllKeys.success && parseCondition.success;
+		const successParse = parsedAllKeys.success && parseCondition.success;
 
 		if (!parseCondition.success) {
-			setJsonInputError(parseCondition.error.errors[0].message);
+			setJsonInputError((prev) => `${prev} ${parseCondition.error.errors[0].message}`);
 		}
 
 		if (successParse) {

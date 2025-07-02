@@ -4,13 +4,11 @@ import { useState } from 'react';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { DataWords } from '../main/CreateWords';
-import {
-	arrayOfFilledWordsSchema,
-	arrayOfHasRequiredKeys,
-	dataWordsArraySchema,
-} from '../../zod-schemas/form.schema';
+import { arrayOfHasRequiredKeys, dataWordsArraySchema } from '../../zod-schemas/form.schema';
 import { handleFileChange } from '../../utils/handleFileChange';
 import { FormValues } from '../../types';
+import { checkCorrectFormat } from '../../utils/checkCorrectFormat';
+import { requiredKeys } from '../../constants/constants';
 
 export const AddXmlFile = ({
 	errors,
@@ -48,49 +46,22 @@ export const AddXmlFile = ({
 			};
 		});
 
-		const requiredKeys: (keyof DataWords)[] = [
-			'name',
-			'transcription',
-			'translate',
-			'useCase',
-			'type',
-			'variants',
-		];
-
 		const filterXML = items.filter((word) =>
 			requiredKeys.every(
 				(key) => word[key] !== undefined && word[key] !== null && word[key] !== '',
 			),
 		);
 
-		const parseFilledSchema = arrayOfFilledWordsSchema.safeParse(items);
 		const parsedAllKeys = arrayOfHasRequiredKeys.safeParse(items);
 
-		if (parseFilledSchema.error) {
-			for (const [_, value] of Object.entries(parseFilledSchema.error.format())) {
-				if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-					for (let i = 0; i < requiredKeys.length; i++) {
-						const key = requiredKeys[i];
-						if (key in value) {
-							const errorField = value[key];
-							if (errorField && typeof errorField === 'object' && '_errors' in errorField) {
-								setXmlInputError((prev) => `${prev} ${errorField._errors.join(' ')}`);
-							}
-						}
-					}
-				}
-			}
-		}
-
 		if (!parsedAllKeys.success) {
-			setXmlInputError(parsedAllKeys.error.errors[0].message);
+			setXmlInputError((prev) => `${prev} ${checkCorrectFormat(parsedAllKeys)}`);
 		}
 
 		const merged = [...tableWords, ...items];
 		const parseCondition = dataWordsArraySchema.safeParse(merged);
 
-		const successParse =
-			parseFilledSchema.success && parsedAllKeys.success && parseCondition.success;
+		const successParse = parsedAllKeys.success && parseCondition.success;
 
 		if (!parseCondition.success) {
 			setXmlInputError(parseCondition.error.errors[0].message);
