@@ -34,42 +34,52 @@ export const AddJsonFile = ({
 }) => {
 	const [jsonInputError, setJsonInputError] = useState('');
 
-	console.log('INPUT ERROR: ', jsonInputError);
-
 	const parseJSON = (jsonString: string) => {
 		const json = JSON.parse(jsonString);
 		const parseFilledSchema = arrayOfFilledWordsSchema.safeParse(json);
 		const parsedAllKeys = arrayOfHasRequiredKeys.safeParse(json);
-		const requiredKeys = ['name', 'transcription', 'translate', 'useCase', 'type', 'variants'];
-
-		console.log('JSON: ', json);
-		console.log('SUCCESS: ', parseFilledSchema.success);
+		const requiredKeys: (keyof DataWords)[] = [
+			'name',
+			'transcription',
+			'translate',
+			'useCase',
+			'type',
+			'variants',
+		];
 
 		if (!parseFilledSchema.success) {
 			for (const [_, value] of Object.entries(parseFilledSchema.error.format())) {
-				for (let i = 0; i < requiredKeys.length; i++) {
-					if (value[requiredKeys[i]]) {
-						console.log('REQUIRED KEYS: ', value[requiredKeys[i]]);
-						setJsonInputError((prev) => `${prev} ${value[requiredKeys[i]]._errors}`);
+				if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+					for (let i = 0; i < requiredKeys.length; i++) {
+						const key = requiredKeys[i];
+						if (key in value) {
+							const errorField = value[key];
+							if (errorField && typeof errorField === 'object' && '_errors' in errorField) {
+								setJsonInputError((prev) => `${prev} ${errorField._errors.join(' ')}`);
+							}
+						}
 					}
 				}
 			}
-			//setJsonInputError(parseFilledSchema.error.errors[0].message);
 		}
 
 		if (!parsedAllKeys.success) {
-			console.log('KEYS FORMAT: ', parsedAllKeys.error.format());
 			for (const [_, value] of Object.entries(parsedAllKeys.error.format())) {
-				for (let i = 0; i < requiredKeys.length; i++) {
-					if (value[requiredKeys[i]]) {
-						console.log('REQUIRED KEYS: ', value[requiredKeys[i]]);
-						setJsonInputError((prev) => `${prev} ${value[requiredKeys[i]]._errors}`);
+				if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+					for (let i = 0; i < requiredKeys.length; i++) {
+						const key = requiredKeys[i];
+						if (key in value) {
+							const errorField = value[key];
+							if (errorField && typeof errorField === 'object' && '_errors' in errorField) {
+								setJsonInputError((prev) => `${prev} ${errorField._errors.join(' ')}`);
+							}
+						}
 					}
 				}
 			}
 		}
 
-		const filterJson = json.filter((word) =>
+		const filterJson: JsonWord[] = json.filter((word: JsonWord) =>
 			requiredKeys.every(
 				(key) => word[key] !== undefined && word[key] !== null && word[key] !== '',
 			),

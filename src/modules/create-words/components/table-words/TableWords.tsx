@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Control, FieldErrors, UseFormHandleSubmit } from 'react-hook-form';
+import { Control, FieldErrors, UseFormHandleSubmit, UseFormSetValue } from 'react-hook-form';
 import { TableProps } from 'antd';
 import { ColumnType } from 'antd/es/table';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
@@ -8,11 +8,11 @@ import { Table } from '@/ui-components/Table';
 import { Input } from '@/ui-components/Input';
 import { Space } from '@/ui-components/Space';
 import { Icon } from '@/ui-components/Icon';
-import { DataWords } from '../main/CreateWords';
-import styles from './tableWords.module.css';
 import { Modal } from '@/ui-components/Modal';
 import { AddWordForm } from '../add-word-form/AddWordForm';
+import { DataWords } from '../main/CreateWords';
 import { FormValues } from '../../types';
+import styles from './tableWords.module.css';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
@@ -27,9 +27,10 @@ export const TableWords = ({
 		control: Control<FormValues>;
 		error: Error | null;
 		isPending: boolean;
-		handleAdd: () => void;
+		setValue: UseFormSetValue<FormValues>;
 		clearForm: () => void;
 		addWord: (data: FormValues) => void;
+		handleAdd: () => void;
 		handleSubmit: UseFormHandleSubmit<FormValues>;
 	};
 	setTableWords: React.Dispatch<React.SetStateAction<DataWords[]>>;
@@ -40,13 +41,11 @@ export const TableWords = ({
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editData, setEditData] = useState({});
 
-	console.log('EDIT DATA: ', editData);
-
 	useEffect(() => {
 		setIsModalOpen(false);
 	}, [tableWords]);
 
-	const showModal = (record) => {
+	const showModal = (record: DataWords) => {
 		setEditData({ ...record, variants: record.variants.split(', ') });
 		setIsModalOpen(true);
 	};
@@ -60,7 +59,11 @@ export const TableWords = ({
 	};
 
 	const deleteRows = () => {
-		const newRows = tableWords.filter((row) => !selectedRowKeys.includes(row.key));
+		const newRows = tableWords.filter((row) => {
+			if (row.key) {
+				return !selectedRowKeys.includes(row.key);
+			}
+		});
 		setTableWords(newRows);
 	};
 
@@ -112,7 +115,7 @@ export const TableWords = ({
 			record[dataIndex]
 				?.toString()
 				.toLowerCase()
-				.includes((value as string).toLowerCase()),
+				.includes((value as string).toLowerCase()) || false,
 	});
 
 	const columns = [
@@ -148,7 +151,7 @@ export const TableWords = ({
 			title: 'Action',
 			dataIndex: '',
 			key: 'action',
-			render: (_, record) => (
+			render: (_: unknown, record: DataWords) => (
 				<Button type="link" onClick={() => showModal(record)}>
 					Edit
 				</Button>
@@ -163,7 +166,7 @@ export const TableWords = ({
 
 	const fillForm = () => {
 		Object.entries(editData).forEach(([key, value]) => {
-			editWordForm.setValue(key as keyof FormValues, value);
+			editWordForm.setValue(key as keyof FormValues, value as string | string[]);
 		});
 	};
 

@@ -14,13 +14,13 @@ import { FormValues, EditFormValues } from '../../types';
 import styles from './createWords.module.css';
 
 export type DataWords = {
-	key: React.Key;
 	name: string;
 	transcription: string;
 	translate: string;
 	type: string;
 	variants: string;
 	useCase: string;
+	key?: React.Key;
 };
 
 export const CreateWords = () => {
@@ -29,20 +29,6 @@ export const CreateWords = () => {
 	const { mutate, isPending, error } = useWordsMutation(() => {
 		clearForm();
 	});
-
-	/* const {
-		reset,
-		control,
-		setValue,
-		watch,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<FormValues>({
-		mode: 'onChange',
-		resolver: zodResolver(dataWordSchema),
-	}); */
-
-	console.log('TABLE WORDS: ', tableWords);
 
 	const createWord = useForm<FormValues>({
 		mode: 'onChange',
@@ -93,7 +79,6 @@ export const CreateWords = () => {
 	};
 
 	const editWordAndClose = (editObject: EditFormValues) => {
-		console.log('EDIT OBJECT: ', editObject);
 		const filteredWords = tableWords.filter((word) => word.key !== editObject.key);
 		setTableWords([...filteredWords, { ...editObject, variants: editObject.variants.join(', ') }]);
 	};

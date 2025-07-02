@@ -59,6 +59,7 @@ const hasRequiredKeys = z.record(z.any()).superRefine((obj, ctx) => {
 export const arrayOfHasRequiredKeys = z.array(hasRequiredKeys);
 
 export const dataWordSchema = z.object({
+	key: z.string().optional(),
 	name: z.string().min(3, 'Name is required'),
 	transcription: z.string().min(3, 'Transcription is required'),
 	translate: z.string().min(3, 'Translate is required'),
@@ -80,7 +81,7 @@ export const dataWordSchema = z.object({
 });
 
 export const editWordSchema = z.object({
-	key: z.string(),
+	key: z.string().optional(),
 	name: z.string().min(3, 'Name is required'),
 	transcription: z.string().min(3, 'Transcription is required'),
 	translate: z.string().min(3, 'Translate is required'),

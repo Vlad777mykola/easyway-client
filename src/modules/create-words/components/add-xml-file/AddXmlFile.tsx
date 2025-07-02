@@ -48,7 +48,14 @@ export const AddXmlFile = ({
 			};
 		});
 
-		const requiredKeys = ['name', 'transcription', 'translate', 'useCase', 'type', 'variants'];
+		const requiredKeys: (keyof DataWords)[] = [
+			'name',
+			'transcription',
+			'translate',
+			'useCase',
+			'type',
+			'variants',
+		];
 
 		const filterXML = items.filter((word) =>
 			requiredKeys.every(
@@ -56,17 +63,20 @@ export const AddXmlFile = ({
 			),
 		);
 
-		console.log('ITEMS: ', items);
-		console.log('FILTER ITEMS XML: ', filterXML);
-
 		const parseFilledSchema = arrayOfFilledWordsSchema.safeParse(items);
 		const parsedAllKeys = arrayOfHasRequiredKeys.safeParse(items);
 
-		if (!parseFilledSchema.success) {
+		if (parseFilledSchema.error) {
 			for (const [_, value] of Object.entries(parseFilledSchema.error.format())) {
-				for (let i = 0; i < requiredKeys.length; i++) {
-					if (value[requiredKeys[i]]) {
-						setXmlInputError((prev) => `${prev} ${value[requiredKeys[i]]._errors}`);
+				if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+					for (let i = 0; i < requiredKeys.length; i++) {
+						const key = requiredKeys[i];
+						if (key in value) {
+							const errorField = value[key];
+							if (errorField && typeof errorField === 'object' && '_errors' in errorField) {
+								setXmlInputError((prev) => `${prev} ${errorField._errors.join(' ')}`);
+							}
+						}
 					}
 				}
 			}
