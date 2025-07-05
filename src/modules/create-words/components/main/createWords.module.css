@@ -1,0 +1,36 @@
+.container {
+	width: 900px;
+	font-family: 'Inter', sans-serif;
+	padding: 40px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.formContent {
+	width: 100%;
+	display: flex;
+	gap: 1.5rem;
+	flex-direction: column;
+	padding: 40px;
+	box-sizing: border-box;
+}
+
+.title {
+	align-self: center;
+}
+
+.submitButton {
+	display: flex;
+	align-self: end;
+	margin-top: 20px;
+}
+
+@media (max-width: 1200px) {
+	.formContent {
+		width: 100%;
+		padding: 0px;
+	}
+}

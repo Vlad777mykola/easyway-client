@@ -1,0 +1,22 @@
+.addWordForm {
+	display: flex;
+	gap: 1.5rem;
+	flex-direction: column;
+}
+
+.variantsContainer {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	gap: 10px;
+}
+
+.variants {
+	width: 100%;
+}
+
+.collectionButtons {
+	display: flex;
+	gap: 10px;
+	align-self: end;
+}
