@@ -11,6 +11,7 @@ const types = ['pronoun', 'noun', 'interjection', 'adjective', 'verb'];
 
 export const AddWordForm = ({
 	createWordForm,
+	isModal = false,
 }: {
 	createWordForm: {
 		errors: FieldErrors<FormValues>;
@@ -22,6 +23,7 @@ export const AddWordForm = ({
 		addWord: (data: FormValues) => void;
 		handleSubmit: UseFormHandleSubmit<FormValues>;
 	};
+	isModal?: boolean;
 }) => {
 	const { errors, control, error, isPending, handleAdd, clearForm, addWord, handleSubmit } =
 		createWordForm;
@@ -129,7 +131,7 @@ export const AddWordForm = ({
 					Clear
 				</Button>
 				<Button disabled={isPending} type="primary" shape="round" onClick={handleSubmit(addWord)}>
-					Add
+					{isModal ? 'Save' : 'Add'}
 				</Button>
 			</div>
 		</div>

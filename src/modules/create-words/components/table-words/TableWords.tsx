@@ -9,6 +9,7 @@ import { Input } from '@/ui-components/Input';
 import { Space } from '@/ui-components/Space';
 import { Icon } from '@/ui-components/Icon';
 import { Modal } from '@/ui-components/Modal';
+import { Typography } from '@/ui-components/Typography';
 import { AddWordForm } from '../add-word-form/AddWordForm';
 import { DataWords } from '../main/CreateWords';
 import { FormValues } from '../../types';
@@ -27,6 +28,7 @@ export const TableWords = ({
 		control: Control<FormValues>;
 		error: Error | null;
 		isPending: boolean;
+		clearEditErrors: () => void;
 		setValue: UseFormSetValue<FormValues>;
 		clearForm: () => void;
 		addWord: (data: FormValues) => void;
@@ -44,6 +46,13 @@ export const TableWords = ({
 	useEffect(() => {
 		setIsModalOpen(false);
 	}, [tableWords]);
+
+	useEffect(() => {
+		if (fillForm) {
+			fillForm();
+			editWordForm.clearEditErrors();
+		}
+	}, [editData]);
 
 	const showModal = (record: DataWords) => {
 		setEditData({ ...record, variants: record.variants.split(', ') });
@@ -170,25 +179,24 @@ export const TableWords = ({
 		});
 	};
 
-	useEffect(() => {
-		if (fillForm) {
-			fillForm();
-		}
-	}, [editData]);
-
 	return (
 		<div className={styles.tableContainer}>
 			<div className={styles.deleteButtonContainer}>
 				<Button onClick={deleteRows}>Delete</Button>
 			</div>
 			<Modal
-				title="Basic Modal"
+				title={
+					<Typography.Title className={styles.titleModal} level={2}>
+						Edit Word
+					</Typography.Title>
+				}
 				closable={{ 'aria-label': 'Custom Close Button' }}
 				open={isModalOpen}
 				onCancel={handleCancel}
 				footer={null}
+				mask={false}
 			>
-				<AddWordForm createWordForm={editWordForm} />
+				<AddWordForm createWordForm={editWordForm} isModal={true} />
 			</Modal>
 			<Table<DataWords>
 				className={styles.table}

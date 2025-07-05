@@ -36,7 +36,6 @@ export const CreateWords = () => {
 	});
 
 	const editWord = useForm<EditFormValues>({
-		mode: 'onChange',
 		resolver: zodResolver(editWordSchema),
 	});
 
@@ -100,6 +99,7 @@ export const CreateWords = () => {
 		control: editWord.control,
 		error,
 		isPending,
+		clearEditErrors: editWord.clearErrors,
 		setValue: editWord.setValue,
 		clearForm: clearEditForm,
 		addWord: editWordAndClose,
