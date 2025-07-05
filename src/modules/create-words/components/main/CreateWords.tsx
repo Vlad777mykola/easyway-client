@@ -66,7 +66,7 @@ export const CreateWords = () => {
 		setTableWords((prev) => [
 			...prev,
 			{
-				key: tableWords.length++,
+				key: data.name,
 				name: data.name,
 				useCase: data.useCase,
 				transcription: data.transcription,
@@ -117,6 +117,8 @@ export const CreateWords = () => {
 		handleAdd,
 		handleSubmit: createWord.handleSubmit,
 	};
+
+	console.log('ERRORS: ', createWord.formState.errors);
 
 	return (
 		<div className={styles.container}>

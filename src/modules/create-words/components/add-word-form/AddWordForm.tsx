@@ -102,7 +102,7 @@ export const AddWordForm = ({
 					)}
 				/>
 			</FieldGroup>
-			<FieldGroup marginY="03" title="Variants" error={errors.type?.message}>
+			<FieldGroup marginY="03" title="Variants" error={errors.variants?.message}>
 				<div className={styles.variantsContainer}>
 					<Controller
 						name="variants"

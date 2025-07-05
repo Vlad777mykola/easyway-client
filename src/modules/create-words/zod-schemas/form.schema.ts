@@ -46,12 +46,42 @@ export const arrayOfHasRequiredKeys = z.array(hasRequiredKeys);
 
 export const dataWordSchema = z.object({
 	key: z.string().optional(),
-	name: z.string().min(3, 'Name is required'),
-	transcription: z.string().min(3, 'Transcription is required'),
-	translate: z.string().min(3, 'Translate is required'),
-	useCase: z.string().min(3, 'Use case is required'),
-	type: z.string().min(1, 'Select at least one type'),
-	variants: z.array(z.string()).min(1, 'Variants must have at least one variant'),
+	name: z
+		.string()
+		.min(3, 'Name is required')
+		.refine((val) => isNaN(Number(val)), {
+			message: 'Must not be a number',
+		}),
+	transcription: z
+		.string()
+		.min(3, 'Transcription is required')
+		.refine((val) => isNaN(Number(val)), {
+			message: 'Must not be a number',
+		}),
+	translate: z
+		.string()
+		.min(3, 'Translate is required')
+		.refine((val) => isNaN(Number(val)), {
+			message: 'Must not be a number',
+		}),
+	useCase: z
+		.string()
+		.min(3, 'Use case is required')
+		.refine((val) => isNaN(Number(val)), {
+			message: 'Must not be a number',
+		}),
+	type: z
+		.string()
+		.min(1, 'Select at least one type')
+		.refine((val) => isNaN(Number(val)), {
+			message: 'Must not be a number',
+		}),
+	variants: z
+		.array(z.string())
+		.min(1, 'Variants must have at least one variant')
+		.refine((arr) => arr.every((variant) => isNaN(Number(variant))), {
+			message: 'Variants cannot contain number',
+		}),
 	xmlFile: z.union([xmlFileSchema.optional(), dataWordsArraySchema, hasRequiredKeys]),
 	jsonFile: z.union([jsonFileSchema.optional(), dataWordsArraySchema, hasRequiredKeys]),
 });
