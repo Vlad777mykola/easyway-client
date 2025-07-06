@@ -5,11 +5,10 @@ import { DataWords } from '../main/CreateWords';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { handleFileChange } from '../../utils/handleFileChange';
 import { FormValues } from '../../types';
-import { arrayOfHasRequiredKeys, dataWordsArraySchema } from '../../zod-schemas/form.schema';
-import { checkCorrectFormat } from '../../utils/checkCorrectFormat';
-import { requiredKeys } from '../../constants/constants';
+import { correctParse } from '../../utils/correctParse';
+import { filterFileData } from '../../utils/filterFileData';
 
-type JsonWord = {
+export type JsonWord = {
 	key: React.Key;
 	name: string;
 	transcription: string;
@@ -33,43 +32,33 @@ export const AddJsonFile = ({
 	const [jsonInputError, setJsonInputError] = useState('');
 
 	const parseJSON = (jsonString: string) => {
-		const json = JSON.parse(jsonString);
-		const parsedAllKeys = arrayOfHasRequiredKeys.safeParse(json);
+		try {
+			const json = JSON.parse(jsonString);
 
-		if (!parsedAllKeys.success) {
-			setJsonInputError((prev) => `${prev} ${checkCorrectFormat(parsedAllKeys)}`);
+			const dataWord: DataWords[] = json.map((word: JsonWord) => ({
+				...word,
+				key: word.name,
+				variants: word.variants.join(', '),
+			}));
+
+			const filterJson = filterFileData(dataWord);
+
+			const merged = [...tableWords, ...filterJson];
+
+			const uniqueWords = Array.from(
+				new Map([...tableWords, ...filterJson].map((word) => [word.name, word])).values(),
+			);
+
+			setJsonInputError(correctParse(merged, dataWord).join('.'));
+
+			setTableWords(uniqueWords);
+		} catch (e: unknown) {
+			if (e instanceof Error) {
+				console.error('Invalid JSON:', e.message);
+			} else {
+				console.error('Unknown error during JSON parsing');
+			}
 		}
-
-		const filterJson: JsonWord[] = json.filter((word: JsonWord) =>
-			requiredKeys.every(
-				(key) => word[key] !== undefined && word[key] !== null && word[key] !== '',
-			),
-		);
-
-		const result: DataWords[] = filterJson.map((word: JsonWord) => ({
-			...word,
-			key: word.name,
-			variants: word.variants.join(', '),
-		}));
-
-		const merged = [...tableWords, ...result];
-		const parseCondition = dataWordsArraySchema.safeParse(merged);
-
-		const successParse = parsedAllKeys.success && parseCondition.success;
-
-		if (!parseCondition.success) {
-			setJsonInputError((prev) => `${prev} ${parseCondition.error.errors[0].message}`);
-		}
-
-		if (successParse) {
-			setJsonInputError('');
-		}
-
-		const uniqueWords = Array.from(
-			new Map([...tableWords, ...result].map((word) => [word.name, word])).values(),
-		);
-
-		setTableWords(uniqueWords);
 	};
 
 	return (

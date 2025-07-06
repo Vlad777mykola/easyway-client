@@ -3,7 +3,6 @@ import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { Select } from '@/ui-components/Select';
 import { Button } from '@/ui-components/Button';
-import { Typography } from '@/ui-components/Typography';
 import { FormValues } from '../../types';
 import styles from './addWordForm.module.css';
 
@@ -16,7 +15,6 @@ export const AddWordForm = ({
 	createWordForm: {
 		errors: FieldErrors<FormValues>;
 		control: Control<FormValues>;
-		error: Error | null;
 		isPending: boolean;
 		handleAdd: () => void;
 		clearForm: () => void;
@@ -25,7 +23,7 @@ export const AddWordForm = ({
 	};
 	isModal?: boolean;
 }) => {
-	const { errors, control, error, isPending, handleAdd, clearForm, addWord, handleSubmit } =
+	const { errors, control, isPending, handleAdd, clearForm, addWord, handleSubmit } =
 		createWordForm;
 
 	return (
@@ -125,7 +123,6 @@ export const AddWordForm = ({
 					<Button onClick={handleAdd}>Add</Button>
 				</div>
 			</FieldGroup>
-			{error && <Typography.Text type="danger">{error?.message}</Typography.Text>}
 			<div className={styles.collectionButtons}>
 				<Button type="primary" shape="round" onClick={clearForm}>
 					Clear

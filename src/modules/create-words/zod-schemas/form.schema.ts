@@ -39,6 +39,19 @@ const hasRequiredKeys = z.record(z.any()).superRefine((obj, ctx) => {
 				message: `Key "${keys[i]}" in ${obj.name} object must be filled.`,
 			});
 		}
+
+		const wordArr =
+			typeof obj[keys[i]] === 'string'
+				? obj[keys[i]].replace(/\s+/g, '').split('')
+				: obj[keys[i]]?.join('').split('');
+
+		if (!wordArr?.every((symbol: string) => isNaN(Number(symbol)))) {
+			ctx.addIssue({
+				path: [keys[i]],
+				code: z.ZodIssueCode.custom,
+				message: `Key "${keys[i]}" in ${obj.name} cannot contain numbers.`,
+			});
+		}
 	}
 });
 
@@ -49,49 +62,75 @@ export const dataWordSchema = z.object({
 	name: z
 		.string()
 		.min(3, 'Name is required')
-		.refine((val) => isNaN(Number(val)), {
-			message: 'Must not be a number',
-		}),
+		.refine(
+			(val) => {
+				const stringArr = val.replace(/\s+/g, '').split('');
+				return stringArr.every((symbol) => isNaN(Number(symbol)));
+			},
+			{
+				message: 'Cannot contain numbers.',
+			},
+		),
 	transcription: z
 		.string()
 		.min(3, 'Transcription is required')
-		.refine((val) => isNaN(Number(val)), {
-			message: 'Must not be a number',
-		}),
+		.refine(
+			(val) => {
+				const stringArr = val.replace(/\s+/g, '').split('');
+				return stringArr.every((symbol) => isNaN(Number(symbol)));
+			},
+			{
+				message: 'Cannot contain numbers.',
+			},
+		),
 	translate: z
 		.string()
 		.min(3, 'Translate is required')
-		.refine((val) => isNaN(Number(val)), {
-			message: 'Must not be a number',
-		}),
+		.refine(
+			(val) => {
+				const stringArr = val.replace(/\s+/g, '').split('');
+				return stringArr.every((symbol) => isNaN(Number(symbol)));
+			},
+			{
+				message: 'Cannot contain numbers.',
+			},
+		),
 	useCase: z
 		.string()
 		.min(3, 'Use case is required')
-		.refine((val) => isNaN(Number(val)), {
-			message: 'Must not be a number',
-		}),
+		.refine(
+			(val) => {
+				const stringArr = val.replace(/\s+/g, '').split('');
+				return stringArr.every((symbol) => isNaN(Number(symbol)));
+			},
+			{
+				message: 'Cannot contain numbers.',
+			},
+		),
 	type: z
 		.string()
 		.min(1, 'Select at least one type')
-		.refine((val) => isNaN(Number(val)), {
-			message: 'Must not be a number',
-		}),
+		.refine(
+			(val) => {
+				const stringArr = val.replace(/\s+/g, '').split('');
+				return stringArr.every((symbol) => isNaN(Number(symbol)));
+			},
+			{
+				message: 'Cannot contain numbers.',
+			},
+		),
 	variants: z
 		.array(z.string())
 		.min(1, 'Variants must have at least one variant')
-		.refine((arr) => arr.every((variant) => isNaN(Number(variant))), {
-			message: 'Variants cannot contain number',
-		}),
+		.refine(
+			(arr) => {
+				const stringArr = arr.join('').split('');
+				return stringArr.every((symbol) => isNaN(Number(symbol)));
+			},
+			{
+				message: 'Variants cannot contain numbers',
+			},
+		),
 	xmlFile: z.union([xmlFileSchema.optional(), dataWordsArraySchema, hasRequiredKeys]),
 	jsonFile: z.union([jsonFileSchema.optional(), dataWordsArraySchema, hasRequiredKeys]),
-});
-
-export const editWordSchema = z.object({
-	key: z.string().optional(),
-	name: z.string().min(3, 'Name is required'),
-	transcription: z.string().min(3, 'Transcription is required'),
-	translate: z.string().min(3, 'Translate is required'),
-	useCase: z.string().min(3, 'Use case is required'),
-	type: z.string().min(1, 'Select at least one type'),
-	variants: z.array(z.string()).min(1, 'Variants must have at least one variant'),
 });

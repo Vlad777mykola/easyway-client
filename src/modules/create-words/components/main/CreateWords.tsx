@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,8 +8,8 @@ import { AddXmlFile } from '../add-xml-file/AddXmlFile';
 import { AddJsonFile } from '../add-json-file/AddJsonFile';
 import { TableWords } from '../table-words/TableWords';
 import { useWordsMutation } from '../../hooks/useWordsMutation';
-import { dataWordSchema, editWordSchema } from '../../zod-schemas/form.schema';
-import { FormValues, EditFormValues } from '../../types';
+import { dataWordSchema } from '../../zod-schemas/form.schema';
+import { FormValues } from '../../types';
 import styles from './createWords.module.css';
 
 export type DataWords = {
@@ -20,11 +19,12 @@ export type DataWords = {
 	type: string;
 	variants: string;
 	useCase: string;
-	key?: React.Key;
+	key?: string;
 };
 
 export const CreateWords = () => {
 	const [tableWords, setTableWords] = useState<DataWords[]>([]);
+	const isDisabled = tableWords.length === 0;
 
 	const { mutate, isPending, error } = useWordsMutation(() => {
 		clearForm();
@@ -35,8 +35,8 @@ export const CreateWords = () => {
 		resolver: zodResolver(dataWordSchema),
 	});
 
-	const editWord = useForm<EditFormValues>({
-		resolver: zodResolver(editWordSchema),
+	const editWord = useForm<FormValues>({
+		resolver: zodResolver(dataWordSchema),
 	});
 
 	const variants = createWord.watch('variants');
@@ -77,7 +77,7 @@ export const CreateWords = () => {
 		]);
 	};
 
-	const editWordAndClose = (editObject: EditFormValues) => {
+	const editWordAndClose = (editObject: FormValues) => {
 		const filteredWords = tableWords.filter((word) => word.key !== editObject.key);
 		setTableWords([...filteredWords, { ...editObject, variants: editObject.variants.join(', ') }]);
 	};
@@ -91,13 +91,17 @@ export const CreateWords = () => {
 	};
 
 	const clearEditForm = () => {
-		editWord.reset();
+		editWord.setValue('name', '');
+		editWord.setValue('useCase', '');
+		editWord.setValue('transcription', '');
+		editWord.setValue('translate', '');
+		editWord.setValue('type', '');
+		editWord.setValue('variants', []);
 	};
 
 	const editWordForm = {
 		errors: editWord.formState.errors,
 		control: editWord.control,
-		error,
 		isPending,
 		clearEditErrors: editWord.clearErrors,
 		setValue: editWord.setValue,
@@ -110,15 +114,12 @@ export const CreateWords = () => {
 	const createWordForm = {
 		errors: createWord.formState.errors,
 		control: createWord.control,
-		error,
 		isPending,
 		clearForm,
 		addWord,
 		handleAdd,
 		handleSubmit: createWord.handleSubmit,
 	};
-
-	console.log('ERRORS: ', createWord.formState.errors);
 
 	return (
 		<div className={styles.container}>
@@ -145,11 +146,12 @@ export const CreateWords = () => {
 				editWordForm={editWordForm}
 				setTableWords={setTableWords}
 			/>
+			{error && <Typography.Text type="danger">{error?.message}</Typography.Text>}
 			<div className={styles.submitButton}>
 				<Button
 					type="primary"
 					shape="round"
-					disabled={tableWords.length === 0}
+					disabled={isDisabled}
 					onClick={() => onSubmit(tableWords)}
 				>
 					Submit

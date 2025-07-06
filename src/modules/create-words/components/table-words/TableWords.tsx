@@ -26,7 +26,6 @@ export const TableWords = ({
 	editWordForm: {
 		errors: FieldErrors<FormValues>;
 		control: Control<FormValues>;
-		error: Error | null;
 		isPending: boolean;
 		clearEditErrors: () => void;
 		setValue: UseFormSetValue<FormValues>;
@@ -57,6 +56,11 @@ export const TableWords = ({
 	const showModal = (record: DataWords) => {
 		setEditData({ ...record, variants: record.variants.split(', ') });
 		setIsModalOpen(true);
+	};
+
+	const deleteWord = (record: DataWords) => {
+		const filteredWords = tableWords.filter((word) => word.key !== record.key);
+		setTableWords(filteredWords);
 	};
 
 	const handleCancel = () => {
@@ -161,9 +165,14 @@ export const TableWords = ({
 			dataIndex: '',
 			key: 'action',
 			render: (_: unknown, record: DataWords) => (
-				<Button type="link" onClick={() => showModal(record)}>
-					Edit
-				</Button>
+				<div>
+					<Button type="link" onClick={() => showModal(record)}>
+						Edit
+					</Button>
+					<Button type="link" onClick={() => deleteWord(record)}>
+						Delete
+					</Button>
+				</div>
 			),
 		},
 	];
