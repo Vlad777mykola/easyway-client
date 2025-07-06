@@ -8,7 +8,7 @@ import CreateWords from '../create-words';
 /* import { SecondTab } from './components/second-tab/SecondTab'; */
 
 export const Admin = () => {
-	const [activeKey, setActiveKey] = useState('2');
+	const [activeKey, setActiveKey] = useState('1');
 
 	const tabs = [
 		{
