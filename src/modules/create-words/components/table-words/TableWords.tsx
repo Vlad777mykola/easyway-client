@@ -11,9 +11,9 @@ import { Icon } from '@/ui-components/Icon';
 import { Modal } from '@/ui-components/Modal';
 import { Typography } from '@/ui-components/Typography';
 import { AddWordForm } from '../add-word-form/AddWordForm';
-import { DataWords } from '../main/CreateWords';
 import { FormValues } from '../../types';
 import styles from './tableWords.module.css';
+import { CreateWordDto } from '@/shared/api/generated/model';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
@@ -22,7 +22,7 @@ export const TableWords = ({
 	editWordForm,
 	setTableWords,
 }: {
-	tableWords: DataWords[];
+	tableWords: CreateWordDto[];
 	editWordForm: {
 		errors: FieldErrors<FormValues>;
 		control: Control<FormValues>;
@@ -34,11 +34,11 @@ export const TableWords = ({
 		handleAdd: () => void;
 		handleSubmit: UseFormHandleSubmit<FormValues>;
 	};
-	setTableWords: React.Dispatch<React.SetStateAction<DataWords[]>>;
+	setTableWords: React.Dispatch<React.SetStateAction<CreateWordDto[]>>;
 }) => {
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 	const [, setSearchText] = useState('');
-	const [, setSearchedColumn] = useState<keyof DataWords | ''>('');
+	const [, setSearchedColumn] = useState<keyof CreateWordDto | ''>('');
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editData, setEditData] = useState({});
 
@@ -53,13 +53,13 @@ export const TableWords = ({
 		}
 	}, [editData]);
 
-	const showModal = (record: DataWords) => {
+	const showModal = (record: CreateWordDto) => {
 		setEditData({ ...record, variants: record.variants.split(', ') });
 		setIsModalOpen(true);
 	};
 
-	const deleteWord = (record: DataWords) => {
-		const filteredWords = tableWords.filter((word) => word.key !== record.key);
+	const deleteWord = (record: CreateWordDto) => {
+		const filteredWords = tableWords.filter((word) => word.name !== record.name);
 		setTableWords(filteredWords);
 	};
 
@@ -73,8 +73,8 @@ export const TableWords = ({
 
 	const deleteRows = () => {
 		const newRows = tableWords.filter((row) => {
-			if (row.key) {
-				return !selectedRowKeys.includes(row.key);
+			if (row.name) {
+				return !selectedRowKeys.includes(row.name);
 			}
 		});
 		setTableWords(newRows);
@@ -83,7 +83,7 @@ export const TableWords = ({
 	const handleSearch = (
 		selectedKeys: string[],
 		confirm: (param?: FilterConfirmProps) => void,
-		dataIndex: keyof DataWords,
+		dataIndex: keyof CreateWordDto,
 	) => {
 		confirm();
 		setSearchText(selectedKeys[0]);
@@ -95,11 +95,11 @@ export const TableWords = ({
 		setSearchText('');
 	};
 
-	const getColumnSearchProps = (dataIndex: keyof DataWords): ColumnType<DataWords> => ({
+	const getColumnSearchProps = (dataIndex: keyof CreateWordDto): ColumnType<CreateWordDto> => ({
 		filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
 			<div style={{ padding: 8 }}>
 				<Input
-					placeholder={`Search ${dataIndex}`}
+					// placeholder={`Search ${dataIndex}`}
 					value={selectedKeys[0]}
 					onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
 					onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
@@ -137,7 +137,7 @@ export const TableWords = ({
 			title: 'Name',
 			dataIndex: 'name',
 			key: 'name',
-			sorter: (a: DataWords, b: DataWords) => a.name.localeCompare(b.name),
+			sorter: (a: CreateWordDto, b: CreateWordDto) => a.name.localeCompare(b.name),
 			...getColumnSearchProps('name'),
 		},
 		{
@@ -164,7 +164,7 @@ export const TableWords = ({
 			title: 'Action',
 			dataIndex: '',
 			key: 'action',
-			render: (_: unknown, record: DataWords) => (
+			render: (_: unknown, record: CreateWordDto) => (
 				<div>
 					<Button type="link" onClick={() => showModal(record)}>
 						Edit
@@ -177,7 +177,7 @@ export const TableWords = ({
 		},
 	];
 
-	const rowSelection: TableRowSelection<DataWords> = {
+	const rowSelection: TableRowSelection<CreateWordDto> = {
 		selectedRowKeys,
 		onChange: onSelectChange,
 	};
@@ -207,7 +207,7 @@ export const TableWords = ({
 			>
 				<AddWordForm createWordForm={editWordForm} isModal={true} />
 			</Modal>
-			<Table<DataWords>
+			<Table<CreateWordDto>
 				className={styles.table}
 				size="small"
 				expandable={{

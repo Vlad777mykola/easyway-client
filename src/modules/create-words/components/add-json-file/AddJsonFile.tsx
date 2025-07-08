@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
-import { DataWords } from '../main/CreateWords';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { handleFileChange } from '../../utils/handleFileChange';
 import { FormValues } from '../../types';
 import { correctParse } from '../../utils/correctParse';
 import { filterFileData } from '../../utils/filterFileData';
+import { CreateWordDto } from '@/shared/api/generated/model';
 
 export type JsonWord = {
 	key: React.Key;
@@ -26,8 +26,8 @@ export const AddJsonFile = ({
 }: {
 	errors: FieldErrors<FormValues>;
 	control: Control<FormValues>;
-	tableWords: DataWords[];
-	setTableWords: React.Dispatch<React.SetStateAction<DataWords[]>>;
+	tableWords: CreateWordDto[];
+	setTableWords: React.Dispatch<React.SetStateAction<CreateWordDto[]>>;
 }) => {
 	const [jsonInputError, setJsonInputError] = useState('');
 
@@ -35,7 +35,7 @@ export const AddJsonFile = ({
 		try {
 			const json = JSON.parse(jsonString);
 
-			const dataWord: DataWords[] = json.map((word: JsonWord) => ({
+			const dataWord: CreateWordDto[] = json.map((word: JsonWord) => ({
 				...word,
 				key: word.name,
 				variants: word.variants.join(', '),

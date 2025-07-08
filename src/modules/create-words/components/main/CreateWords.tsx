@@ -7,27 +7,27 @@ import { AddWordForm } from '../add-word-form/AddWordForm';
 import { AddXmlFile } from '../add-xml-file/AddXmlFile';
 import { AddJsonFile } from '../add-json-file/AddJsonFile';
 import { TableWords } from '../table-words/TableWords';
-import { useWordsMutation } from '../../hooks/useWordsMutation';
 import { dataWordSchema } from '../../zod-schemas/form.schema';
 import { FormValues } from '../../types';
+import { wordsApi } from '@/shared/api/generated';
+import { ApiError } from '@/shared/api/types';
+import { CreateWordDto } from '@/shared/api/generated/model';
+
 import styles from './createWords.module.css';
 
-export type DataWords = {
-	name: string;
-	transcription: string;
-	translate: string;
-	type: string;
-	variants: string;
-	useCase: string;
-	key?: string;
-};
-
 export const CreateWords = () => {
-	const [tableWords, setTableWords] = useState<DataWords[]>([]);
+	const [tableWords, setTableWords] = useState<CreateWordDto[]>([]);
 	const isDisabled = tableWords.length === 0;
 
-	const { mutate, isPending, error } = useWordsMutation(() => {
-		clearForm();
+	const { mutate, isPending, error } = wordsApi.useWordsControllerCreateWords<ApiError>({
+		mutation: {
+			onSuccess: () => {
+				clearForm();
+			},
+			onError: (error) => {
+				console.error('Error creating filter:', error);
+			},
+		},
 	});
 
 	const createWord = useForm<FormValues>({
@@ -39,25 +39,25 @@ export const CreateWords = () => {
 		resolver: zodResolver(dataWordSchema),
 	});
 
-	const variants = createWord.watch('variants');
+	// const variants = createWord.watch('variants');
 
-	const getSelectInputValue = (): string => {
-		const input = document.querySelector('.ant-select-selector input') as HTMLInputElement;
-		return input?.value?.trim() || '';
-	};
+	// const getSelectInputValue = (): string => {
+	// 	const input = document.querySelector('.ant-select-selector input') as HTMLInputElement;
+	// 	return input?.value?.trim() || '';
+	// };
 
 	const handleAdd = () => {
-		const newValue = getSelectInputValue();
-		if (newValue && !variants.includes(newValue)) {
-			createWord.setValue('variants', [...variants, newValue]);
-		}
+		// const newValue = getSelectInputValue();
+		// if (newValue && !variants.includes(newValue)) {
+		// 	createWord.setValue('variants', [...variants, newValue]);
+		// }
 	};
 
 	const handleAddEdit = () => {
-		const newValue = getSelectInputValue();
-		if (newValue && !variants.includes(newValue)) {
-			editWord.setValue('variants', [...variants, newValue]);
-		}
+		// const newValue = getSelectInputValue();
+		// if (newValue && !variants.includes(newValue)) {
+		// 	editWord.setValue('variants', [...variants, newValue]);
+		// }
 	};
 
 	const addWord = (data: FormValues) => {
@@ -66,24 +66,32 @@ export const CreateWords = () => {
 		setTableWords((prev) => [
 			...prev,
 			{
-				key: data.name,
 				name: data.name,
 				useCase: data.useCase,
 				transcription: data.transcription,
 				translate: data.translate,
-				type: data.type,
-				variants: data.variants.join(', '),
+				type: data.type as CreateWordDto['type'],
+				variants: data.variants,
+				imgUrl: '',
 			},
 		]);
 	};
 
 	const editWordAndClose = (editObject: FormValues) => {
-		const filteredWords = tableWords.filter((word) => word.key !== editObject.key);
-		setTableWords([...filteredWords, { ...editObject, variants: editObject.variants.join(', ') }]);
+		const filteredWords = tableWords.filter((word) => word.name !== editObject.name);
+		setTableWords([
+			...filteredWords,
+			{
+				...editObject,
+				type: editObject.type as CreateWordDto['type'],
+				variants: editObject.variants,
+				imgUrl: '',
+			},
+		]);
 	};
 
-	const onSubmit = (data: DataWords[]) => {
-		mutate(data);
+	const onSubmit = (data: CreateWordDto[]) => {
+		mutate({ data: { words: data } });
 	};
 
 	const clearForm = () => {
@@ -96,7 +104,7 @@ export const CreateWords = () => {
 		editWord.setValue('transcription', '');
 		editWord.setValue('translate', '');
 		editWord.setValue('type', '');
-		editWord.setValue('variants', []);
+		editWord.setValue('variants', '');
 	};
 
 	const editWordForm = {

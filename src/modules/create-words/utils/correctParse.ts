@@ -1,8 +1,8 @@
-import { DataWords } from '../components/main/CreateWords';
+import { CreateWordDto } from '@/shared/api/generated/model';
 import { arrayOfHasRequiredKeys, dataWordsArraySchema } from '../zod-schemas/form.schema';
 import { checkCorrectFormat } from './checkCorrectFormat';
 
-export const correctParse = (merged: DataWords[], dataWords: DataWords[]) => {
+export const correctParse = (merged: CreateWordDto[], dataWords: CreateWordDto[]) => {
 	const parseCondition = dataWordsArraySchema.safeParse(merged);
 	const parsedAllKeys = arrayOfHasRequiredKeys.safeParse(dataWords);
 	const successParse = parsedAllKeys.success && parseCondition.success;

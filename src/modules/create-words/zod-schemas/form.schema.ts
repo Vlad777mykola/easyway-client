@@ -58,7 +58,6 @@ const hasRequiredKeys = z.record(z.any()).superRefine((obj, ctx) => {
 export const arrayOfHasRequiredKeys = z.array(hasRequiredKeys);
 
 export const dataWordSchema = z.object({
-	key: z.string().optional(),
 	name: z
 		.string()
 		.min(3, 'Name is required')
@@ -120,17 +119,11 @@ export const dataWordSchema = z.object({
 			},
 		),
 	variants: z
-		.array(z.string())
+		.string()
 		.min(1, 'Variants must have at least one variant')
-		.refine(
-			(arr) => {
-				const stringArr = arr.join('').split('');
-				return stringArr.every((symbol) => isNaN(Number(symbol)));
-			},
-			{
-				message: 'Variants cannot contain numbers',
-			},
-		),
+		.refine((str) => str, {
+			message: 'Variants cannot contain numbers',
+		}),
 	xmlFile: z.union([xmlFileSchema.optional(), dataWordsArraySchema, hasRequiredKeys]),
 	jsonFile: z.union([jsonFileSchema.optional(), dataWordsArraySchema, hasRequiredKeys]),
 });

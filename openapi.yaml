@@ -302,11 +302,31 @@ paths:
           description: ''
       tags: &a4
         - Words
-  /words/{id}:
+  /words/bulk:
+    post:
+      operationId: WordsController_createWords
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                words:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CreateWordDto'
+      responses:
+        '201':
+          description: ''
+      summary: Create bulk of words
+      tags: *a4
+  /words/{name}:
     get:
       operationId: WordsController_findOne
       parameters:
-        - name: id
+        - name: name
           required: true
           in: path
           schema:
@@ -315,6 +335,7 @@ paths:
         '200':
           description: ''
       tags: *a4
+  /words/{id}:
     patch:
       operationId: WordsController_update
       parameters:
@@ -531,10 +552,102 @@ components:
             type: string
     CreateWordDto:
       type: object
-      properties: {}
+      properties:
+        name:
+          type: string
+          example: apple
+          description: The word being added
+          minLength: 1
+          maxLength: 50
+        transcription:
+          type: string
+          example: '[ˈæpl]'
+          description: Phonetic transcription of the word
+          minLength: 1
+          maxLength: 100
+        translate:
+          type: string
+          example: яблоко
+          description: Translation of the word
+          minLength: 1
+          maxLength: 100
+        type:
+          type: string
+          example: noun
+          description: Grammatical type of the word
+          enum:
+            - noun
+            - verb
+            - adjective
+            - adverb
+            - other
+        useCase:
+          type: string
+          example: Used when describing fruit
+          description: Example use case or context of the word
+          minLength: 1
+          maxLength: 200
+        variants:
+          type: string
+          example:
+            - fruit
+            - food
+          description: Categories or contexts the word belongs to
+          minLength: 10
+          maxLength: 500
+        imgUrl:
+          type: string
+          example: https://example.com/image.jpg
+          description: URL to an image representing the word
+      required:
+        - name
+        - transcription
+        - translate
+        - type
+        - useCase
+        - variants
+        - imgUrl
     UpdateWordDto:
       type: object
-      properties: {}
+      properties:
+        name:
+          type: string
+          example: apple
+          description: The word being updated
+          minLength: 1
+          maxLength: 50
+        transcription:
+          type: string
+          example: '[ˈæpl]'
+          description: Phonetic transcription
+        translate:
+          type: string
+          example: яблоко
+          description: Translation of the word
+        type:
+          type: string
+          example: noun
+          description: Word type
+          enum:
+            - noun
+            - verb
+            - adjective
+            - adverb
+            - other
+        useCase:
+          type: string
+          example: Used when describing fruit
+          description: Use case or context
+        variants:
+          type: string
+          example:
+            - fruit
+            - food
+          description: Word categories
+        imgUrl:
+          type: string
+          example: https://example.com/image.jpg
+          description: Image URL
     CreateFiltersCollectionDto:
       type: object
       properties: {}
