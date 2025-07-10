@@ -30,14 +30,14 @@ export const CreateWords = () => {
 		},
 	});
 
-	const createWord = useForm<FormValues>({
-		mode: 'onChange',
-		resolver: zodResolver(dataWordSchema),
-	});
+	// const createWord = useForm<FormValues>({
+	// 	mode: 'onChange',
+	// 	resolver: zodResolver(dataWordSchema),
+	// });
 
-	const editWord = useForm<FormValues>({
-		resolver: zodResolver(dataWordSchema),
-	});
+	// const editWord = useForm<FormValues>({
+	// 	resolver: zodResolver(dataWordSchema),
+	// });
 
 	// const variants = createWord.watch('variants');
 
@@ -60,22 +60,24 @@ export const CreateWords = () => {
 		// }
 	};
 
-	const addWord = (data: FormValues) => {
-		clearForm();
+	// const addWord = (data: FormValues) => {
+	// 	clearForm();
 
-		setTableWords((prev) => [
-			...prev,
-			{
-				name: data.name,
-				useCase: data.useCase,
-				transcription: data.transcription,
-				translate: data.translate,
-				type: data.type as CreateWordDto['type'],
-				variants: data.variants,
-				imgUrl: '',
-			},
-		]);
-	};
+	// 	setTableWords((prev) => [
+	// 		...prev,
+	// 		{
+	// 			name: data.name,
+	// 			useCase: data.useCase,
+	// 			transcription: data.transcription,
+	// 			translate: data.translate,
+	// 			type: data.type as CreateWordDto['type'],
+	// 			variants: data.variants,
+	// 			imgUrl: '',
+	// 		},
+	// 	]);
+	// };
+
+	console.log('TABLE WORDS: ', tableWords);
 
 	const editWordAndClose = (editObject: FormValues) => {
 		const filteredWords = tableWords.filter((word) => word.name !== editObject.name);
@@ -94,40 +96,40 @@ export const CreateWords = () => {
 		mutate({ data: { words: data } });
 	};
 
-	const clearForm = () => {
-		createWord.reset();
-	};
+	// const clearForm = () => {
+	// 	createWord.reset();
+	// };
 
-	const clearEditForm = () => {
-		editWord.setValue('name', '');
-		editWord.setValue('useCase', '');
-		editWord.setValue('transcription', '');
-		editWord.setValue('translate', '');
-		editWord.setValue('type', '');
-		editWord.setValue('variants', '');
-	};
+	// const clearEditForm = () => {
+	// 	editWord.setValue('name', '');
+	// 	editWord.setValue('useCase', '');
+	// 	editWord.setValue('transcription', '');
+	// 	editWord.setValue('translate', '');
+	// 	editWord.setValue('type', '');
+	// 	editWord.setValue('variants', '');
+	// };
 
-	const editWordForm = {
-		errors: editWord.formState.errors,
-		control: editWord.control,
-		isPending,
-		clearEditErrors: editWord.clearErrors,
-		setValue: editWord.setValue,
-		clearForm: clearEditForm,
-		addWord: editWordAndClose,
-		handleAdd: handleAddEdit,
-		handleSubmit: editWord.handleSubmit,
-	};
+	// const editWordForm = {
+	// 	errors: editWord.formState.errors,
+	// 	control: editWord.control,
+	// 	isPending,
+	// 	clearEditErrors: editWord.clearErrors,
+	// 	setValue: editWord.setValue,
+	// 	clearForm: clearEditForm,
+	// 	addWord: editWordAndClose,
+	// 	handleAdd: handleAddEdit,
+	// 	handleSubmit: editWord.handleSubmit,
+	// };
 
-	const createWordForm = {
-		errors: createWord.formState.errors,
-		control: createWord.control,
-		isPending,
-		clearForm,
-		addWord,
-		handleAdd,
-		handleSubmit: createWord.handleSubmit,
-	};
+	// const createWordForm = {
+	// 	errors: createWord.formState.errors,
+	// 	control: createWord.control,
+	// 	isPending,
+	// 	clearForm,
+	// 	addWord,
+	// 	handleAdd,
+	// 	handleSubmit: createWord.handleSubmit,
+	// };
 
 	return (
 		<div className={styles.container}>
@@ -135,25 +137,21 @@ export const CreateWords = () => {
 				Create new word
 			</Typography.Title>
 			<div className={styles.formContent}>
-				<AddWordForm createWordForm={createWordForm} />
-				<AddXmlFile
+				<AddWordForm setTableWords={setTableWords} />
+				{/* <AddXmlFile
 					errors={createWord.formState.errors}
 					control={createWord.control}
 					tableWords={tableWords}
 					setTableWords={setTableWords}
-				/>
-				<AddJsonFile
+				/> */}
+				{/* <AddJsonFile
 					errors={createWord.formState.errors}
 					control={createWord.control}
 					tableWords={tableWords}
 					setTableWords={setTableWords}
-				/>
+				/> */}
 			</div>
-			<TableWords
-				tableWords={tableWords}
-				editWordForm={editWordForm}
-				setTableWords={setTableWords}
-			/>
+			<TableWords tableWords={tableWords} setTableWords={setTableWords} />
 			{error && <Typography.Text type="danger">{error?.message}</Typography.Text>}
 			<div className={styles.submitButton}>
 				<Button

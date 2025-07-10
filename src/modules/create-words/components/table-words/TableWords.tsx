@@ -14,44 +14,29 @@ import { AddWordForm } from '../add-word-form/AddWordForm';
 import { FormValues } from '../../types';
 import styles from './tableWords.module.css';
 import { CreateWordDto } from '@/shared/api/generated/model';
+import { ModalForm } from '../modal-form/ModalForm';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
-export const TableWords = ({
-	tableWords,
-	editWordForm,
-	setTableWords,
-}: {
-	tableWords: CreateWordDto[];
-	editWordForm: {
-		errors: FieldErrors<FormValues>;
-		control: Control<FormValues>;
-		isPending: boolean;
-		clearEditErrors: () => void;
-		setValue: UseFormSetValue<FormValues>;
-		clearForm: () => void;
-		addWord: (data: FormValues) => void;
-		handleAdd: () => void;
-		handleSubmit: UseFormHandleSubmit<FormValues>;
-	};
-	setTableWords: React.Dispatch<React.SetStateAction<CreateWordDto[]>>;
-}) => {
+export const TableWords = ({ tableWords, setTableWords }: { tableWords: CreateWordDto[] }) => {
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 	const [, setSearchText] = useState('');
 	const [, setSearchedColumn] = useState<keyof CreateWordDto | ''>('');
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editData, setEditData] = useState({});
 
+	console.log('EDIT DATA: ', editData);
+
 	useEffect(() => {
 		setIsModalOpen(false);
 	}, [tableWords]);
 
-	useEffect(() => {
-		if (fillForm) {
-			fillForm();
-			editWordForm.clearEditErrors();
-		}
-	}, [editData]);
+	// useEffect(() => {
+	// 	if (fillForm) {
+	// 		fillForm();
+	// 		editWordForm.clearEditErrors();
+	// 	}
+	// }, [editData]);
 
 	const showModal = (record: CreateWordDto) => {
 		setEditData({ ...record, variants: record.variants.split(', ') });
@@ -77,7 +62,7 @@ export const TableWords = ({
 				return !selectedRowKeys.includes(row.name);
 			}
 		});
-		setTableWords(newRows);
+		//setTableWords(newRows);
 	};
 
 	const handleSearch = (
@@ -182,31 +167,23 @@ export const TableWords = ({
 		onChange: onSelectChange,
 	};
 
-	const fillForm = () => {
-		Object.entries(editData).forEach(([key, value]) => {
-			editWordForm.setValue(key as keyof FormValues, value as string | string[]);
-		});
-	};
+	// const fillForm = () => {
+	// 	Object.entries(editData).forEach(([key, value]) => {
+	// 		editWordForm.setValue(key as keyof FormValues, value as string | string[]);
+	// 	});
+	// };
 
 	return (
 		<div className={styles.tableContainer}>
 			<div className={styles.deleteButtonContainer}>
 				<Button onClick={deleteRows}>Delete</Button>
 			</div>
-			<Modal
-				title={
-					<Typography.Title className={styles.titleModal} level={2}>
-						Edit Word
-					</Typography.Title>
-				}
-				closable={{ 'aria-label': 'Custom Close Button' }}
-				open={isModalOpen}
-				onCancel={handleCancel}
-				footer={null}
-				mask={false}
-			>
-				<AddWordForm createWordForm={editWordForm} isModal={true} />
-			</Modal>
+			<ModalForm
+				isModalOpen={isModalOpen}
+				setTableWords={setTableWords}
+				handleCancel={handleCancel}
+				filledData={editData}
+			/>
 			<Table<CreateWordDto>
 				className={styles.table}
 				size="small"
