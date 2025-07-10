@@ -182,7 +182,8 @@ export const TableWords = ({ tableWords, setTableWords }: { tableWords: CreateWo
 				isModalOpen={isModalOpen}
 				setTableWords={setTableWords}
 				handleCancel={handleCancel}
-				filledData={editData}
+				wordName={editData?.name}
+				tableWords={tableWords}
 			/>
 			<Table<CreateWordDto>
 				className={styles.table}

@@ -1,128 +1,76 @@
-import React, { useEffect } from 'react';
 import { useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { Controller, useController, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { Select } from '@/ui-components/Select';
 import { Button } from '@/ui-components/Button';
-import { FormValues } from '../../types';
+import type { FormValues } from '../../types';
 import styles from './addWordForm.module.css';
 import { dataWordSchema } from '../../zod-schemas/form.schema';
-import { wordsApi } from '@/shared/api/generated';
-import { ApiError } from '@/shared/api/types';
 import { CreateWordDto } from '@/shared/api/generated/model';
 
 const types = ['pronoun', 'noun', 'interjection', 'adjective', 'verb'];
 
 export const AddWordForm = ({
 	setTableWords,
-	isModal = false,
-	filledData,
+	tableWords,
+	wordName,
 }: {
-	setTableWords: React.Dispatch<React.SetStateAction<CreateWordDto[]>>;
-	isModal?: boolean;
+	setTableWords: Dispatch<SetStateAction<CreateWordDto[]>>;
+	tableWords: CreateWordDto[];
+	wordName?: string;
 }) => {
-	const [searchValue, setSearchValue] = useState('');
-	const createWord = useForm<FormValues>({
+	const [error, setErrorMap] = useState<string>('');
+
+	const { reset, setValue, handleSubmit, formState, control } = useForm<FormValues>({
 		mode: 'onChange',
 		resolver: zodResolver(dataWordSchema),
+		defaultValues: wordName ? tableWords.find((w) => w.name === wordName) : undefined,
 	});
-	const { field } = useController({ name: 'variants', control: createWord.control });
+
+	const { field } = useController({ name: 'variants', control });
+
+	// to do move to utils
+	const isValidWordForTable = (name: string, wordList: CreateWordDto[]) =>
+		wordList.find((w) => w.name === name);
+
 	const stringVariant = field.value || '';
-
-	useEffect(() => {
-		if (fillForm) {
-			fillForm();
-			createWord.clearErrors();
-		}
-	}, [filledData]);
-
 	const tagArray = stringVariant
 		.split(',')
 		.map((tag) => tag.trim())
 		.filter((tag) => tag.length > 0);
 
-	const { isPending } = wordsApi.useWordsControllerCreateWords<ApiError>({
-		mutation: {
-			onSuccess: () => {
-				clearForm();
-			},
-			onError: (error) => {
-				console.error('Error creating filter:', error);
-			},
-		},
-	});
+	const onSubmit = (data: FormValues) => {
+		setTableWords((prev) => {
+			let filteredWords = prev;
 
-	const handleAdd = () => {
-		createWord.setValue('variants', `${field.value}`);
-	};
-
-	const clearForm = () => {
-		createWord.reset();
-	};
-
-	const addWord = (data: FormValues) => {
-		clearForm();
-
-		if (isModal) {
-			setTableWords((prev) => {
-				const filteredWords = prev.filter((word) =>
-					types.some((type) => word[type] !== data[type]),
-				);
-				return [
-					...filteredWords,
-					{
-						name: data.name,
-						useCase: data.useCase,
-						transcription: data.transcription,
-						translate: data.translate,
-						type: data.type as CreateWordDto['type'],
-						variants: data.variants,
-						imgUrl: '',
-					},
-				];
-			});
-		}
-
-		if (!isModal) {
-			setTableWords((prev) => [
-				...prev,
-				{
-					name: data.name,
-					useCase: data.useCase,
-					transcription: data.transcription,
-					translate: data.translate,
-					type: data.type as CreateWordDto['type'],
-					variants: data.variants,
-					imgUrl: '',
-				},
-			]);
-		}
-	};
-
-	const fillForm = () => {
-		if (!filledData) return;
-		Object.entries(filledData).forEach(([key, value]) => {
-			createWord.setValue(key as keyof FormValues, value as string);
-			if (key === 'variants' && Array.isArray(value)) {
-				createWord.setValue('variants', value.join(',') as string);
+			if (!wordName && isValidWordForTable(data.name, prev)) {
+				setErrorMap(`The word is already in the list ${data.name}`);
+				return prev;
 			}
+			if (wordName) {
+				filteredWords = prev.filter((w) => w.name !== wordName);
+			}
+
+			reset();
+			return [{ ...data, type: data.type as CreateWordDto['type'], imgUrl: '' }, ...filteredWords];
 		});
 	};
 
 	return (
 		<div className={styles.addWordForm}>
-			<FieldGroup marginY="03" title="Name" error={createWord.formState.errors?.name?.message}>
+			<FieldGroup marginY="03" title="Name" error={formState.errors?.name?.message}>
 				<Controller
 					name="name"
-					control={createWord.control}
+					control={control}
 					render={({ field }) => (
 						<Input
 							{...field}
 							placeholder="Enter your title"
 							size="middle"
-							status={createWord.formState.errors?.name && 'error'}
+							status={formState.errors?.name && 'error'}
 						/>
 					)}
 				/>
@@ -130,82 +78,70 @@ export const AddWordForm = ({
 			<FieldGroup
 				marginY="03"
 				title="Transcription"
-				error={createWord.formState.errors?.transcription?.message}
+				error={formState.errors?.transcription?.message}
 			>
 				<Controller
 					name="transcription"
-					control={createWord.control}
+					control={control}
 					render={({ field }) => (
 						<Input
 							{...field}
 							placeholder="Enter your description"
 							size="middle"
-							status={createWord.formState.errors?.name && 'error'}
+							status={formState.errors?.transcription && 'error'}
 						/>
 					)}
 				/>
 			</FieldGroup>
-			<FieldGroup
-				marginY="03"
-				title="Translate"
-				error={createWord.formState.errors?.translate?.message}
-			>
+			<FieldGroup marginY="03" title="Translate" error={formState.errors?.translate?.message}>
 				<Controller
 					name="translate"
-					control={createWord.control}
+					control={control}
 					render={({ field }) => (
 						<Input
 							{...field}
 							placeholder="Enter your translate"
 							size="middle"
-							status={createWord.formState.errors?.name && 'error'}
+							status={formState.errors?.translate && 'error'}
 						/>
 					)}
 				/>
 			</FieldGroup>
-			<FieldGroup
-				marginY="03"
-				title="Use Case"
-				error={createWord.formState.errors?.useCase?.message}
-			>
+			<FieldGroup marginY="03" title="Use Case" error={formState.errors?.useCase?.message}>
 				<Controller
 					name="useCase"
-					control={createWord.control}
+					control={control}
 					render={({ field }) => (
 						<Input
 							{...field}
 							placeholder="Enter your use case"
 							size="middle"
-							status={createWord.formState.errors?.useCase && 'error'}
+							status={formState.errors?.useCase && 'error'}
 						/>
 					)}
 				/>
 			</FieldGroup>
-			<FieldGroup marginY="03" title="Type" error={createWord.formState.errors.type?.message}>
+			<FieldGroup marginY="03" title="Type" error={formState.errors.type?.message}>
 				<Controller
 					name="type"
-					control={createWord.control}
+					control={control}
 					render={({ field }) => (
 						<Select
 							{...field}
 							placeholder="Select topics"
 							options={types.map((i: string) => ({ label: i, value: i }))}
-							status={createWord.formState.errors.type ? 'error' : undefined}
+							status={formState.errors.type ? 'error' : undefined}
 							onChange={field.onChange}
 							value={field.value}
 						/>
 					)}
 				/>
 			</FieldGroup>
-			<FieldGroup
-				marginY="03"
-				title="Variants"
-				error={createWord.formState.errors.variants?.message}
-			>
+			<FieldGroup marginY="03" title="Variants" error={formState.errors.variants?.message}>
 				<div className={styles.variantsContainer}>
 					<Controller
 						name="variants"
-						control={createWord.control}
+						control={control}
 						render={({ field }) => (
 							<div className={styles.variants}>
 								<Select
@@ -214,8 +150,7 @@ export const AddWordForm = ({
 									open={false}
 									suffixIcon={null}
 									placeholder="Press Enter to add tags"
-									status={createWord.formState.errors.type ? 'error' : undefined}
-									onSearch={(value) => setSearchValue(value)}
+									status={formState.errors.variants ? 'error' : undefined}
 									onChange={(values) => {
 										const joined = values.join(',');
 										field.onChange(joined);
@@ -225,20 +160,17 @@ export const AddWordForm = ({
 							</div>
 						)}
 					/>
-					<Button onClick={handleAdd}>Add</Button>
+					<Button onClick={() => setValue('variants', `${field.value}`)}>Add</Button>
 				</div>
 			</FieldGroup>
+			{/* To do use wra for error  */}
+			{error && <span className={styles.errorMessage}>{error}</span>}
 			<div className={styles.collectionButtons}>
-				<Button type="primary" shape="round" onClick={clearForm}>
+				<Button type="primary" shape="round" onClick={() => reset()}>
 					Clear
 				</Button>
-				<Button
-					disabled={isPending}
-					type="primary"
-					shape="round"
-					onClick={createWord.handleSubmit(addWord)}
-				>
-					{isModal ? 'Save' : 'Add'}
+				<Button type="primary" shape="round" onClick={handleSubmit(onSubmit)}>
+					{wordName ? 'Save' : 'Add'}
 				</Button>
 			</div>
 		</div>

@@ -3,7 +3,7 @@ import { Typography } from '@/ui-components/Typography';
 import styles from './modalForm.module.css';
 import { AddWordForm } from '../add-word-form/AddWordForm';
 
-export const ModalForm = ({ isModalOpen, setTableWords, handleCancel, filledData }) => {
+export const ModalForm = ({ isModalOpen, setTableWords, handleCancel, wordName, tableWords }) => {
 	return (
 		<Modal
 			title={
@@ -17,7 +17,7 @@ export const ModalForm = ({ isModalOpen, setTableWords, handleCancel, filledData
 			footer={null}
 			mask={false}
 		>
-			<AddWordForm setTableWords={setTableWords} isModal={true} filledData={filledData} />
+			<AddWordForm tableWords={tableWords} setTableWords={setTableWords} wordName={wordName} />
 		</Modal>
 	);
 };

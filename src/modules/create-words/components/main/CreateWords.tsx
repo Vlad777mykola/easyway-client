@@ -137,8 +137,8 @@ export const CreateWords = () => {
 				Create new word
 			</Typography.Title>
 			<div className={styles.formContent}>
-				<AddWordForm setTableWords={setTableWords} />
-				<AddXmlFile tableWords={tableWords} setTableWords={setTableWords} tableWords={tableWords} />
+				<AddWordForm setTableWords={setTableWords} tableWords={tableWords} />
+				<AddXmlFile tableWords={tableWords} setTableWords={setTableWords} />
 				{/* <AddJsonFile
 					errors={createWord.formState.errors}
 					control={createWord.control}
