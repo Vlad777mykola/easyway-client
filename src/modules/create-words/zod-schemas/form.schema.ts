@@ -106,18 +106,7 @@ export const dataWordSchema = z.object({
 				message: 'Cannot contain numbers.',
 			},
 		),
-	type: z
-		.string()
-		.min(1, 'Select at least one type')
-		.refine(
-			(val) => {
-				const stringArr = val.replace(/\s+/g, '').split('');
-				return stringArr.every((symbol) => isNaN(Number(symbol)));
-			},
-			{
-				message: 'Cannot contain numbers.',
-			},
-		),
+	type: z.enum(['noun', 'adjective', 'verb', 'adverb', 'other']),
 	variants: z
 		.string()
 		.min(1, 'Variants must have at least one variant')

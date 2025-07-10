@@ -8,3 +8,5 @@ export const requiredKeys: (keyof CreateWordDto)[] = [
 	'type',
 	'variants',
 ];
+
+export const ALLOWED_TYPES = ['noun', 'adjective', 'verb', 'adverb', 'other'] as const;

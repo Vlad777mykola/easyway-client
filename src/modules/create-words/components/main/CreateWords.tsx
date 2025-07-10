@@ -11,7 +11,7 @@ import { dataWordSchema } from '../../zod-schemas/form.schema';
 import { FormValues } from '../../types';
 import { wordsApi } from '@/shared/api/generated';
 import { ApiError } from '@/shared/api/types';
-import { CreateWordDto } from '@/shared/api/generated/model';
+import type { CreateWordDto } from '@/shared/api/generated/model';
 
 import styles from './createWords.module.css';
 
@@ -138,7 +138,7 @@ export const CreateWords = () => {
 			</Typography.Title>
 			<div className={styles.formContent}>
 				<AddWordForm setTableWords={setTableWords} tableWords={tableWords} />
-				<AddXmlFile tableWords={tableWords} setTableWords={setTableWords} />
+				<AddXmlFile setTableWords={setTableWords} />
 				{/* <AddJsonFile
 					errors={createWord.formState.errors}
 					control={createWord.control}

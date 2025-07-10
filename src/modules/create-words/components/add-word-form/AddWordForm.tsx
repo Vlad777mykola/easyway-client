@@ -7,11 +7,10 @@ import { Input } from '@/ui-components/Input';
 import { Select } from '@/ui-components/Select';
 import { Button } from '@/ui-components/Button';
 import type { FormValues } from '../../types';
-import styles from './addWordForm.module.css';
 import { dataWordSchema } from '../../zod-schemas/form.schema';
 import { CreateWordDto } from '@/shared/api/generated/model';
-
-const types = ['pronoun', 'noun', 'interjection', 'adjective', 'verb'];
+import { ALLOWED_TYPES } from '../../constants/constants';
+import styles from './addWordForm.module.css';
 
 export const AddWordForm = ({
 	setTableWords,
@@ -129,7 +128,7 @@ export const AddWordForm = ({
 						<Select
 							{...field}
 							placeholder="Select topics"
-							options={types.map((i: string) => ({ label: i, value: i }))}
+							options={ALLOWED_TYPES.map((i: string) => ({ label: i, value: i }))}
 							status={formState.errors.type ? 'error' : undefined}
 							onChange={field.onChange}
 							value={field.value}
