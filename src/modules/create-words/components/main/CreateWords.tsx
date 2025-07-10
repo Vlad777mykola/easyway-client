@@ -138,12 +138,7 @@ export const CreateWords = () => {
 			</Typography.Title>
 			<div className={styles.formContent}>
 				<AddWordForm setTableWords={setTableWords} />
-				{/* <AddXmlFile
-					errors={createWord.formState.errors}
-					control={createWord.control}
-					tableWords={tableWords}
-					setTableWords={setTableWords}
-				/> */}
+				<AddXmlFile tableWords={tableWords} setTableWords={setTableWords} />
 				{/* <AddJsonFile
 					errors={createWord.formState.errors}
 					control={createWord.control}

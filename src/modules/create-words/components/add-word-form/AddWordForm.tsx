@@ -34,7 +34,7 @@ export const AddWordForm = ({
 	useEffect(() => {
 		if (fillForm) {
 			fillForm();
-			//createWord.clearEditErrors();
+			createWord.clearErrors();
 		}
 	}, [filledData]);
 
