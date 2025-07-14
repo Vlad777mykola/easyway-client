@@ -6,14 +6,14 @@ type Result = {
 	errors: string[];
 };
 
-export const containAllKeys = (xmlWords: CreateWordDto[]) => {
+export const checkContainAllKeys = (fileWords: CreateWordDto[]) => {
 	const emptyFieldsMap = new Map<string, string[]>();
 	const result: Result = {
 		correctWords: [],
 		errors: [],
 	};
 
-	xmlWords.forEach((word) => {
+	fileWords.forEach((word) => {
 		const missingFields: string[] = [];
 
 		WORD_FIELDS.forEach((field) => {

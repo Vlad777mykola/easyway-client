@@ -7,9 +7,9 @@ import { ALLOWED_TYPES, WORD_FIELDS } from '../../constants/constants';
 import type { CreateWordDto } from '@/shared/api/generated/model';
 
 import styles from './addXmlFile.module.css';
-import { containAllKeys } from '../../utils/containAllKeys';
-
-//const WORD_FIELDS = ['name', 'transcription', 'translate', 'type', 'useCase', 'variants'] as const;
+import { checkContainAllKeys } from '../../utils/checkContainAllKeys';
+import { checkSameItems } from '../../utils/checkSameItems';
+import { validateFileContent } from '../../utils/validateFileContent';
 
 export const AddXmlFile = ({
 	setTableWords,
@@ -19,87 +19,6 @@ export const AddXmlFile = ({
 	const [error, setErrorMap] = useState<string>('');
 
 	type CreateWordDtoType = (typeof ALLOWED_TYPES)[number];
-
-	const validateXMLContent = (xmlWords: CreateWordDto[]) => {
-		const sameWords: string[] = [];
-		setTableWords((prev) => {
-			const existWord = prev.filter((word) =>
-				xmlWords.some(
-					(xmlWord) => xmlWord.name.trim().toLowerCase() === word.name.trim().toLowerCase(),
-				),
-			);
-
-			if (existWord.length > 0) {
-				sameWords.push(...existWord.map((word) => word.name));
-				const newWords = prev.filter(
-					(word) =>
-						!xmlWords.some(
-							(xmlWord) => xmlWord.name.trim().toLowerCase() !== word.name.trim().toLowerCase(),
-						),
-				);
-				setErrorMap(`That xml file already contains words: ${sameWords.join(', ')}`);
-				return [...newWords, ...prev];
-			} else {
-				setErrorMap('');
-			}
-
-			return [...xmlWords, ...prev];
-		});
-	};
-
-	// const containAllKeys = (xmlWords: CreateWordDto[]) => {
-	// 	const emptyFieldsMap = new Map<string, string[]>();
-	// 	const fullFields: CreateWordDto[] = [];
-
-	// 	xmlWords.forEach((word) => {
-	// 		const missingFields: string[] = [];
-
-	// 		WORD_FIELDS.forEach((field) => {
-	// 			if (!word[field] || word[field].length === 0) {
-	// 				missingFields.push(field);
-	// 			}
-	// 		});
-
-	// 		if (missingFields.length > 0) {
-	// 			const name = word.name || '(no name)';
-	// 			emptyFieldsMap.set(name, missingFields);
-	// 		} else {
-	// 			fullFields.push(word);
-	// 		}
-	// 	});
-
-	// 	if (emptyFieldsMap.size > 0) {
-	// 		const errors = Array.from(emptyFieldsMap.entries()).map(([name, fields]) => {
-	// 			return `Empty key in ${name}: ${fields.join(', ')}.`;
-	// 		});
-	// 		setErrorMap(errors.join('\n'));
-	// 	} else {
-	// 		setErrorMap('');
-	// 	}
-
-	// 	return fullFields;
-	// };
-
-	const checkSameItems = (fileItems: CreateWordDto[]) => {
-		const uniqueItems: CreateWordDto[] = [];
-		const sameItems: string[] = [];
-
-		fileItems.forEach((item) => {
-			if (!uniqueItems.some((unique) => unique.name === item.name)) {
-				uniqueItems.push(item);
-			} else {
-				sameItems.push(item.name);
-			}
-		});
-
-		if (sameItems.length > 0) {
-			setErrorMap(`File has same word(s): ${sameItems.join(', ')}`);
-		} else {
-			setErrorMap('');
-		}
-
-		return uniqueItems;
-	};
 
 	const parseWordType = (value: string | null): CreateWordDtoType => {
 		if (ALLOWED_TYPES.includes(value as CreateWordDtoType)) {
@@ -145,14 +64,21 @@ export const AddXmlFile = ({
 				return createCorrectedWord(item);
 			});
 
-			const fullKeysWord = containAllKeys(items);
+			const fullKeysWord = checkContainAllKeys(items);
 
-			if (fullKeysWord.errors.length > 0) {
-				setErrorMap(fullKeysWord.errors.join(', '));
-			}
+			console.log('FULL KEYS WORD: ', fullKeysWord);
+
+			if (fullKeysWord.errors.length > 0) setErrorMap(fullKeysWord.errors.join(', '));
 
 			const uniqueItems = checkSameItems(fullKeysWord.correctWords);
-			validateXMLContent(uniqueItems);
+
+			console.log('UNIQUE ITEMS: ', uniqueItems);
+
+			if (uniqueItems.errors !== '') setErrorMap(uniqueItems.errors);
+
+			const error = validateFileContent(uniqueItems.uniqueWords, setTableWords);
+
+			if (error !== '') setErrorMap(error);
 		} catch (error) {
 			if (error instanceof Error) {
 				console.error('Invalid XML:', error.message);
@@ -162,13 +88,15 @@ export const AddXmlFile = ({
 		}
 	};
 
+	console.log('ERROR: ', error);
+
 	const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const error = checkIsCorrectFile(event);
 		if (error) {
 			setErrorMap(error);
 			return;
 		} else {
-			setErrorMap('');
+			//setErrorMap('');
 		}
 		handleFileChange(event, parseXML);
 	};

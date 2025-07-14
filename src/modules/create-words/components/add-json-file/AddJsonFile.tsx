@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
-import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { checkIsCorrectFile, handleFileChange } from '../../utils/handleFileChange';
-import { FormValues } from '../../types';
-import { correctParse } from '../../utils/correctParse';
-import { filterFileData } from '../../utils/filterFileData';
 import { CreateWordDto } from '@/shared/api/generated/model';
 import styles from './addJsonFile.module.css';
+import { checkContainAllKeys } from '../../utils/checkContainAllKeys';
+import { checkSameItems } from '../../utils/checkSameItems';
+import { validateFileContent } from '../../utils/validateFileContent';
 
 export type JsonWord = {
 	key: React.Key;
@@ -36,19 +35,17 @@ export const AddJsonFile = ({
 				variants: word.variants.join(', '),
 			}));
 
-			console.log('DATA WORD: ', dataWord);
+			const fullKeysWord = checkContainAllKeys(dataWord);
 
-			//const filterJson = filterFileData(dataWord);
+			if (fullKeysWord.errors.length > 0) setErrorMap(fullKeysWord.errors.join(', '));
 
-			//const merged = [...tableWords, ...filterJson];
+			const uniqueItems = checkSameItems(fullKeysWord.correctWords);
 
-			// const uniqueWords = Array.from(
-			// 	new Map([...tableWords, ...filterJson].map((word) => [word.name, word])).values(),
-			// );
+			if (uniqueItems.errors !== '') setErrorMap(uniqueItems.errors);
 
-			//setJsonInputError(correctParse(merged, dataWord).join('.'));
+			const error = validateFileContent(uniqueItems.uniqueWords, setTableWords);
 
-			//setTableWords(uniqueWords);
+			if (error !== '') setErrorMap(error);
 		} catch (e: unknown) {
 			if (e instanceof Error) {
 				console.error('Invalid JSON:', e.message);
