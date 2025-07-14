@@ -32,19 +32,18 @@ export const AddWordForm = ({
 
 	useEffect(() => {
 		if (wordName) {
-			const value = getDefaultValuesForm(wordName);
-			reset(value);
+			getDefaultValuesForm(wordName);
 		}
 	}, [wordName, reset]);
 
 	const getDefaultValuesForm = (wordName: string) => {
-		console.log(
-			'FIND: ',
-			tableWords.find((w) => w.name === wordName),
-		);
-		return tableWords.find((w) => w.name === wordName);
-	};
+		const editWord = tableWords.find((w) => w.name === wordName);
+		if (!editWord) return;
 
+		(Object.keys(editWord) as (keyof CreateWordDto)[]).forEach((key) => {
+			setValue(key, editWord[key]);
+		});
+	};
 	// to do move to utils
 	const isValidWordForTable = (name: string, wordList: CreateWordDto[]) =>
 		wordList.find((w) => w.name === name);

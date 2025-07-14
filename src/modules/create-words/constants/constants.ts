@@ -10,3 +10,12 @@ export const requiredKeys: (keyof CreateWordDto)[] = [
 ];
 
 export const ALLOWED_TYPES = ['noun', 'adjective', 'verb', 'adverb', 'other'] as const;
+
+export const WORD_FIELDS = [
+	'name',
+	'transcription',
+	'translate',
+	'type',
+	'useCase',
+	'variants',
+] as const;

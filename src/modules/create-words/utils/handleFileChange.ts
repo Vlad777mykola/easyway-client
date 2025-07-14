@@ -23,8 +23,10 @@ export const checkIsCorrectFile = (event: React.ChangeEvent<HTMLInputElement>) =
 		return 'File is required';
 	}
 
-	if (file.type !== 'text/xml') {
-		return 'Invalid file type. Please upload an XML file.';
+	const allowedTypes = ['application/json', 'text/xml'];
+
+	if (!allowedTypes.includes(file.type)) {
+		return 'Invalid file type. Please upload a valid file.';
 	}
 
 	if (file.size === 0) {

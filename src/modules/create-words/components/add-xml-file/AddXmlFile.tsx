@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { checkIsCorrectFile, handleFileChange } from '../../utils/handleFileChange';
+import { ALLOWED_TYPES, WORD_FIELDS } from '../../constants/constants';
 import type { CreateWordDto } from '@/shared/api/generated/model';
-import { ALLOWED_TYPES } from '../../constants/constants';
 
 import styles from './addXmlFile.module.css';
+import { containAllKeys } from '../../utils/containAllKeys';
 
-const WORD_FIELDS = ['name', 'transcription', 'translate', 'type', 'useCase', 'variants'] as const;
+//const WORD_FIELDS = ['name', 'transcription', 'translate', 'type', 'useCase', 'variants'] as const;
 
 export const AddXmlFile = ({
 	setTableWords,
@@ -36,50 +37,68 @@ export const AddXmlFile = ({
 							(xmlWord) => xmlWord.name.trim().toLowerCase() !== word.name.trim().toLowerCase(),
 						),
 				);
-				setErrorMap('That xml file already contains words: ' + sameWords.join(', '));
+				setErrorMap(`That xml file already contains words: ${sameWords.join(', ')}`);
 				return [...newWords, ...prev];
+			} else {
+				setErrorMap('');
 			}
 
 			return [...xmlWords, ...prev];
 		});
 	};
 
-	const containAllKeys = (xmlWords: CreateWordDto[]) => {
-		let emptyFields: { name: string; fields: string[] }[] = [];
-		let fullFields: CreateWordDto[] = [];
-		let error = '';
-		xmlWords.forEach((word: CreateWordDto) => {
-			WORD_FIELDS.forEach((field) => {
-				const value = word[field];
-				if (!value || value.length === 0) {
-					if (!emptyFields.some((field) => field.name === word.name)) {
-						emptyFields.push({ name: word.name, fields: [field] });
-					} else {
-						const found: { name: string; fields: string[] } = emptyFields.find(
-							(field) => field.name === word.name,
-						);
-						const filtered = emptyFields.filter((field) => field.name !== word.name);
-						emptyFields = [...filtered, { ...found, fields: [...found.fields, field] }];
-					}
-				}
-			});
+	// const containAllKeys = (xmlWords: CreateWordDto[]) => {
+	// 	const emptyFieldsMap = new Map<string, string[]>();
+	// 	const fullFields: CreateWordDto[] = [];
 
-			if (!emptyFields.some((field) => field.name === word.name)) {
-				fullFields.push(word);
+	// 	xmlWords.forEach((word) => {
+	// 		const missingFields: string[] = [];
+
+	// 		WORD_FIELDS.forEach((field) => {
+	// 			if (!word[field] || word[field].length === 0) {
+	// 				missingFields.push(field);
+	// 			}
+	// 		});
+
+	// 		if (missingFields.length > 0) {
+	// 			const name = word.name || '(no name)';
+	// 			emptyFieldsMap.set(name, missingFields);
+	// 		} else {
+	// 			fullFields.push(word);
+	// 		}
+	// 	});
+
+	// 	if (emptyFieldsMap.size > 0) {
+	// 		const errors = Array.from(emptyFieldsMap.entries()).map(([name, fields]) => {
+	// 			return `Empty key in ${name}: ${fields.join(', ')}.`;
+	// 		});
+	// 		setErrorMap(errors.join('\n'));
+	// 	} else {
+	// 		setErrorMap('');
+	// 	}
+
+	// 	return fullFields;
+	// };
+
+	const checkSameItems = (fileItems: CreateWordDto[]) => {
+		const uniqueItems: CreateWordDto[] = [];
+		const sameItems: string[] = [];
+
+		fileItems.forEach((item) => {
+			if (!uniqueItems.some((unique) => unique.name === item.name)) {
+				uniqueItems.push(item);
+			} else {
+				sameItems.push(item.name);
 			}
 		});
 
-		if (emptyFields.length > 0) {
-			emptyFields.forEach((field) => {
-				error =
-					field.name.length === 0
-						? 'Check that all objects have name of word.'
-						: `Empty key in ${field.name}: ${field.fields.join(', ')}`;
-				setErrorMap(error);
-			});
+		if (sameItems.length > 0) {
+			setErrorMap(`File has same word(s): ${sameItems.join(', ')}`);
+		} else {
+			setErrorMap('');
 		}
 
-		return fullFields;
+		return uniqueItems;
 	};
 
 	const parseWordType = (value: string | null): CreateWordDtoType => {
@@ -101,7 +120,6 @@ export const AddXmlFile = ({
 
 			if (field === 'variants') {
 				const variantsParent = xmlWord?.getElementsByTagName(field)[0];
-				console.log('VARIANTS PARENT: ', variantsParent);
 				word[field] =
 					typeof variantsParent !== 'undefined'
 						? Array.from(variantsParent.getElementsByTagName('variant'))
@@ -128,7 +146,13 @@ export const AddXmlFile = ({
 			});
 
 			const fullKeysWord = containAllKeys(items);
-			validateXMLContent(fullKeysWord);
+
+			if (fullKeysWord.errors.length > 0) {
+				setErrorMap(fullKeysWord.errors.join(', '));
+			}
+
+			const uniqueItems = checkSameItems(fullKeysWord.correctWords);
+			validateXMLContent(uniqueItems);
 		} catch (error) {
 			if (error instanceof Error) {
 				console.error('Invalid XML:', error.message);
@@ -143,13 +167,21 @@ export const AddXmlFile = ({
 		if (error) {
 			setErrorMap(error);
 			return;
+		} else {
+			setErrorMap('');
 		}
 		handleFileChange(event, parseXML);
 	};
 
 	return (
 		<FieldGroup marginY="03" title="Send XML file">
-			<Input type="file" accept=".xml" size="middle" onChange={(e) => onChangeInput(e)} />
+			<Input
+				type="file"
+				accept=".xml"
+				size="middle"
+				status={error && 'error'}
+				onChange={(e) => onChangeInput(e)}
+			/>
 			{error && <span className={styles.errorMessage}>{error}</span>}
 		</FieldGroup>
 	);

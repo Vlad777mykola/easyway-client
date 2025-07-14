@@ -77,8 +77,6 @@ export const CreateWords = () => {
 	// 	]);
 	// };
 
-	console.log('TABLE WORDS: ', tableWords);
-
 	const editWordAndClose = (editObject: FormValues) => {
 		const filteredWords = tableWords.filter((word) => word.name !== editObject.name);
 		setTableWords([
@@ -139,12 +137,7 @@ export const CreateWords = () => {
 			<div className={styles.formContent}>
 				<AddWordForm setTableWords={setTableWords} tableWords={tableWords} />
 				<AddXmlFile setTableWords={setTableWords} />
-				{/* <AddJsonFile
-					errors={createWord.formState.errors}
-					control={createWord.control}
-					tableWords={tableWords}
-					setTableWords={setTableWords}
-				/> */}
+				<AddJsonFile setTableWords={setTableWords} />
 			</div>
 			<TableWords tableWords={tableWords} setTableWords={setTableWords} />
 			{error && <Typography.Text type="danger">{error?.message}</Typography.Text>}

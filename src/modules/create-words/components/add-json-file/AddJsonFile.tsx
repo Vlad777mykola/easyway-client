@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
-import { handleFileChange } from '../../utils/handleFileChange';
+import { checkIsCorrectFile, handleFileChange } from '../../utils/handleFileChange';
 import { FormValues } from '../../types';
 import { correctParse } from '../../utils/correctParse';
 import { filterFileData } from '../../utils/filterFileData';
 import { CreateWordDto } from '@/shared/api/generated/model';
+import styles from './addJsonFile.module.css';
 
 export type JsonWord = {
 	key: React.Key;
@@ -19,17 +20,11 @@ export type JsonWord = {
 };
 
 export const AddJsonFile = ({
-	errors,
-	control,
-	tableWords,
 	setTableWords,
 }: {
-	errors: FieldErrors<FormValues>;
-	control: Control<FormValues>;
-	tableWords: CreateWordDto[];
 	setTableWords: React.Dispatch<React.SetStateAction<CreateWordDto[]>>;
 }) => {
-	const [jsonInputError, setJsonInputError] = useState('');
+	const [error, setErrorMap] = useState<string>('');
 
 	const parseJSON = (jsonString: string) => {
 		try {
@@ -41,17 +36,19 @@ export const AddJsonFile = ({
 				variants: word.variants.join(', '),
 			}));
 
-			const filterJson = filterFileData(dataWord);
+			console.log('DATA WORD: ', dataWord);
 
-			const merged = [...tableWords, ...filterJson];
+			//const filterJson = filterFileData(dataWord);
 
-			const uniqueWords = Array.from(
-				new Map([...tableWords, ...filterJson].map((word) => [word.name, word])).values(),
-			);
+			//const merged = [...tableWords, ...filterJson];
 
-			setJsonInputError(correctParse(merged, dataWord).join('.'));
+			// const uniqueWords = Array.from(
+			// 	new Map([...tableWords, ...filterJson].map((word) => [word.name, word])).values(),
+			// );
 
-			setTableWords(uniqueWords);
+			//setJsonInputError(correctParse(merged, dataWord).join('.'));
+
+			//setTableWords(uniqueWords);
 		} catch (e: unknown) {
 			if (e instanceof Error) {
 				console.error('Invalid JSON:', e.message);
@@ -61,29 +58,27 @@ export const AddJsonFile = ({
 		}
 	};
 
+	const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const error = checkIsCorrectFile(event);
+		if (error) {
+			setErrorMap(error);
+			return;
+		} else {
+			setErrorMap('');
+		}
+		handleFileChange(event, parseJSON);
+	};
+
 	return (
-		<FieldGroup
-			marginY="03"
-			title="Send JSON file"
-			error={errors?.jsonFile?.message || jsonInputError}
-		>
-			<Controller
-				name="jsonFile"
-				control={control}
-				render={({ field }) => (
-					<Input
-						type="file"
-						accept=".json"
-						onChange={(e) => {
-							handleFileChange(e, parseJSON);
-							const file = e.target.files?.[0];
-							field.onChange(file);
-						}}
-						size="middle"
-						status={errors?.xmlFile && 'error'}
-					/>
-				)}
+		<FieldGroup marginY="03" title="Send JSON file">
+			<Input
+				type="file"
+				accept=".json"
+				size="middle"
+				status={error && 'error'}
+				onChange={(e) => onChangeInput(e)}
 			/>
+			{error && <span className={styles.errorMessage}>{error}</span>}
 		</FieldGroup>
 	);
 };

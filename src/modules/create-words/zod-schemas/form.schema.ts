@@ -113,6 +113,7 @@ export const dataWordSchema = z.object({
 		.refine((str) => str, {
 			message: 'Variants cannot contain numbers',
 		}),
+	imgUrl: z.string().optional(),
 	// xmlFile: z.union([xmlFileSchema.optional(), dataWordsArraySchema, hasRequiredKeys]),
 	// jsonFile: z.union([jsonFileSchema.optional(), dataWordsArraySchema, hasRequiredKeys]),
 });
