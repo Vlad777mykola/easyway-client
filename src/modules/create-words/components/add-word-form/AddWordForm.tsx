@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import { Controller, useController, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,10 +26,24 @@ export const AddWordForm = ({
 	const { reset, setValue, handleSubmit, formState, control } = useForm<FormValues>({
 		mode: 'onChange',
 		resolver: zodResolver(dataWordSchema),
-		defaultValues: wordName ? tableWords.find((w) => w.name === wordName) : undefined,
 	});
 
 	const { field } = useController({ name: 'variants', control });
+
+	useEffect(() => {
+		if (wordName) {
+			const value = getDefaultValuesForm(wordName);
+			reset(value);
+		}
+	}, [wordName, reset]);
+
+	const getDefaultValuesForm = (wordName: string) => {
+		console.log(
+			'FIND: ',
+			tableWords.find((w) => w.name === wordName),
+		);
+		return tableWords.find((w) => w.name === wordName);
+	};
 
 	// to do move to utils
 	const isValidWordForTable = (name: string, wordList: CreateWordDto[]) =>

@@ -25,18 +25,9 @@ export const TableWords = ({ tableWords, setTableWords }: { tableWords: CreateWo
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editData, setEditData] = useState({});
 
-	console.log('EDIT DATA: ', editData);
-
 	useEffect(() => {
 		setIsModalOpen(false);
 	}, [tableWords]);
-
-	// useEffect(() => {
-	// 	if (fillForm) {
-	// 		fillForm();
-	// 		editWordForm.clearEditErrors();
-	// 	}
-	// }, [editData]);
 
 	const showModal = (record: CreateWordDto) => {
 		setEditData({ ...record, variants: record.variants.split(', ') });
@@ -62,7 +53,7 @@ export const TableWords = ({ tableWords, setTableWords }: { tableWords: CreateWo
 				return !selectedRowKeys.includes(row.name);
 			}
 		});
-		//setTableWords(newRows);
+		setTableWords(newRows);
 	};
 
 	const handleSearch = (
@@ -167,12 +158,6 @@ export const TableWords = ({ tableWords, setTableWords }: { tableWords: CreateWo
 		onChange: onSelectChange,
 	};
 
-	// const fillForm = () => {
-	// 	Object.entries(editData).forEach(([key, value]) => {
-	// 		editWordForm.setValue(key as keyof FormValues, value as string | string[]);
-	// 	});
-	// };
-
 	return (
 		<div className={styles.tableContainer}>
 			<div className={styles.deleteButtonContainer}>
@@ -188,6 +173,7 @@ export const TableWords = ({ tableWords, setTableWords }: { tableWords: CreateWo
 			<Table<CreateWordDto>
 				className={styles.table}
 				size="small"
+				rowKey="name"
 				expandable={{
 					expandedRowRender: (record) => <p className={styles.description}>{record.useCase}</p>,
 				}}

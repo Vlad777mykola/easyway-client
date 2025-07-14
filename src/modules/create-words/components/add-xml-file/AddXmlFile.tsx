@@ -1,26 +1,14 @@
 import React from 'react';
-import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { useState } from 'react';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { checkIsCorrectFile, handleFileChange } from '../../utils/handleFileChange';
-// import { correctParse } from '../../utils/correctParse';
-// import { filterFileData } from '../../utils/filterFileData';
-import { FormValues } from '../../types';
 import type { CreateWordDto } from '@/shared/api/generated/model';
 import { ALLOWED_TYPES } from '../../constants/constants';
 
 import styles from './addXmlFile.module.css';
 
-const WORD_FIELDS = [
-	'name',
-	'transcription',
-	'translate',
-	'type',
-	'useCase',
-	'variants',
-	'imgUrl',
-] as const;
+const WORD_FIELDS = ['name', 'transcription', 'translate', 'type', 'useCase', 'variants'] as const;
 
 export const AddXmlFile = ({
 	setTableWords,
@@ -57,15 +45,41 @@ export const AddXmlFile = ({
 	};
 
 	const containAllKeys = (xmlWords: CreateWordDto[]) => {
-		WORD_FIELDS.forEach((field) => {
-			const wordWithEmptyFields: CreateWordDto[] = xmlWords.filter(
-				(word) => word[field] === undefined || word[field] === '',
-			);
+		let emptyFields: { name: string; fields: string[] }[] = [];
+		let fullFields: CreateWordDto[] = [];
+		let error = '';
+		xmlWords.forEach((word: CreateWordDto) => {
+			WORD_FIELDS.forEach((field) => {
+				const value = word[field];
+				if (!value || value.length === 0) {
+					if (!emptyFields.some((field) => field.name === word.name)) {
+						emptyFields.push({ name: word.name, fields: [field] });
+					} else {
+						const found: { name: string; fields: string[] } = emptyFields.find(
+							(field) => field.name === word.name,
+						);
+						const filtered = emptyFields.filter((field) => field.name !== word.name);
+						emptyFields = [...filtered, { ...found, fields: [...found.fields, field] }];
+					}
+				}
+			});
 
-			console.log('WORD WITH EMPTY FIELDS: ', wordWithEmptyFields);
-
-			setErrorMap(`XML file is missing required field: ${wordWithEmptyFields.join(', ')}`);
+			if (!emptyFields.some((field) => field.name === word.name)) {
+				fullFields.push(word);
+			}
 		});
+
+		if (emptyFields.length > 0) {
+			emptyFields.forEach((field) => {
+				error =
+					field.name.length === 0
+						? 'Check that all objects have name of word.'
+						: `Empty key in ${field.name}: ${field.fields.join(', ')}`;
+				setErrorMap(error);
+			});
+		}
+
+		return fullFields;
 	};
 
 	const parseWordType = (value: string | null): CreateWordDtoType => {
@@ -86,10 +100,14 @@ export const AddXmlFile = ({
 			}
 
 			if (field === 'variants') {
-				const variantsParent = xmlWord.getElementsByTagName(field)[0];
-				word[field] = Array.from(variantsParent.getElementsByTagName('variant'))
-					.map((v) => v.textContent)
-					.join(', ');
+				const variantsParent = xmlWord?.getElementsByTagName(field)[0];
+				console.log('VARIANTS PARENT: ', variantsParent);
+				word[field] =
+					typeof variantsParent !== 'undefined'
+						? Array.from(variantsParent.getElementsByTagName('variant'))
+								.map((v) => v.textContent)
+								.join(', ')
+						: '';
 			}
 
 			if (field !== 'variants' && field !== 'type') {
@@ -109,23 +127,11 @@ export const AddXmlFile = ({
 				return createCorrectedWord(item);
 			});
 
-			//containAllKeys(items);
-			validateXMLContent(items);
-
-			//const filterXML = filterFileData(items);
-
-			//const newWords = [...tableWords, ...items];
-
-			// const uniqueWords = Array.from(
-			// 	new Map([...tableWords, ...filterXML].map((word) => [word.name, word])).values(),
-			// );
-
-			//setXmlInputError(correctParse(merged, items).join('.'));
-
-			//setTableWords((prev: CreateWordDto[]) => [...prev, ...items]);
+			const fullKeysWord = containAllKeys(items);
+			validateXMLContent(fullKeysWord);
 		} catch (error) {
 			if (error instanceof Error) {
-				console.error('Invalid JSON:', error.message);
+				console.error('Invalid XML:', error.message);
 			} else {
 				console.error('Unknown error during JSON parsing');
 			}
@@ -142,29 +148,6 @@ export const AddXmlFile = ({
 	};
 
 	return (
-		// <FieldGroup
-		// 	marginY="03"
-		// 	title="Send XML file"
-		// 	//error={errors?.xmlFile?.message || xmlInputError}
-		// >
-		// 	<Controller
-		// 		name="xmlFile"
-		// 		//control={control}
-		// 		render={({ field }) => (
-		// 			<Input
-		// 			//type="file"
-		// 			//accept=".xml"
-		// 			// onChange={(e) => {
-		// 			// 	handleFileChange(e, parseXML);
-		// 			// 	const file = e.target.files?.[0];
-		// 			// 	field.onChange(file);
-		// 			// }}
-		// 			//size="middle"
-		// 			//status={errors?.xmlFile && 'error'}
-		// 			/>
-		// 		)}
-		// 	/>
-		// </FieldGroup>
 		<FieldGroup marginY="03" title="Send XML file">
 			<Input type="file" accept=".xml" size="middle" onChange={(e) => onChangeInput(e)} />
 			{error && <span className={styles.errorMessage}>{error}</span>}
