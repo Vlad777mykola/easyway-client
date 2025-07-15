@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Dispatch, type SetStateAction } from 'react';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { checkIsCorrectFile, handleFileChange } from '../../utils/handleFileChange';
@@ -22,7 +22,7 @@ export type JsonWord = {
 export const AddJsonFile = ({
 	setTableWords,
 }: {
-	setTableWords: React.Dispatch<React.SetStateAction<CreateWordDto[]>>;
+	setTableWords: Dispatch<SetStateAction<CreateWordDto[]>>;
 }) => {
 	const [error, setErrorMap] = useState<string>('');
 
