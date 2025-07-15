@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Control, FieldErrors, UseFormHandleSubmit, UseFormSetValue } from 'react-hook-form';
+import React, { Dispatch, type SetStateAction, useEffect, useState } from 'react';
 import { TableProps } from 'antd';
 import { ColumnType } from 'antd/es/table';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
@@ -8,22 +7,33 @@ import { Table } from '@/ui-components/Table';
 import { Input } from '@/ui-components/Input';
 import { Space } from '@/ui-components/Space';
 import { Icon } from '@/ui-components/Icon';
-import { Modal } from '@/ui-components/Modal';
-import { Typography } from '@/ui-components/Typography';
-import { AddWordForm } from '../add-word-form/AddWordForm';
-import { FormValues } from '../../types';
-import styles from './tableWords.module.css';
 import { CreateWordDto } from '@/shared/api/generated/model';
 import { ModalForm } from '../modal-form/ModalForm';
+import styles from './tableWords.module.css';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
-export const TableWords = ({ tableWords, setTableWords }: { tableWords: CreateWordDto[] }) => {
+interface Edit {
+	name: string;
+	transcription: string;
+	translate: string;
+	type: 'noun' | 'verb' | 'adjective' | 'adverb' | 'other';
+	useCase: string;
+	variants: string[];
+}
+
+export const TableWords = ({
+	tableWords,
+	setTableWords,
+}: {
+	tableWords: CreateWordDto[];
+	setTableWords: Dispatch<SetStateAction<CreateWordDto[]>>;
+}) => {
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 	const [, setSearchText] = useState('');
 	const [, setSearchedColumn] = useState<keyof CreateWordDto | ''>('');
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [editData, setEditData] = useState({});
+	const [editData, setEditData] = useState<Edit>();
 
 	useEffect(() => {
 		setIsModalOpen(false);
@@ -75,7 +85,6 @@ export const TableWords = ({ tableWords, setTableWords }: { tableWords: CreateWo
 		filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
 			<div style={{ padding: 8 }}>
 				<Input
-					// placeholder={`Search ${dataIndex}`}
 					value={selectedKeys[0]}
 					onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
 					onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
@@ -163,13 +172,15 @@ export const TableWords = ({ tableWords, setTableWords }: { tableWords: CreateWo
 			<div className={styles.deleteButtonContainer}>
 				<Button onClick={deleteRows}>Delete</Button>
 			</div>
-			<ModalForm
-				isModalOpen={isModalOpen}
-				setTableWords={setTableWords}
-				handleCancel={handleCancel}
-				wordName={editData?.name}
-				tableWords={tableWords}
-			/>
+			{editData && (
+				<ModalForm
+					isModalOpen={isModalOpen}
+					setTableWords={setTableWords}
+					handleCancel={handleCancel}
+					wordName={editData.name}
+					tableWords={tableWords}
+				/>
+			)}
 			<Table<CreateWordDto>
 				className={styles.table}
 				size="small"

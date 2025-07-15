@@ -12,8 +12,6 @@ export const checkSameItems = (fileItems: CreateWordDto[]) => {
 		errors: '',
 	};
 
-	console.log('SAME ITEMS: ', sameItems);
-
 	fileItems.forEach((item) => {
 		if (!result.uniqueWords.some((unique) => unique.name === item.name)) {
 			result.uniqueWords.push(item);

@@ -6,9 +6,11 @@ import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { Select } from '@/ui-components/Select';
 import { Button } from '@/ui-components/Button';
+import { ErrorMessage } from '../error-message/ErrorMessage';
+import { type CreateWordDto } from '@/shared/api/generated/model';
+import { isValidWordForTable } from '../../utils/isValidForTable';
 import type { FormValues } from '../../types';
 import { dataWordSchema } from '../../zod-schemas/form.schema';
-import { CreateWordDto } from '@/shared/api/generated/model';
 import { ALLOWED_TYPES } from '../../constants/constants';
 import styles from './addWordForm.module.css';
 
@@ -44,9 +46,6 @@ export const AddWordForm = ({
 			setValue(key, editWord[key]);
 		});
 	};
-	// to do move to utils
-	const isValidWordForTable = (name: string, wordList: CreateWordDto[]) =>
-		wordList.find((w) => w.name === name);
 
 	const stringVariant = field.value || '';
 	const tagArray = stringVariant
@@ -61,6 +60,8 @@ export const AddWordForm = ({
 			if (!wordName && isValidWordForTable(data.name, prev)) {
 				setErrorMap(`The word is already in the list ${data.name}`);
 				return prev;
+			} else {
+				setErrorMap('');
 			}
 			if (wordName) {
 				filteredWords = prev.filter((w) => w.name !== wordName);
@@ -175,8 +176,7 @@ export const AddWordForm = ({
 					<Button onClick={() => setValue('variants', `${field.value}`)}>Add</Button>
 				</div>
 			</FieldGroup>
-			{/* To do use wra for error  */}
-			{error && <span className={styles.errorMessage}>{error}</span>}
+			{error && <ErrorMessage error={error} />}
 			<div className={styles.collectionButtons}>
 				<Button type="primary" shape="round" onClick={() => reset()}>
 					Clear

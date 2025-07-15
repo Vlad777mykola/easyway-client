@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { checkIsCorrectFile, handleFileChange } from '../../utils/handleFileChange';
-import { ALLOWED_TYPES, WORD_FIELDS } from '../../constants/constants';
-import type { CreateWordDto } from '@/shared/api/generated/model';
-
-import styles from './addXmlFile.module.css';
 import { checkContainAllKeys } from '../../utils/checkContainAllKeys';
 import { checkSameItems } from '../../utils/checkSameItems';
-import { validateFileContent } from '../../utils/validateFileContent';
+import { checkFileDublicates } from '../../utils/checkFileDublicates';
+import { checkContainNumbers } from '../../utils/checkContainNumbers';
+import { ALLOWED_TYPES, WORD_FIELDS } from '../../constants/constants';
+import type { CreateWordDto } from '@/shared/api/generated/model';
+import { ErrorMessage } from '../error-message/ErrorMessage';
 
 export const AddXmlFile = ({
 	setTableWords,
@@ -65,20 +65,27 @@ export const AddXmlFile = ({
 			});
 
 			const fullKeysWord = checkContainAllKeys(items);
-
-			console.log('FULL KEYS WORD: ', fullKeysWord);
-
 			if (fullKeysWord.errors.length > 0) setErrorMap(fullKeysWord.errors.join(', '));
 
 			const uniqueItems = checkSameItems(fullKeysWord.correctWords);
-
-			console.log('UNIQUE ITEMS: ', uniqueItems);
-
 			if (uniqueItems.errors !== '') setErrorMap(uniqueItems.errors);
 
-			const error = validateFileContent(uniqueItems.uniqueWords, setTableWords);
+			const hasNumbers = checkContainNumbers(uniqueItems.uniqueWords);
+			if (hasNumbers.errors !== '') setErrorMap(hasNumbers.errors);
+
+			const error = checkFileDublicates(hasNumbers.correctWords, setTableWords);
 
 			if (error !== '') setErrorMap(error);
+
+			const noErrors =
+				error === '' &&
+				uniqueItems.errors === '' &&
+				fullKeysWord.errors.length === 0 &&
+				hasNumbers.errors === '';
+
+			if (noErrors) {
+				setErrorMap('');
+			}
 		} catch (error) {
 			if (error instanceof Error) {
 				console.error('Invalid XML:', error.message);
@@ -88,15 +95,13 @@ export const AddXmlFile = ({
 		}
 	};
 
-	console.log('ERROR: ', error);
-
 	const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const error = checkIsCorrectFile(event);
 		if (error) {
 			setErrorMap(error);
 			return;
 		} else {
-			//setErrorMap('');
+			setErrorMap('');
 		}
 		handleFileChange(event, parseXML);
 	};
@@ -110,7 +115,7 @@ export const AddXmlFile = ({
 				status={error && 'error'}
 				onChange={(e) => onChangeInput(e)}
 			/>
-			{error && <span className={styles.errorMessage}>{error}</span>}
+			{error && <ErrorMessage error={error} />}
 		</FieldGroup>
 	);
 };
