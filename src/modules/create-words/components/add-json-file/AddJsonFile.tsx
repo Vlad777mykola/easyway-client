@@ -3,11 +3,8 @@ import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { checkIsCorrectFile, handleFileChange } from '../../utils/handleFileChange';
 import { CreateWordDto } from '@/shared/api/generated/model';
-import { checkContainAllKeys } from '../../utils/checkContainAllKeys';
-import { checkSameItems } from '../../utils/checkSameItems';
-import { checkFileDublicates } from '../../utils/checkFileDublicates';
-import { checkContainNumbers } from '../../utils/checkContainNumbers';
 import { ErrorMessage } from '../error-message/ErrorMessage';
+import { checkCorrectData } from '../../utils/checkCorrectData';
 
 export type JsonWord = {
 	key: React.Key;
@@ -33,30 +30,12 @@ export const AddJsonFile = ({
 			const dataWord: CreateWordDto[] = json.map((word: JsonWord) => ({
 				...word,
 				key: word.name,
-				variants: word.variants.join(', '),
+				variants: word.variants ? word.variants.join(', ') : '',
 			}));
 
-			const fullKeysWord = checkContainAllKeys(dataWord);
-			if (fullKeysWord.errors.length > 0) setErrorMap(fullKeysWord.errors.join(', '));
+			const errors = checkCorrectData(dataWord, setTableWords);
 
-			const uniqueItems = checkSameItems(fullKeysWord.correctWords);
-			if (uniqueItems.errors !== '') setErrorMap(uniqueItems.errors);
-
-			const hasNumbers = checkContainNumbers(uniqueItems.uniqueWords);
-			if (hasNumbers.errors !== '') setErrorMap(hasNumbers.errors);
-
-			const error = checkFileDublicates(hasNumbers.correctWords, setTableWords);
-			if (error !== '') setErrorMap(error);
-
-			const noErrors =
-				error === '' &&
-				uniqueItems.errors === '' &&
-				fullKeysWord.errors.length === 0 &&
-				hasNumbers.errors === '';
-
-			if (noErrors) {
-				setErrorMap('');
-			}
+			setErrorMap(errors.join('\n'));
 		} catch (e: unknown) {
 			if (e instanceof Error) {
 				console.error('Invalid JSON:', e.message);

@@ -25,16 +25,19 @@ export const AddWordForm = ({
 }) => {
 	const [error, setErrorMap] = useState<string>('');
 
-	const { reset, setValue, handleSubmit, formState, control } = useForm<FormValues>({
-		mode: 'onChange',
-		resolver: zodResolver(dataWordSchema),
-	});
+	const { reset, setValue, getValues, handleSubmit, clearErrors, formState, control } =
+		useForm<FormValues>({
+			mode: 'onChange',
+			resolver: zodResolver(dataWordSchema),
+		});
 
 	const { field } = useController({ name: 'variants', control });
 
 	useEffect(() => {
 		if (wordName) {
 			getDefaultValuesForm(wordName);
+			setErrorMap('');
+			clearErrors();
 		}
 	}, [wordName, reset]);
 
@@ -60,14 +63,23 @@ export const AddWordForm = ({
 			if (!wordName && isValidWordForTable(data.name, prev)) {
 				setErrorMap(`The word is already in the list ${data.name}`);
 				return prev;
-			} else {
-				setErrorMap('');
 			}
-			if (wordName) {
+
+			if (wordName && typeof isValidWordForTable(getValues('name'), prev) === 'undefined') {
+				console.log('HAS WORD NAME: ', wordName);
+				console.log('SET VALUE: ', getValues('name'));
+				console.log(typeof isValidWordForTable(getValues('name'), prev) === 'undefined');
+				console.log('IS VALID: ', isValidWordForTable(getValues('name'), prev));
 				filteredWords = prev.filter((w) => w.name !== wordName);
 			}
 
-			reset();
+			if (wordName && isValidWordForTable(getValues('name'), prev)) {
+				setErrorMap(`The word is already in the list11111 ${data.name}`);
+				return prev;
+			}
+
+			setErrorMap('');
+			if (!wordName) reset();
 			return [{ ...data, type: data.type as CreateWordDto['type'], imgUrl: '' }, ...filteredWords];
 		});
 	};

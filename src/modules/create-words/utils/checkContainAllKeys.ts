@@ -1,5 +1,5 @@
 import { CreateWordDto } from '@/shared/api/generated/model';
-import { WORD_FIELDS } from '../constants/constants';
+import { requiredKeys } from '../constants/constants';
 
 type Result = {
 	correctWords: CreateWordDto[];
@@ -16,8 +16,16 @@ export const checkContainAllKeys = (fileWords: CreateWordDto[]) => {
 	fileWords.forEach((word) => {
 		const missingFields: string[] = [];
 
-		WORD_FIELDS.forEach((field) => {
-			if (!word[field] || word[field].length === 0) {
+		requiredKeys.forEach((field) => {
+			if ((!word[field] || word[field].length < 3) && field !== 'variants') {
+				missingFields.push(field);
+			}
+
+			if (
+				field === 'variants' &&
+				!word[field] &&
+				(word[field].length === 0 || word[field].split(', ').some((item) => item.length < 3))
+			) {
 				missingFields.push(field);
 			}
 		});
@@ -34,7 +42,7 @@ export const checkContainAllKeys = (fileWords: CreateWordDto[]) => {
 		const errors = Array.from(emptyFieldsMap.entries()).map(([name, fields]) => {
 			return `Empty key in ${name}: ${fields.join(', ')}.`;
 		});
-		result.errors.push(...errors);
+		result.errors.push(...errors, 'Every item must contain minimum three symbols.');
 	}
 
 	return result;

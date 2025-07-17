@@ -1,20 +1,17 @@
-import React from 'react';
+import { type Dispatch, type SetStateAction, ChangeEvent } from 'react';
 import { useState } from 'react';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { checkIsCorrectFile, handleFileChange } from '../../utils/handleFileChange';
-import { checkContainAllKeys } from '../../utils/checkContainAllKeys';
-import { checkSameItems } from '../../utils/checkSameItems';
-import { checkFileDublicates } from '../../utils/checkFileDublicates';
-import { checkContainNumbers } from '../../utils/checkContainNumbers';
-import { ALLOWED_TYPES, WORD_FIELDS } from '../../constants/constants';
+import { ALLOWED_TYPES, requiredKeys } from '../../constants/constants';
 import type { CreateWordDto } from '@/shared/api/generated/model';
 import { ErrorMessage } from '../error-message/ErrorMessage';
+import { checkCorrectData } from '../../utils/checkCorrectData';
 
 export const AddXmlFile = ({
 	setTableWords,
 }: {
-	setTableWords: React.Dispatch<React.SetStateAction<CreateWordDto[]>>;
+	setTableWords: Dispatch<SetStateAction<CreateWordDto[]>>;
 }) => {
 	const [error, setErrorMap] = useState<string>('');
 
@@ -30,7 +27,7 @@ export const AddXmlFile = ({
 	const createCorrectedWord = (xmlWord: Element): CreateWordDto => {
 		const word: Partial<CreateWordDto> = {};
 
-		WORD_FIELDS.forEach((field) => {
+		requiredKeys.forEach((field) => {
 			const safeKey = field as Exclude<keyof CreateWordDto, 'type' | 'variants'>;
 
 			if (field === 'type') {
@@ -64,28 +61,9 @@ export const AddXmlFile = ({
 				return createCorrectedWord(item);
 			});
 
-			const fullKeysWord = checkContainAllKeys(items);
-			if (fullKeysWord.errors.length > 0) setErrorMap(fullKeysWord.errors.join(', '));
+			const errors = checkCorrectData(items, setTableWords);
 
-			const uniqueItems = checkSameItems(fullKeysWord.correctWords);
-			if (uniqueItems.errors !== '') setErrorMap(uniqueItems.errors);
-
-			const hasNumbers = checkContainNumbers(uniqueItems.uniqueWords);
-			if (hasNumbers.errors !== '') setErrorMap(hasNumbers.errors);
-
-			const error = checkFileDublicates(hasNumbers.correctWords, setTableWords);
-
-			if (error !== '') setErrorMap(error);
-
-			const noErrors =
-				error === '' &&
-				uniqueItems.errors === '' &&
-				fullKeysWord.errors.length === 0 &&
-				hasNumbers.errors === '';
-
-			if (noErrors) {
-				setErrorMap('');
-			}
+			setErrorMap(errors.join('\n'));
 		} catch (error) {
 			if (error instanceof Error) {
 				console.error('Invalid XML:', error.message);
@@ -95,7 +73,7 @@ export const AddXmlFile = ({
 		}
 	};
 
-	const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
 		const error = checkIsCorrectFile(event);
 		if (error) {
 			setErrorMap(error);
