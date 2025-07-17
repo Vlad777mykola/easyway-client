@@ -74,7 +74,7 @@ export const AddWordForm = ({
 			}
 
 			if (wordName && isValidWordForTable(getValues('name'), prev)) {
-				setErrorMap(`The word is already in the list11111 ${data.name}`);
+				setErrorMap(`The word is already in the list ${data.name}`);
 				return prev;
 			}
 
