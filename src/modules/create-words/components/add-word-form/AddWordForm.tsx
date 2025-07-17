@@ -66,10 +66,6 @@ export const AddWordForm = ({
 			}
 
 			if (wordName && typeof isValidWordForTable(getValues('name'), prev) === 'undefined') {
-				console.log('HAS WORD NAME: ', wordName);
-				console.log('SET VALUE: ', getValues('name'));
-				console.log(typeof isValidWordForTable(getValues('name'), prev) === 'undefined');
-				console.log('IS VALID: ', isValidWordForTable(getValues('name'), prev));
 				filteredWords = prev.filter((w) => w.name !== wordName);
 			}
 
