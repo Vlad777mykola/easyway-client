@@ -4,7 +4,25 @@
  * API
  * OpenAPI spec version: 1.0.0
  */
+import type { UpdateWordDtoType } from './updateWordDtoType';
 
 export interface UpdateWordDto {
-	[key: string]: unknown;
+	/**
+	 * The word being updated
+	 * @minLength 1
+	 * @maxLength 50
+	 */
+	name?: string;
+	/** Phonetic transcription */
+	transcription?: string;
+	/** Translation of the word */
+	translate?: string;
+	/** Word type */
+	type?: UpdateWordDtoType;
+	/** Use case or context */
+	useCase?: string;
+	/** Word categories */
+	variants?: string;
+	/** Image URL */
+	imgUrl?: string;
 }

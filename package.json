@@ -13,7 +13,7 @@
 		"preview": "vite preview",
 		"verify": "npm run format && npm run lint && npm run ts",
 		"deploy": "aws s3 sync dist/ s3://best-way",
-		"api:g": "orval"
+		"g-api": "orval"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.0.1",

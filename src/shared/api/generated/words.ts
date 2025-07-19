@@ -22,7 +22,7 @@ import type {
 	UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 
-import type { CreateWordDto, UpdateWordDto } from './model';
+import type { CreateWordDto, UpdateWordDto, WordsControllerCreateWordsBody } from './model';
 
 import { apiInstance } from '../instance';
 
@@ -97,19 +97,99 @@ export const useWordsControllerCreate = <TError = unknown, TContext = unknown>(
 
 	return useMutation(mutationOptions, queryClient);
 };
-export const wordsControllerFindOne = (id: string, signal?: AbortSignal) => {
-	return apiInstance<void>({ url: `/words/${id}`, method: 'GET', signal });
+/**
+ * @summary Create bulk of words
+ */
+export const wordsControllerCreateWords = (
+	wordsControllerCreateWordsBody: WordsControllerCreateWordsBody,
+	signal?: AbortSignal,
+) => {
+	return apiInstance<void>({
+		url: `/words/bulk`,
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		data: wordsControllerCreateWordsBody,
+		signal,
+	});
 };
 
-export const getWordsControllerFindOneQueryKey = (id: string) => {
-	return [`/words/${id}`] as const;
+export const getWordsControllerCreateWordsMutationOptions = <
+	TError = unknown,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof wordsControllerCreateWords>>,
+		TError,
+		{ data: WordsControllerCreateWordsBody },
+		TContext
+	>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof wordsControllerCreateWords>>,
+	TError,
+	{ data: WordsControllerCreateWordsBody },
+	TContext
+> => {
+	const mutationKey = ['wordsControllerCreateWords'];
+	const { mutation: mutationOptions } = options
+		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey } };
+
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof wordsControllerCreateWords>>,
+		{ data: WordsControllerCreateWordsBody }
+	> = (props) => {
+		const { data } = props ?? {};
+
+		return wordsControllerCreateWords(data);
+	};
+
+	return { mutationFn, ...mutationOptions };
+};
+
+export type WordsControllerCreateWordsMutationResult = NonNullable<
+	Awaited<ReturnType<typeof wordsControllerCreateWords>>
+>;
+export type WordsControllerCreateWordsMutationBody = WordsControllerCreateWordsBody;
+export type WordsControllerCreateWordsMutationError = unknown;
+
+/**
+ * @summary Create bulk of words
+ */
+export const useWordsControllerCreateWords = <TError = unknown, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof wordsControllerCreateWords>>,
+			TError,
+			{ data: WordsControllerCreateWordsBody },
+			TContext
+		>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof wordsControllerCreateWords>>,
+	TError,
+	{ data: WordsControllerCreateWordsBody },
+	TContext
+> => {
+	const mutationOptions = getWordsControllerCreateWordsMutationOptions(options);
+
+	return useMutation(mutationOptions, queryClient);
+};
+export const wordsControllerFindOne = (name: string, signal?: AbortSignal) => {
+	return apiInstance<void>({ url: `/words/${name}`, method: 'GET', signal });
+};
+
+export const getWordsControllerFindOneQueryKey = (name: string) => {
+	return [`/words/${name}`] as const;
 };
 
 export const getWordsControllerFindOneQueryOptions = <
 	TData = Awaited<ReturnType<typeof wordsControllerFindOne>>,
 	TError = unknown,
 >(
-	id: string,
+	name: string,
 	options?: {
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof wordsControllerFindOne>>, TError, TData>
@@ -118,12 +198,12 @@ export const getWordsControllerFindOneQueryOptions = <
 ) => {
 	const { query: queryOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getWordsControllerFindOneQueryKey(id);
+	const queryKey = queryOptions?.queryKey ?? getWordsControllerFindOneQueryKey(name);
 
 	const queryFn: QueryFunction<Awaited<ReturnType<typeof wordsControllerFindOne>>> = ({ signal }) =>
-		wordsControllerFindOne(id, signal);
+		wordsControllerFindOne(name, signal);
 
-	return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+	return { queryKey, queryFn, enabled: !!name, ...queryOptions } as UseQueryOptions<
 		Awaited<ReturnType<typeof wordsControllerFindOne>>,
 		TError,
 		TData
@@ -139,7 +219,7 @@ export function useWordsControllerFindOne<
 	TData = Awaited<ReturnType<typeof wordsControllerFindOne>>,
 	TError = unknown,
 >(
-	id: string,
+	name: string,
 	options: {
 		query: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof wordsControllerFindOne>>, TError, TData>
@@ -159,7 +239,7 @@ export function useWordsControllerFindOne<
 	TData = Awaited<ReturnType<typeof wordsControllerFindOne>>,
 	TError = unknown,
 >(
-	id: string,
+	name: string,
 	options?: {
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof wordsControllerFindOne>>, TError, TData>
@@ -179,7 +259,7 @@ export function useWordsControllerFindOne<
 	TData = Awaited<ReturnType<typeof wordsControllerFindOne>>,
 	TError = unknown,
 >(
-	id: string,
+	name: string,
 	options?: {
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof wordsControllerFindOne>>, TError, TData>
@@ -192,7 +272,7 @@ export function useWordsControllerFindOne<
 	TData = Awaited<ReturnType<typeof wordsControllerFindOne>>,
 	TError = unknown,
 >(
-	id: string,
+	name: string,
 	options?: {
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof wordsControllerFindOne>>, TError, TData>
@@ -200,7 +280,7 @@ export function useWordsControllerFindOne<
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-	const queryOptions = getWordsControllerFindOneQueryOptions(id, options);
+	const queryOptions = getWordsControllerFindOneQueryOptions(name, options);
 
 	const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
 		queryKey: DataTag<QueryKey, TData, TError>;
@@ -215,7 +295,7 @@ export const getWordsControllerFindOneSuspenseQueryOptions = <
 	TData = Awaited<ReturnType<typeof wordsControllerFindOne>>,
 	TError = unknown,
 >(
-	id: string,
+	name: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseQueryOptions<Awaited<ReturnType<typeof wordsControllerFindOne>>, TError, TData>
@@ -224,10 +304,10 @@ export const getWordsControllerFindOneSuspenseQueryOptions = <
 ) => {
 	const { query: queryOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getWordsControllerFindOneQueryKey(id);
+	const queryKey = queryOptions?.queryKey ?? getWordsControllerFindOneQueryKey(name);
 
 	const queryFn: QueryFunction<Awaited<ReturnType<typeof wordsControllerFindOne>>> = ({ signal }) =>
-		wordsControllerFindOne(id, signal);
+		wordsControllerFindOne(name, signal);
 
 	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof wordsControllerFindOne>>,
@@ -245,7 +325,7 @@ export function useWordsControllerFindOneSuspense<
 	TData = Awaited<ReturnType<typeof wordsControllerFindOne>>,
 	TError = unknown,
 >(
-	id: string,
+	name: string,
 	options: {
 		query: Partial<
 			UseSuspenseQueryOptions<Awaited<ReturnType<typeof wordsControllerFindOne>>, TError, TData>
@@ -257,7 +337,7 @@ export function useWordsControllerFindOneSuspense<
 	TData = Awaited<ReturnType<typeof wordsControllerFindOne>>,
 	TError = unknown,
 >(
-	id: string,
+	name: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseQueryOptions<Awaited<ReturnType<typeof wordsControllerFindOne>>, TError, TData>
@@ -269,7 +349,7 @@ export function useWordsControllerFindOneSuspense<
 	TData = Awaited<ReturnType<typeof wordsControllerFindOne>>,
 	TError = unknown,
 >(
-	id: string,
+	name: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseQueryOptions<Awaited<ReturnType<typeof wordsControllerFindOne>>, TError, TData>
@@ -282,7 +362,7 @@ export function useWordsControllerFindOneSuspense<
 	TData = Awaited<ReturnType<typeof wordsControllerFindOne>>,
 	TError = unknown,
 >(
-	id: string,
+	name: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseQueryOptions<Awaited<ReturnType<typeof wordsControllerFindOne>>, TError, TData>
@@ -290,7 +370,7 @@ export function useWordsControllerFindOneSuspense<
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-	const queryOptions = getWordsControllerFindOneSuspenseQueryOptions(id, options);
+	const queryOptions = getWordsControllerFindOneSuspenseQueryOptions(name, options);
 
 	const query = useSuspenseQuery(queryOptions, queryClient) as UseSuspenseQueryResult<
 		TData,

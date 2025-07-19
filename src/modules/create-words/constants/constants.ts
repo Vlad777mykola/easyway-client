@@ -1,6 +1,6 @@
-import { DataWords } from '../components/main/CreateWords';
+import { CreateWordDto } from '@/shared/api/generated/model';
 
-export const requiredKeys: (keyof DataWords)[] = [
+export const requiredKeys: (keyof CreateWordDto)[] = [
 	'name',
 	'transcription',
 	'translate',
@@ -8,3 +8,5 @@ export const requiredKeys: (keyof DataWords)[] = [
 	'type',
 	'variants',
 ];
+
+export const ALLOWED_TYPES = ['noun', 'adjective', 'verb', 'adverb', 'other'] as const;

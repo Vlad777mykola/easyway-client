@@ -2,7 +2,7 @@ import { defineConfig } from 'orval';
 
 export default defineConfig({
 	main: {
-		input: './api.yaml',
+		input: './openapi.yaml',
 		output: {
 			target: './src/shared/api/generated',
 			schemas: './src/shared/api/generated/model',

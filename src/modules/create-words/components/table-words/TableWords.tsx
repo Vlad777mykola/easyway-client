@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Control, FieldErrors, UseFormHandleSubmit, UseFormSetValue } from 'react-hook-form';
+import React, { Dispatch, type SetStateAction, useEffect, useState } from 'react';
 import { TableProps } from 'antd';
 import { ColumnType } from 'antd/es/table';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
@@ -8,58 +7,45 @@ import { Table } from '@/ui-components/Table';
 import { Input } from '@/ui-components/Input';
 import { Space } from '@/ui-components/Space';
 import { Icon } from '@/ui-components/Icon';
-import { Modal } from '@/ui-components/Modal';
-import { Typography } from '@/ui-components/Typography';
-import { AddWordForm } from '../add-word-form/AddWordForm';
-import { DataWords } from '../main/CreateWords';
-import { FormValues } from '../../types';
+import { CreateWordDto } from '@/shared/api/generated/model';
+import { ModalForm } from '../modal-form/ModalForm';
 import styles from './tableWords.module.css';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
+interface Edit {
+	name: string;
+	transcription: string;
+	translate: string;
+	type: 'noun' | 'verb' | 'adjective' | 'adverb' | 'other';
+	useCase: string;
+	variants: string[];
+}
+
 export const TableWords = ({
 	tableWords,
-	editWordForm,
 	setTableWords,
 }: {
-	tableWords: DataWords[];
-	editWordForm: {
-		errors: FieldErrors<FormValues>;
-		control: Control<FormValues>;
-		isPending: boolean;
-		clearEditErrors: () => void;
-		setValue: UseFormSetValue<FormValues>;
-		clearForm: () => void;
-		addWord: (data: FormValues) => void;
-		handleAdd: () => void;
-		handleSubmit: UseFormHandleSubmit<FormValues>;
-	};
-	setTableWords: React.Dispatch<React.SetStateAction<DataWords[]>>;
+	tableWords: CreateWordDto[];
+	setTableWords: Dispatch<SetStateAction<CreateWordDto[]>>;
 }) => {
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 	const [, setSearchText] = useState('');
-	const [, setSearchedColumn] = useState<keyof DataWords | ''>('');
+	const [, setSearchedColumn] = useState<keyof CreateWordDto | ''>('');
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [editData, setEditData] = useState({});
+	const [editData, setEditData] = useState<Edit>();
 
 	useEffect(() => {
 		setIsModalOpen(false);
 	}, [tableWords]);
 
-	useEffect(() => {
-		if (fillForm) {
-			fillForm();
-			editWordForm.clearEditErrors();
-		}
-	}, [editData]);
-
-	const showModal = (record: DataWords) => {
+	const showModal = (record: CreateWordDto) => {
 		setEditData({ ...record, variants: record.variants.split(', ') });
 		setIsModalOpen(true);
 	};
 
-	const deleteWord = (record: DataWords) => {
-		const filteredWords = tableWords.filter((word) => word.key !== record.key);
+	const deleteWord = (record: CreateWordDto) => {
+		const filteredWords = tableWords.filter((word) => word.name !== record.name);
 		setTableWords(filteredWords);
 	};
 
@@ -73,8 +59,8 @@ export const TableWords = ({
 
 	const deleteRows = () => {
 		const newRows = tableWords.filter((row) => {
-			if (row.key) {
-				return !selectedRowKeys.includes(row.key);
+			if (row.name) {
+				return !selectedRowKeys.includes(row.name);
 			}
 		});
 		setTableWords(newRows);
@@ -83,7 +69,7 @@ export const TableWords = ({
 	const handleSearch = (
 		selectedKeys: string[],
 		confirm: (param?: FilterConfirmProps) => void,
-		dataIndex: keyof DataWords,
+		dataIndex: keyof CreateWordDto,
 	) => {
 		confirm();
 		setSearchText(selectedKeys[0]);
@@ -95,11 +81,10 @@ export const TableWords = ({
 		setSearchText('');
 	};
 
-	const getColumnSearchProps = (dataIndex: keyof DataWords): ColumnType<DataWords> => ({
+	const getColumnSearchProps = (dataIndex: keyof CreateWordDto): ColumnType<CreateWordDto> => ({
 		filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
 			<div style={{ padding: 8 }}>
 				<Input
-					placeholder={`Search ${dataIndex}`}
 					value={selectedKeys[0]}
 					onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
 					onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
@@ -137,7 +122,7 @@ export const TableWords = ({
 			title: 'Name',
 			dataIndex: 'name',
 			key: 'name',
-			sorter: (a: DataWords, b: DataWords) => a.name.localeCompare(b.name),
+			sorter: (a: CreateWordDto, b: CreateWordDto) => a.name.localeCompare(b.name),
 			...getColumnSearchProps('name'),
 		},
 		{
@@ -164,7 +149,7 @@ export const TableWords = ({
 			title: 'Action',
 			dataIndex: '',
 			key: 'action',
-			render: (_: unknown, record: DataWords) => (
+			render: (_: unknown, record: CreateWordDto) => (
 				<div>
 					<Button type="link" onClick={() => showModal(record)}>
 						Edit
@@ -177,15 +162,9 @@ export const TableWords = ({
 		},
 	];
 
-	const rowSelection: TableRowSelection<DataWords> = {
+	const rowSelection: TableRowSelection<CreateWordDto> = {
 		selectedRowKeys,
 		onChange: onSelectChange,
-	};
-
-	const fillForm = () => {
-		Object.entries(editData).forEach(([key, value]) => {
-			editWordForm.setValue(key as keyof FormValues, value as string | string[]);
-		});
 	};
 
 	return (
@@ -193,23 +172,19 @@ export const TableWords = ({
 			<div className={styles.deleteButtonContainer}>
 				<Button onClick={deleteRows}>Delete</Button>
 			</div>
-			<Modal
-				title={
-					<Typography.Title className={styles.titleModal} level={2}>
-						Edit Word
-					</Typography.Title>
-				}
-				closable={{ 'aria-label': 'Custom Close Button' }}
-				open={isModalOpen}
-				onCancel={handleCancel}
-				footer={null}
-				mask={false}
-			>
-				<AddWordForm createWordForm={editWordForm} isModal={true} />
-			</Modal>
-			<Table<DataWords>
+			{editData && (
+				<ModalForm
+					isModalOpen={isModalOpen}
+					setTableWords={setTableWords}
+					handleCancel={handleCancel}
+					wordName={editData.name}
+					tableWords={tableWords}
+				/>
+			)}
+			<Table<CreateWordDto>
 				className={styles.table}
 				size="small"
+				rowKey="name"
 				expandable={{
 					expandedRowRender: (record) => <p className={styles.description}>{record.useCase}</p>,
 				}}

@@ -62,7 +62,7 @@ export default [
 			'react-refresh': reactRefresh,
 		},
 		rules: {
-			...reactHooks.configs.recommended.rules, // React hooks recommended rules
+			...reactHooks.configs.recommended.rules,
 			'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 		},
 	},

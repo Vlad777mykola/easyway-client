@@ -4,7 +4,41 @@
  * API
  * OpenAPI spec version: 1.0.0
  */
+import type { CreateWordDtoType } from './createWordDtoType';
 
 export interface CreateWordDto {
-	[key: string]: unknown;
+	/**
+	 * The word being added
+	 * @minLength 1
+	 * @maxLength 50
+	 */
+	name: string;
+	/**
+	 * Phonetic transcription of the word
+	 * @minLength 1
+	 * @maxLength 100
+	 */
+	transcription: string;
+	/**
+	 * Translation of the word
+	 * @minLength 1
+	 * @maxLength 100
+	 */
+	translate: string;
+	/** Grammatical type of the word */
+	type: CreateWordDtoType;
+	/**
+	 * Example use case or context of the word
+	 * @minLength 1
+	 * @maxLength 200
+	 */
+	useCase: string;
+	/**
+	 * Categories or contexts the word belongs to
+	 * @minLength 10
+	 * @maxLength 500
+	 */
+	variants: string;
+	/** URL to an image representing the word */
+	imgUrl: string;
 }

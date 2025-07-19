@@ -1,94 +1,99 @@
-import React from 'react';
-import { Control, Controller, FieldErrors } from 'react-hook-form';
+import { type Dispatch, type SetStateAction, ChangeEvent } from 'react';
 import { useState } from 'react';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
-import { DataWords } from '../main/CreateWords';
-import { handleFileChange } from '../../utils/handleFileChange';
-import { correctParse } from '../../utils/correctParse';
-import { filterFileData } from '../../utils/filterFileData';
-import { FormValues } from '../../types';
+import { checkIsCorrectFile, handleFileChange } from '../../utils/handleFileChange';
+import { ALLOWED_TYPES, requiredKeys } from '../../constants/constants';
+import type { CreateWordDto } from '@/shared/api/generated/model';
+import { ErrorMessage } from '../error-message/ErrorMessage';
+import { checkCorrectData } from '../../utils/checkCorrectData';
 
 export const AddXmlFile = ({
-	errors,
-	control,
-	tableWords,
 	setTableWords,
 }: {
-	errors: FieldErrors<FormValues>;
-	control: Control<FormValues>;
-	tableWords: DataWords[];
-	setTableWords: React.Dispatch<React.SetStateAction<DataWords[]>>;
+	setTableWords: Dispatch<SetStateAction<CreateWordDto[]>>;
 }) => {
-	const [xmlInputError, setXmlInputError] = useState('');
+	const [error, setErrorMap] = useState<string>('');
+
+	type CreateWordDtoType = (typeof ALLOWED_TYPES)[number];
+
+	const parseWordType = (value: string | null): CreateWordDtoType => {
+		if (ALLOWED_TYPES.includes(value as CreateWordDtoType)) {
+			return value as CreateWordDtoType;
+		}
+		return 'other';
+	};
+
+	const createCorrectedWord = (xmlWord: Element): CreateWordDto => {
+		const word: Partial<CreateWordDto> = {};
+
+		requiredKeys.forEach((field) => {
+			const safeKey = field as Exclude<keyof CreateWordDto, 'type' | 'variants'>;
+
+			if (field === 'type') {
+				word[field] = parseWordType(xmlWord.getElementsByTagName(field)[0]?.textContent);
+			}
+
+			if (field === 'variants') {
+				const variantsParent = xmlWord?.getElementsByTagName(field)[0];
+				word[field] =
+					typeof variantsParent !== 'undefined'
+						? Array.from(variantsParent.getElementsByTagName('variant'))
+								.map((v) => v.textContent)
+								.join(', ')
+						: '';
+			}
+
+			if (field !== 'variants' && field !== 'type') {
+				word[safeKey] = xmlWord.getElementsByTagName(field)[0]?.textContent || '';
+			}
+		});
+
+		return word as CreateWordDto;
+	};
 
 	const parseXML = (xmlString: string) => {
 		try {
 			const parser = new DOMParser();
 			const xml = parser.parseFromString(xmlString, 'application/xml');
 
-			const items: DataWords[] = Array.from(xml.getElementsByTagName('word')).map((item) => {
-				const variantsParent = item.getElementsByTagName('variants')[0];
-				const variants = variantsParent
-					? Array.from(variantsParent.getElementsByTagName('variant'))
-							.map((v) => v.textContent)
-							.join(', ')
-					: '';
-
-				return {
-					key: item.getElementsByTagName('name')[0]?.textContent || '',
-					name: item.getElementsByTagName('name')[0]?.textContent || '',
-					transcription: item.getElementsByTagName('transcription')[0]?.textContent || '',
-					translate: item.getElementsByTagName('translate')[0]?.textContent || '',
-					type: item.getElementsByTagName('type')[0]?.textContent || '',
-					useCase: item.getElementsByTagName('useCase')[0]?.textContent || '',
-					variants,
-				};
+			const items: CreateWordDto[] = Array.from(xml.getElementsByTagName('word')).map((item) => {
+				return createCorrectedWord(item);
 			});
 
-			const filterXML = filterFileData(items);
+			const errors = checkCorrectData(items, setTableWords);
 
-			const merged = [...tableWords, ...items];
-
-			const uniqueWords = Array.from(
-				new Map([...tableWords, ...filterXML].map((word) => [word.name, word])).values(),
-			);
-
-			setXmlInputError(correctParse(merged, items).join('.'));
-
-			setTableWords(uniqueWords);
+			setErrorMap(errors.join('\n'));
 		} catch (error) {
 			if (error instanceof Error) {
-				console.error('Invalid JSON:', error.message);
+				console.error('Invalid XML:', error.message);
 			} else {
 				console.error('Unknown error during JSON parsing');
 			}
 		}
 	};
 
+	const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
+		const error = checkIsCorrectFile(event);
+		if (error) {
+			setErrorMap(error);
+			return;
+		} else {
+			setErrorMap('');
+		}
+		handleFileChange(event, parseXML);
+	};
+
 	return (
-		<FieldGroup
-			marginY="03"
-			title="Send XML file"
-			error={errors?.xmlFile?.message || xmlInputError}
-		>
-			<Controller
-				name="xmlFile"
-				control={control}
-				render={({ field }) => (
-					<Input
-						type="file"
-						accept=".xml"
-						onChange={(e) => {
-							handleFileChange(e, parseXML);
-							const file = e.target.files?.[0];
-							field.onChange(file);
-						}}
-						size="middle"
-						status={errors?.xmlFile && 'error'}
-					/>
-				)}
+		<FieldGroup marginY="03" title="Send XML file">
+			<Input
+				type="file"
+				accept=".xml"
+				size="middle"
+				status={error && 'error'}
+				onChange={(e) => onChangeInput(e)}
 			/>
+			{error && <ErrorMessage error={error} />}
 		</FieldGroup>
 	);
 };
