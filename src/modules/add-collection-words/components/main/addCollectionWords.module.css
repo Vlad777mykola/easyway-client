@@ -2,6 +2,10 @@
   width: 900px;
 }
 
+.tableWords {
+  margin-top: 30px;
+}
+
 .collectionButtons {
 	display: flex;
 	flex-direction: row;

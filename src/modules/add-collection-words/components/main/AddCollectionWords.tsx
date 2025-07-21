@@ -14,12 +14,21 @@ import { COLLECTIONS } from '@/shared/constants/collections/collections';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
 import { useCollectionsMutation } from '@/modules/create-collections/hooks/useCollectionsMutation';
+import { TableWords } from '../table-words/TableWords';
+import { useState } from 'react';
+
+export type TableWord = {
+	key: string;
+	name: string;
+};
 
 export const AddCollectionWords = () => {
 	const location = useLocation();
 	const { title, topic, tenses, level, description, category } = location.state;
+	const [tableWords, setTableWords] = useState<TableWord[]>([]);
 	const {
-		reset,
+		getValues,
+		resetField,
 		control,
 		handleSubmit,
 		formState: { errors },
@@ -40,13 +49,37 @@ export const AddCollectionWords = () => {
 	const { TextArea } = Input;
 
 	const clearForm = () => {
-		reset();
+		resetField('words');
 	};
 
-	const onSubmit = (data: FormValues) => {
+	const addWord = (data: FormValues) => {
+		const { words } = data;
+		const wordsForTable = words.split(',').map((word) => ({
+			key: word.trim(),
+			name: word.trim(),
+		}));
 		console.log('DATA: ', data);
+		setTableWords([...tableWords, ...wordsForTable]);
+		clearForm();
 		//mutate(data);
 	};
+
+	const onSubmit = () => {
+		const words = tableWords.map((item) => item.name.trim()).join(', ');
+		const result = {
+			title: getValues('collectionName'),
+			topic,
+			tenses,
+			level,
+			description,
+			category,
+			words: words,
+		};
+		console.log('RESULT: ', result);
+		return result;
+	};
+
+	console.log('TABLE WORDS: ', tableWords);
 
 	return (
 		<WrapperCard>
@@ -81,10 +114,18 @@ export const AddCollectionWords = () => {
 					<Button type="primary" onClick={clearForm}>
 						Clear
 					</Button>
-					<Button disabled={isPending} type="primary" onClick={handleSubmit(onSubmit)}>
-						Submit
+					<Button disabled={isPending} type="primary" onClick={handleSubmit(addWord)}>
+						Add
 					</Button>
 				</div>
+				<div className={styles.tableWords}>
+					<TableWords tableWords={tableWords} setTableWords={setTableWords} />
+				</div>
+			</div>
+			<div className={styles.submitButton}>
+				<Button type="primary" onClick={onSubmit}>
+					Submit
+				</Button>
 			</div>
 		</WrapperCard>
 	);
