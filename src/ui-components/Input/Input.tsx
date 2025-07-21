@@ -6,3 +6,4 @@ export const Input = ({ ...props }: InputProps) => {
 };
 
 Input.Search = InputAnt.Search;
+Input.TextArea = InputAnt.TextArea;

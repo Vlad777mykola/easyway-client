@@ -20,6 +20,8 @@ const CompleteWordTest = lazy(() => import('@/pages/CompleteWordTest'));
 
 const WordCardPage = lazy(() => import('@/pages/WordCardPage'));
 
+const AddCollectionWords = lazy(() => import('@/modules/add-collection-words'));
+
 //const AdminPage = lazy(() => import('@/pages/AdminPage'));
 
 export const router = createBrowserRouter([
@@ -37,6 +39,7 @@ export const router = createBrowserRouter([
 			{ path: 'signup', element: <Auth /> },
 
 			{ path: 'create/collection', element: <CreateCollections /> },
+			{ path: 'create/collection/words', element: <AddCollectionWords /> },
 
 			{ path: 'exercises', element: <ExercisesPage /> },
 			{ path: 'exercises/:exercisesId', element: <ExerciseDetails /> },

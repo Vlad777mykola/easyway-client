@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '@/ui-components/Input';
@@ -18,6 +19,7 @@ import { FiltersKeys, FormValues } from '../../types';
 import styles from './createCollections.module.css';
 
 export const CreateCollections = () => {
+	const navigate = useNavigate();
 	const { data: filters } = filtersApi.useFiltersControllerFindSuspense();
 
 	const { mutate, isPending, error } = useCollectionsMutation(() => {
@@ -34,7 +36,11 @@ export const CreateCollections = () => {
 	});
 
 	const onSubmit = (data: FormValues) => {
-		mutate(data);
+		console.log('DATA: ', data);
+		navigate('/create/collection/words', {
+			state: data,
+		});
+		//mutate(data);
 	};
 
 	const clearForm = () => {
