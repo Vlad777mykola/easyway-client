@@ -1,6 +1,7 @@
 import React, { Dispatch, type SetStateAction, useState } from 'react';
 import { TableProps } from 'antd';
 import { ColumnType } from 'antd/es/table';
+import { TableWord } from '../main/AddCollectionWords';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
 import { Button } from '@/ui-components/Button';
 import { Table } from '@/ui-components/Table';
@@ -8,7 +9,6 @@ import { Input } from '@/ui-components/Input';
 import { Space } from '@/ui-components/Space';
 import { Icon } from '@/ui-components/Icon';
 import styles from './tableWords.module.css';
-import { TableWord } from '../main/AddCollectionWords';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
@@ -97,13 +97,15 @@ export const TableWords = ({
 			title: 'Name',
 			dataIndex: 'name',
 			key: 'name',
-			sorter: (a: string, b: string) => a.localeCompare(b),
+			sorter: (a: TableWord, b: TableWord) => a.name.localeCompare(b.name),
 			...getColumnSearchProps('name'),
 		},
 		{
 			title: 'Action',
 			dataIndex: '',
 			key: 'action',
+			width: '20%',
+			align: 'center',
 			render: (_: unknown, record: TableWord) => (
 				<Button type="link" onClick={() => deleteWord(record)}>
 					Delete
