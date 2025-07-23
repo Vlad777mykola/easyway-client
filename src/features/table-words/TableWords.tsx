@@ -7,27 +7,30 @@ import { Table } from '@/ui-components/Table';
 import { Input } from '@/ui-components/Input';
 import { Space } from '@/ui-components/Space';
 import { Icon } from '@/ui-components/Icon';
-import { CreateWordDto } from '@/shared/api/generated/model';
-import { ModalForm } from '../modal-form/ModalForm';
+import { type CreateWordDto } from '@/shared/api/generated/model';
+import { ModalForm } from '@/modules/create-words/components/modal-form/ModalForm';
+import { type TableWord } from '@/modules/add-collection-words/components/main/AddCollectionWords';
 import styles from './tableWords.module.css';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
 interface Edit {
 	name: string;
-	transcription: string;
-	translate: string;
-	type: 'noun' | 'verb' | 'adjective' | 'adverb' | 'other';
-	useCase: string;
-	variants: string[];
+	transcription?: string;
+	translate?: string;
+	type?: 'noun' | 'verb' | 'adjective' | 'adverb' | 'other';
+	useCase?: string;
+	variants?: string[];
 }
 
-export const TableWords = ({
+export const TableWords = <T extends CreateWordDto | TableWord>({
 	tableWords,
+	isEdit = false,
 	setTableWords,
 }: {
-	tableWords: CreateWordDto[];
-	setTableWords: Dispatch<SetStateAction<CreateWordDto[]>>;
+	tableWords: T[];
+	setTableWords: Dispatch<SetStateAction<T[]>>;
+	isEdit?: boolean;
 }) => {
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 	const [, setSearchText] = useState('');
@@ -118,42 +121,38 @@ export const TableWords = ({
 
 	const columns = [
 		Table.EXPAND_COLUMN,
-		{
-			title: 'Name',
-			dataIndex: 'name',
-			key: 'name',
-			sorter: (a: CreateWordDto, b: CreateWordDto) => a.name.localeCompare(b.name),
-			...getColumnSearchProps('name'),
-		},
-		{
-			title: 'Transcription',
-			dataIndex: 'transcription',
-			key: 'transcription',
-		},
-		{
-			title: 'Translate',
-			dataIndex: 'translate',
-			key: 'translate',
-		},
-		{
-			title: 'Type',
-			dataIndex: 'type',
-			key: 'type',
-		},
-		{
-			title: 'Variants',
-			dataIndex: 'variants',
-			key: 'variants',
-		},
+		...Object.keys(tableWords[0] || [])
+			.filter((key) => key !== 'useCase' && key !== 'key')
+			.map((key) => {
+				const columnObj = {
+					title: key,
+					dataIndex: key,
+					key: key,
+				};
+
+				if (key === 'name') {
+					return {
+						...columnObj,
+						sorter: (a: CreateWordDto, b: CreateWordDto) => a.name.localeCompare(b.name),
+						...getColumnSearchProps('name'),
+					};
+				}
+
+				return columnObj;
+			}),
 		{
 			title: 'Action',
 			dataIndex: '',
 			key: 'action',
+			width: '20%',
+			align: 'center',
 			render: (_: unknown, record: CreateWordDto) => (
 				<div>
-					<Button type="link" onClick={() => showModal(record)}>
-						Edit
-					</Button>
+					{isEdit && (
+						<Button type="link" onClick={() => showModal(record)}>
+							Edit
+						</Button>
+					)}
 					<Button type="link" onClick={() => deleteWord(record)}>
 						Delete
 					</Button>
@@ -162,7 +161,7 @@ export const TableWords = ({
 		},
 	];
 
-	const rowSelection: TableRowSelection<CreateWordDto> = {
+	const rowSelection: TableRowSelection<T> = {
 		selectedRowKeys,
 		onChange: onSelectChange,
 	};
@@ -175,18 +174,19 @@ export const TableWords = ({
 			{editData && (
 				<ModalForm
 					isModalOpen={isModalOpen}
-					setTableWords={setTableWords}
+					setTableWords={setTableWords as Dispatch<SetStateAction<CreateWordDto[]>>}
 					handleCancel={handleCancel}
 					wordName={editData.name}
-					tableWords={tableWords}
+					tableWords={tableWords as CreateWordDto[]}
 				/>
 			)}
-			<Table<CreateWordDto>
+			<Table<T>
 				className={styles.table}
 				size="small"
 				rowKey="name"
 				expandable={{
-					expandedRowRender: (record) => <p className={styles.description}>{record.useCase}</p>,
+					expandedRowRender: (record) =>
+						'useCase' in record && <p className={styles.description}>{record.useCase}</p>,
 				}}
 				dataSource={tableWords}
 				columns={columns}

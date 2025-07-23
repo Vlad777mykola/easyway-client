@@ -5,7 +5,7 @@ import { Input } from '@/ui-components/Input';
 import { checkIsCorrectFile, handleFileChange } from '../../utils/handleFileChange';
 import { ALLOWED_TYPES, requiredKeys } from '../../constants/constants';
 import type { CreateWordDto } from '@/shared/api/generated/model';
-import { ErrorMessage } from '../error-message/ErrorMessage';
+import { ErrorMessage } from '../../../../ui-components/error-message/ErrorMessage';
 import { checkCorrectData } from '../../utils/checkCorrectData';
 
 export const AddXmlFile = ({

@@ -22,7 +22,7 @@ export const CreateCollections = () => {
 	const navigate = useNavigate();
 	const { data: filters } = filtersApi.useFiltersControllerFindSuspense();
 
-	const { mutate, isPending, error } = useCollectionsMutation(() => {
+	const { isPending, error } = useCollectionsMutation(() => {
 		clearForm();
 	});
 
@@ -40,7 +40,6 @@ export const CreateCollections = () => {
 		navigate('/create/collection/words', {
 			state: data,
 		});
-		//mutate(data);
 	};
 
 	const clearForm = () => {

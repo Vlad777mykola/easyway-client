@@ -4,7 +4,7 @@ import { Button } from '@/ui-components/Button';
 import { AddWordForm } from '../add-word-form/AddWordForm';
 import { AddXmlFile } from '../add-xml-file/AddXmlFile';
 import { AddJsonFile } from '../add-json-file/AddJsonFile';
-import { TableWords } from '../table-words/TableWords';
+import { TableWords } from '@/features/table-words';
 import { wordsApi } from '@/shared/api/generated';
 import { ApiError } from '@/shared/api/types';
 import type { CreateWordDto } from '@/shared/api/generated/model';
@@ -37,7 +37,7 @@ export const CreateWords = () => {
 				<AddXmlFile setTableWords={setTableWords} />
 				<AddJsonFile setTableWords={setTableWords} />
 			</div>
-			<TableWords tableWords={tableWords} setTableWords={setTableWords} />
+			<TableWords tableWords={tableWords} setTableWords={setTableWords} isEdit />
 			{error && <Typography.Text type="danger">{error?.message}</Typography.Text>}
 			<div className={styles.submitButton}>
 				<Button
