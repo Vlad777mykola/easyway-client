@@ -5,14 +5,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FormValues } from '../../types';
 import { schema } from '../../zod-schemas/form.schema';
 import { WrapperCard } from '@/features/wrap-card';
+import { TableWords } from '@/features/table-words';
 import { Select } from '@/ui-components/Select';
 import { Typography } from '@/ui-components/Typography';
 import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { Button } from '@/ui-components/Button';
-import { ErrorMessage } from '@/ui-components/error-message';
+import { ErrorMessage } from '@/ui-components/ErrorMessage';
 import { COLLECTIONS } from '@/shared/constants/collections/collections';
-import { TableWords } from '@/features/table-words';
 import { useCollectionsMutation } from '@/modules/create-collections/hooks/useCollectionsMutation';
 
 import styles from './addCollectionWords.module.css';
@@ -91,7 +91,6 @@ export const AddCollectionWords = () => {
 		if (!error) {
 			clearForm();
 		}
-		//mutate(data);
 	};
 
 	const onSubmit = () => {
@@ -105,6 +104,7 @@ export const AddCollectionWords = () => {
 			category,
 			words: words,
 		};
+		//mutate(result);
 		return result;
 	};
 

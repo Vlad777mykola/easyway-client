@@ -6,7 +6,7 @@ import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { Select } from '@/ui-components/Select';
 import { Button } from '@/ui-components/Button';
-import { ErrorMessage } from '../../../../ui-components/error-message';
+import { ErrorMessage } from '../../../../ui-components/ErrorMessage';
 import { type CreateWordDto } from '@/shared/api/generated/model';
 import { isValidWordForTable } from '../../utils/isValidForTable';
 import type { FormValues } from '../../types';

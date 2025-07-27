@@ -3,7 +3,7 @@ import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { checkIsCorrectFile, handleFileChange } from '../../utils/handleFileChange';
 import { CreateWordDto } from '@/shared/api/generated/model';
-import { ErrorMessage } from '../../../../ui-components/error-message';
+import { ErrorMessage } from '@/ui-components/ErrorMessage';
 import { checkCorrectData } from '../../utils/checkCorrectData';
 
 export type JsonWord = {

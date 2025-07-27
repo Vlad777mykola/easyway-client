@@ -36,7 +36,6 @@ export const CreateCollections = () => {
 	});
 
 	const onSubmit = (data: FormValues) => {
-		console.log('DATA: ', data);
 		navigate('/create/collection/words', {
 			state: data,
 		});
