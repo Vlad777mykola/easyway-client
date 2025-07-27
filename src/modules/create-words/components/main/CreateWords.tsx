@@ -10,6 +10,7 @@ import { ApiError } from '@/shared/api/types';
 import type { CreateWordDto } from '@/shared/api/generated/model';
 
 import styles from './createWords.module.css';
+import { ModalForm } from '../modal-form/ModalForm';
 
 export const CreateWords = () => {
 	const [tableWords, setTableWords] = useState<CreateWordDto[]>([]);
@@ -37,7 +38,12 @@ export const CreateWords = () => {
 				<AddXmlFile setTableWords={setTableWords} />
 				<AddJsonFile setTableWords={setTableWords} />
 			</div>
-			<TableWords tableWords={tableWords} setTableWords={setTableWords} isEdit />
+			<TableWords
+				tableWords={tableWords}
+				setTableWords={setTableWords}
+				isEdit
+				ModalForm={ModalForm}
+			/>
 			{error && <Typography.Text type="danger">{error?.message}</Typography.Text>}
 			<div className={styles.submitButton}>
 				<Button

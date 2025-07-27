@@ -52,9 +52,10 @@ export const AddCollectionWords = () => {
 		resetField('words');
 	};
 
-	const checkUniqueItems = (wordsForTable: TableWord[]): TableWord[] => {
+	const checkUniqueItems = (wordsForTable: TableWord[]) => {
 		const sameWords: string[] = [];
 		const uniqueWords: TableWord[] = [];
+		let error = '';
 
 		wordsForTable.forEach((word) => {
 			const hasSameWord = tableWords.find((wordForTable) => wordForTable.name === word.name);
@@ -67,12 +68,10 @@ export const AddCollectionWords = () => {
 		});
 
 		if (sameWords.length > 0) {
-			setError(`Table contain same words: ${sameWords.join(', ')}`);
-		} else {
-			setError('');
+			error = `Table contain same words: ${sameWords.join(', ')}`;
 		}
 
-		return uniqueWords;
+		return { uniqueWords: uniqueWords, error: error };
 	};
 
 	const addWords = (data: FormValues) => {
@@ -82,13 +81,13 @@ export const AddCollectionWords = () => {
 			name: word.trim(),
 		}));
 
-		const uniqueWords = checkUniqueItems(wordsForTable);
+		const { uniqueWords, error } = checkUniqueItems(wordsForTable);
 
-		console.log('UNIQUE WORDS: ', uniqueWords);
-
-		console.log('DATA: ', data);
 		setTableWords([...tableWords, ...uniqueWords]);
-		clearForm();
+		setError(error);
+		if (!error) {
+			clearForm();
+		}
 		//mutate(data);
 	};
 
@@ -103,11 +102,8 @@ export const AddCollectionWords = () => {
 			category,
 			words: words,
 		};
-		console.log('RESULT: ', result);
 		return result;
 	};
-
-	console.log('TABLE WORDS: ', tableWords);
 
 	return (
 		<WrapperCard>

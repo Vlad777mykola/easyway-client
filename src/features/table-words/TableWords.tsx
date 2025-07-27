@@ -1,4 +1,4 @@
-import React, { Dispatch, type SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, ComponentType, type SetStateAction, useEffect, useState } from 'react';
 import { TableProps } from 'antd';
 import { ColumnType } from 'antd/es/table';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
@@ -8,11 +8,22 @@ import { Input } from '@/ui-components/Input';
 import { Space } from '@/ui-components/Space';
 import { Icon } from '@/ui-components/Icon';
 import { type CreateWordDto } from '@/shared/api/generated/model';
-import { ModalForm } from '@/modules/create-words/components/modal-form/ModalForm';
-import { type TableWord } from '@/modules/add-collection-words/components/main/AddCollectionWords';
 import styles from './tableWords.module.css';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
+
+type TableWord = {
+	key: string;
+	name: string;
+};
+
+type ModalFormProps = {
+	isModalOpen: boolean;
+	handleCancel: () => void;
+	wordName: string;
+	tableWords: CreateWordDto[];
+	setTableWords: Dispatch<SetStateAction<CreateWordDto[]>>;
+};
 
 interface Edit {
 	name: string;
@@ -26,10 +37,12 @@ interface Edit {
 export const TableWords = <T extends CreateWordDto | TableWord>({
 	tableWords,
 	isEdit = false,
+	ModalForm = () => null,
 	setTableWords,
 }: {
 	tableWords: T[];
 	setTableWords: Dispatch<SetStateAction<T[]>>;
+	ModalForm?: ComponentType<ModalFormProps>;
 	isEdit?: boolean;
 }) => {
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
