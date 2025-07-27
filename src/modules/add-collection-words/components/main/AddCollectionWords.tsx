@@ -76,10 +76,13 @@ export const AddCollectionWords = () => {
 
 	const addWords = (data: FormValues) => {
 		const { words } = data;
-		const wordsForTable = words.split(',').map((word) => ({
-			key: word.trim(),
-			name: word.trim(),
-		}));
+		const wordsForTable = words
+			.split(',')
+			.filter((word) => word !== '')
+			.map((word) => ({
+				key: word.trim(),
+				name: word.trim(),
+			}));
 
 		const { uniqueWords, error } = checkUniqueItems(wordsForTable);
 
