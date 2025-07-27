@@ -6,7 +6,7 @@ import { FieldGroup } from '@/ui-components/FieldGroup';
 import { Input } from '@/ui-components/Input';
 import { Select } from '@/ui-components/Select';
 import { Button } from '@/ui-components/Button';
-import { ErrorMessage } from '../error-message/ErrorMessage';
+import { ErrorMessage } from '../../../../ui-components/ErrorMessage';
 import { type CreateWordDto } from '@/shared/api/generated/model';
 import { isValidWordForTable } from '../../utils/isValidForTable';
 import type { FormValues } from '../../types';
@@ -59,19 +59,20 @@ export const AddWordForm = ({
 	const onSubmit = (data: FormValues) => {
 		setTableWords((prev) => {
 			let filteredWords = prev;
+			const prevFiltered = prev.filter((w) => w.name !== wordName);
 
 			if (!wordName && isValidWordForTable(data.name, prev)) {
 				setErrorMap(`The word is already in the list ${data.name}`);
 				return prev;
 			}
 
-			if (wordName && typeof isValidWordForTable(getValues('name'), prev) === 'undefined') {
-				filteredWords = prev.filter((w) => w.name !== wordName);
+			if (wordName && isValidWordForTable(getValues('name'), prevFiltered)) {
+				setErrorMap(`The word is already in the list: ${data.name}`);
+				return prev;
 			}
 
-			if (wordName && isValidWordForTable(getValues('name'), prev)) {
-				setErrorMap(`The word is already in the list ${data.name}`);
-				return prev;
+			if (wordName) {
+				filteredWords = prev.filter((w) => w.name !== wordName);
 			}
 
 			setErrorMap('');
