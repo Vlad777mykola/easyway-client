@@ -1,5 +1,6 @@
 import { DEFAULT_COLLECTIONS } from './collections/data';
 import { DICTIONARY_COLLECTIONS } from './dictionary/collections';
+import { DEFAULT_COLLECTIONS_QUESTION } from './questions/collections';
 import { DEFAULT_COLLECTIONS_VOCABULARY } from './vocabulary/collections';
 
 export { DEFAULT_COLLECTIONS_VOCABULARY, ALL_VOCABULARIES_BY_ID } from './vocabulary/collections';
@@ -10,6 +11,7 @@ export const ALL_COLLECTIONS = {
 	exercises: DEFAULT_COLLECTIONS,
 	dictionaries: DICTIONARY_COLLECTIONS,
 	vocabularies: DEFAULT_COLLECTIONS_VOCABULARY,
+	questions: DEFAULT_COLLECTIONS_QUESTION,
 };
 
 export type CollectionsType = keyof typeof ALL_COLLECTIONS;

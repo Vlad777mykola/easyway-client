@@ -6,8 +6,15 @@ import { useCollectionFilter } from '@/store/collection-filter';
 
 import { Item } from '../item/Item';
 import styles from './listCollections.module.css';
+import { getAllCollections } from '@/shared/services/fetch-collections/getCollectionsData';
 
-export const ListCollections = ({ collectionId }: { collectionId: CollectionsType }): ReactNode => {
+export const ListCollections = ({
+	collectionId,
+	isLocal,
+}: {
+	collectionId: CollectionsType;
+	isLocal: boolean;
+}): ReactNode => {
 	const navigate = useNavigate();
 	// const setCollections = useCollectionFilter.use.setCollections();
 	const collectionsData = useCollectionFilter.use.collectionsData();
@@ -16,15 +23,22 @@ export const ListCollections = ({ collectionId }: { collectionId: CollectionsTyp
 
 	// useCollectionsData(setCollections, collectionId);
 
+	const localCollections = isLocal && getAllCollections(collectionId);
+
+	console.log('COLLECTIONS: ', localCollections);
+	console.log('DATA: ', data);
+
 	const onClick = (id: string) => {
 		navigate(`/${collectionId}/${id}`);
 	};
 
 	return (
 		<div className={styles.listContainer}>
-			{data.map((i: { title: string; id: string; category: string[]; topic: string[] }) => (
-				<Item key={i.id} data={i} onClick={() => onClick(i.id)} />
-			))}
+			{(localCollections || data).map(
+				(i: { title: string; id: string; category: string[]; topic: string[] }) => (
+					<Item key={i.id} data={i} onClick={() => onClick(i.id)} />
+				),
+			)}
 		</div>
 	);
 };

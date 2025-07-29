@@ -8,7 +8,13 @@ import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sid
 import { ListCollections } from './components/lits-collections/ListCollections';
 import { filtersApi } from '@/shared/api/generated';
 
-export const Collections = ({ collectionId }: { collectionId: CollectionsType }): ReactNode => {
+export const Collections = ({
+	collectionId,
+	isLocal = false,
+}: {
+	collectionId: CollectionsType;
+	isLocal?: boolean;
+}): ReactNode => {
 	const setClean = useCollectionFilter.use.setClean();
 	const setFilter = useCollectionFilter.use.setFilter();
 	const getFiltersData = useCollectionFilter.use.getFiltersData();
@@ -68,7 +74,7 @@ export const Collections = ({ collectionId }: { collectionId: CollectionsType })
 				/>
 			</ContentContainer.Sidebar>
 			<ContentContainer.Content>
-				<ListCollections collectionId={collectionId} />
+				<ListCollections collectionId={collectionId} isLocal={isLocal} />
 			</ContentContainer.Content>
 		</ContentContainer>
 	);
