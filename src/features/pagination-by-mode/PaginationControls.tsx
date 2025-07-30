@@ -24,7 +24,7 @@ export const PaginationControls = ({
 
 	return (
 		<div className={styles.pagination}>
-			{ids.map((id, index) => {
+			{ids.map((_, index) => {
 				const paginationPage: number | string | undefined = paginationRange[index];
 
 				if (paginationPage === DOTS) {
@@ -42,7 +42,7 @@ export const PaginationControls = ({
 				return (
 					<Button
 						className={exerciseMode === 'examMode' ? styles.noHoverEffect : ''}
-						key={id}
+						key={index}
 						size="small"
 						type={isActive ? 'primary' : 'default'}
 						onClick={() =>
