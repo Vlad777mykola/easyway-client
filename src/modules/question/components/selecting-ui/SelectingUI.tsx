@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Button } from '@/ui-components/Button';
 import { classes } from '@/ui-design-atoms/classes';
 import { ALL_QUESTIONS_BY_ID } from '@/shared/constants/questions/collections';
 
@@ -107,14 +106,15 @@ export const SelectingUI = ({
 			<div className={styles.words}>
 				{selectVariants.map((s, i) => (
 					<div key={`${i}${s}`} className={styles.word}>
-						<Button
-							size="large"
-							color={error === s ? 'danger' : 'default'}
-							variant="outlined"
+						<div
+							className={classes(styles.variant, {
+								[styles.defaultVariant]: error !== s,
+								[styles.errorVariant]: error === s,
+							})}
 							onClick={() => onSelect(s)}
 						>
 							{s}
-						</Button>
+						</div>
 					</div>
 				))}
 			</div>
