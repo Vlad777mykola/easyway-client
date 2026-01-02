@@ -3,6 +3,7 @@
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
+	"homepage": "https://Vlad777mykola.github.io/easyway-client",
 	"scripts": {
 		"start": "vite",
 		"build": "tsc -b && vite build",
@@ -12,7 +13,9 @@
 		"lint": "eslint .",
 		"preview": "vite preview",
 		"verify": "npm run format && npm run lint && npm run ts",
-		"deploy": "aws s3 sync dist/ s3://best-way",
+		"deploy:s3": "aws s3 sync dist/ s3://best-way",
+		"deploy": "gh-pages -d dist",
+		"predeploy": "npm run build",
 		"g-api": "orval"
 	},
 	"dependencies": {
@@ -47,6 +50,7 @@
 		"eslint-plugin-prettier": "^5.2.1",
 		"eslint-plugin-react-hooks": "^5.0.0",
 		"eslint-plugin-react-refresh": "^0.4.14",
+		"gh-pages": "^6.3.0",
 		"globals": "^15.12.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.2.11",
