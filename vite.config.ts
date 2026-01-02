@@ -2,9 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
 	plugins: [react()],
-	base: '/easyway-client/',
+	base: command === 'build' ? '/easyway-client/' : '/',
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, './src'),
@@ -15,4 +15,4 @@ export default defineConfig({
 			'/auth': 'http://localhost:3000',
 		},
 	},
-});
+}));
