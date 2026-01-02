@@ -8,7 +8,6 @@ export const useExerciseListData = (
 	isPause = false,
 ) => {
 	const exercise = getExerciseByCollection(collectionsId);
-
 	useEffect(() => {
 		if (exercise && !isPause) {
 			func(exercise, collectionsId);

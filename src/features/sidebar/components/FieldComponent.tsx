@@ -76,7 +76,6 @@ export const FieldComponent = ({
 	}
 
 	if (isCheckbox(item)) {
-		console.log(item.label);
 		return (
 			<div key={item.keyValue} className={styles.fieldContainer}>
 				<Checkbox

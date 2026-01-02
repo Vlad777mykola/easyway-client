@@ -1,8 +1,6 @@
-import {
-	ALL_COLLECTIONS_TASKS_BY_ID,
-	ExerciseResponseType,
-} from '@/shared/constants/collections/data';
+import { ExerciseResponseType } from '@/shared/constants/collections/data';
+import { ALL_DICTIONARY_COLLECTIONS_TASKS_BY_ID } from '@/shared/constants/dictionary';
 
 export const getExerciseByCollection = (id: string): ExerciseResponseType[] | undefined => {
-	return ALL_COLLECTIONS_TASKS_BY_ID.get(id);
+	return ALL_DICTIONARY_COLLECTIONS_TASKS_BY_ID.get(id);
 };

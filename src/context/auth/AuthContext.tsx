@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useUser } from '@/shared/api-hooks/useUser';
+// import { useUser } from '@/shared/api-hooks/useUser';
 import { createContext, ReactNode, useContext } from 'react';
 
 type UserData = {
@@ -27,8 +27,13 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: UserProvider) => {
-	const { data: user, refetch } = useUser();
-
+	// const { data: user, refetch } = useUser();
+	const user = {
+		id: '1',
+		username: 'JohnDoe',
+		email: 'john.doe@example.com',
+	};
+	const refetch = () => {};
 	return (
 		<AuthContext.Provider value={{ user, isLogIn: !!user?.id, refetch }}>
 			{children}

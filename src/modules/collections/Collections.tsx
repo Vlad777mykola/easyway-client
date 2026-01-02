@@ -6,7 +6,7 @@ import { ContentContainer } from '@/ui-components/Content-Container';
 import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sidebar';
 
 import { ListCollections } from './components/lits-collections/ListCollections';
-import { filtersApi } from '@/shared/api/generated';
+// import { filtersApi } from '@/shared/api/generated';
 
 export const Collections = ({ collectionId }: { collectionId: CollectionsType }): ReactNode => {
 	const setClean = useCollectionFilter.use.setClean();
@@ -14,7 +14,13 @@ export const Collections = ({ collectionId }: { collectionId: CollectionsType })
 	const getFiltersData = useCollectionFilter.use.getFiltersData();
 	const setFilterDataOnSearch = useCollectionFilter.use.setFilterDataOnSearch();
 
-	const { data: filters } = filtersApi.useFiltersControllerFindSuspense();
+	// const { data: filters } = filtersApi.useFiltersControllerFindSuspense();
+	const filters = {
+		category: ['Grammar', 'Vocabulary', 'Phrasal Verbs', 'Idioms'],
+		topic: ['Present', 'Past', 'Future', 'Perfect', 'Continuous'],
+		level: ['Beginner', 'Intermediate', 'Advanced'],
+		tenses: ['Present Simple', 'Past Simple', 'Future Simple'],
+	};
 
 	const fieldsData: FieldsDataType[] = [
 		{
