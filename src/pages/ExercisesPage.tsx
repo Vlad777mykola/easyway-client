@@ -1,7 +1,7 @@
-import { Collections } from '@/modules/collections';
+// import { Collections } from '@/modules/collections';
 
 const ExercisesPage = () => {
-	return <Collections collectionId="exercises" />;
+	return null; /// <Collections collectionId="exercises" />;
 };
 
 export default ExercisesPage;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAllCollections } from '@/shared/services/fetch-collections/getCollectionsData';
+// import { getAllCollections } from '@/shared/services/fetch-collections/getCollectionsData';
 import { DefaultCollectionType } from '@/shared/constants/collections/data';
 import { ProgressStoreState } from '@/store/progress';
 import { AddInfo } from './components/add-info/AddInfo';
@@ -45,35 +45,35 @@ export const Progress = ({
 	const [exercise, setExercise] = useState<Exercise[]>([]);
 
 	useEffect(() => {
-		const filterData = (exercise: Exercise[]) => {
-			const filteredData = progressData.filter((item) => {
-				const progressStore = item.progressStore;
-				return Object.keys(progressStore).some((key) => key.includes(exerciseTheme));
-			});
+		// const filterData = (exercise: Exercise[]) => {
+		// 	const filteredData = progressData.filter((item) => {
+		// 		const progressStore = item.progressStore;
+		// 		return Object.keys(progressStore).some((key) => key.includes(exerciseTheme));
+		// 	});
 
-			const filteredStore = exercise
-				.filter((item) => {
-					const id = `${item.id}_${exerciseTheme}`;
-					return filteredData.some((p) => Object.keys(p.progressStore).includes(id));
-				})
-				.map((item) => ({
-					...item,
-				}));
+		// 	const filteredStore = exercise
+		// 		.filter((item) => {
+		// 			const id = `${item.id}_${exerciseTheme}`;
+		// 			return filteredData.some((p) => Object.keys(p.progressStore).includes(id));
+		// 		})
+		// 		.map((item) => ({
+		// 			...item,
+		// 		}));
 
-			return filteredStore;
-		};
+		// 	return filteredStore;
+		// };
 
 		(async () => {
 			try {
 				const fetchedProgressData = await fetchProgressData();
 				setProgressData(fetchedProgressData);
 
-				const vocabularies: Exercise[] = getAllCollections(collection).map((item) => ({
-					...item,
-					showAddInfo: false,
-				}));
-				const filteredExercise = filterData(vocabularies);
-				setExercise(filteredExercise);
+				// const vocabularies: Exercise[] = getAllCollections(collection).map((item) => ({
+				// 	...item,
+				// 	showAddInfo: false,
+				// }));
+				// const filteredExercise =  filterData(vocabularies);
+				// setExercise(filteredExercise);
 			} catch (err) {
 				console.log('Error fetching progress data: ', err);
 			}

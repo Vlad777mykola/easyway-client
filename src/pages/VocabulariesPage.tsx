@@ -1,7 +1,8 @@
-import { Collections } from '@/modules/collections';
+// import { Collections } from '@/modules/collections';
 
 const VocabulariesPage = () => {
-	return <Collections collectionId="vocabularies" />;
+	return null;
+	//<Collections collectionId="vocabularies" />;
 };
 
 export default VocabulariesPage;

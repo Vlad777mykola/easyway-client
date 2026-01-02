@@ -26,7 +26,7 @@ export const DEFAULT_TASKS = [...id1, ...id2];
 export const ALL_COLLECTIONS_TASKS_BY_ID = new Map<string, ExerciseResponseType[]>([
 	['1', id1],
 	['2', id2],
-	// ['3', common1000],
+	['3', tsQ],
 	['4', tsQ],
 	['5', id3],
 	['6', id3],

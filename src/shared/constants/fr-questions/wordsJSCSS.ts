@@ -1,9 +1,3 @@
-// {
-// 	exercise: 'What is cookie ?',
-// 	exerciseAnswer: 'A cookie is a small piece of data that a website stores on a user's browser when they visit the site. ',
-// 	explanation: 'Файл cookie — це невеликий фрагмент даних, який веб-сайт зберігає у браузері користувача, коли він відвідує сайт.',
-// },
-
 export const id1 = [
 	{
 		exercise: 'ітератор',
