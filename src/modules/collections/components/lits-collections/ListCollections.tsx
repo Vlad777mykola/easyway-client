@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { CollectionsType } from '@/shared/constants';
 import { useCollectionFilter } from '@/store/collection-filter';
 import { getAllCollections } from '@/shared/services/fetch-collections/getCollectionsData';
-
 import { Item } from '../item/Item';
+
 import styles from './listCollections.module.css';
 
 export const ListCollections = ({ collectionId }: { collectionId: CollectionsType }): ReactNode => {
