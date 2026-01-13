@@ -5,9 +5,9 @@ import { classes } from '@/ui-design-atoms/classes';
 import { Button } from '@/ui-components/Button';
 import { CircleButton } from '@/ui-components/CircleButton';
 import { IconVariantsType } from '@/ui-components/Icon';
+import { useLockBodyScroll } from '@/shared/hooks/use-lock-body-scroll/useLockBodyScroll';
 
 import styles from './menu.module.css';
-import { useLockBodyScroll } from '@/shared/hooks/use-lock-body-scroll/useLockBodyScroll';
 
 const Side = {
 	left: 'left',
