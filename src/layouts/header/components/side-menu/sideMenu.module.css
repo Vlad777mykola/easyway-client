@@ -1,7 +1,6 @@
 .headerLeftMenuList {
 	display: flex;
 	flex-direction: column;
-	padding: 2rem;
 	font-size: 1rem;
 }
 

@@ -4,9 +4,10 @@ import { Icon } from '@/ui-components/Icon';
 import { classes } from '@/ui-design-atoms/classes';
 import { Button } from '@/ui-components/Button';
 import { CircleButton } from '@/ui-components/CircleButton';
+import { IconVariantsType } from '@/ui-components/Icon';
+import { useLockBodyScroll } from '@/shared/hooks/use-lock-body-scroll/useLockBodyScroll';
 
 import styles from './menu.module.css';
-import { IconVariantsType } from '@/ui-components/Icon';
 
 const Side = {
 	left: 'left',
@@ -26,6 +27,8 @@ type Props = {
 export const Menu = ({ Items, side, icon = 'menu', text, overrideOnClick }: Props) => {
 	const [open, setOpen] = useState<boolean>(false);
 	const [notShow, setNotShow] = useState<boolean>(true);
+
+	useLockBodyScroll(open);
 
 	const onClick = () => {
 		if (overrideOnClick) {
@@ -70,7 +73,9 @@ export const Menu = ({ Items, side, icon = 'menu', text, overrideOnClick }: Prop
 					>
 						<Icon icon="close" />
 					</span>
-					{Items}
+					<div className={styles.menuContainer}>
+						<div onClick={handleCloseMenu}>{Items}</div>
+					</div>
 				</div>
 			)}
 			{text && (
