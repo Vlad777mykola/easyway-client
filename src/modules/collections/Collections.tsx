@@ -9,6 +9,7 @@ import { ListCollections } from './components/lits-collections/ListCollections';
 // import { filtersApi } from '@/shared/api/generated';
 
 type FilterKey = 'category' | 'topic' | 'level' | 'tenses';
+const FILTERS_KEY: FilterKey[] = ['category', 'topic', 'level', 'tenses'];
 
 export const Collections = ({ collectionId }: { collectionId: CollectionsType }): ReactNode => {
 	const setClean = useCollectionFilter.use.setClean();
@@ -27,7 +28,7 @@ export const Collections = ({ collectionId }: { collectionId: CollectionsType })
 			tenses: new Set<string>(),
 		};
 
-		const filterKeys: FilterKey[] = ['category', 'topic', 'level', 'tenses'];
+		const filterKeys: FilterKey[] = FILTERS_KEY;
 
 		collectionsData.forEach((collection) => {
 			filterKeys.forEach((key) => {
