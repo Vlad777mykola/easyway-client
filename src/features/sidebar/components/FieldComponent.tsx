@@ -39,6 +39,7 @@ export const FieldComponent = ({
 				{item.showTooltip && item.label && <TooltipLabel label={item.label} />}
 				<Select
 					className={styles.select}
+					placeholder={item.label}
 					value={selectValue}
 					mode={
 						item.componentType === SIDE_BAR_COMPONENT_TYPE.MULTIPLE
