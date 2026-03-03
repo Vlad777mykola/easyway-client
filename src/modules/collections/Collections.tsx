@@ -8,19 +8,43 @@ import { FieldsDataType, SIDE_BAR_COMPONENT_TYPE, Sidebar } from '@/features/sid
 import { ListCollections } from './components/lits-collections/ListCollections';
 // import { filtersApi } from '@/shared/api/generated';
 
+type FilterKey = 'category' | 'topic' | 'level' | 'tenses';
+const FILTERS_KEY: FilterKey[] = ['category', 'topic', 'level', 'tenses'];
+
 export const Collections = ({ collectionId }: { collectionId: CollectionsType }): ReactNode => {
 	const setClean = useCollectionFilter.use.setClean();
 	const setFilter = useCollectionFilter.use.setFilter();
 	const getFiltersData = useCollectionFilter.use.getFiltersData();
 	const setFilterDataOnSearch = useCollectionFilter.use.setFilterDataOnSearch();
+	const collectionsData = useCollectionFilter.use.collectionsData();
 
 	// const { data: filters } = filtersApi.useFiltersControllerFindSuspense();
-	const filters = {
-		category: ['Grammar', 'Vocabulary', 'Phrasal Verbs', 'Idioms'],
-		topic: ['Present', 'Past', 'Future', 'Perfect', 'Continuous'],
-		level: ['Beginner', 'Intermediate', 'Advanced'],
-		tenses: ['Present Simple', 'Past Simple', 'Future Simple'],
+
+	const getFilters = () => {
+		const filters: Record<FilterKey, Set<string>> = {
+			category: new Set<string>(),
+			topic: new Set<string>(),
+			level: new Set<string>(),
+			tenses: new Set<string>(),
+		};
+
+		const filterKeys: FilterKey[] = FILTERS_KEY;
+
+		collectionsData.forEach((collection) => {
+			filterKeys.forEach((key) => {
+				filters[key] = new Set([...filters[key], ...collection[key]]);
+			});
+		});
+
+		return {
+			category: Array.from(filters.category),
+			topic: Array.from(filters.topic),
+			level: Array.from(filters.level),
+			tenses: Array.from(filters.tenses),
+		};
 	};
+
+	const filters = getFilters();
 
 	const fieldsData: FieldsDataType[] = [
 		{
