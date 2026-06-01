@@ -1,0 +1,19 @@
+.container {
+	width: 500px;
+}
+
+.tableWords {
+	margin-top: 30px;
+}
+
+.collectionButtons {
+	display: flex;
+	flex-direction: row;
+	justify-content: right;
+	gap: 10px;
+	margin-top: 30px;
+}
+
+.submitButton {
+	margin-top: 30px;
+}

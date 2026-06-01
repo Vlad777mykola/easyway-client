@@ -1,0 +1,48 @@
+.itemContainer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	background: #fff;
+	box-sizing: border-box;
+	width: 500px;
+	height: 400px;
+	padding: 20px;
+	cursor: pointer;
+	transition: transform 0.2s ease-in-out;
+}
+.itemContainer:hover {
+	transform: translateY(-4px);
+}
+
+.title {
+	font-size: 20px;
+	font-weight: bold;
+	margin: 10px;
+}
+
+.infoCard {
+	margin-top: 20px;
+}
+
+.topicContainer {
+	display: flex;
+	flex-direction: row;
+	font-size: 15px;
+}
+
+.topicContainer {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.nameOfTopic {
+	font-weight: bold;
+	margin-right: 10px;
+}
+
+@media (max-width: 400px) {
+	.itemContainer {
+		width: 350px;
+	}
+}

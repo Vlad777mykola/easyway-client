@@ -1,0 +1,1 @@
+export { PartOfSpeechFlag } from './PartOfSpeechFlag';

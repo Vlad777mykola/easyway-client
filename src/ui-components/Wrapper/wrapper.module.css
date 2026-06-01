@@ -1,0 +1,30 @@
+.wrapper {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	margin-left: auto;
+	margin-right: auto;
+	background: #fff;
+	box-sizing: border-box;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 8px;
+	padding: 40px;
+	height: fit-content;
+	width: auto;
+	margin-top: 10px;
+	max-width: 1400px;
+}
+
+.sticky {
+	top: 110px;
+	position: sticky;
+	z-index: 5;
+}
+
+@media (max-width: 1201px) {
+	.wrapper {
+		margin: 0;
+		width: 100%;
+		height: auto; /* change style here */
+		box-shadow: none;
+	}
+}

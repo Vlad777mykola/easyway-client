@@ -1,0 +1,8 @@
+.containerSelect {
+	margin-bottom: 0;
+	content: none !important;
+}
+
+.containerSelect::after {
+	content: none !important;
+}

@@ -1,3 +1,3 @@
 export { Guard } from './components/Guard';
-export { Login } from './components/Login';
+export { Signin } from './components/Signin';
 export { SignUp } from './components/SignUp';

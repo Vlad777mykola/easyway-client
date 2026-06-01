@@ -1,0 +1,18 @@
+.itemContainer {
+	width: 100%;
+	background: #fff;
+	box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 8px;
+	padding: 10px;
+	box-sizing: border-box;
+	cursor: pointer;
+	transition: transform 0.2s ease-in-out;
+}
+
+.itemContainer:hover {
+	opacity: 0.8;
+	transform: translateY(-2px);
+}
+
+.dataItem {
+	margin: 10px 10px;
+}

@@ -1,0 +1,16 @@
+.labelContainer {
+	display: flex;
+	flex-direction: row;
+	gap: 5px;
+	font-size: 14px;
+	align-items: center;
+	text-align: end;
+	white-space: nowrap;
+	color: rgba(0, 0, 0, 0.88);
+}
+
+.label {
+	max-width: 22ch;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

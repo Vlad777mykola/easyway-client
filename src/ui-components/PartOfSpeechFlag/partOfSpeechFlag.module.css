@@ -1,0 +1,63 @@
+.typeContainer {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.flag {
+	position: relative;
+	z-index: 10;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	padding-right: 1rem;
+	box-sizing: border-box;
+	height: 2.5rem;
+}
+
+.svg {
+	position: absolute;
+	z-index: 5;
+	height: 2rem;
+	right: 0;
+	height: 2.5rem;
+	width: 210px;
+}
+
+.type {
+	color: #fff;
+	font-size: 1rem;
+	line-height: 1.5rem;
+	font-weight: 700;
+}
+
+.adjective {
+	background: rgb(230 126 34);
+}
+
+.verb {
+	background: rgb(26 188 106);
+}
+
+.pronoun {
+	background: rgb(52 73 94);
+}
+
+.noun {
+	background: rgb(41 128 195);
+}
+
+.adjectiveSvg {
+	fill: rgb(230 126 34);
+}
+
+.verbSvg {
+	fill: rgb(26 188 106);
+}
+
+.pronounSvg {
+	fill: rgb(52 73 94);
+}
+
+.nounSvg {
+	fill: rgb(41 128 195);
+}

@@ -1,44 +1,39 @@
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { Icon } from '@/ui-components/Icon';
-import { Menu } from '@/ui-components/Menu';
-import { useGetUser } from '@/modules/auth/hooks/useGetUser';
-import { CircleButton } from '@/ui-components/CircleButton';
-import { Navbar } from '../navbar';
+import { Menu } from '@/features/Menu';
+// import { useAuthData } from '@/context/auth';
+import { Navbar } from '@/features/navbar';
+// import { useNavigate } from 'react-router-dom';
+import { NavHeader } from '@/features/nav-header';
+import { SideMenu } from './components/side-menu/SideMenu';
+// import { profileMenuItems, sideMenuItems } from './constants';
+import { sideMenuItems } from './constants';
+
 import styles from './header.module.css';
 
-const SideMenu = () => {
-	return (
-		<div className={styles.headerLeftMenuList}>
-			<Link to="/complete-test">Tasks</Link>
-			<Link to="/test">Create Task</Link>
-		</div>
-	);
-};
-
 const Header = () => {
-	const navigate = useNavigate();
-	const { data } = useGetUser();
-
-	const handleClick = (link: string) => {
-		navigate(link);
-	};
-
+	// const { isLogIn } = useAuthData();
+	// const navigate = useNavigate();
 	return (
-		<Navbar
-			RightSide={
-				data === undefined ? (
-					<CircleButton onClick={() => handleClick('/login')}>
-						<Icon icon="login" />
-					</CircleButton>
-				) : (
-					<CircleButton onClick={() => handleClick('/profile')}>
-						<Icon icon="user" />
-					</CircleButton>
-				)
-			}
-			LeftSide={<Menu side="left" Items={<SideMenu />} />}
-		/>
+		<div className={styles.headersContainer}>
+			<Navbar
+				// rightSide={
+				// 	<Menu
+				// 		side="right"
+				// 		icon="user"
+				// 		text={isLogIn ? '' : 'Sing in'}
+				// 		overrideOnClick={isLogIn ? undefined : () => navigate('/signin')}
+				// 		Items={
+				// 			<SideMenu
+				// 				img="https://imgcdn.stablediffusionweb.com/2024/3/24/17ee935b-c63a-4374-8fc3-91b2559e02f2.jpg"
+				// 				list={profileMenuItems}
+				// 				imgSpan="John Smith"
+				// 			/>
+				// 		}
+				// 	/>
+				// }
+				leftSide={<Menu side="left" Items={<SideMenu list={sideMenuItems} />} />}
+			/>
+			<NavHeader />
+		</div>
 	);
 };
 

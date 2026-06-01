@@ -1,4 +1,8 @@
 /* eslint-disable css-modules/no-unused-class */
+import { Size, Variant } from '@/ui-design-atoms/parameters';
+import type { SizeType, VariantType } from '@/ui-design-atoms/parameters';
+import { classes } from '@/ui-design-atoms/classes';
+
 import {
 	CloseOutlined,
 	MenuOutlined,
@@ -10,10 +14,27 @@ import {
 	TwitterOutlined,
 	LeftOutlined,
 	RightOutlined,
+	SearchOutlined,
+	ClearOutlined,
+	FilterOutlined,
+	CheckOutlined,
+	FullscreenOutlined,
+	FullscreenExitOutlined,
+	SmileOutlined,
+	InfoCircleOutlined,
+	StockOutlined,
+	FieldTimeOutlined,
+	TrophyOutlined,
+	QuestionOutlined,
+	ClockCircleOutlined,
+	FrownOutlined,
+	PlusOutlined,
+	SoundOutlined,
+	FolderAddOutlined,
+	AppstoreAddOutlined,
+	AimOutlined,
 } from '@ant-design/icons';
-import { Size, Variant } from '@/common-ui/parameters';
-import type { SizeType, VariantType } from '@/common-ui/parameters';
-import { classes } from '@/utils/classes';
+
 import styles from './icon.module.css';
 
 const IconVariants = {
@@ -27,9 +48,28 @@ const IconVariants = {
 	twitter: TwitterOutlined,
 	left: LeftOutlined,
 	right: RightOutlined,
+	search: SearchOutlined,
+	clear: ClearOutlined,
+	filter: FilterOutlined,
+	check: CheckOutlined,
+	fullScreen: FullscreenOutlined,
+	exitFullScreen: FullscreenExitOutlined,
+	smile: SmileOutlined,
+	info: InfoCircleOutlined,
+	stock: StockOutlined,
+	time: FieldTimeOutlined,
+	trophy: TrophyOutlined,
+	question: QuestionOutlined,
+	clock: ClockCircleOutlined,
+	frown: FrownOutlined,
+	plus: PlusOutlined,
+	sound: SoundOutlined,
+	folder: FolderAddOutlined,
+	appStoreAdd: AppstoreAddOutlined,
+	aim: AimOutlined,
 };
 
-type IconVariantsType = keyof typeof IconVariants;
+export type IconVariantsType = keyof typeof IconVariants;
 
 type Props = {
 	icon: IconVariantsType;

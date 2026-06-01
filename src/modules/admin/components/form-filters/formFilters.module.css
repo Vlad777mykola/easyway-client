@@ -1,0 +1,50 @@
+.filtersContainer {
+	width: 800px;
+	font-family: 'Inter', sans-serif;
+	padding: 40px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.title {
+	text-align: center;
+	font-size: 24px;
+	font-weight: 600;
+	color: #4e4e4e;
+}
+
+.formItemContainer {
+	margin-top: 15px;
+}
+
+.formContent {
+	width: 100%;
+	display: flex;
+	gap: 1.5rem;
+	flex-direction: column;
+	padding: 40px;
+	box-sizing: border-box;
+}
+
+.filtersButtons {
+	display: flex;
+	gap: 10px;
+	align-self: end;
+}
+
+.allTags {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	gap: 30px;
+}
+
+@media (max-width: 1200px) {
+	.formContent {
+		width: 100%;
+		padding: 0px;
+	}
+}
